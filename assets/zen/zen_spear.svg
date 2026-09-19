@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 280" width="40" height="280">
+  <defs>
+    <linearGradient id="bambooGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#caa575"/>
+      <stop offset="40%" stop-color="#f0d5ac"/>
+      <stop offset="100%" stop-color="#b68e5a"/>
+    </linearGradient>
+    <filter id="spearShadow" x="-30%" y="-10%" width="160%" height="120%">
+      <feDropShadow dx="2" dy="8" stdDeviation="4" flood-color="#1a1512" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- 竹籤身 -->
+  <rect x="12" y="10" width="16" height="260" rx="4" fill="url(#bambooGrad)" filter="url(#spearShadow)"/>
+  <!-- 頂部硃砂紅漆頭 -->
+  <path d="M 12 10 L 28 10 L 28 55 L 12 55 Z" fill="#9e2a2b"/>
+  <!-- 籤頭金線 -->
+  <line x1="12" y1="55" x2="28" y2="55" stroke="#ffd700" stroke-width="2"/>
+  <!-- 墨字示意線條 -->
+  <line x1="20" y1="80" x2="20" y2="190" stroke="#3d2612" stroke-width="2.5" stroke-dasharray="8,5"/>
+</svg>
