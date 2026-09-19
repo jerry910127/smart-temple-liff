@@ -26,7 +26,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.6.0")
+app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.7.0")
 
 # 即時日誌快取（記錄最近 100 筆系統動作，方便診斷）
 SERVER_LOGS = collections.deque(maxlen=100)
@@ -62,10 +62,11 @@ TEMPLE_MASTER_PROMPT = """你是「AI 福運宮」的駐廟老廟祝。但你平
 2. 【像朋友一樣隨便聊】：
    - 用戶跟你打招呼（如「哈囉」、「嗨」），你就自然回「嗨～今天過得如何呀？」、「哈囉！找我聊聊天嗎哈哈」。
    - 用戶發牢騷（如「好累」、「好煩」），你就真心安慰陪伴、當個好的傾聽者，聊聊生活日常。
-   - 絕對不要每一句回覆都硬推銷「快去線上求籤」，日常聊天就好好聊天！
-3. 【只有遇到籤詩或正經問事才認真解】：
+3. 【主動提供求籤連結】：
+   - 當用戶表達想「求籤」、「抽籤」、「擲筊」或想向神明請示問題時，請熱情親切地提供線上求籤連結：https://liff.line.me/2011668576-3Qay1nBv ，並提醒他記得連續擲三次聖筊！
+4. 【只有遇到籤詩或正經問事才認真解】：
    - 只有當用戶明確傳送籤詩內容，或者認真問感情、事業卦象時，才給出富有生活哲理與智慧的指點，但也必須是用大白話分析。
-4. 【回覆簡潔自然】：
+5. 【回覆簡潔自然】：
    - 日常閒聊時，1～3 句話即可，就像真正的真人朋友回 LINE 一樣，輕鬆毫無壓力。"""
 
 
@@ -154,9 +155,19 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
         # 極短詞快速秒回（0.01 秒無延遲）
         t = user_text.strip().lower()
-        instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "早安", "晚安", "午安", "你可以回復我嗎", "你可以回復我媽", "講話", "說話", "求籤", "抽籤", "我要抽籤", "我要求籤", "線上求籤", "擲筊"]
+        instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "早安", "晚安", "午安", "你可以回復我嗎", "你可以回復我媽", "講話", "說話"]
 
-        if t in instant_casual_words:
+        # 意圖偵測：只要信徒提到想求籤/抽籤/擲筊（且非已抽到籤詩），0.01 秒發送專屬 LIFF 連結
+        fortune_intent = any(k in t for k in ["求籤", "抽籤", "擲筊", "聖筊", "想抽", "想求", "抽個籤", "問事"])
+        has_drawn_poem = any(k in t for k in ["詩曰", "【靈籤", "第", "首", "大吉", "上吉", "中吉", "中平"])
+
+        if fortune_intent and not has_drawn_poem:
+            reply_content = (
+                "心有所感，神明自會慈悲指引！請點擊下方開啟【線上求籤・三聖筊請示】：\n"
+                "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
+                "記得在心裡默念姓名與所問之事，依循正統科儀連續擲出三次聖筊。抽完後點擊「回傳」，老廟祝阿伯在聊天室替你好好解籤！"
+            )
+        elif t in instant_casual_words:
             reply_content = get_casual_fallback(t)
         else:
             reply_content = call_nvidia_ai(user_text)
@@ -287,7 +298,7 @@ def root():
         "chat_style": "casual-everyday-friendly",
         "vision_support": "multimodal-enabled",
         "logs_endpoint": "/logs",
-        "version": "2.6.0"
+        "version": "2.7.0"
     }
 
 
