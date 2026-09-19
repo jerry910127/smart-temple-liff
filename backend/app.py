@@ -58,7 +58,7 @@ def get_ai_interpretation(user_message: str) -> str:
             return "【老廟祝叮嚀】老道人目前連線神明信使中（尚未配置 NVIDIA_API_KEY），請廟方管理員檢查環境變數。"
 
         response = nvidia_client.chat.completions.create(
-            model="z-ai/glm-5-3-flash",
+            model="z-ai/glm-5.3-flash",
             messages=[
                 {"role": "system", "content": TEMPLE_MASTER_PROMPT},
                 {"role": "user", "content": f"信徒傳來的籤詩資訊與問題如下：\n{user_message}"}
