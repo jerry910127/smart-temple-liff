@@ -2,139 +2,1114 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>智慧宮廟 - 線上求籤祈福</title>
-  <!-- 載入 LINE LIFF SDK -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>智慧靈籤宮 - 線上擲筊求籤</title>
+  <!-- LINE LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <!-- GSAP Animation Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    :root {
+      --yin-bwei-image: url('assets/yin_bwei.png');
+      --zheng-bwei-image: url('assets/zheng_bwei.png');
+      --button-bg-color: #7b1113;
+      --button-hover-color: #9e181b;
+      --button-text-color: #fff;
+      --button-border-color: #ffd700;
+      --shining-color-1: rgba(255, 223, 100, 0.7);
+      --shining-color-2: rgba(255, 215, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: #1a0808;
+      color: #fff;
+      user-select: none;
+    }
+
+    .service015 {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    /* === 場景共用 === */
+    .scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      overflow: hidden;
+    }
+
+    .scene.current-scene {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 5;
+    }
+
+    /* === 第一場景：大殿祈願與搖籤 === */
+    .first-scene .background-fixed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/bg_first_mb.jpg') no-repeat center center / cover;
+      z-index: 1;
+      filter: brightness(0.92);
+    }
+
+    @media (min-width: 768px) {
+      .first-scene .background-fixed {
+        background-image: url('assets/bg_first_pc.jpg');
+      }
+    }
+
+    /* 頂部宮名標題條 */
+    .temple-header {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: rgba(30, 8, 8, 0.82);
+      border: 1.5px solid #d4af37;
+      padding: 8px 24px;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .temple-header h1 {
+      font-size: 1.25rem;
+      color: #ffd700;
+      letter-spacing: 3px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .temple-header .user-info {
+      font-size: 0.85rem;
+      color: #f1e4c3;
+      margin-top: 3px;
+    }
+
+    /* 神明光暈波紋 */
+    .init-wave {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      height: 320px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .wave__circle {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border: 3px solid rgba(255, 215, 0, 0.6);
+      border-radius: 50%;
+      animation: service015_ripple 2.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+    .wave__circle:nth-child(2) { animation-delay: -0.8s; }
+    .wave__circle:nth-child(3) { animation-delay: -1.6s; }
+
+    @keyframes service015_ripple {
+      0% { transform: scale(0.2); opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    /* 搖籤的手與籤筒 */
+    .hand-divination-block {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 380px;
+      background: url('assets/hand_shake.png') no-repeat center bottom / contain;
+      z-index: 6;
+      animation: service015_throw_divination_block 2.8s ease-in-out infinite alternate;
+      transition: transform 0.5s ease;
+    }
+
+    .hand-divination-block.shaking {
+      animation: service015_shake_fast 0.12s infinite alternate !important;
+    }
+
+    @keyframes service015_throw_divination_block {
+      from { transform: translateX(-50%) translateY(0); }
+      to { transform: translateX(-50%) translateY(-18px); }
+    }
+
+    @keyframes service015_shake_fast {
+      0% { transform: translateX(-52%) rotate(-3deg); }
+      100% { transform: translateX(-48%) rotate(3deg); }
+    }
+
+    /* 抽出的籤枝 */
+    .filter-divination-spear {
+      position: absolute;
+      bottom: 220px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 150px;
+      background: url('assets/divination_spear.png') no-repeat center center / contain;
+      z-index: 5;
+      opacity: 0;
+      transition: bottom 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.5s ease;
+    }
+
+    .filter-divination-spear.action {
+      opacity: 1;
+      bottom: 330px;
+    }
+
+    /* 側邊引導卷軸（可收合） */
+    .scroll-guide {
+      position: absolute;
+      top: 85px;
+      left: 12px;
+      z-index: 15;
+      background: rgba(45, 10, 10, 0.92);
+      border: 1px solid #d4af37;
+      border-radius: 8px;
+      padding: 12px 14px;
+      max-width: 220px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: #fffae6;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .scroll-guide.hidden {
+      transform: translateX(-190px);
+    }
+
+    .scroll-guide-title {
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 6px;
+      border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
+      padding-bottom: 4px;
+    }
+
+    .guide-toggle-btn {
+      position: absolute;
+      right: -28px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #7b1113;
+      color: #ffd700;
+      border: 1px solid #d4af37;
+      border-left: none;
+      border-radius: 0 8px 8px 0;
+      padding: 8px 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      writing-mode: vertical-lr;
+    }
+
+    /* 祈願求籤按鈕 */
+    .qiu-qian-button-container {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      width: 90%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    /* === 籤枝抽出結果橫幅 (第一場景完成時) === */
+    .spear-result-modal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.85);
+      width: 90%;
+      max-width: 340px;
+      background: rgba(30, 5, 5, 0.96);
+      border: 2px solid #ffd700;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      z-index: 30;
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    .spear-result-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .spear-result-modal h3 {
+      color: #ffd700;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .spear-result-modal .lot-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ffeedd;
+      margin-bottom: 8px;
+    }
+
+    .spear-result-modal p {
+      font-size: 0.92rem;
+      color: #ddc6a5;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    /* === 第二/三場景：擲杯物理拋擲舞台 === */
+    .second-scene .second-background-fixed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/bg_second_mb.jpg') no-repeat center center / cover;
+      z-index: 1;
+    }
+
+    @media (min-width: 768px) {
+      .second-scene .second-background-fixed {
+        background-image: url('assets/bg_second_pc.png');
+      }
+    }
+
+    .wrapper-throw-divination {
+      position: relative;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background: #fbf9f5;
-      color: #333;
+      justify-content: space-between;
+      padding: 70px 20px 30px;
+      z-index: 10;
     }
-    .card {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+
+    /* 聖杯計數面板 */
+    .bwei-status-bar {
+      background: rgba(30, 8, 8, 0.85);
+      border: 1.5px solid #d4af37;
+      border-radius: 20px;
+      padding: 10px 20px;
       text-align: center;
-      max-width: 320px;
       width: 90%;
+      max-width: 320px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
-    .bwa-container {
-      font-size: 3.5rem;
-      margin: 1.5rem 0;
-      transition: transform 0.2s;
-      user-select: none;
+
+    .bwei-status-bar .stage-title {
+      font-size: 0.95rem;
+      color: #f1e4c3;
+      margin-bottom: 4px;
     }
-    button {
-      background: #c0392b;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      border-radius: 24px;
-      cursor: pointer;
+
+    .bwei-status-bar .counter-text {
+      font-size: 1.3rem;
+      color: #ffd700;
       font-weight: bold;
-      box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
-      transition: background-color 0.2s, opacity 0.2s;
+      letter-spacing: 1px;
     }
-    button:disabled {
-      background: #ccc;
-      box-shadow: none;
-      cursor: not-allowed;
+
+    .bwei-status-bar .rule-tip {
+      font-size: 0.8rem;
+      color: #c9b18f;
+      margin-top: 3px;
     }
-    #result-text {
-      margin-top: 1rem;
+
+    /* 筊杯展示容器 */
+    .bwei-stage {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      margin: auto 0;
+    }
+
+    /* 左右兩個木筊實體 */
+    .bwei-left, .bwei-right {
+      position: absolute;
+      top: 50%;
+      width: 96px;
+      height: 175px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      transition: opacity 0.3s ease;
+      filter: drop-shadow(0 15px 12px rgba(0, 0, 0, 0.7));
+    }
+
+    /* 起始懸停待擲狀態 */
+    .bwei-left {
+      left: 36%;
+      transform: translate(-50%, -50%) rotate(-55deg);
+      background-image: var(--yin-bwei-image);
+      animation: service015_bouncing 1.2s ease-in-out infinite alternate;
+    }
+
+    .bwei-right {
+      left: 64%;
+      transform: translate(-50%, -50%) rotate(125deg);
+      background-image: var(--zheng-bwei-image);
+      animation: service015_bouncing 1.2s ease-in-out infinite alternate -0.6s;
+    }
+
+    @keyframes service015_bouncing {
+      from { top: 48%; }
+      to { top: 52%; }
+    }
+
+    /* ====================================================
+       仁海宮擬真物理拋擲 KEYFRAMES
+       0% 起手 -> 25% 下沉蓄力 -> 50% 衝向天際 -> 100% 翻轉落地
+       ==================================================== */
+    
+    /* 左筊 -> 落地為陰 (fan) */
+    .bwei-left.anim-fan {
+      animation: zheng_bwei_left_animation_fan 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes zheng_bwei_left_animation_fan {
+      0% {
+        top: 50%;
+        left: 36%;
+        transform: translate(-50%, -50%) rotate(-55deg);
+      }
+      22% {
+        top: 60%;
+        left: 36%;
+        transform: translate(-50%, -50%) rotate(-55deg);
+      }
+      50% {
+        top: -45%;
+        left: 45%;
+        transform: translate(-50%, -50%) rotate(-360deg) scale(1.15);
+      }
+      100% {
+        top: 52%;
+        left: 35%;
+        transform: translate(-50%, -50%) rotate(-720deg) scale(1);
+        background-image: var(--yin-bwei-image);
+      }
+    }
+
+    /* 左筊 -> 落地為正 (zheng) */
+    .bwei-left.anim-zheng {
+      animation: zheng_bwei_left_animation_zheng 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes zheng_bwei_left_animation_zheng {
+      0% {
+        top: 50%;
+        left: 36%;
+        transform: translate(-50%, -50%) rotate(-55deg);
+      }
+      22% {
+        top: 60%;
+        left: 36%;
+        transform: translate(-50%, -50%) rotate(-55deg);
+      }
+      50% {
+        top: -45%;
+        left: 45%;
+        transform: translate(-50%, -50%) rotate(-420deg) scale(1.15);
+      }
+      100% {
+        top: 52%;
+        left: 34%;
+        transform: translate(-50%, -50%) rotate(-900deg) scale(1);
+        background-image: var(--zheng-bwei-image);
+      }
+    }
+
+    /* 右筊 -> 落地為陰 (fan) */
+    .bwei-right.anim-fan {
+      animation: zheng_bwei_right_animation_fan 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes zheng_bwei_right_animation_fan {
+      0% {
+        top: 50%;
+        left: 64%;
+        transform: translate(-50%, -50%) rotate(125deg);
+      }
+      22% {
+        top: 60%;
+        left: 64%;
+        transform: translate(-50%, -50%) rotate(125deg);
+      }
+      50% {
+        top: -45%;
+        left: 55%;
+        transform: translate(-50%, -50%) rotate(420deg) scale(1.15);
+      }
+      100% {
+        top: 52%;
+        left: 66%;
+        transform: translate(-50%, -50%) rotate(840deg) scale(1);
+        background-image: var(--yin-bwei-image);
+      }
+    }
+
+    /* 右筊 -> 落地為正 (zheng) */
+    .bwei-right.anim-zheng {
+      animation: zheng_bwei_right_animation_zheng 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes zheng_bwei_right_animation_zheng {
+      0% {
+        top: 50%;
+        left: 64%;
+        transform: translate(-50%, -50%) rotate(125deg);
+      }
+      22% {
+        top: 60%;
+        left: 64%;
+        transform: translate(-50%, -50%) rotate(125deg);
+      }
+      50% {
+        top: -45%;
+        left: 55%;
+        transform: translate(-50%, -50%) rotate(360deg) scale(1.15);
+      }
+      100% {
+        top: 52%;
+        left: 65%;
+        transform: translate(-50%, -50%) rotate(720deg) scale(1);
+        background-image: var(--zheng-bwei-image);
+      }
+    }
+
+    /* 最終結果顯示大圖 (聖杯 / 笑杯 / 陰杯) */
+    .bwei-result-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 15;
+    }
+
+    .bwei-result-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bwei-result-overlay img {
+      max-width: 220px;
+      height: auto;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
+    }
+
+    .bwei-result-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      border: 1px solid #ffd700;
+    }
+
+    .badge-sheng { background: rgba(140, 20, 20, 0.95); color: #ffd700; }
+    .badge-xiao  { background: rgba(50, 50, 50, 0.92); color: #fff; }
+    .badge-yin   { background: rgba(20, 20, 40, 0.92); color: #ff9999; }
+
+    /* 通用按鈕樣式 */
+    .temple-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 13px 20px;
       font-size: 1.1rem;
-      font-weight: 500;
-      color: #7f1d1d;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: var(--button-text-color);
+      background: linear-gradient(180deg, #9e181b 0%, #610d15 100%);
+      border: 1.5px solid var(--button-border-color);
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s;
+    }
+
+    .temple-btn:active {
+      transform: scale(0.96);
+    }
+
+    .temple-btn:disabled {
+      background: #555 !important;
+      border-color: #888 !important;
+      color: #bbb !important;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* 金光閃爍光暈 (Shining) */
+    .shining-halo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      border-radius: 30px;
+      pointer-events: none;
+      box-shadow: 0 0 25px 8px var(--shining-color-1), 0 0 45px 15px var(--shining-color-2);
+      animation: temple_shining 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes temple_shining {
+      from { opacity: 0.4; transform: translate(-50%, -50%) scale(0.98); }
+      to { opacity: 0.9; transform: translate(-50%, -50%) scale(1.04); }
+    }
+
+    /* 底部操作控制列 */
+    .action-controls {
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 25;
+    }
+
+    /* 簽詩詳情 Modal (抽成三聖杯後展開) */
+    .lot-detail-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 3, 3, 0.94);
+      z-index: 50;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .lot-detail-modal.show {
+      display: flex;
+    }
+
+    .lot-card {
+      background: #fbf5e6;
+      color: #2b1700;
+      border: 3px double #8a1f1d;
+      border-radius: 12px;
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      text-align: center;
+      position: relative;
+    }
+
+    .lot-card .lot-tag {
+      display: inline-block;
+      background: #8a1f1d;
+      color: #ffd700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .lot-card h2 {
+      font-size: 1.45rem;
+      color: #7b1113;
+      margin-bottom: 14px;
+      letter-spacing: 2px;
+    }
+
+    .lot-card .poem-content {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      font-weight: 600;
+      color: #2b1700;
+      margin: 16px 0;
+      padding: 12px;
+      border-top: 1px solid #d4c29d;
+      border-bottom: 1px solid #d4c29d;
+      letter-spacing: 2px;
+    }
+
+    .lot-card .interpretation {
+      font-size: 0.9rem;
+      color: #614022;
       line-height: 1.6;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h2 style="margin-top:0; color:#8b0000;">🏮 智慧靈籤宮 🏮</h2>
-    <p id="user-greeting">正在連線神明...</p>
-    
-    <div class="bwa-container" id="bwa-icon">🎋</div>
-    
-    <button id="draw-btn" onclick="startDivination()" disabled>誠心求籤擲筊</button>
-    <div id="result-text"></div>
+  <div class="service015" id="app">
+
+    <!-- ==============================================
+         第一場景：大殿、神明願景、手持搖籤筒
+         ============================================== -->
+    <div class="scene first-scene current-scene" id="firstScene">
+      <div class="background-fixed"></div>
+
+      <!-- 頂部宮名 -->
+      <div class="temple-header">
+        <h1>🏮 中壢仁海宮 🏮</h1>
+        <div class="user-info" id="userGreeting">正在連線神明信使...</div>
+      </div>
+
+      <!-- 側邊求籤指引卷軸 -->
+      <div class="scroll-guide" id="scrollGuide">
+        <div class="guide-toggle-btn" id="guideToggleBtn">收起指引</div>
+        <div class="scroll-guide-title">📜 線上求籤禮儀</div>
+        <p>1. 心中默念姓名、生辰、現居地址。<br>
+           2. 誠心向天上聖母說明祈求解惑之事。<br>
+           3. 點擊開始搖籤抽得靈籤。<br>
+           4. 抽得後須連續擲得「三聖杯」確認神意。</p>
+      </div>
+
+      <!-- 光暈波紋 -->
+      <div class="init-wave">
+        <div class="wave__circle"></div>
+        <div class="wave__circle"></div>
+        <div class="wave__circle"></div>
+      </div>
+
+      <!-- 抽出籤枝 (動畫抽出) -->
+      <div class="filter-divination-spear" id="divinationSpear"></div>
+
+      <!-- 搖籤的手與籤筒 -->
+      <div class="hand-divination-block" id="handShakeBlock"></div>
+
+      <!-- 祈願抽籤按鈕 -->
+      <div class="qiu-qian-button-container">
+        <button class="temple-btn" id="startShakeBtn" onclick="onStartShake()">
+          <div class="shining-halo"></div>
+          <span>誠 心 祈 願 求 籤</span>
+        </button>
+      </div>
+
+      <!-- 抽籤完成彈窗 -->
+      <div class="spear-result-modal" id="spearResultModal">
+        <h3>🎋 神明賜籤 🎋</h3>
+        <div class="lot-name" id="modalLotName">第十八籤【丙戌】</div>
+        <p>已為信士搖出籤枝！<br>依照宮廟傳統儀軌，須向神明擲筊請示，<br><strong style="color:#ffd700;">須連續擲出「三個聖杯」</strong>方為神意正籤。</p>
+        <button class="temple-btn" onclick="goToSecondScene()">
+          <span>前 往 擲 筊 請 示</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         第二/三場景：紅案神桌、物理拋物線擲杯
+         ============================================== -->
+    <div class="scene second-scene" id="secondScene">
+      <div class="second-background-fixed"></div>
+
+      <div class="wrapper-throw-divination">
+        <!-- 狀態資訊條 -->
+        <div class="bwei-status-bar">
+          <div class="stage-title" id="stageTitle">請示神明聖意</div>
+          <div class="counter-text" id="counterText">連續聖杯：0 / 3</div>
+          <div class="rule-tip" id="ruleTip">須連續擲得 3 個聖杯方能領取籤詩</div>
+        </div>
+
+        <!-- 擲筊舞台 -->
+        <div class="bwei-stage">
+          <!-- 左木筊 -->
+          <div class="bwei-left" id="bweiLeft"></div>
+          <!-- 右木筊 -->
+          <div class="bwei-right" id="bweiRight"></div>
+
+          <!-- 結果展示蓋層 -->
+          <div class="bwei-result-overlay" id="resultOverlay">
+            <img id="resultImage" src="assets/sheng_bwei_res.png" alt="結果圖" />
+            <br>
+            <span class="bwei-result-badge badge-sheng" id="resultBadge">【聖杯】神明應允</span>
+          </div>
+        </div>
+
+        <!-- 下方操作按鈕組 -->
+        <div class="action-controls">
+          <button class="temple-btn" id="throwBtn" onclick="onThrowBwei()">
+            <div class="shining-halo" id="throwHalo"></div>
+            <span id="throwBtnText">擲　　筊</span>
+          </button>
+          
+          <button class="temple-btn" id="reShakeBtn" style="display:none; background:#444;" onclick="onReShake()">
+            <span>放回籤枝，重新抽籤</span>
+          </button>
+
+          <button class="temple-btn" id="viewPoemBtn" style="display:none;" onclick="onOpenPoemModal()">
+            <div class="shining-halo"></div>
+            <span>領取籤詩並回傳 LINE</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         籤詩解惑 Modal
+         ============================================== -->
+    <div class="lot-detail-modal" id="lotDetailModal">
+      <div class="lot-card">
+        <div class="lot-tag">天上聖母靈籤</div>
+        <h2 id="finalLotTitle">第一籤【甲子】</h2>
+        <div class="poem-content" id="finalLotPoem">
+          日出便見風雲散<br>
+          光明清淨照世間<br>
+          一向前途通大道<br>
+          萬事清吉保平安
+        </div>
+        <div class="interpretation" id="finalLotDesc">
+          【籤解】凡事大吉，名利雙收。若問前程，自有貴人相照，撥雲見日。
+        </div>
+
+        <button class="temple-btn" style="margin-bottom:10px;" onclick="sendPoemToLine()">
+          <span>💬 回傳聊天室（AI 解籤）</span>
+        </button>
+        <button class="temple-btn" style="background:#555; border-color:#888;" onclick="onReShake()">
+          <span>誠心感謝，再次求籤</span>
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <script>
     // LINE Developers LIFF ID
     const MY_LIFF_ID = "2011668576-3Qay1nBv";
 
-    // 籤詩庫範例（可依需求擴充為 60 甲子籤或靈籤）
+    // 經典六十甲子靈籤詩庫範例
     const LOTS = [
-      { id: 1, name: "第一籤【甲子】大吉", poem: "日出便見風雲散，光明清淨照世間。" },
-      { id: 2, name: "第二籤【乙丑】上吉", poem: "雲開月出正分明，不須進退問前程。" },
-      { id: 3, name: "第三籤【丙寅】中平", poem: "財中漸漸見分明，花開花謝結子成。" }
+      { id: 1, name: "第一籤【甲子】大吉", poem: "日出便見風雲散，光明清淨照世間。\n一向前途通大道，萬事清吉保平安。", desc: "【大吉】雲開月出，萬事亨通，前程光明。" },
+      { id: 2, name: "第二籤【乙丑】上吉", poem: "雲開月出正分明，不須進退問前程。\n婚姻皆由天注定，和合相調萬事成。", desc: "【上吉】事有成機，毋須猶豫進退，順其自然。" },
+      { id: 3, name: "第三籤【丙寅】中平", poem: "財中漸漸見分明，花開花謝結子成。\n寬心且看月中桂，郎君即便見太平。", desc: "【中平】漸入佳境，春夏平平，秋冬獲利。" },
+      { id: 4, name: "第四籤【丁卯】上吉", poem: "風恬浪靜可行舟，恰是中秋月一輪。\n凡事不須多憂慮，福祿自有天安排。", desc: "【上吉】順風順水，平安順遂，靜候佳音。" },
+      { id: 5, name: "第五籤【戊辰】中吉", poem: "客到前途多得利，君爾何故兩相疑。\n若問前程皆順利，百事亨通不用悲。", desc: "【中吉】貴人相引，謀事有成，毋庸多疑。" }
     ];
 
-    async function initLiff() {
+    let currentLot = null;
+    let shengCount = 0;       // 目前累積連續聖杯數
+    const TARGET_SHENG = 3;   // 目標連續 3 個聖杯
+    let isThrowing = false;
+    let audioCtx = null;
+
+    // 仁海宮機率設定：笑杯權重 3, 陰杯權重 4, 聖杯權重 7 (更容易體驗到連續擲筊的樂趣)
+    const PROBABILITY = { xiao: 3, yin: 4, sheng: 7 };
+
+    // 初始化頁面
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('app').style.opacity = '1';
+      initLiff();
+      initGuideToggle();
+    });
+
+    // 卷軸收合
+    function initGuideToggle() {
+      const guide = document.getElementById('scrollGuide');
+      const btn = document.getElementById('guideToggleBtn');
+      btn.addEventListener('click', () => {
+        guide.classList.toggle('hidden');
+        btn.innerText = guide.classList.contains('hidden') ? '展開指引' : '收起指引';
+      });
+    }
+
+    // Web Audio API 合成真實木筊碰撞聲 (兩聲清脆木質叩叩聲)
+    function playWoodClatterSound() {
       try {
-        await liff.init({ liffId: MY_LIFF_ID });
-        if (!liff.isLoggedIn()) {
-          liff.login();
-          return;
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        const profile = await liff.getProfile();
-        document.getElementById("user-greeting").innerText = `信士 ${profile.displayName}，請誠心祈願`;
-        document.getElementById("draw-btn").disabled = false;
-      } catch (err) {
-        console.error("LIFF 初始化失敗:", err);
-        document.getElementById("user-greeting").innerText = "無法載入神明連線，請於 LINE 內開啟";
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+        [0, 0.08].forEach((delay, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(idx === 0 ? 320 : 380, now + delay);
+          osc.frequency.exponentialRampToValueAtTime(110, now + delay + 0.12);
+
+          gain.gain.setValueAtTime(0.7, now + delay);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.12);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now + delay);
+          osc.stop(now + delay + 0.14);
+        });
+      } catch (e) {
+        console.warn("音效播放失敗:", e);
       }
     }
 
-    async function startDivination() {
-      const btn = document.getElementById("draw-btn");
-      const icon = document.getElementById("bwa-icon");
-      const resultText = document.getElementById("result-text");
-
-      btn.disabled = true;
-      resultText.innerText = "祈願求籤中...";
-      icon.style.transform = "rotate(20deg) scale(1.1)";
-
-      setTimeout(async () => {
-        icon.style.transform = "none";
-        // 隨機抽選籤詩
-        const lot = LOTS[Math.floor(Math.random() * LOTS.length)];
-        resultText.innerHTML = `【聖筊】神明賜籤！<br><b>${lot.name}</b><br>「${lot.poem}」`;
-
-        // 若在 LINE App 內開啟，發送訊息回聊天室並自動關閉 LIFF
-        if (liff.isInClient()) {
-          try {
-            await liff.sendMessages([
-              {
-                type: "text",
-                text: `我向神明求得【${lot.name}】：\n「${lot.poem}」\n請廟方幫我解籤！`
-              }
-            ]);
-            setTimeout(() => {
-              liff.closeWindow();
-            }, 2000);
-          } catch (e) {
-            console.error("訊息發送失敗:", e);
-          }
+    // LINE LIFF 初始化
+    async function initLiff() {
+      try {
+        await liff.init({ liffId: MY_LIFF_ID });
+        if (liff.isLoggedIn()) {
+          const profile = await liff.getProfile();
+          document.getElementById("userGreeting").innerText = `信士 ${profile.displayName}，請誠心祈願`;
+        } else {
+          document.getElementById("userGreeting").innerText = "信士 請誠心向天上聖母祈願";
         }
-        btn.disabled = false;
-      }, 1200);
+      } catch (err) {
+        console.error("LIFF 初始化:", err);
+        document.getElementById("userGreeting").innerText = "智慧靈籤宮 - 請誠心向天上聖母祈願";
+      }
     }
 
-    // 啟動初始化
-    initLiff();
+    // 第一階段：開始搖籤筒
+    function onStartShake() {
+      const btn = document.getElementById('startShakeBtn');
+      const hand = document.getElementById('handShakeBlock');
+      const spear = document.getElementById('divinationSpear');
+
+      btn.disabled = true;
+      hand.classList.add('shaking');
+
+      // 隨機選籤
+      currentLot = LOTS[Math.floor(Math.random() * LOTS.length)];
+
+      setTimeout(() => {
+        // 停止搖動，籤枝升起
+        hand.classList.remove('shaking');
+        spear.classList.add('action');
+
+        setTimeout(() => {
+          // 彈出籤枝確認視窗
+          document.getElementById('modalLotName').innerText = currentLot.name;
+          document.getElementById('spearResultModal').classList.add('show');
+        }, 800);
+      }, 2000);
+    }
+
+    // 前往第二場景 (擲筊)
+    function goToSecondScene() {
+      document.getElementById('spearResultModal').classList.remove('show');
+      document.getElementById('firstScene').classList.remove('current-scene');
+      document.getElementById('secondScene').classList.add('current-scene');
+
+      shengCount = 0;
+      updateStatusBar();
+      resetBweiToIdle();
+    }
+
+    // 更新狀態列
+    function updateStatusBar() {
+      document.getElementById('counterText').innerText = `連續聖杯：${shengCount} / ${TARGET_SHENG}`;
+      if (shengCount === 0) {
+        document.getElementById('stageTitle').innerText = `向神明請示【${currentLot.name}】`;
+        document.getElementById('ruleTip').innerText = `須連續擲出 3 個聖杯方為神意正籤`;
+      } else {
+        document.getElementById('stageTitle').innerText = `神意相通，已累積 ${shengCount} 次聖杯！`;
+        document.getElementById('ruleTip').innerText = `請再接再厲，尚需 ${TARGET_SHENG - shengCount} 次聖杯`;
+      }
+    }
+
+    // 重置筊杯為自然懸停待擲狀態
+    function resetBweiToIdle() {
+      const left = document.getElementById('bweiLeft');
+      const right = document.getElementById('bweiRight');
+      const overlay = document.getElementById('resultOverlay');
+
+      overlay.classList.remove('show');
+      left.className = 'bwei-left';
+      right.className = 'bwei-right';
+
+      document.getElementById('throwBtn').disabled = false;
+      document.getElementById('throwBtnText').innerText = shengCount === 0 ? '擲　　筊' : '再 擲 一 次';
+      document.getElementById('throwHalo').style.display = 'block';
+    }
+
+    // 擲筊機率計算
+    function calculateThrowResult() {
+      const total = PROBABILITY.xiao + PROBABILITY.yin + PROBABILITY.sheng;
+      const rand = Math.random() * total;
+
+      if (rand < PROBABILITY.xiao) {
+        // 笑杯 (雙陽/正)
+        return { type: 'xiao', left: 'zheng', right: 'zheng', title: '【笑杯】神明微笑，事未明朗', badge: 'badge-xiao', img: 'assets/zheng_bwei_res.png' };
+      } else if (rand < PROBABILITY.xiao + PROBABILITY.yin) {
+        // 陰杯 (雙陰/反)
+        return { type: 'yin', left: 'fan', right: 'fan', title: '【陰杯】此籤非神意，請放回重抽', badge: 'badge-yin', img: 'assets/fan_bwei_res.png' };
+      } else {
+        // 聖杯 (一正一反)
+        const isLeftZheng = Math.random() > 0.5;
+        return {
+          type: 'sheng',
+          left: isLeftZheng ? 'zheng' : 'fan',
+          right: isLeftZheng ? 'fan' : 'zheng',
+          title: '【聖杯】神明首肯應允！',
+          badge: 'badge-sheng',
+          img: 'assets/sheng_bwei_res.png'
+        };
+      }
+    }
+
+    // 核心擲杯動作
+    function onThrowBwei() {
+      if (isThrowing) return;
+      isThrowing = true;
+
+      const throwBtn = document.getElementById('throwBtn');
+      const left = document.getElementById('bweiLeft');
+      const right = document.getElementById('bweiRight');
+      const overlay = document.getElementById('resultOverlay');
+
+      throwBtn.disabled = true;
+      document.getElementById('throwHalo').style.display = 'none';
+      overlay.classList.remove('show');
+
+      // 產生隨機結果
+      const outcome = calculateThrowResult();
+
+      // 觸發拋擲動畫 (清空既有動畫並賦予新的 anim keyframe)
+      left.className = 'bwei-left';
+      right.className = 'bwei-right';
+      void left.offsetWidth; // 強制重繪
+
+      left.classList.add(outcome.left === 'zheng' ? 'anim-zheng' : 'anim-fan');
+      right.classList.add(outcome.right === 'zheng' ? 'anim-zheng' : 'anim-fan');
+
+      // 在 1.6 秒（落地瞬間）精準播放木筊碰撞聲
+      setTimeout(() => {
+        playWoodClatterSound();
+      }, 1600);
+
+      // 動畫結束 (1.75秒) 判定結果
+      setTimeout(() => {
+        isThrowing = false;
+
+        // 顯示結果圖片與徽章
+        const resultImg = document.getElementById('resultImage');
+        const badge = document.getElementById('resultBadge');
+        resultImg.src = outcome.img;
+        badge.innerText = outcome.title;
+        badge.className = `bwei-result-badge ${outcome.badge}`;
+        overlay.classList.add('show');
+
+        if (outcome.type === 'sheng') {
+          shengCount++;
+          updateStatusBar();
+
+          if (shengCount >= TARGET_SHENG) {
+            // 連續三聖杯達成！
+            document.getElementById('stageTitle').innerText = '🎉 連續三聖杯！神明賜籤！';
+            document.getElementById('ruleTip').innerText = '恭喜獲得天上聖母應允，請領取靈籤';
+            throwBtn.style.display = 'none';
+            document.getElementById('viewPoemBtn').style.display = 'inline-flex';
+          } else {
+            throwBtn.disabled = false;
+            document.getElementById('throwBtnText').innerText = '誠心再擲一次';
+            document.getElementById('throwHalo').style.display = 'block';
+          }
+        } else {
+          // 笑杯或陰杯：聖杯歸零，需重新抽籤
+          shengCount = 0;
+          updateStatusBar();
+          document.getElementById('stageTitle').innerText = outcome.type === 'xiao' ? '神明微笑，所求未明' : '非神明賜籤，請重新抽籤';
+          document.getElementById('ruleTip').innerText = '依民間習俗，請將籤枝放回籤筒重新求取';
+
+          throwBtn.style.display = 'none';
+          document.getElementById('reShakeBtn').style.display = 'inline-flex';
+        }
+      }, 1800);
+    }
+
+    // 放回籤枝重新搖籤
+    function onReShake() {
+      shengCount = 0;
+      document.getElementById('secondScene').classList.remove('current-scene');
+      document.getElementById('lotDetailModal').classList.remove('show');
+      document.getElementById('firstScene').classList.add('current-scene');
+
+      // 重置第一場景按鈕與籤枝
+      document.getElementById('startShakeBtn').disabled = false;
+      document.getElementById('divinationSpear').classList.remove('action');
+      document.getElementById('spearResultModal').classList.remove('show');
+
+      // 重置第二場景控制按鈕
+      document.getElementById('throwBtn').style.display = 'inline-flex';
+      document.getElementById('reShakeBtn').style.display = 'none';
+      document.getElementById('viewPoemBtn').style.display = 'none';
+      resetBweiToIdle();
+    }
+
+    // 打開籤詩彈窗
+    function onOpenPoemModal() {
+      document.getElementById('finalLotTitle').innerText = currentLot.name;
+      document.getElementById('finalLotPoem').innerHTML = currentLot.poem.replace(/\n/g, '<br>');
+      document.getElementById('finalLotDesc').innerText = currentLot.desc;
+      document.getElementById('lotDetailModal').classList.add('show');
+    }
+
+    // 透過 LINE LIFF 傳回聊天室
+    async function sendPoemToLine() {
+      if (liff.isInClient()) {
+        try {
+          await liff.sendMessages([
+            {
+              type: "text",
+              text: `【中壢仁海宮 線上靈籤】\n信士誠心祈得連續三聖杯，神明賜予：\n${currentLot.name}\n\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請廟方/AI靈籤大師為我詳細解籤！`
+            }
+          ]);
+          liff.closeWindow();
+        } catch (e) {
+          alert("回傳聊天室失敗：" + e.message);
+        }
+      } else {
+        alert(`已獲得【${currentLot.name}】！\n請於手機 LINE 內開啟即可自動回傳至聊天室由 AI 解籤。`);
+      }
+    }
   </script>
 </body>
 </html>
