@@ -45,14 +45,16 @@ parser = WebhookParser(LINE_CHANNEL_SECRET)
 
 nvidia_client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
-    api_key=NVIDIA_API_KEY
+    api_key=NVIDIA_API_KEY,
+    max_retries=0,
+    timeout=6.0
 )
 
 # 極具親和力、像朋友與鄰家長輩般隨和日常的老廟祝 Prompt
 TEMPLE_MASTER_PROMPT = """你是「AI 福運宮」的駐廟老廟祝。但你平日就像一位坐在廟口老榕樹下泡茶、親切幽默、很會聊天的長輩好友。
 
 【聊天風格與核心要求】：
-1. 【稀鬆平常、極度口語化】：
+1. 【稀鬆平常、極度口語化、繁體中文】：
    - 講話請像普通朋友在 LINE 聊天一樣自然隨和、平易近人，多用「我」、「你」、「哈哈」、「辛苦啦」、「真的假的」、「喝口水休息一下」。
    - 絕對不要動不動就自稱「老夫」、「本道人」，也不要張口閉口「善信吉祥」、「神明信使」這種死板嚴肅的文言腔調！
 2. 【像朋友一樣隨便聊】：
@@ -66,51 +68,57 @@ TEMPLE_MASTER_PROMPT = """你是「AI 福運宮」的駐廟老廟祝。但你平
 
 
 def call_nvidia_ai(user_message: str) -> str:
-    """調用 NVIDIA NIM 大模型，若超時則使用親切日常備援"""
+    """調用 NVIDIA NIM 極速模型 (Llama-3.2 11B)，若超時則立即使用親切日常備援，絕不卡頓"""
+    # 針對籤詩給予較充裕的 token，一般日常閒聊給 120 token 達到秒回
+    is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
+    max_tok = 300 if is_fortune else 120
+
     try:
         response = nvidia_client.chat.completions.create(
-            model="z-ai/glm-5.3-flash",
+            model="meta/llama-3.2-11b-vision-instruct",
             messages=[
                 {"role": "system", "content": TEMPLE_MASTER_PROMPT},
                 {"role": "user", "content": user_message}
             ],
-            temperature=0.8,
-            max_tokens=450,
-            top_p=0.95,
-            timeout=12
+            temperature=0.75,
+            max_tokens=max_tok,
+            timeout=5.5
         )
-        return response.choices[0].message.content.strip()
+        content = response.choices[0].message.content
+        if content and content.strip():
+            return content.strip()
     except Exception as e:
-        log_event(f"NVIDIA API 呼叫略過或超時: {e}")
-        return get_casual_fallback(user_message)
+        log_event(f"NVIDIA API 呼叫略過或超時 ({e})，立即啟動親切備援")
+
+    return get_casual_fallback(user_message)
 
 
 def get_casual_fallback(user_text: str) -> str:
     """接地氣的日常對話保底庫（像真人朋友在 LINE 聊天）"""
     t = user_text.strip().lower()
 
-    if any(k in t for k in ["哈囉", "嗨", "hi", "hello"]):
+    if any(k in t for k in ["哈囉", "嗨", "hi", "hello", "早安", "晚安", "午安", "你好"]):
         return random.choice([
             "嗨～今天過得如何呀？😊",
             "哈囉！今天忙不忙？有什麼好事想聊聊嗎哈哈～",
             "嗨嗨！在忙什麼呢？我剛好在泡茶，隨時找我聊聊天喔！"
         ])
-    elif any(k in t for k in ["在嗎", "在不在", "欸"]):
+    elif any(k in t for k in ["在嗎", "在不在", "欸", "在"]):
         return random.choice([
             "在呀在呀！怎麼啦？有心事想說說嗎？",
             "在呢！你說，我隨時在線上陪你聊聊～",
             "在喔～剛好忙完，怎麼啦，遇到什麼事了嗎？"
         ])
-    elif any(k in t for k in ["你可以回復我嗎", "你可以回復我媽", "回復我", "說話", "講話"]):
-        return "哈哈當然可以呀！我一直都在～剛剛是不是等有點久？隨時找我都可以聊聊喔！"
-    elif any(k in t for k in ["你是誰", "什麼ai", "你到底是什麼"]):
+    elif any(k in t for k in ["你可以回復我嗎", "你可以回復我媽", "回復我", "說話", "講話", "理我"]):
+        return "哈哈當然可以呀！我一直都在～剛剛在泡茶，隨時找我都可以聊聊喔！"
+    elif any(k in t for k in ["你是誰", "什麼ai", "你到底是什麼", "模型"]):
         return "哈哈我是《AI 福運宮》的駐廟老廟祝啦！平常在廟埕樹下泡茶，也兼職在 LINE 上陪大家聊聊天解悶。不管是生活煩惱還是想要求籤解惑，都可以跟我聊聊喔～"
-    elif any(k in t for k in ["累", "煩", "辛苦", "壓力"]):
+    elif any(k in t for k in ["累", "煩", "辛苦", "壓力", "好累", "好煩"]):
         return "辛苦啦！生活確實不容易，先喝口水、深呼吸一下。是工作太忙還是有什麼煩心事啊？想抱怨儘管跟我說，我聽你說！"
-    elif any(k in t for k in ["靈籤", "籤", "聖杯", "解籤"]):
+    elif any(k in t for k in ["靈籤", "籤", "聖杯", "解籤", "首"]):
         return (
-            "抽到籤啦！來，籤詩內容跟老廟祝說說，我用白話幫你好好分析一下，"
-            "看看神明有什麼生活上的小撇步要提醒你～"
+            "抽到籤啦！神明的意思是說凡事不用太心急，按部就班穩健前行，"
+            "目前雖然有些小波折，但心態放寬、保持善念，轉機很快就會來囉！有想細聊的阿伯都在這陪你！"
         )
     else:
         return random.choice([
@@ -131,14 +139,14 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
         try:
             if user_id:
                 messaging_api.show_loading_animation(
-                    ShowLoadingAnimationRequest(chat_id=user_id, loading_seconds=10)
+                    ShowLoadingAnimationRequest(chat_id=user_id, loading_seconds=5)
                 )
         except Exception as e:
             pass
 
-        # 極短詞快速秒回
+        # 極短詞快速秒回（0.01 秒無延遲）
         t = user_text.strip().lower()
-        instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "你可以回復我嗎", "你可以回復我媽", "講話"]
+        instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "早安", "晚安", "午安", "你可以回復我嗎", "你可以回復我媽", "講話", "說話"]
 
         if t in instant_casual_words:
             reply_content = get_casual_fallback(t)
