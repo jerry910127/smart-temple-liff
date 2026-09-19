@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧宮廟 - 線上求籤祈福</title>
+  <!-- 載入 LINE LIFF SDK -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #fbf9f5;
+      color: #333;
+    }
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      text-align: center;
+      max-width: 320px;
+      width: 90%;
+    }
+    .bwa-container {
+      font-size: 3.5rem;
+      margin: 1.5rem 0;
+      transition: transform 0.2s;
+      user-select: none;
+    }
+    button {
+      background: #c0392b;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 24px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+      transition: background-color 0.2s, opacity 0.2s;
+    }
+    button:disabled {
+      background: #ccc;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    #result-text {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #7f1d1d;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2 style="margin-top:0; color:#8b0000;">🏮 智慧靈籤宮 🏮</h2>
+    <p id="user-greeting">正在連線神明...</p>
+    
+    <div class="bwa-container" id="bwa-icon">🎋</div>
+    
+    <button id="draw-btn" onclick="startDivination()" disabled>誠心求籤擲筊</button>
+    <div id="result-text"></div>
+  </div>
+
+  <script>
+    // 請替換為您在 LINE Developers 後台取得的 LIFF ID (例如: 2001234567-xxxxxxx)
+    const MY_LIFF_ID = "YOUR_LIFF_ID";
+
+    // 籤詩庫範例（可依需求擴充為 60 甲子籤或靈籤）
+    const LOTS = [
+      { id: 1, name: "第一籤【甲子】大吉", poem: "日出便見風雲散，光明清淨照世間。" },
+      { id: 2, name: "第二籤【乙丑】上吉", poem: "雲開月出正分明，不須進退問前程。" },
+      { id: 3, name: "第三籤【丙寅】中平", poem: "財中漸漸見分明，花開花謝結子成。" }
+    ];
+
+    async function initLiff() {
+      try {
+        await liff.init({ liffId: MY_LIFF_ID });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        const profile = await liff.getProfile();
+        document.getElementById("user-greeting").innerText = `信士 ${profile.displayName}，請誠心祈願`;
+        document.getElementById("draw-btn").disabled = false;
+      } catch (err) {
+        console.error("LIFF 初始化失敗:", err);
+        document.getElementById("user-greeting").innerText = "無法載入神明連線，請於 LINE 內開啟";
+      }
+    }
+
+    async function startDivination() {
+      const btn = document.getElementById("draw-btn");
+      const icon = document.getElementById("bwa-icon");
+      const resultText = document.getElementById("result-text");
+
+      btn.disabled = true;
+      resultText.innerText = "祈願求籤中...";
+      icon.style.transform = "rotate(20deg) scale(1.1)";
+
+      setTimeout(async () => {
+        icon.style.transform = "none";
+        // 隨機抽選籤詩
+        const lot = LOTS[Math.floor(Math.random() * LOTS.length)];
+        resultText.innerHTML = `【聖筊】神明賜籤！<br><b>${lot.name}</b><br>「${lot.poem}」`;
+
+        // 若在 LINE App 內開啟，發送訊息回聊天室並自動關閉 LIFF
+        if (liff.isInClient()) {
+          try {
+            await liff.sendMessages([
+              {
+                type: "text",
+                text: `我向神明求得【${lot.name}】：\n「${lot.poem}」\n請廟方幫我解籤！`
+              }
+            ]);
+            setTimeout(() => {
+              liff.closeWindow();
+            }, 2000);
+          } catch (e) {
+            console.error("訊息發送失敗:", e);
+          }
+        }
+        btn.disabled = false;
+      }, 1200);
+    }
+
+    // 啟動初始化
+    initLiff();
+  </script>
+</body>
+</html>
