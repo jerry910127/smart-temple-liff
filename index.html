@@ -922,8 +922,26 @@
   </div>
 
   <script>
-    // LINE Developers LIFF ID
-    const MY_LIFF_ID = "2011668576-3Qay1nBv";
+    // LINE MINI App / LIFF ID 多階段配置
+    const MINI_APP_IDS = {
+      dev: "2011672732-8VId10cb",       // Developing（開發中階段）
+      review: "2011672733-59eN6KAB",    // Review（審核中階段）
+      published: "2011672734-RX4TBGQf", // Published（正式發布階段）
+      legacy: "2011668576-3Qay1nBv"     // 舊版 LINE Login LIFF
+    };
+
+    function resolveCurrentLiffId() {
+      const search = window.location.search || '';
+      const href = window.location.href || '';
+      const urlParams = new URLSearchParams(search);
+      if (urlParams.get('liffId')) return urlParams.get('liffId');
+      if (href.includes('2011672734-RX4TBGQf')) return MINI_APP_IDS.published;
+      if (href.includes('2011672733-59eN6KAB')) return MINI_APP_IDS.review;
+      if (href.includes('2011668576-3Qay1nBv')) return MINI_APP_IDS.legacy;
+      return MINI_APP_IDS.dev;
+    }
+
+    const MY_LIFF_ID = resolveCurrentLiffId();
 
     // 參拜小知識跑馬燈庫 (Game loading Tips 風格)
     const TEMPLE_TIPS = [
