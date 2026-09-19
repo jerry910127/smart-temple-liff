@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.4.0")
+app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.5.0")
 
 # 即時日誌快取（記錄最近 100 筆系統動作，方便診斷）
 SERVER_LOGS = collections.deque(maxlen=100)
@@ -190,7 +190,7 @@ def root():
         "project": "靈籤入微 - LINE 智慧宮廟文化生活圈",
         "chat_style": "casual-everyday-friendly",
         "logs_endpoint": "/logs",
-        "version": "2.4.0"
+        "version": "2.5.0"
     }
 
 
