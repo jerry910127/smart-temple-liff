@@ -3,6 +3,8 @@ import sys
 import time
 import random
 import traceback
+import collections
+from datetime import datetime
 from fastapi import FastAPI, Request, HTTPException, Header, BackgroundTasks
 from fastapi.responses import JSONResponse
 from linebot.v3 import WebhookParser
@@ -22,12 +24,21 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.3.0")
+app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.4.0")
+
+# 即時日誌快取（記錄最近 100 筆系統動作，方便診斷）
+SERVER_LOGS = collections.deque(maxlen=100)
+
+def log_event(msg: str):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    entry = f"[{now}] {msg}"
+    SERVER_LOGS.append(entry)
+    print(entry, flush=True)
 
 # 環境變數設定
-LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "d17ea5b0159bcb2985396186a3279dcb")
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "ZZZ2jYlPyqxzNpoUyqVd5zBCq6phjA8voG12JjYAnYLW2y+xybTBrLf4Oxsasl+H9ENpS3RevFy7SVQheDW0mHKGqpk3kloUv7AzUl2lMOaypqpKJ17oEzRqvECFaxUIwFYF3a488f2XQ+I0OTSh7gdB04t89/1O/w1cDnyilFU=")
-NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "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")
+LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "d17ea5b0159bcb2985396186a3279dcb").strip()
+LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "ZZZ2jYlPyqxzNpoUyqVd5zBCq6phjA8voG12JjYAnYLW2y+xybTBrLf4Oxsasl+H9ENpS3RevFy7SVQheDW0mHKGqpk3kloUv7AzUl2lMOaypqpKJ17oEzRqvECFaxUIwFYF3a488f2XQ+I0OTSh7gdB04t89/1O/w1cDnyilFU=").strip()
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "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").strip()
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(LINE_CHANNEL_SECRET)
@@ -64,13 +75,13 @@ def call_nvidia_ai(user_message: str) -> str:
                 {"role": "user", "content": user_message}
             ],
             temperature=0.8,
-            max_tokens=500,
+            max_tokens=450,
             top_p=0.95,
-            timeout=15
+            timeout=12
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"NVIDIA API 異常或超時: {e}", file=sys.stderr)
+        log_event(f"NVIDIA API 呼叫略過或超時: {e}")
         return get_casual_fallback(user_message)
 
 
@@ -112,7 +123,7 @@ def get_casual_fallback(user_text: str) -> str:
 def process_and_reply(user_text: str, reply_token: str, user_id: str):
     """在背景非同步處理訊息並透過 LINE 送出"""
     t_start = time.time()
-    print(f"[Worker] 收到來自 {user_id} 的日常訊息: {user_text}")
+    log_event(f"收到信徒 [{user_id}] 訊息: {user_text}")
 
     with ApiClient(configuration) as api_client:
         messaging_api = MessagingApi(api_client)
@@ -123,22 +134,22 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
                     ShowLoadingAnimationRequest(chat_id=user_id, loading_seconds=10)
                 )
         except Exception as e:
-            print(f"[Worker] Loading animation skip: {e}")
+            pass
 
-        # 如果是非常短的打招呼詞，秒回真人日常口吻（極致流暢，0.1秒秒回！）
+        # 極短詞快速秒回
         t = user_text.strip().lower()
         instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "你可以回復我嗎", "你可以回復我媽", "講話"]
 
         if t in instant_casual_words:
             reply_content = get_casual_fallback(t)
         else:
-            # 其餘較長的句子或提問，交由大模型以稀鬆平常的朋友語氣智慧作答
             reply_content = call_nvidia_ai(user_text)
 
         elapsed = time.time() - t_start
-        print(f"[Worker] 生成完成 (耗時 {elapsed:.2f}s): {reply_content[:30]}...")
+        log_event(f"回覆生成完成 (耗時 {elapsed:.2f}s): {reply_content[:25]}...")
 
-        # 優先 reply，若過期則 push 保底
+        # 優先 reply_message，失敗自動轉 push_message
+        sent_success = False
         try:
             messaging_api.reply_message(
                 ReplyMessageRequest(
@@ -146,20 +157,22 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
                     messages=[TextMessage(text=reply_content)]
                 )
             )
-            print(f"[Worker] 成功透過 reply_message 回覆！")
+            log_event(f"已成功透過 reply_message 回傳訊息！")
+            sent_success = True
         except Exception as err:
-            print(f"[Worker] reply_message 失敗 ({err})，啟用 push_message 保底發送...")
+            log_event(f"reply_message 失敗 ({err})，嘗試 push_message 保底...")
+
+        if not sent_success and user_id:
             try:
-                if user_id:
-                    messaging_api.push_message(
-                        PushMessageRequest(
-                            to=user_id,
-                            messages=[TextMessage(text=reply_content)]
-                        )
+                messaging_api.push_message(
+                    PushMessageRequest(
+                        to=user_id,
+                        messages=[TextMessage(text=reply_content)]
                     )
-                    print(f"[Worker] push_message 成功送達！")
+                )
+                log_event(f"已成功透過 push_message 發送給信徒 [{user_id}]！")
             except Exception as push_err:
-                print(f"[Worker] push_message 失敗: {push_err}", file=sys.stderr)
+                log_event(f"push_message 亦失敗: {push_err}")
 
 
 @app.get("/")
@@ -168,7 +181,17 @@ def root():
         "status": "online",
         "project": "靈籤入微 - LINE 智慧宮廟文化生活圈",
         "chat_style": "casual-everyday-friendly",
-        "version": "2.3.0"
+        "logs_endpoint": "/logs",
+        "version": "2.4.0"
+    }
+
+
+@app.get("/logs")
+def view_logs():
+    """即時查看伺服器處理日誌，排查連線狀況"""
+    return {
+        "total_logs": len(SERVER_LOGS),
+        "logs": list(SERVER_LOGS)
     }
 
 
@@ -176,6 +199,7 @@ def root():
 async def webhook(request: Request, background_tasks: BackgroundTasks, x_line_signature: str = Header(None)):
     """0.05 秒秒回 Webhook，背景執行日常對話"""
     if not x_line_signature:
+        log_event("收到 Webhook 請求，但缺少 X-Line-Signature")
         raise HTTPException(status_code=400, detail="Missing X-Line-Signature")
 
     body = await request.body()
@@ -183,9 +207,12 @@ async def webhook(request: Request, background_tasks: BackgroundTasks, x_line_si
 
     try:
         events = parser.parse(body_str, x_line_signature)
+        log_event(f"成功解析 Webhook 請求，包含 {len(events)} 個事件")
     except InvalidSignatureError:
+        log_event("Webhook 簽章驗證失敗 (InvalidSignatureError)")
         raise HTTPException(status_code=400, detail="Invalid signature")
     except Exception as e:
+        log_event(f"Webhook 解析異常: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
     for event in events:
