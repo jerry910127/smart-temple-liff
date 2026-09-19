@@ -117,6 +117,12 @@ def get_casual_fallback(user_text: str) -> str:
         return "哈哈我是《AI 福運宮》的駐廟老廟祝啦！平常在廟埕樹下泡茶，也兼職在 LINE 上陪大家聊聊天解悶。不管是生活煩惱還是想要求籤解惑，都可以跟我聊聊喔～"
     elif any(k in t for k in ["累", "煩", "辛苦", "壓力", "好累", "好煩"]):
         return "辛苦啦！生活確實不容易，先喝口水、深呼吸一下。是工作太忙還是有什麼煩心事啊？想抱怨儘管跟我說，我聽你說！"
+    elif any(k in t for k in ["求籤", "抽籤", "我要抽籤", "我要求籤", "線上求籤", "擲筊"]):
+        return (
+            "心有所感，神明自會慈悲指引！請點擊下方連結開啟【線上求籤・三聖筊請示】：\n"
+            "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
+            "記得在心裡默念姓名與所問之事，依循正統科儀連續擲出三次聖筊。抽完後點擊回傳，老廟祝阿伯在聊天室替你好好解籤！"
+        )
     elif any(k in t for k in ["靈籤", "籤", "聖杯", "解籤", "首"]):
         return (
             "抽到籤啦！神明的意思是說凡事不用太心急，按部就班穩健前行，"
@@ -148,7 +154,7 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
         # 極短詞快速秒回（0.01 秒無延遲）
         t = user_text.strip().lower()
-        instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "早安", "晚安", "午安", "你可以回復我嗎", "你可以回復我媽", "講話", "說話"]
+        instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "早安", "晚安", "午安", "你可以回復我嗎", "你可以回復我媽", "講話", "說話", "求籤", "抽籤", "我要抽籤", "我要求籤", "線上求籤", "擲筊"]
 
         if t in instant_casual_words:
             reply_content = get_casual_fallback(t)
