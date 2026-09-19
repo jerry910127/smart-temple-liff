@@ -8,6 +8,7 @@ import collections
 from datetime import datetime
 from fastapi import FastAPI, Request, HTTPException, Header, BackgroundTasks
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from linebot.v3 import WebhookParser
 from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import (
@@ -26,7 +27,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.7.0")
+app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.8.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # 即時日誌快取（記錄最近 100 筆系統動作，方便診斷）
 SERVER_LOGS = collections.deque(maxlen=100)
@@ -290,6 +299,68 @@ def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
                 log_event(f"照片 push 亦失敗: {push_err}")
 
 
+def process_and_push_ai_interpretation(fortune_text: str, user_id: str):
+    """為電腦版/外部網頁抽籤的信徒，非同步生成老廟祝解籤並推播至 LINE"""
+    time.sleep(1.2)  # 稍微錯開，讓籤詩先抵達聊天室
+    log_event(f"正在為電腦版信徒 [{user_id}] 生成老廟祝專屬解籤...")
+    reply_content = call_nvidia_ai(fortune_text)
+    with ApiClient(configuration) as api_client:
+        messaging_api = MessagingApi(api_client)
+        try:
+            messaging_api.push_message(
+                PushMessageRequest(
+                    to=user_id,
+                    messages=[TextMessage(text=reply_content)]
+                )
+            )
+            log_event(f"已成功推送 AI 解籤給電腦版信徒 [{user_id}]！")
+        except Exception as e:
+            log_event(f"推送 AI 解籤失敗: {e}")
+
+
+@app.post("/api/push_fortune")
+async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
+    """供電腦版/外開瀏覽器 LIFF 一鍵將抽籤結果送回用戶 LINE 聊天室"""
+    try:
+        data = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+
+    user_id = data.get("user_id")
+    text = data.get("text")
+    if not user_id or not text:
+        raise HTTPException(status_code=400, detail="Missing user_id or text")
+
+    log_event(f"收到來自電腦版網頁的抽籤回傳請求: 信徒 [{user_id}]")
+
+    with ApiClient(configuration) as api_client:
+        messaging_api = MessagingApi(api_client)
+        try:
+            messaging_api.push_message(
+                PushMessageRequest(
+                    to=user_id,
+                    messages=[TextMessage(text=text)]
+                )
+            )
+            log_event(f"已成功將電腦版籤詩推播至信徒 [{user_id}] 聊天室！")
+        except Exception as e:
+            log_event(f"推播籤詩失敗: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+
+    # 排程 AI 老廟祝緊接著推播深度解籤
+    background_tasks.add_task(process_and_push_ai_interpretation, text, user_id)
+    return {"status": "success", "message": "已成功將籤詩送達您的 LINE 聊天室"}
+
+
+@app.post("/api/interpret_fortune")
+async def api_interpret_fortune(request: Request):
+    """直接在網頁畫面上進行老廟祝即時解籤（適用於不想跳轉 LINE 的電腦用戶）"""
+    data = await request.json()
+    text = data.get("text", "")
+    reply = call_nvidia_ai(text)
+    return {"status": "success", "reply": reply}
+
+
 @app.get("/")
 def root():
     return {
@@ -297,8 +368,9 @@ def root():
         "project": "靈籤入微 - LINE 智慧宮廟文化生活圈",
         "chat_style": "casual-everyday-friendly",
         "vision_support": "multimodal-enabled",
+        "desktop_push_support": "api-push-fortune-enabled",
         "logs_endpoint": "/logs",
-        "version": "2.7.0"
+        "version": "2.8.0"
     }
 
 

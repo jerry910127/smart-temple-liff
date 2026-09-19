@@ -775,7 +775,7 @@
             【解曰】凡事大吉，前程光明。雲開月出，所求如願，貴人常臨相照。
           </div>
 
-          <button class="zen-btn" style="margin-bottom:10px;" onclick="handleSendToLine()">
+          <button class="zen-btn" id="sendToLineBtn" style="margin-bottom:10px;" onclick="handleSendToLine()">
             <span>💬 回傳 LINE 聊天室（老廟祝解籤）</span>
           </button>
           <button class="zen-btn zen-btn-secondary" onclick="handleResetToShake()">
@@ -1102,14 +1102,19 @@
       document.getElementById('omikujiOverlay').classList.add('visible');
     }
 
-    // 回傳至 LINE 聊天室進行 AI 解籤
+    // 回傳至 LINE 聊天室進行 AI 解籤（無縫支援手機與電腦版）
     async function handleSendToLine() {
+      const sendBtn = document.getElementById('sendToLineBtn');
+      const originalHtml = sendBtn.innerHTML;
+      const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`;
+
       if (liff.isInClient()) {
+        // 1. 手機 LINE App 內部開啟：原生 sendMessages 閉環
         try {
           await liff.sendMessages([
             {
               type: "text",
-              text: `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`
+              text: msgText
             }
           ]);
           liff.closeWindow();
@@ -1117,7 +1122,40 @@
           alert("回傳聊天室失敗：" + err.message);
         }
       } else {
-        alert(`已獲得【${currentLot.name}】！\n請於手機 LINE 內開啟，即可自動將籤文發送至聊天室由 AI 解籤。`);
+        // 2. 電腦瀏覽器 / 外開 Chrome / Edge
+        if (liff.isLoggedIn()) {
+          try {
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = "<span>⏳ 正在傳送至 LINE 聊天室...</span>";
+            const profile = await liff.getProfile();
+
+            const resp = await fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user_id: profile.userId,
+                text: msgText
+              })
+            });
+
+            if (resp.ok) {
+              sendBtn.innerHTML = "<span>✅ 已成功送達 LINE 聊天室！</span>";
+              alert("🎉 恭喜！靈籤已成功傳送至您的 LINE 聊天室！\n老廟祝阿伯正在為您解籤，請打開手機或電腦版 LINE 查看！");
+            } else {
+              throw new Error("伺服器回應異常");
+            }
+          } catch (err) {
+            console.warn("後端推播異常，改用 LINE URL Scheme 喚醒:", err);
+            window.open(`https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`, '_blank');
+          } finally {
+            sendBtn.disabled = false;
+          }
+        } else {
+          // 未登入則引導登入
+          if (confirm("電腦瀏覽器需先登入您的 LINE（可直接手機掃描 QR Code），即可直接把籤詩送到您的聊天室並獲得 AI 解籤！\n\n是否立即登入？")) {
+            liff.login();
+          }
+        }
       }
     }
   </script>
