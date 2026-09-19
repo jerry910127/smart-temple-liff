@@ -549,6 +549,103 @@
       margin-bottom: 20px;
     }
 
+    /* === 心理學補償：誠心奉茶折扣券 Modal === */
+    .coupon-ticket {
+      position: relative;
+      background: linear-gradient(135deg, #2a221b 0%, #1c1917 100%);
+      border: 1px dashed var(--muted-gold);
+      border-radius: 8px;
+      padding: 16px 14px;
+      margin: 12px 0 16px 0;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+    .coupon-ticket::before, .coupon-ticket::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      background: #231f1d;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+    .coupon-ticket::before { left: -8px; border-right: 1px dashed var(--muted-gold); }
+    .coupon-ticket::after { right: -8px; border-left: 1px dashed var(--muted-gold); }
+    .coupon-badge {
+      display: inline-block;
+      background: rgba(201, 164, 92, 0.2);
+      border: 1px solid var(--muted-gold);
+      color: #f7d58b;
+      font-size: 0.75rem;
+      padding: 2px 10px;
+      border-radius: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .coupon-discount {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffd875;
+      letter-spacing: 1px;
+      margin: 4px 0;
+    }
+    .coupon-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .coupon-code-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.4);
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 164, 92, 0.3);
+    }
+    .coupon-code {
+      font-family: monospace;
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+    .coupon-copy-btn {
+      background: var(--muted-gold);
+      color: #241e1a;
+      border: none;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      font-weight: bold;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .pity-buff-alert {
+      font-size: 0.82rem;
+      color: #7ee787;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+    .pity-boost-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: #ffd875;
+      background: rgba(201, 164, 92, 0.15);
+      border: 1px solid rgba(201, 164, 92, 0.4);
+      padding: 3px 10px;
+      border-radius: 12px;
+      animation: pulse_pity 2s infinite ease-in-out;
+    }
+    @keyframes pulse_pity {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+
     /* === 日式御神籤 (和紙風格詩籤詳情) === */
     .omikuji-overlay {
       position: absolute;
@@ -709,6 +806,40 @@
     </div>
 
     <!-- ==============================================
+         心理學挫折補償：奉茶解躁飲料折扣券 Modal
+         ============================================== -->
+    <div class="zen-modal" id="couponModal">
+      <div class="coupon-badge">🍵 心理學誠心奉茶・消躁解煩</div>
+      <div class="zen-modal-title" style="font-size:1.25rem;">喝杯好茶，沉澱再擲</div>
+      <div class="zen-modal-body" style="margin-bottom:8px;">
+        擲筊未中？別氣餒，神明正在考驗您的恆心！<br>
+        特批為您奉上一杯清心好茶，消消火氣：
+      </div>
+
+      <div class="coupon-ticket">
+        <div class="coupon-badge">全台合作手搖飲 / 咖啡通用</div>
+        <div class="coupon-discount">🥤 現折 15 元／85折</div>
+        <div class="coupon-desc">結帳出示折扣代碼，消暑降火心誠則靈</div>
+        <div class="coupon-code-box">
+          <span class="coupon-code" id="couponCodeText">TEMPLE88</span>
+          <button class="coupon-copy-btn" onclick="copyCouponCode()">複製代碼</button>
+        </div>
+      </div>
+
+      <div class="pity-buff-alert">
+        ✨ <strong>好茶加持效果</strong>：神明已感念您的誠心，<br>
+        下一擲聖筊機率直接飆升至 <span style="color:#ffd875; font-size:1.05rem; font-weight:bold;">90%</span>！
+      </div>
+
+      <button class="zen-btn" style="margin-top:14px;" onclick="claimCouponAndContinue()">
+        <span>領取優惠・霸氣再擲！</span>
+      </button>
+      <button class="zen-btn zen-btn-secondary" style="margin-top:8px; font-size:0.85rem; padding:8px;" onclick="closeCouponModal()">
+        <span>稍後再領</span>
+      </button>
+    </div>
+
+    <!-- ==============================================
          第二幕：檜木雙筊・請示神意
          ============================================== -->
     <div class="shrine-scene" id="sceneToss">
@@ -721,6 +852,9 @@
           <div class="sheng-dot" id="dot3"></div>
         </div>
         <div class="sheng-dot-tip" id="shengTipText">尚需連續擲出 3 個聖杯</div>
+        <div class="pity-boost-indicator" id="pityBoostIndicator" style="display:none;">
+          <span>✨ 誠心祈願感應：聖筊機率加成中 <strong id="pityRateText">+0%</strong></span>
+        </div>
       </div>
 
       <!-- 筊杯拋擲舞台 -->
@@ -818,8 +952,36 @@
     let isTossing = false;
     let audioContext = null;
 
-    // 機率配置：笑杯 25%, 陰杯 25%, 聖杯 50%
-    const TOSS_RATES = { xiao: 25, yin: 25, sheng: 50 };
+    // 心理學動態保底機率與挫折補償狀態
+    let failureStreak = 0;
+    let pityShengBonus = 0;
+    let couponOffered = false;
+
+    // 機率運算（基礎 50%，沒中一次自動累加提升，領券再加成）
+    function getDynamicRates() {
+      const dynamicSheng = Math.min(95, 50 + (failureStreak * 15) + pityShengBonus);
+      const remaining = 100 - dynamicSheng;
+      return {
+        sheng: dynamicSheng,
+        xiao: remaining / 2,
+        yin: remaining / 2
+      };
+    }
+
+    function updatePityIndicator() {
+      const indicator = document.getElementById('pityBoostIndicator');
+      const rateText = document.getElementById('pityRateText');
+      if (!indicator || !rateText) return;
+
+      const rates = getDynamicRates();
+      const bonus = Math.round(rates.sheng - 50);
+      if (bonus > 0) {
+        rateText.innerText = `+${bonus}% (現為 ${Math.round(rates.sheng)}%)`;
+        indicator.style.display = 'inline-flex';
+      } else {
+        indicator.style.display = 'none';
+      }
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('zenApp').style.opacity = '1';
@@ -970,12 +1132,12 @@
       document.getElementById('tossBtnLabel').innerText = consecutiveSheng === 0 ? '擲　　筊' : '誠 心 再 擲';
     }
 
-    // 機率運算
+    // 機率運算（採用心理學動態補償）
     function evaluateTossOutcome() {
-      const total = TOSS_RATES.xiao + TOSS_RATES.yin + TOSS_RATES.sheng;
-      const roll = Math.random() * total;
+      const rates = getDynamicRates();
+      const roll = Math.random() * 100;
 
-      if (roll < TOSS_RATES.xiao) {
+      if (roll < rates.xiao) {
         // 笑杯（雙凸/陽面）
         return {
           type: 'xiao',
@@ -985,7 +1147,7 @@
           badgeClass: 'badge-xiao',
           imageSrc: 'assets/zen/cypress_xiao.svg'
         };
-      } else if (roll < TOSS_RATES.xiao + TOSS_RATES.yin) {
+      } else if (roll < (rates.xiao + rates.yin)) {
         // 陰杯（雙平/陰面）
         return {
           type: 'yin',
@@ -1058,7 +1220,11 @@
           updateShengProgress();
 
           if (consecutiveSheng >= TARGET_SHENG_COUNT) {
-            // 三聖杯達成
+            // 三聖杯達成！重置失敗累積與加成
+            failureStreak = 0;
+            pityShengBonus = 0;
+            updatePityIndicator();
+
             tossBtn.style.display = 'none';
             document.getElementById('viewPoemBtn').style.display = 'inline-flex';
           } else {
@@ -1066,14 +1232,56 @@
             document.getElementById('tossBtnLabel').innerText = '誠 心 再 擲';
           }
         } else {
-          // 未獲聖杯，歸零重抽
+          // 未獲聖杯：累加失敗次數，激發心理學動態機率提升！
+          failureStreak++;
           consecutiveSheng = 0;
           updateShengProgress();
+          updatePityIndicator();
+
+          // 心理學挫折補償：當累計失敗 2 次（快沒耐心時），彈出飲料折扣券！
+          if (failureStreak >= 2 && !couponOffered) {
+            setTimeout(() => {
+              openCouponModal();
+            }, 600);
+          }
 
           tossBtn.style.display = 'none';
           document.getElementById('resetBtn').style.display = 'inline-flex';
         }
       }, 1750);
+    }
+
+    // 心理學飲料折扣券控制
+    function openCouponModal() {
+      couponOffered = true;
+      document.getElementById('couponModal').classList.add('visible');
+    }
+
+    function closeCouponModal() {
+      document.getElementById('couponModal').classList.remove('visible');
+    }
+
+    function copyCouponCode() {
+      const code = document.getElementById('couponCodeText').innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).catch(() => {});
+      }
+      alert(`🎉 飲料折扣代碼【${code}】已成功複製到剪貼簿！\n至全台合作手搖茶飲或超商結帳出示即享折抵！`);
+    }
+
+    function claimCouponAndContinue() {
+      copyCouponCode();
+      pityShengBonus = 35; // 額外加成 35%，讓聖杯機率狂飆至 90%+
+      updatePityIndicator();
+      closeCouponModal();
+
+      // 貼心體驗：免退回搖籤，直接在原案前再擲！
+      document.getElementById('resetBtn').style.display = 'none';
+      const tossBtn = document.getElementById('tossBtn');
+      tossBtn.style.display = 'inline-flex';
+      tossBtn.disabled = false;
+      document.getElementById('tossBtnLabel').innerText = '✨ 奉茶加持・霸氣再擲';
+      restorePoeToRest();
     }
 
     // 重置回到第一幕搖籤
