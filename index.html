@@ -735,11 +735,998 @@
       margin: 12px 0 18px;
       text-align: justify;
     }
+
+    /* ==========================================================================
+       LINE Bye - LINE Pay / LINE GO 風格 MINI App 首頁入口專屬樣式
+       ========================================================================== */
+    .line-bye-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      background: #F5F6F8;
+      color: #111111;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
+      font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', 'Segoe UI', Roboto, sans-serif;
+      z-index: 10;
+    }
+
+    /* 1. 頂部導航列 (Header: Y 0% ~ 8%) */
+    .lb-header {
+      flex: 0 0 8%;
+      min-height: 52px;
+      max-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      background: #FFFFFF;
+      border-bottom: 1px solid #ECEEF2;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .lb-brand {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      cursor: pointer;
+    }
+    .lb-brand-line {
+      color: #06C755;
+    }
+    .lb-brand-bye {
+      color: #111111;
+      margin-left: 1px;
+    }
+    .lb-brand-badge {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #06C755;
+      background: #E8F8EE;
+      border: 1px solid rgba(6, 199, 85, 0.25);
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: 4px;
+      letter-spacing: 0.5px;
+    }
+    .lb-header-icons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .lb-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #333333;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .lb-icon-btn:active {
+      background: #ECEEF2;
+      transform: scale(0.92);
+    }
+    .lb-icon-dot {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 7px;
+      height: 7px;
+      background: #FF4B4B;
+      border-radius: 50%;
+      border: 1.5px solid #FFFFFF;
+    }
+
+    /* 2. 主題推薦橫幅 (Hero Banner: Y 8% ~ 32%) */
+    .lb-hero-section {
+      flex: 0 0 24%;
+      min-height: 155px;
+      max-height: 180px;
+      padding: 2.5% 5%;
+      display: flex;
+      align-items: center;
+    }
+    .lb-hero-card {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #FFF7F0 0%, #FFEADA 100%);
+      border: 1.5px solid #FFD6B5;
+      border-radius: 16px;
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(255, 122, 69, 0.08);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .lb-hero-card:active {
+      transform: scale(0.985);
+    }
+    .lb-hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 65%;
+      z-index: 2;
+    }
+    .lb-hero-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #FF5A1F;
+      background: rgba(255, 90, 31, 0.14);
+      padding: 2px 8px;
+      border-radius: 10px;
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 4px;
+    }
+    .lb-hero-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #191919;
+      line-height: 1.25;
+      margin-bottom: 2px;
+    }
+    .lb-hero-subtitle {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #4A4A4A;
+      margin-bottom: 2px;
+    }
+    .lb-hero-desc {
+      font-size: 0.76rem;
+      color: #7A7A7A;
+      margin-bottom: 8px;
+    }
+    .lb-hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #FF5A1F;
+      color: #FFFFFF;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 18px;
+      align-self: flex-start;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255, 90, 31, 0.25);
+    }
+    .lb-hero-right {
+      position: absolute;
+      right: 8px;
+      bottom: 4px;
+      width: 32%;
+      max-width: 110px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* 3. 四大核心服務入口 (Quick Access Grid: Y 32% ~ 45%) */
+    .lb-quick-grid {
+      flex: 0 0 13%;
+      min-height: 88px;
+      max-height: 100px;
+      padding: 0 5%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      align-items: center;
+      background: #FFFFFF;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #ECEEF2;
+    }
+    .lb-quick-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-align: center;
+      background: none;
+      border: none;
+      padding: 4px 0;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .lb-quick-item:active {
+      background: #F5F6F8;
+    }
+    .lb-quick-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.15s;
+    }
+    .lb-quick-item:active .lb-quick-icon {
+      transform: scale(0.9);
+    }
+    .lb-quick-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #2B2B2B;
+    }
+
+    /* 4. 附近廟宇探索區 (Near Temples: Y 45% ~ 78%) */
+    .lb-temple-section {
+      flex: 0 0 33%;
+      min-height: 220px;
+      padding: 10px 5%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .lb-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .lb-section-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #111111;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lb-section-more {
+      font-size: 0.78rem;
+      color: #888888;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .lb-temple-carousel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      height: calc(100% - 28px);
+    }
+    .lb-temple-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1px solid #ECEEF2;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .lb-temple-card:active {
+      transform: translateY(2px);
+    }
+    .lb-temple-img-box {
+      width: 100%;
+      height: 52%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F8F9FA;
+    }
+    .lb-temple-info {
+      padding: 6px 8px 8px 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 48%;
+    }
+    .lb-temple-name {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #191919;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lb-temple-tag {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #FF5A1F;
+      background: #FFF1EB;
+      padding: 1px 4px;
+      border-radius: 3px;
+      display: inline-block;
+      align-self: flex-start;
+      margin: 2px 0;
+    }
+    .lb-temple-btn {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #06C755;
+      background: #F0FAF3;
+      border: 1px solid #D2F2DD;
+      border-radius: 5px;
+      padding: 2px 0;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* 5. 底部跑馬燈橫條 (Footer Tips: Y 78% ~ 87%) */
+    .lb-footer-bar {
+      flex: 0 0 9%;
+      min-height: 48px;
+      max-height: 54px;
+      background: #191919;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+      margin-top: auto;
+      cursor: pointer;
+    }
+    .lb-footer-ticker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      font-size: 0.76rem;
+      overflow: hidden;
+    }
+    .lb-footer-badge {
+      background: #06C755;
+      color: #FFFFFF;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .lb-footer-text {
+      color: #E6E6E6;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+
+    /* 6. 底部導航欄 (Bottom Dock: Y 87% ~ 100%) */
+    .lb-bottom-dock {
+      flex: 0 0 13%;
+      min-height: 56px;
+      max-height: 68px;
+      background: #FFFFFF;
+      border-top: 1px solid #ECEEF2;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      padding: 0 2% env(safe-area-inset-bottom, 0px);
+      z-index: 50;
+    }
+    .lb-dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #888888;
+      padding: 4px 0;
+      transition: color 0.15s;
+    }
+    .lb-dock-item.active {
+      color: #06C755;
+    }
+    .lb-dock-icon {
+      font-size: 1.2rem;
+      margin-bottom: 2px;
+    }
+    .lb-dock-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    /* LINE Pay / LINE GO 風格通用彈窗 (Bottom Sheet / Center Modal) */
+    .lb-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .lb-modal-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .lb-sheet {
+      width: 100%;
+      max-width: 480px;
+      background: #FFFFFF;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      max-height: 85vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.15);
+      color: #191919;
+    }
+    .lb-modal-overlay.visible .lb-sheet {
+      transform: translateY(0);
+    }
+    .lb-sheet-bar {
+      width: 36px;
+      height: 4px;
+      background: #E0E0E0;
+      border-radius: 2px;
+      margin: 0 auto 14px auto;
+    }
+    .lb-sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .lb-sheet-title {
+      font-size: 1.18rem;
+      font-weight: 900;
+      color: #191919;
+    }
+    .lb-sheet-close {
+      background: #F5F6F8;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 1.1rem;
+      color: #777;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-primary-btn {
+      width: 100%;
+      background: #06C755;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 12px 0;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 4px 12px rgba(6, 199, 85, 0.25);
+    }
+
+    /* zenApp 頂部返回首頁按鈕 */
+    .zen-nav-back {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 35;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(38, 34, 32, 0.92);
+      border: 1px solid var(--muted-gold);
+      color: #ffd875;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 16px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .zen-nav-back:active {
+      transform: scale(0.95);
+      background: rgba(55, 48, 44, 0.95);
+    }
   </style>
 </head>
 <body>
 
-  <div class="zen-app-container" id="zenApp">
+  <!-- ==============================================
+       LINE Bye - LINE Pay / LINE GO 風格 MINI App 主入口
+       ============================================== -->
+  <div class="line-bye-container" id="lineByeHome">
+
+    <!-- 1. 頂部導航列 (Header: Y 0% ~ 8%) -->
+    <header class="lb-header">
+      <!-- 品牌標題 (X 5% ~ 30%, Y 2% ~ 7%) -->
+      <div class="lb-brand" onclick="location.reload()" title="LINE Bye 智慧宮廟生活圈">
+        <span class="lb-brand-line">LINE</span><span class="lb-brand-bye">Bye</span>
+        <span class="lb-brand-badge">MINI</span>
+      </div>
+
+      <!-- 右側功能圖示群 (X 55% ~ 95%, Y 2% ~ 7%) -->
+      <div class="lb-header-icons">
+        <!-- 優惠券 (標籤框) -->
+        <button class="lb-icon-btn" onclick="openCouponModal()" title="優惠券">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
+            <line x1="9" y1="12" x2="9.01" y2="12"/><line x1="15" y1="12" x2="15.01" y2="12"/>
+          </svg>
+          <span class="lb-icon-dot"></span>
+        </button>
+
+        <!-- 說明 (?) -->
+        <button class="lb-icon-btn" onclick="openLbModal('helpModal')" title="參拜說明">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+
+        <!-- 通知鈴鐺 -->
+        <button class="lb-icon-btn" onclick="openLbModal('bellModal')" title="宮廟活動通知">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <!-- 設定齒輪 -->
+        <button class="lb-icon-btn" onclick="openLbModal('settingsModal')" title="設定">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. 主題推薦橫幅 (Hero Banner: Y 8% ~ 32%) -->
+    <section class="lb-hero-section">
+      <div class="lb-hero-card" onclick="openLbModal('heroDetailModal')">
+        <div class="lb-hero-left">
+          <span class="lb-hero-tag">💖 月老特輯</span>
+          <h2 class="lb-hero-title">LINE Bye 脫單專區</h2>
+          <div class="lb-hero-subtitle">想脫單不知道拜哪？</div>
+          <div class="lb-hero-desc">拜拜攻略都在這～</div>
+          <button class="lb-hero-btn" onclick="event.stopPropagation(); openLbModal('heroDetailModal');">
+            <span>More &gt;</span>
+          </button>
+        </div>
+
+        <!-- 右側手持香火與月老紅線意象插圖 (X 70% ~ 92%, Y 18% ~ 30%) -->
+        <div class="lb-hero-right">
+          <svg width="96" height="96" viewBox="0 0 100 100" fill="none">
+            <!-- 柔和心型祈願光暈 -->
+            <circle cx="56" cy="46" r="36" fill="rgba(255, 90, 31, 0.12)"/>
+            <!-- 香火煙霧繚繞成心形 -->
+            <path d="M42 58 C38 42, 28 34, 40 22 C48 14, 58 24, 52 34 C48 42, 54 48, 50 56" stroke="#FF7A45" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+            <path d="M52 56 C56 40, 68 34, 60 22 C52 14, 46 22, 52 30" stroke="#FFA940" stroke-width="2" stroke-linecap="round"/>
+            <!-- 三炷立香 -->
+            <line x1="44" y1="56" x2="40" y2="92" stroke="#8C5B32" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="48" y1="54" x2="47" y2="92" stroke="#A63A26" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="53" y1="56" x2="55" y2="92" stroke="#8C5B32" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- 香頭燃燒火光點 -->
+            <circle cx="44" cy="56" r="2.5" fill="#FF4D4F"/>
+            <circle cx="48" cy="54" r="3" fill="#FF7A45"/>
+            <circle cx="53" cy="56" r="2.5" fill="#FF4D4F"/>
+            <!-- 月老紅線金墜 -->
+            <path d="M26 62 Q45 74 68 60" stroke="#FF4D4F" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="46" cy="71" r="4" fill="#FAAD14" stroke="#FFF" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 四大核心服務入口 (Quick Access Grid: Y 32% ~ 45%) -->
+    <section class="lb-quick-grid">
+      <!-- 功能 1：線上解籤（籤筒圖示） -->
+      <button class="lb-quick-item" onclick="openDivinationFlow()">
+        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #FFE8D6 0%, #FFD0B5 100%); color:#E05315;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="9" width="14" height="13" rx="2"/>
+            <path d="M9 9V4l3-2 3 2v5"/>
+            <line x1="12" y1="2" x2="12" y2="9"/>
+            <line x1="8" y1="6" x2="8" y2="9"/>
+            <line x1="16" y1="6" x2="16" y2="9"/>
+          </svg>
+        </div>
+        <span class="lb-quick-label">線上解籤</span>
+      </button>
+
+      <!-- 功能 2：點燈專區（燈泡發光圖示） -->
+      <button class="lb-quick-item" onclick="openLbModal('lightingModal')">
+        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #FFF1B8 0%, #FFE58F 100%); color:#D48806;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18h6"/>
+            <path d="M10 22h4"/>
+            <path d="M12 2a7 7 0 0 0-7 7c0 3.03 1.5 5.5 3.5 6.5V17a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-1.5c2-1 3.5-3.47 3.5-6.5a7 7 0 0 0-7-7z"/>
+            <line x1="12" y1="6" x2="12" y2="8"/>
+            <line x1="9" y1="9" x2="15" y2="9"/>
+          </svg>
+        </div>
+        <span class="lb-quick-label">點燈專區</span>
+      </button>
+
+      <!-- 功能 3：參拜足跡（腳印圖示） -->
+      <button class="lb-quick-item" onclick="openLbModal('footprintModal')">
+        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #D9F7BE 0%, #B7EB8F 100%); color:#389E0D;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 16v-2.38C4 11.5 6.5 9 9.62 9h4.76C17.5 9 20 11.5 20 13.62V16"/>
+            <ellipse cx="12" cy="18" rx="7" ry="3"/>
+            <circle cx="8" cy="6" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="5" r="1.5" fill="currentColor"/>
+            <circle cx="16" cy="6" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <span class="lb-quick-label">參拜足跡</span>
+      </button>
+
+      <!-- 功能 4：節慶專區（彩帶拉炮圖示） -->
+      <button class="lb-quick-item" onclick="openLbModal('festivalModal')">
+        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #EFDBFF 0%, #D3ADF7 100%); color:#722ED1;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 19L19 5"/>
+            <path d="M12 4l3 3-9 9-3-3z"/>
+            <path d="M18 10l2-2"/>
+            <path d="M15 3l1 2"/>
+            <path d="M21 7l-2 1"/>
+            <path d="M18 16l3 1"/>
+            <path d="M14 20l2 2"/>
+            <path d="M8 22l1-3"/>
+          </svg>
+        </div>
+        <span class="lb-quick-label">節慶專區</span>
+      </button>
+    </section>
+
+    <!-- 4. 附近廟宇探索區 (Near Temples: Y 45% ~ 78%) -->
+    <section class="lb-temple-section">
+      <div class="lb-section-header">
+        <div class="lb-section-title">
+          <span>⛩️ 附近廟宇</span>
+        </div>
+        <span class="lb-section-more" onclick="openLbModal('allTemplesModal')">探索更多 &gt;</span>
+      </div>
+
+      <!-- 宮廟卡片組（3張等寬卡片） -->
+      <div class="lb-temple-carousel">
+        <!-- 卡片 1：龍山寺 -->
+        <div class="lb-temple-card" onclick="openTempleModal('longshan')">
+          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FDE3CF 0%, #F9D0B4 100%);">
+            <span style="font-size:2rem;">🏮</span>
+            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#8C5B32; font-weight:bold;">1.2 km</div>
+          </div>
+          <div class="lb-temple-info">
+            <div>
+              <div class="lb-temple-name">艋舺龍山寺</div>
+              <span class="lb-temple-tag">觀音・月老</span>
+            </div>
+            <div class="lb-temple-btn">看更多</div>
+          </div>
+        </div>
+
+        <!-- 卡片 2：霞海城隍廟 -->
+        <div class="lb-temple-card" onclick="openTempleModal('xiahai')">
+          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FFE6E6 0%, #FFD1D1 100%);">
+            <span style="font-size:2rem;">❤️</span>
+            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#A8071A; font-weight:bold;">2.5 km</div>
+          </div>
+          <div class="lb-temple-info">
+            <div>
+              <div class="lb-temple-name">霞海城隍廟</div>
+              <span class="lb-temple-tag">最強脫單首選</span>
+            </div>
+            <div class="lb-temple-btn">more</div>
+          </div>
+        </div>
+
+        <!-- 卡片 3：台北行天宮 -->
+        <div class="lb-temple-card" onclick="openTempleModal('xingtian')">
+          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);">
+            <span style="font-size:2rem;">⚔️</span>
+            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#0050B3; font-weight:bold;">3.1 km</div>
+          </div>
+          <div class="lb-temple-info">
+            <div>
+              <div class="lb-temple-name">台北行天宮</div>
+              <span class="lb-temple-tag">關聖帝君・收驚</span>
+            </div>
+            <div class="lb-temple-btn">more</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 底部跑馬燈橫條 (Footer Tips: Y 78% ~ 87%) -->
+    <div class="lb-footer-bar" onclick="cycleLbTip()">
+      <div class="lb-footer-ticker">
+        <span class="lb-footer-badge">拜拜小撇步</span>
+        <span class="lb-footer-text" id="lbFooterTipText">右手插香敬神最誠心，左青龍進、右白虎出吉祥如意</span>
+      </div>
+    </div>
+
+    <!-- 6. 底部導航欄 (Bottom Dock: Y 87% ~ 100%) -->
+    <nav class="lb-bottom-dock">
+      <button class="lb-dock-item active" onclick="location.reload()">
+        <span class="lb-dock-icon">🏠</span>
+        <span class="lb-dock-label">首頁</span>
+      </button>
+      <button class="lb-dock-item" onclick="openDivinationFlow()">
+        <span class="lb-dock-icon">🎋</span>
+        <span class="lb-dock-label">線上求籤</span>
+      </button>
+      <button class="lb-dock-item" onclick="openCouponModal()">
+        <span class="lb-dock-icon">🎟️</span>
+        <span class="lb-dock-label">奉茶優惠</span>
+      </button>
+      <button class="lb-dock-item" onclick="openLbModal('profileModal')">
+        <span class="lb-dock-icon">👤</span>
+        <span class="lb-dock-label">信士中心</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ==============================================
+       LINE Bye 互動彈窗群 (LINE Pay 風格 Bottom Sheet)
+       ============================================== -->
+  <!-- 1. 脫單專區詳細 Modal -->
+  <div class="lb-modal-overlay" id="heroDetailModal" onclick="closeLbModal('heroDetailModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">💖 LINE Bye 脫單專區攻略</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('heroDetailModal')">✕</button>
+      </div>
+      <div style="font-size:0.88rem; line-height:1.7; color:#444;">
+        <p><strong>想求正緣桃花？全台兩大超靈驗月老參拜指南：</strong></p>
+        <div style="background:#FFF9F5; border:1px solid #FFE4D6; padding:12px; border-radius:10px; margin:10px 0;">
+          <strong>1. 台北霞海城隍廟（迪化街）</strong><br>
+          備妥紅線與鉛錢，心念理想伴侶特質，誠心請示月下老人。<br>
+          <span style="color:#FF5A1F; font-size:0.78rem;">★ 脫單心願回訪率高達 90%！</span>
+        </div>
+        <div style="background:#FFF9F5; border:1px solid #FFE4D6; padding:12px; border-radius:10px; margin:10px 0;">
+          <strong>2. 艋舺龍山寺（萬華）</strong><br>
+          循序參拜觀音佛祖後，移步後殿月老廳連續擲得三個聖杯領取紅線。<br>
+          <span style="color:#FF5A1F; font-size:0.78rem;">★ 百年國定古蹟，神威遠播！</span>
+        </div>
+      </div>
+      <button class="lb-primary-btn" onclick="closeLbModal('heroDetailModal'); openDivinationFlow();">
+        🎋 立即為愛情抽籤請示神明
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. 說明 (?) Modal -->
+  <div class="lb-modal-overlay" id="helpModal" onclick="closeLbModal('helpModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">💡 參拜指南與求籤禮節</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('helpModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.8; color:#444;">
+        <p><strong>1. 入廟動線：</strong>遵循「左青龍進、右白虎出」，象徵入吉出凶、祈安迎祥。</p>
+        <p><strong>2. 敬神報家門：</strong>默念信士姓名、農曆生辰、現居地址與具體問事內容。</p>
+        <p><strong>3. 三聖筊確認：</strong>傳統宮廟儀軌中，抽籤後需連續擲出 3 個聖杯方為神明應允正籤。</p>
+        <p><strong>4. AI 解籤回傳：</strong>透過 LINE MINI App 可直接將籤詩回傳 LINE 聊天室，由老廟祝阿伯深入剖析！</p>
+      </div>
+      <button class="lb-primary-btn" onclick="closeLbModal('helpModal')">我知道了</button>
+    </div>
+  </div>
+
+  <!-- 3. 通知鈴鐺 Modal -->
+  <div class="lb-modal-overlay" id="bellModal" onclick="closeLbModal('bellModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🔔 宮廟最新開運動態</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('bellModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.7; color:#444;">
+        <div style="border-bottom:1px solid #EEE; padding:10px 0;">
+          <strong style="color:#FF5A1F;">【手搖飲奉茶優惠】</strong><br>
+          線上擲筊連擲未中即觸發心理學奉茶補償，通用現折 15 元／85 折！
+        </div>
+        <div style="border-bottom:1px solid #EEE; padding:10px 0;">
+          <strong style="color:#06C755;">【中秋月老聖誕法會】</strong><br>
+          各大宮廟中秋良緣特別祈福登記開放中，線上即可同步點燈。
+        </div>
+        <div style="padding:10px 0;">
+          <strong style="color:#1890FF;">【Beacon 參拜集章】</strong><br>
+          抵達全台合作廟宇開啟手機藍牙，即可自動蓋上數位寺廟足跡章！
+        </div>
+      </div>
+      <button class="lb-primary-btn" onclick="closeLbModal('bellModal')">關閉通知</button>
+    </div>
+  </div>
+
+  <!-- 4. 設定齒輪 Modal -->
+  <div class="lb-modal-overlay" id="settingsModal" onclick="closeLbModal('settingsModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">⚙️ 個人設定與偏好</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('settingsModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.8; color:#444;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #EEE;">
+          <span>沉穩檜木擲筊音效</span>
+          <strong style="color:#06C755;">開啟 (ON)</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #EEE;">
+          <span>解籤角色風格</span>
+          <strong style="color:#FF5A1F;">霸道總裁 (CEO)</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
+          <span>LINE MINI App 版本</span>
+          <strong style="color:#888;">v3.2.0 (LINE Bye)</strong>
+        </div>
+      </div>
+      <button class="lb-primary-btn" onclick="closeLbModal('settingsModal')">完成</button>
+    </div>
+  </div>
+
+  <!-- 5. 點燈專區 Modal -->
+  <div class="lb-modal-overlay" id="lightingModal" onclick="closeLbModal('lightingModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🏮 線上點燈祈福專區</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('lightingModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.7; color:#444;">
+        <p>為自己與闔家親友安奉一年四季的光明祥瑞：</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0;">
+          <div style="background:#FFFBE6; border:1px solid #FFE58F; padding:10px; border-radius:8px; text-align:center;">
+            <strong>✨ 光明燈</strong><br><span style="font-size:0.75rem; color:#888;">元辰光彩・前程吉慶</span>
+          </div>
+          <div style="background:#FFF1F0; border:1px solid #FFA39E; padding:10px; border-radius:8px; text-align:center;">
+            <strong>🛡️ 太歲燈</strong><br><span style="font-size:0.75rem; color:#888;">消災解厄・化險為夷</span>
+          </div>
+          <div style="background:#FFF0F6; border:1px solid #FFADD2; padding:10px; border-radius:8px; text-align:center;">
+            <strong>💖 姻緣燈</strong><br><span style="font-size:0.75rem; color:#888;">月老牽線・早結良緣</span>
+          </div>
+          <div style="background:#F6FFED; border:1px solid #B7EB8F; padding:10px; border-radius:8px; text-align:center;">
+            <strong>📖 文昌燈</strong><br><span style="font-size:0.75rem; color:#888;">考運亨通・金榜題名</span>
+          </div>
+        </div>
+      </div>
+      <button class="lb-primary-btn" onclick="alert('🎉 感謝信士誠心！點燈祈願登記功能將於近期版本全面上線！'); closeLbModal('lightingModal');">
+        確認登記點燈
+      </button>
+    </div>
+  </div>
+
+  <!-- 6. 參拜足跡 Modal -->
+  <div class="lb-modal-overlay" id="footprintModal" onclick="closeLbModal('footprintModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">👣 參拜足跡與虛擬集章</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('footprintModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.7; color:#444;">
+        <p>全台宮廟參拜履歷已連線，目前進度：</p>
+        <div style="background:#F0FAF3; border:1px solid #D2F2DD; padding:12px; border-radius:10px; margin:10px 0; display:flex; align-items:center; justify-content:space-around;">
+          <div style="text-align:center;">
+            <span style="font-size:1.5rem;">⛩️</span><br><strong>艋舺龍山寺</strong><br><span style="color:#06C755; font-size:0.72rem;">已參拜打卡</span>
+          </div>
+          <div style="text-align:center;">
+            <span style="font-size:1.5rem;">⚪</span><br><strong>霞海城隍廟</strong><br><span style="color:#999; font-size:0.72rem;">尚未集章</span>
+          </div>
+          <div style="text-align:center;">
+            <span style="font-size:1.5rem;">⚪</span><br><strong>台北行天宮</strong><br><span style="color:#999; font-size:0.72rem;">尚未集章</span>
+          </div>
+        </div>
+        <p style="font-size:0.8rem; color:#777;">抵達廟宇現場開啟手機藍牙，LINE Beacon 將自動完成足跡蓋印！</p>
+      </div>
+      <button class="lb-primary-btn" onclick="closeLbModal('footprintModal')">確認足跡</button>
+    </div>
+  </div>
+
+  <!-- 7. 節慶專區 Modal -->
+  <div class="lb-modal-overlay" id="festivalModal" onclick="closeLbModal('festivalModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🎏 宮廟節慶行事曆</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('festivalModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.7; color:#444;">
+        <div style="padding:8px 0; border-bottom:1px solid #EEE;">
+          <strong>🌕 農曆八月十五日</strong><br>
+          <span style="color:#FF5A1F;">月下老人聖誕</span> — 全台求姻緣大吉日，香火最盛之期。
+        </div>
+        <div style="padding:8px 0; border-bottom:1px solid #EEE;">
+          <strong>🧧 農曆正月初一至初五</strong><br>
+          <span style="color:#06C755;">新春祈福開運</span> — 迎財神、安太歲、搶頭香保平安。
+        </div>
+        <div style="padding:8px 0;">
+          <strong>🌊 農曆三月廿三日</strong><br>
+          <span style="color:#1890FF;">天上聖母媽祖聖誕</span> — 媽祖遶境巡安盛典。
+        </div>
+      </div>
+      <button class="lb-primary-btn" onclick="closeLbModal('festivalModal')">我知道了</button>
+    </div>
+  </div>
+
+  <!-- 8. 宮廟詳情 Modal (龍山寺 / 城隍廟 / 行天宮 動態切換) -->
+  <div class="lb-modal-overlay" id="templeModal" onclick="closeLbModal('templeModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title" id="templeModalTitle">廟宇詳情</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('templeModal')">✕</button>
+      </div>
+      <div id="templeModalBody" style="font-size:0.86rem; line-height:1.7; color:#444; margin-bottom:14px;">
+        <!-- 動態內容注入 -->
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="lb-primary-btn" style="flex:1;" onclick="openDivinationFlow(); closeLbModal('templeModal');">
+          🎋 向此神尊求籤
+        </button>
+        <button class="lb-primary-btn" id="templeMapBtn" style="flex:1; background:#333;" onclick="openTempleMap()">
+          🗺️ 地圖導航
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. 信士中心 Modal -->
+  <div class="lb-modal-overlay" id="profileModal" onclick="closeLbModal('profileModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">👤 信士個人中心</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('profileModal')">✕</button>
+      </div>
+      <div style="font-size:0.88rem; line-height:1.7; color:#444; text-align:center; padding:10px 0;">
+        <div style="font-size:2.5rem; margin-bottom:8px;">🏮</div>
+        <div id="lbUserProfileName" style="font-size:1.15rem; font-weight:bold; color:#111;">信士 連線中</div>
+        <div style="font-size:0.8rem; color:#888; margin-top:2px;">LINE MINI App 認證信士</div>
+        <div style="background:#F6F7F9; border-radius:12px; padding:14px; margin:16px 0; text-align:left; font-size:0.82rem;">
+          <div>🎫 <strong>我的開運券</strong>：全台通用手搖飲 15 元券 (代碼: TEMPLE88)</div>
+          <div style="margin-top:6px;">🎋 <strong>累計求籤次數</strong>：已獲賜神意靈籤 1 支</div>
+          <div style="margin-top:6px;">⛩️ <strong>參拜足跡章</strong>：1 / 3 間</div>
+        </div>
+      </div>
+      <button class="lb-primary-btn" onclick="closeLbModal('profileModal')">關閉</button>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       求籤與擲筊核心舞台 (預設隱藏，點擊「線上解籤」進入)
+       ============================================== -->
+  <div class="zen-app-container" id="zenApp" style="display:none;">
+
+    <!-- 頂部返回 LINE Bye 首頁導航按鈕 -->
+    <button class="zen-nav-back" onclick="returnToLineByeHome()">
+      <span>‹ LINE Bye</span>
+    </button>
 
     <!-- 神社注連飾邊 -->
     <div class="shrine-top-curtain"></div>
@@ -1004,12 +1991,18 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('zenApp').style.opacity = '1';
       initLiffApp();
       initTipsTicker();
+      initLbFooterTicker();
+
+      // 檢查網址是否有 ?page=divination，若有則直接進入求籤
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('page') === 'divination') {
+        openDivinationFlow();
+      }
     });
 
-    // 參拜 Tips 跑馬燈輪播
+    // 參拜 Tips 跑馬燈輪播 (神社第一幕)
     function initTipsTicker() {
       setInterval(() => {
         cycleNextTip();
@@ -1018,6 +2011,7 @@
 
     function cycleNextTip() {
       const textElem = document.getElementById('tickerText');
+      if (!textElem) return;
       textElem.style.opacity = '0';
       textElem.style.transform = 'translateY(6px)';
 
@@ -1036,6 +2030,8 @@
         if (liff.isLoggedIn()) {
           const profile = await liff.getProfile();
           document.getElementById('userGreeting').innerText = `信士 ${profile.displayName}，請靜心祈願`;
+          const profileNameElem = document.getElementById('lbUserProfileName');
+          if (profileNameElem) profileNameElem.innerText = `信士 ${profile.displayName}`;
         } else {
           document.getElementById('userGreeting').innerText = "信士 請靜心向福運神尊祈願";
         }
@@ -1043,6 +2039,106 @@
         console.warn("LIFF 連線提示:", err);
         document.getElementById('userGreeting').innerText = "靈籤入微 ｜ 智慧宮廟文化生活圈";
       }
+    }
+
+    // ==============================================
+    // LINE Bye 頁面導航與彈窗互動
+    // ==============================================
+    function openDivinationFlow() {
+      document.getElementById('lineByeHome').style.display = 'none';
+      const zenApp = document.getElementById('zenApp');
+      zenApp.style.display = 'block';
+      zenApp.style.opacity = '1';
+    }
+
+    function returnToLineByeHome() {
+      document.getElementById('zenApp').style.display = 'none';
+      const lineByeHome = document.getElementById('lineByeHome');
+      lineByeHome.style.display = 'flex';
+    }
+
+    function openLbModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.add('visible');
+    }
+
+    function closeLbModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('visible');
+    }
+
+    // 附近廟宇資料庫
+    const TEMPLE_DATA = {
+      longshan: {
+        title: "艋舺龍山寺",
+        body: `<p><strong>國定古蹟・二百餘年香火</strong></p>
+               <p style="margin:6px 0;"><strong>主祀神尊：</strong>觀世音菩薩、天上聖母、關聖帝君、月下老人、文昌帝君。</p>
+               <p style="margin:6px 0;"><strong>特色靈驗：</strong>全台求姻緣名剎之一，後殿月老神君靈驗無比；亦是祈求闔家平安、事業功名的信仰重鎮。</p>
+               <p style="margin:6px 0; color:#888;">📍 台北市萬華區廣州街211號（近捷運龍山寺站1號出口）</p>`,
+        mapUrl: "https://maps.google.com/?q=艋舺龍山寺"
+      },
+      xiahai: {
+        title: "台北霞海城隍廟",
+        body: `<p><strong>全台最強脫單聖地・百年古蹟</strong></p>
+               <p style="margin:6px 0;"><strong>主祀神尊：</strong>霞海城隍老爺、城隍夫人、月下老人。</p>
+               <p style="margin:6px 0;"><strong>特色靈驗：</strong>撮合海內外無數良緣，參拜流程快速精準，備喜餅還願香客絡繹不絕，迪化街在地文化地標。</p>
+               <p style="margin:6px 0; color:#888;">📍 台北市大同區迪化街一段61號（大稻埕商圈）</p>`,
+        mapUrl: "https://maps.google.com/?q=台北霞海城隍廟"
+      },
+      xingtian: {
+        title: "台北行天宮",
+        body: `<p><strong>恩主公信仰・身心平靜聖地</strong></p>
+               <p style="margin:6px 0;"><strong>主祀神尊：</strong>關聖帝君（恩主公）、呂恩主、岳恩主。</p>
+               <p style="margin:6px 0;"><strong>特色靈驗：</strong>以心香代線香，志工效勞生提供免費「收驚安神」服務，事業開拓、行車平安之首選宮廟。</p>
+               <p style="margin:6px 0; color:#888;">📍 台北市中山區民權東路二段109號（捷運行天宮站3號出口）</p>`,
+        mapUrl: "https://maps.google.com/?q=台北行天宮"
+      }
+    };
+
+    let currentTempleKey = 'longshan';
+
+    function openTempleModal(key) {
+      const data = TEMPLE_DATA[key];
+      if (!data) return;
+      currentTempleKey = key;
+      document.getElementById('templeModalTitle').innerText = data.title;
+      document.getElementById('templeModalBody').innerHTML = data.body;
+      openLbModal('templeModal');
+    }
+
+    function openTempleMap() {
+      const data = TEMPLE_DATA[currentTempleKey];
+      if (data && data.mapUrl) {
+        window.open(data.mapUrl, '_blank');
+      }
+    }
+
+    // LINE Bye 底部小撇步跑馬燈
+    const LB_FOOTER_TIPS = [
+      "右手插香敬神最誠心，左青龍進、右白虎出吉祥如意",
+      "默念信士姓名、農曆生辰、居住地址，神意指點更相應",
+      "求籤須連續擲得三個聖筊，一事一問心誠則靈",
+      "抵達實體廟宇開啟藍牙，LINE Beacon 自動蓋上參拜足跡章",
+      "遇挫折別氣餒，心念沉澱再擲，神明自會指點迷津",
+      "到訪月老廟誠心祈願，紅線隨身攜帶早逢天定良緣"
+    ];
+    let lbTipIndex = 0;
+
+    function initLbFooterTicker() {
+      setInterval(() => {
+        cycleLbTip();
+      }, 5000);
+    }
+
+    function cycleLbTip() {
+      const tipElem = document.getElementById('lbFooterTipText');
+      if (!tipElem) return;
+      tipElem.style.opacity = '0';
+      setTimeout(() => {
+        lbTipIndex = (lbTipIndex + 1) % LB_FOOTER_TIPS.length;
+        tipElem.innerText = LB_FOOTER_TIPS[lbTipIndex];
+        tipElem.style.opacity = '1';
+      }, 200);
     }
 
     // 2. 原創沈穩檜木撞擊音效 (Web Audio API 雙聲沉靜木扣聲)
