@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AI 福運宮 - 線上祈福求籤</title>
+  <title>靈籤入微 - LINE 智慧宮廟文化生活圈</title>
   <!-- LINE LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <!-- Google Fonts: 典雅明體與黑體 -->
@@ -72,24 +72,24 @@
     /* 頂部神社匾額與使用者迎接 */
     .shrine-brand-bar {
       position: absolute;
-      top: 18px;
+      top: 14px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 25;
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 90%;
-      max-width: 320px;
+      width: 92%;
+      max-width: 340px;
     }
 
     .shrine-plaque {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(38, 34, 32, 0.88);
+      background: rgba(38, 34, 32, 0.9);
       border: 1px solid var(--muted-gold);
-      padding: 6px 18px;
+      padding: 5px 16px;
       border-radius: 4px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.4);
       backdrop-filter: blur(8px);
@@ -97,17 +97,81 @@
 
     .shrine-plaque h1 {
       font-family: 'Noto Serif TC', serif;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--muted-gold);
-      letter-spacing: 4px;
+      letter-spacing: 3px;
     }
 
     .shrine-user-greeting {
-      margin-top: 5px;
-      font-size: 0.8rem;
+      margin-top: 4px;
+      font-size: 0.78rem;
       color: var(--text-dim);
       letter-spacing: 1px;
+    }
+
+    /* 參拜小知識 Tips 跑馬燈 (遊戲 Loading 提示風格) */
+    .zen-tips-ticker {
+      position: absolute;
+      top: 66px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 340px;
+      z-index: 25;
+      background: rgba(32, 28, 26, 0.88);
+      border: 1px solid rgba(201, 164, 92, 0.35);
+      border-radius: 20px;
+      padding: 5px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.35);
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.25s ease, transform 0.15s ease;
+    }
+
+    .zen-tips-ticker:active {
+      transform: translateX(-50%) scale(0.98);
+    }
+
+    .ticker-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: var(--deep-ochre);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+
+    .ticker-content {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-text {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .ticker-arrow {
+      color: var(--muted-gold);
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-left: -2px;
     }
 
     /* === 場景共用 === */
@@ -124,7 +188,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 85px 20px 30px;
+      padding: 105px 20px 25px;
       overflow: hidden;
     }
 
@@ -137,13 +201,13 @@
     /* === 第一階段：誠心搖籤 === */
     .zen-circle-aura {
       position: absolute;
-      top: 48%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 280px;
-      height: 280px;
+      width: 270px;
+      height: 270px;
       border-radius: 50%;
-      border: 1px dashed rgba(201, 164, 92, 0.25);
+      border: 1px dashed rgba(201, 164, 92, 0.22);
       pointer-events: none;
       animation: zen_spin 60s linear infinite;
     }
@@ -157,7 +221,7 @@
     .cylinder-stage {
       position: relative;
       width: 100%;
-      height: 380px;
+      height: 360px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -165,7 +229,7 @@
     }
 
     .zen-cylinder {
-      width: 190px;
+      width: 185px;
       height: auto;
       filter: drop-shadow(0 16px 20px rgba(0,0,0,0.6));
       transform-origin: bottom center;
@@ -185,7 +249,7 @@
     /* 抽出的靈籤竹枝 */
     .drawn-spear {
       position: absolute;
-      bottom: 120px;
+      bottom: 110px;
       left: 50%;
       transform: translateX(-50%);
       width: 32px;
@@ -198,7 +262,7 @@
 
     .drawn-spear.risen {
       opacity: 1;
-      bottom: 220px;
+      bottom: 215px;
     }
 
     /* 禪風引導卡片 (和紙風微浮雕) */
@@ -275,7 +339,7 @@
     .toss-stage {
       position: relative;
       width: 100%;
-      height: 360px;
+      height: 350px;
       margin: auto 0;
     }
 
@@ -283,8 +347,8 @@
     .poe-item {
       position: absolute;
       top: 50%;
-      width: 100px;
-      height: 165px;
+      width: 96px;
+      height: 160px;
       transition: opacity 0.3s ease;
       filter: drop-shadow(0 14px 12px rgba(0,0,0,0.55));
     }
@@ -369,7 +433,7 @@
     }
 
     .toss-result-view img {
-      max-width: 240px;
+      max-width: 230px;
       height: auto;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,0.6));
     }
@@ -528,9 +592,9 @@
 
     .omikuji-header {
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #8b3a2b;
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       margin-bottom: 4px;
     }
 
@@ -587,9 +651,18 @@
     <div class="shrine-brand-bar">
       <div class="shrine-plaque">
         <span style="color:#c9a45c; font-size:0.9rem;">⛩️</span>
-        <h1>AI 福運宮</h1>
+        <h1>靈籤入微・AI 福運宮</h1>
       </div>
       <div class="shrine-user-greeting" id="userGreeting">正在引導信士連線...</div>
+    </div>
+
+    <!-- 參拜小知識 Tips 跑馬燈 (遊戲 Loading 提示風格) -->
+    <div class="zen-tips-ticker" id="zenTipsTicker" onclick="cycleNextTip()" title="點擊切換小知識">
+      <span class="ticker-badge">💡 參拜錦囊</span>
+      <div class="ticker-content">
+        <span class="ticker-text" id="tickerText">心念姓名、農曆生辰與現居地址，神明才能精準為您解惑。</span>
+      </div>
+      <span class="ticker-arrow">›</span>
     </div>
 
     <!-- ==============================================
@@ -601,7 +674,7 @@
       <!-- 禪意導引文字卡 -->
       <div class="washi-guide-card">
         <strong>【祈請儀軌】</strong><br>
-        靜心凝神，心中默念姓名、所求之事。<br>
+        靜心凝神，心中默念姓名、生辰、所求之事。<br>
         搖動靈籤筒後，須連續擲得<strong>三個聖杯</strong>方為神意明確。
       </div>
 
@@ -622,7 +695,7 @@
 
       <!-- 抽籤完成確認彈窗 -->
       <div class="zen-modal" id="spearReadyModal">
-        <div class="zen-modal-tag">福 運 靈 籤</div>
+        <div class="zen-modal-tag">靈 籤 入 微</div>
         <div class="zen-modal-title" id="readyLotName">第十八籤【丙戌】</div>
         <div class="zen-modal-body">
           已為信士請出籤枝。<br>
@@ -687,7 +760,7 @@
     <div class="omikuji-overlay" id="omikujiOverlay">
       <div class="omikuji-sheet">
         <div class="omikuji-inner-border">
-          <div class="omikuji-header">AI 福 運 宮 靈 籤</div>
+          <div class="omikuji-header">靈 籤 入 微 ｜ AI 福 運 靈 籤</div>
           <h2 class="omikuji-lot-title" id="omikujiTitle">第一籤【甲子】</h2>
           <div class="omikuji-rank-seal" id="omikujiRank">大 吉</div>
           
@@ -703,7 +776,7 @@
           </div>
 
           <button class="zen-btn" style="margin-bottom:10px;" onclick="handleSendToLine()">
-            <span>💬 回傳 LINE 聊天室（AI 解籤）</span>
+            <span>💬 回傳 LINE 聊天室（老廟祝解籤）</span>
           </button>
           <button class="zen-btn zen-btn-secondary" onclick="handleResetToShake()">
             <span>誠心致謝，再求一籤</span>
@@ -717,6 +790,18 @@
   <script>
     // LINE Developers LIFF ID
     const MY_LIFF_ID = "2011668576-3Qay1nBv";
+
+    // 參拜小知識跑馬燈庫 (Game loading Tips 風格)
+    const TEMPLE_TIPS = [
+      "【如何報家門】心念姓名、農曆生辰與現居地址，神明才能精準為您解惑。",
+      "【插香之禮】傳統習俗建議使用「左手」插香，表示崇敬與純潔。",
+      "【何謂聖筊】一凸一平為「聖筊」，神明首肯；雙凸為「笑筊」；雙平為「陰筊」。",
+      "【參拜動線】遵循「左青龍進、右白虎出」，象徵入吉出凶、福澤迎祥。",
+      "【神意確證】抽得靈籤後須連續擲出「三聖筊」，方能領受神意正籤。",
+      "【祈福心態】一事一問最相應，求籤在於解心結，正向面對人生起伏。",
+      "【線下集章】抵達實體宮廟開啟藍牙，LINE Beacon 自動為您蓋上「廟宇小腳印」。"
+    ];
+    let currentTipIndex = 0;
 
     // 經典六十甲子靈籤詩庫
     const LOTS_DATABASE = [
@@ -739,7 +824,28 @@
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('zenApp').style.opacity = '1';
       initLiffApp();
+      initTipsTicker();
     });
+
+    // 參拜 Tips 跑馬燈輪播
+    function initTipsTicker() {
+      setInterval(() => {
+        cycleNextTip();
+      }, 5500);
+    }
+
+    function cycleNextTip() {
+      const textElem = document.getElementById('tickerText');
+      textElem.style.opacity = '0';
+      textElem.style.transform = 'translateY(6px)';
+
+      setTimeout(() => {
+        currentTipIndex = (currentTipIndex + 1) % TEMPLE_TIPS.length;
+        textElem.innerText = TEMPLE_TIPS[currentTipIndex];
+        textElem.style.opacity = '1';
+        textElem.style.transform = 'translateY(0)';
+      }, 250);
+    }
 
     // 1. 初始化 LIFF SDK
     async function initLiffApp() {
@@ -753,7 +859,7 @@
         }
       } catch (err) {
         console.warn("LIFF 連線提示:", err);
-        document.getElementById('userGreeting').innerText = "AI 福運宮 ｜ 雲端祈福靈籤";
+        document.getElementById('userGreeting').innerText = "靈籤入微 ｜ 智慧宮廟文化生活圈";
       }
     }
 
@@ -768,7 +874,6 @@
         }
 
         const now = audioContext.currentTime;
-        // 模擬兩片檜木依序落地的輕脆回彈 (0ms 與 70ms)
         [0, 0.07].forEach((delay, index) => {
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
@@ -922,7 +1027,7 @@
       // 重置並賦予拋物線動畫
       left.className = 'poe-item poe-left';
       right.className = 'poe-item poe-right';
-      void left.offsetWidth; // Trigger reflow
+      void left.offsetWidth;
 
       left.classList.add(outcome.leftForm === 'convex' ? 'launch-convex' : 'launch-flat');
       right.classList.add(outcome.rightForm === 'convex' ? 'launch-convex' : 'launch-flat');
@@ -1004,7 +1109,7 @@
           await liff.sendMessages([
             {
               type: "text",
-              text: `【AI 福運宮・靈籤解惑】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請福運大師／AI為我深入剖析指點迷津！`
+              text: `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`
             }
           ]);
           liff.closeWindow();
