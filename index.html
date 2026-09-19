@@ -1119,7 +1119,32 @@
           ]);
           liff.closeWindow();
         } catch (err) {
-          alert("回傳聊天室失敗：" + err.message);
+          console.warn("liff.sendMessages 權限受限 (缺少 chat_message.write)，無縫改用後端推播:", err);
+          try {
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = "<span>⏳ 正在傳送至 LINE 聊天室...</span>";
+            const profile = await liff.getProfile();
+
+            const resp = await fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user_id: profile.userId,
+                text: msgText
+              })
+            });
+
+            if (resp.ok) {
+              alert("🎉 靈籤已成功傳送至您的 LINE 聊天室！\n老廟祝阿伯正在線上解籤，請回到聊天室查看！");
+              liff.closeWindow();
+            } else {
+              throw new Error("推播失敗");
+            }
+          } catch (fallbackErr) {
+            alert("回傳聊天室失敗：" + err.message + "\n請確認 LINE Developers LIFF 設定已勾選 chat_message.write 權限。");
+          } finally {
+            sendBtn.disabled = false;
+          }
         }
       } else {
         // 2. 電腦瀏覽器 / 外開 Chrome / Edge
