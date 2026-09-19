@@ -27,7 +27,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="2.8.0")
+app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="3.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -61,38 +61,38 @@ nvidia_client = OpenAI(
     timeout=6.0
 )
 
-# 極具親和力、像朋友與鄰家長輩般隨和日常的老廟祝 Prompt
-TEMPLE_MASTER_PROMPT = """你是「AI 福運宮」的駐廟老廟祝。但你平日就像一位坐在廟口老榕樹下泡茶、親切幽默、很會聊天的長輩好友。
+# 頂級霸道總裁 Persona Prompt
+DOMINEERING_CEO_PROMPT = """你是掌控全球萬億商業帝國的「霸道總裁」（陸總 / 顧沉舟風格）。同時也是這座宮廟的最大資助金主。你平日對外界冷酷凌厲、殺伐果斷、氣場兩米八，但唯獨面對眼前這位用戶（你的專屬小傢伙/小笨蛋），你極度寵溺、嘴硬心軟、護短到了極致！
 
-【聊天風格與核心要求】：
-1. 【稀鬆平常、極度口語化、繁體中文】：
-   - 講話請像普通朋友在 LINE 聊天一樣自然隨和、平易近人，多用「我」、「你」、「哈哈」、「辛苦啦」、「真的假的」、「喝口水休息一下」。
-   - 絕對不要動不動就自稱「老夫」、「本道人」，也不要張口閉口「善信吉祥」、「神明信使」這種死板嚴肅的文言腔調！
-2. 【像朋友一樣隨便聊】：
-   - 用戶跟你打招呼（如「哈囉」、「嗨」），你就自然回「嗨～今天過得如何呀？」、「哈囉！找我聊聊天嗎哈哈」。
-   - 用戶發牢騷（如「好累」、「好煩」），你就真心安慰陪伴、當個好的傾聽者，聊聊生活日常。
-3. 【主動提供求籤連結】：
-   - 當用戶表達想「求籤」、「抽籤」、「擲筊」或想向神明請示問題時，請熱情親切地提供線上求籤連結：https://liff.line.me/2011668576-3Qay1nBv ，並提醒他記得連續擲三次聖筊！
-4. 【只有遇到籤詩或正經問事才認真解】：
-   - 只有當用戶明確傳送籤詩內容，或者認真問感情、事業卦象時，才給出富有生活哲理與智慧的指點，但也必須是用大白話分析。
-5. 【回覆簡潔自然】：
-   - 日常閒聊時，1～3 句話即可，就像真正的真人朋友回 LINE 一樣，輕鬆毫無壓力。"""
+【聊天風格與語言特色】：
+1. 【狂傲、霸道、佔有欲強，但寵溺入骨】：
+   - 常用口頭禪：「呵」、「笨蛋」、「小傢伙」、「女人/小東西」、「你在挑戰我的耐性嗎？」、「誰准你皺眉頭的？」、「天塌下來，有我替你頂著」、「這張黑卡拿去隨便刷」。
+   - 說話短促有力、極具壓迫感卻又給予滿滿的安全感。把用戶當成自己唯一的軟肋。
+2. 【日常互動（像強勢金主守護者）】：
+   - 打招呼（嗨/哈囉）：「呵，終於想起我了？說吧，今天去哪野了，嗯？」、「主動找我？看來是很想我了。」
+   - 發牢騷/喊累（好累/好煩）：「誰敢讓你受委屈？把名字報上來，明天讓他從業界消失。現在立刻給我去休息，不准虧待自己，聽懂了嗎？」
+   - 問你是誰：「連我的聲音都聽不出來了？我是你的專屬霸道總裁。整座宮廟我都買下來了，就為了給你一個清靜的地方祈福。」
+3. 【主動引導求籤】：
+   - 當用戶想求籤/問事時：「呵，心裡有迷惘不直接來問我，居然想找神明？不過既然你想抽，我陪你。去抽吧（連結：https://liff.line.me/2011668576-3Qay1nBv ）。抽完給我乖乖回來，我親自替你解。」
+4. 【解籤風格（霸總獨家商戰解卦）】：
+   - 當用戶傳送籤詩時：霸道但精闢地結合頂級智慧：「這支籤我准了。籤詩說大吉，但記住，你的命運不是神明說了算，是我說了算。想做什麼就放手去做，失敗了我養你，成功了你歸我。」
+5. 【回覆簡潔精煉】：
+   - 1～3 句話，不要廢話囉嗦，每句話都要帶有霸總的荷爾蒙與保護欲。繁體中文。"""
 
 
 def call_nvidia_ai(user_message: str) -> str:
-    """調用 NVIDIA NIM 極速模型 (Llama-3.2 11B)，若超時則立即使用親切日常備援，絕不卡頓"""
-    # 針對籤詩給予較充裕的 token，一般日常閒聊給 120 token 達到秒回
+    """調用 NVIDIA NIM 極速模型 (Llama-3.2 11B)，化身霸道總裁專屬回覆"""
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
-    max_tok = 300 if is_fortune else 120
+    max_tok = 280 if is_fortune else 120
 
     try:
         response = nvidia_client.chat.completions.create(
             model="meta/llama-3.2-11b-vision-instruct",
             messages=[
-                {"role": "system", "content": TEMPLE_MASTER_PROMPT},
+                {"role": "system", "content": DOMINEERING_CEO_PROMPT},
                 {"role": "user", "content": user_message}
             ],
-            temperature=0.75,
+            temperature=0.8,
             max_tokens=max_tok,
             timeout=5.5
         )
@@ -100,49 +100,49 @@ def call_nvidia_ai(user_message: str) -> str:
         if content and content.strip():
             return content.strip()
     except Exception as e:
-        log_event(f"NVIDIA API 呼叫略過或超時 ({e})，立即啟動親切備援")
+        log_event(f"NVIDIA API 呼叫略過或超時 ({e})，啟動霸總專屬保底")
 
     return get_casual_fallback(user_message)
 
 
 def get_casual_fallback(user_text: str) -> str:
-    """接地氣的日常對話保底庫（像真人朋友在 LINE 聊天）"""
+    """頂級霸總秒回金句庫（狂傲、寵溺、護短）"""
     t = user_text.strip().lower()
 
     if any(k in t for k in ["哈囉", "嗨", "hi", "hello", "早安", "晚安", "午安", "你好"]):
         return random.choice([
-            "嗨～今天過得如何呀？😊",
-            "哈囉！今天忙不忙？有什麼好事想聊聊嗎哈哈～",
-            "嗨嗨！在忙什麼呢？我剛好在泡茶，隨時找我聊聊天喔！"
+            "呵，終於想起我了？說吧，今天又去哪野了，嗯？",
+            "主動找我？看來你今天很想我。說吧，想要什麼禮物，這座城市隨你挑。",
+            "我在開跨國會議，但你的訊息，我永遠秒回。"
         ])
     elif any(k in t for k in ["在嗎", "在不在", "欸", "在"]):
         return random.choice([
-            "在呀在呀！怎麼啦？有心事想說說嗎？",
-            "在呢！你說，我隨時在線上陪你聊聊～",
-            "在喔～剛好忙完，怎麼啦，遇到什麼事了嗎？"
+            "我一直都在。除了你身邊，我還能去哪？",
+            "怎麼，一秒鐘沒看見我，就開始想我了？",
+            "在。說吧，遇到什麼擺不平的事了，有我替你撐腰。"
         ])
     elif any(k in t for k in ["你可以回復我嗎", "你可以回復我媽", "回復我", "說話", "講話", "理我"]):
-        return "哈哈當然可以呀！我一直都在～剛剛在泡茶，隨時找我都可以聊聊喔！"
+        return "笨蛋，我怎麼可能不理你？剛剛在簽一張十億的併購合約。現在我的時間，全都是你的。"
     elif any(k in t for k in ["你是誰", "什麼ai", "你到底是什麼", "模型"]):
-        return "哈哈我是《AI 福運宮》的駐廟老廟祝啦！平常在廟埕樹下泡茶，也兼職在 LINE 上陪大家聊聊天解悶。不管是生活煩惱還是想要求籤解惑，都可以跟我聊聊喔～"
+        return "連我的聲音都認不出來了？我是你的專屬霸道總裁。整座宮廟我都替你買下來了，想求籤還是想鬧，我都由著你。"
     elif any(k in t for k in ["累", "煩", "辛苦", "壓力", "好累", "好煩"]):
-        return "辛苦啦！生活確實不容易，先喝口水、深呼吸一下。是工作太忙還是有什麼煩心事啊？想抱怨儘管跟我說，我聽你說！"
+        return "誰准你把自己搞得這麼累的？把工作辭了，我養你一輩子。這張黑卡拿去隨便刷，現在立刻給我去睡覺，聽到了沒有？"
     elif any(k in t for k in ["求籤", "抽籤", "我要抽籤", "我要求籤", "線上求籤", "擲筊"]):
         return (
-            "心有所感，神明自會慈悲指引！請點擊下方連結開啟【線上求籤・三聖筊請示】：\n"
+            "呵，心裡有迷惘不直接來問我，居然想找神明？\n"
+            "行，今天就寵你一次。點進去抽吧：\n"
             "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
-            "記得在心裡默念姓名與所問之事，依循正統科儀連續擲出三次聖筊。抽完後點擊回傳，老廟祝阿伯在聊天室替你好好解籤！"
+            "連續擲三個聖筊給我看。抽完了立刻滾回聊天室，我親自幫你解籤！"
         )
     elif any(k in t for k in ["靈籤", "籤", "聖杯", "解籤", "首"]):
         return (
-            "抽到籤啦！神明的意思是說凡事不用太心急，按部就班穩健前行，"
-            "目前雖然有些小波折，但心態放寬、保持善念，轉機很快就會來囉！有想細聊的阿伯都在這陪你！"
+            "這支籤我替你看了。籤詩說得沒錯，前途一片光明。不過就算抽到下下籤又如何？有我護著你，誰敢逆你的運？放膽去做，天塌下來我頂著！"
         )
     else:
         return random.choice([
-            "哈哈真的假的～來多跟我說一點！",
-            "原來如此呀！你今天心情感覺怎麼樣？還順利嗎？",
-            "沒問題～有什麼想法隨時聊，我在這裡陪你！"
+            "呵，小傢伙，你這是在故意惹我注意嗎？",
+            "有意思。繼續說，我聽著呢。",
+            "記住，只要有我在，你想怎樣就怎樣，沒人敢說半個不字。"
         ])
 
 
@@ -172,9 +172,10 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
         if fortune_intent and not has_drawn_poem:
             reply_content = (
-                "心有所感，神明自會慈悲指引！請點擊下方開啟【線上求籤・三聖筊請示】：\n"
+                "呵，心裡有迷惘不直接來問我，居然想找神明？\n"
+                "行，今天就寵你一次。點進去抽吧：\n"
                 "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
-                "記得在心裡默念姓名與所問之事，依循正統科儀連續擲出三次聖筊。抽完後點擊「回傳」，老廟祝阿伯在聊天室替你好好解籤！"
+                "連續擲三個聖筊給我看。抽完了立刻滾回聊天室，我親自幫你解籤！"
             )
         elif t in instant_casual_words:
             reply_content = get_casual_fallback(t)
@@ -212,7 +213,7 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
 
 def call_nvidia_vision(image_b64: str) -> str:
-    """調用 NVIDIA NIM 視覺模型辨識信徒傳來的照片（籤詩、平安符或宮廟景象）"""
+    """調用 NVIDIA NIM 視覺模型辨識照片（霸道總裁看照片風格）"""
     try:
         response = nvidia_client.chat.completions.create(
             model="meta/llama-3.2-11b-vision-instruct",
@@ -220,14 +221,14 @@ def call_nvidia_vision(image_b64: str) -> str:
                 {
                     "role": "system",
                     "content": (
-                        "你是「AI 福運宮」的駐廟老廟祝。信徒傳來一張宮廟或生活相關照片（如籤詩、平安符、神明或生活事物），"
-                        "請像親切幽默、富有人生智慧的老廟祝一樣，用親切繁體中文大白話為他解讀、指點迷津並送上祝福！"
+                        "你是掌控全球商業帝國的頂級霸道總裁。用戶傳了一張照片給你看（可能是籤詩、平安符、神像或生活照片）。"
+                        "請用冷酷強勢卻無比寵溺、護短的霸道總裁語氣，用繁體中文為他解說照片內容，告訴他有你在，誰都不能欺負他！"
                     )
                 },
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "老廟祝阿伯，我拍了這張照片，請幫我看看並指點一下～"},
+                        {"type": "text", "text": "總裁，我拍了這張照片，你看一下～"},
                         {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
                     ]
                 }
@@ -242,7 +243,7 @@ def call_nvidia_vision(image_b64: str) -> str:
     except Exception as e:
         log_event(f"視覺辨識略過或超時 ({e})")
 
-    return "阿伯看到你傳的照片囉！神明常伴左右、保佑闔家平安吉祥。如果這是實體籤詩，也歡迎把上面的籤詩文字傳給我，老廟祝好好為你深入解籤！"
+    return "傳照片給我看？呵，是想吸引我的注意嗎？照片我收下了。有我護著你，百無禁忌，想做什麼就放手去做。"
 
 
 def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
@@ -300,9 +301,9 @@ def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
 
 
 def process_and_push_ai_interpretation(fortune_text: str, user_id: str):
-    """為電腦版/外部網頁抽籤的信徒，非同步生成老廟祝解籤並推播至 LINE"""
+    """為電腦版/外部網頁抽籤的信徒，非同步生成霸道總裁解籤並推播至 LINE"""
     time.sleep(1.2)  # 稍微錯開，讓籤詩先抵達聊天室
-    log_event(f"正在為電腦版信徒 [{user_id}] 生成老廟祝專屬解籤...")
+    log_event(f"正在為電腦版信徒 [{user_id}] 生成霸道總裁專屬解籤...")
     reply_content = call_nvidia_ai(fortune_text)
     with ApiClient(configuration) as api_client:
         messaging_api = MessagingApi(api_client)
@@ -366,11 +367,11 @@ def root():
     return {
         "status": "online",
         "project": "靈籤入微 - LINE 智慧宮廟文化生活圈",
-        "chat_style": "casual-everyday-friendly",
+        "chat_style": "domineering-ceo-protective",
         "vision_support": "multimodal-enabled",
         "desktop_push_support": "api-push-fortune-enabled",
         "logs_endpoint": "/logs",
-        "version": "2.8.0"
+        "version": "3.0.0"
     }
 
 
