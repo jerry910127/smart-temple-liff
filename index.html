@@ -1986,6 +1986,34 @@
       </div>
     </section>
 
+    <!-- 4.5 萬春宮專屬特色法門精選服務 (Y 72% ~ 82%) -->
+    <section style="padding: 0 5% 10px 5%;">
+      <div style="font-size: 0.85rem; font-weight: 800; color: #8C5B32; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+        <span>✨ 萬春宮・特色祈安專區</span>
+        <span style="font-size: 0.7rem; color: #999;">正統道法科儀</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+        <!-- 卡片 1：預約淨車 -->
+        <div style="background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%); border: 1px solid #91D5FF; border-radius: 12px; padding: 10px 6px; text-align: center; cursor: pointer;" onclick="openLbModal('jingcheModal')">
+          <div style="font-size: 1.5rem; margin-bottom: 2px;">🚗</div>
+          <div style="font-size: 0.78rem; font-weight: bold; color: #0050B3;">淨車消煞</div>
+          <div style="font-size: 0.65rem; color: #555; transform: scale(0.92);">愛車灑淨保平安</div>
+        </div>
+        <!-- 卡片 2：換花拜契 -->
+        <div style="background: linear-gradient(135deg, #FFF0F6 0%, #FFD6E7 100%); border: 1px solid #FFADD2; border-radius: 12px; padding: 10px 6px; text-align: center; cursor: pointer;" onclick="openLbModal('huanhuaModal')">
+          <div style="font-size: 1.5rem; margin-bottom: 2px;">🌸</div>
+          <div style="font-size: 0.78rem; font-weight: bold; color: #C41D7F;">換花拜契</div>
+          <div style="font-size: 0.65rem; color: #555; transform: scale(0.92);">求子・認媽祖義子</div>
+        </div>
+        <!-- 卡片 3：四季國運籤 -->
+        <div style="background: linear-gradient(135deg, #FFFBE6 0%, #FFE58F 100%); border: 1px solid #FFD666; border-radius: 12px; padding: 10px 6px; text-align: center; cursor: pointer;" onclick="openLbModal('sijiModal')">
+          <div style="font-size: 1.5rem; margin-bottom: 2px;">📜</div>
+          <div style="font-size: 0.78rem; font-weight: bold; color: #D48806;">四季公籤</div>
+          <div style="font-size: 0.65rem; color: #555; transform: scale(0.92);">士農工商百業指南</div>
+        </div>
+      </div>
+    </section>
+
     <!-- 5. 底部跑馬燈橫條 (Footer Tips: Y 75% ~ 83%) -->
     <div class="lb-footer-bar" onclick="cycleLbTip()">
       <div class="lb-footer-ticker">
@@ -2679,6 +2707,206 @@
               🔄 為親友再收一次
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.9 萬春宮特色：新車預約淨車消煞 Modal (Jingche Modal) -->
+  <div class="lb-modal-overlay" id="jingcheModal" onclick="closeLbModal('jingcheModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:88vh; overflow-y:auto;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🚗 萬春宮・愛車淨化消煞預約</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('jingcheModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.6; color:#444;">
+        <p style="margin-bottom:8px;"><strong>【萬春宮正統淨車科儀】</strong><br>
+        新車牽回、行經事故路段、出入穢地或遇車關擦撞，由廟方法師以三媽淨水符灑淨車身四輪、誦咒解化車關煞氣，確保行車出入大吉平安（法師不收紅包，隨喜添油香）。</p>
+
+        <div style="background:#F0F7FF; border:1px solid #BAE7FF; border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+            <label style="font-size:0.8rem; color:#555; font-weight:bold;">車主姓名：</label>
+            <input type="text" id="jingcheOwner" placeholder="車主姓名" value="王信士" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+          </div>
+          <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+            <label style="font-size:0.8rem; color:#555; font-weight:bold;">車輛號牌：</label>
+            <input type="text" id="jingchePlate" placeholder="例如：ABC-8888" value="BMQ-1721" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+          </div>
+          <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+            <label style="font-size:0.8rem; color:#555; font-weight:bold;">車輛類型：</label>
+            <select id="jingcheType" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem; background:#FFF;">
+              <option value="car">自用小客車 / 新車交車</option>
+              <option value="moto">重型機車 / 普通機車</option>
+              <option value="truck">貨車 / 商用營運車</option>
+              <option value="safe">化解車關・近期有擦撞受驚</option>
+            </select>
+          </div>
+          <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center;">
+            <label style="font-size:0.8rem; color:#555; font-weight:bold;">預約良辰：</label>
+            <input type="date" id="jingcheDate" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+          </div>
+        </div>
+
+        <div style="background:#FFFBE6; border-left:3px solid #FAAD14; padding:8px 12px; border-radius:4px; font-size:0.76rem; color:#8C5B32; margin-bottom:12px;">
+          📌 <strong>淨車當日須知：</strong>請依約定吉時將愛車開至萬春宮廟前廣場停妥，先入大殿向開基媽祖稟報，法師即行淨化開光儀軌。
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button class="lb-primary-btn" style="flex:1; background:#0050B3;" onclick="submitJingcheOrder()">
+            🚗 預約良辰淨車・領數位行車符
+          </button>
+          <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="closeLbModal('jingcheModal')">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.10 萬春宮特色：註生娘娘求子換花與媽祖拜契 Modal (Huanhua & Baiqi Modal) -->
+  <div class="lb-modal-overlay" id="huanhuaModal" onclick="closeLbModal('huanhuaModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:88vh; overflow-y:auto;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🌸 註生娘娘換花・媽祖拜契做義子</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('huanhuaModal')">✕</button>
+      </div>
+
+      <!-- 頁籤切換：1. 求子換花 / 2. 神明拜契認義子 -->
+      <div style="display:flex; background:#F5F6F8; border-radius:10px; padding:3px; margin-bottom:12px;">
+        <button id="tabHuanhuaBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:#FFF; color:#C41D7F; box-shadow:0 1px 4px rgba(0,0,0,0.08); cursor:pointer;" onclick="switchHuanhuaTab('huanhua')">
+          🌸 註生娘娘換花求子
+        </button>
+        <button id="tabBaiqiBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:transparent; color:#666; cursor:pointer;" onclick="switchHuanhuaTab('baiqi')">
+          👑 拜契神明做義子
+        </button>
+      </div>
+
+      <!-- 分頁 1：求子換花 -->
+      <div id="huanhuaTab1">
+        <div style="font-size:0.85rem; line-height:1.6; color:#444;">
+          <p style="margin-bottom:8px;">依循道法本命花欉儀軌：每人在陰司皆有一株本命花樹，白花主男、紅花主女。萬春宮註生娘娘慈悲，助夫妻添花換花、祈求麟兒鳳女。</p>
+          
+          <div style="background:#FFF0F6; border:1px solid #FFD6E7; border-radius:10px; padding:12px; margin-bottom:12px;">
+            <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555; font-weight:bold;">善信夫婦：</label>
+              <input type="text" id="huanhuaCouple" placeholder="夫與妻姓名" value="林善信・李信女" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+            </div>
+            <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555; font-weight:bold;">祈求願景：</label>
+              <select id="huanhuaTarget" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem; background:#FFF;">
+                <option value="white">🌸 換白花（祈求得男・添丁納吉）</option>
+                <option value="red">🌺 換紅花（祈求千金・掌上明珠）</option>
+                <option value="nourish">🌱 栽花養欉（護佑胎兒平安・順利著床）</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="background:#FFF; border:1px dashed #FF85C0; padding:10px; border-radius:8px; font-size:0.78rem; color:#C41D7F; margin-bottom:12px;">
+            ✨ <strong>註生娘娘換花古禮：</strong>夫妻偕同來廟備鮮花一對、素果香燭，於殿前焚香稟白後，擲出三聖筊應允，即可將廟中供花與自備鮮花相換帶回安奉。
+          </div>
+
+          <button class="lb-primary-btn" style="background:#C41D7F;" onclick="submitHuanhuaPrayer()">
+            🌺 線上敬呈換花疏文・祈得貴子
+          </button>
+        </div>
+      </div>
+
+      <!-- 分頁 2：拜契神明 (做義子/義女) -->
+      <div id="huanhuaTab2" style="display:none;">
+        <div style="font-size:0.85rem; line-height:1.6; color:#444;">
+          <p style="margin-bottom:8px;"><strong>【拜契神明・契子女福緣】</strong><br>
+          為祈求孩子好養易帶、乖巧聰穎，或信士成年後求神明常佑，可拜萬春宮神尊為「義父義母」，終身蒙神恩加被。</p>
+          
+          <div style="background:#FFFBE6; border:1px solid #FFE58F; border-radius:10px; padding:12px; margin-bottom:12px;">
+            <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555; font-weight:bold;">拜契信士：</label>
+              <input type="text" id="baiqiChildName" placeholder="孩子或信士姓名" value="陳小信士 (3歲)" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+            </div>
+            <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555; font-weight:bold;">仰奉神尊：</label>
+              <select id="baiqiGod" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem; background:#FFF;">
+                <option value="mazu">👑 湄洲開基媽祖 (大墩三媽 - 義母)</option>
+                <option value="guandi">⚔️ 關聖帝君 (忠義威武 - 義父)</option>
+                <option value="chenghuang">⚖️ 境主城隍老爺 (保泰除煞 - 義父)</option>
+                <option value="guanyin">🪷 觀音佛祖 (慈悲大士 - 義母)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="background:#F6FFED; border:1px dashed #73D13D; padding:10px; border-radius:8px; font-size:0.78rem; color:#389E0D; margin-bottom:12px;">
+            🪔 <strong>認契規範：</strong>未滿16歲由父母代求，滿16歲可自請。獲賜三聖杯即正式頒發「大墩萬春宮契子認契書」，並於神明聖誕推播祝壽提醒。
+          </div>
+
+          <button class="lb-primary-btn" style="background:#D48806;" onclick="submitBaiqiOrder()">
+            📜 線上請示拜契・生成數位認契書
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.11 萬春宮特色：歲次丙午四季公籤（士農工商國運百業）Modal (Siji Modal) -->
+  <div class="lb-modal-overlay" id="sijiModal" onclick="closeLbModal('sijiModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:88vh; overflow-y:auto;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">📜 萬春宮・四季國運百業聖籤</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('sijiModal')">✕</button>
+      </div>
+
+      <div style="font-size:0.86rem; line-height:1.6; color:#444;">
+        <p style="margin-bottom:8px;">萬春宮每年正月初四接神日，九天司命真君降壇抽取<strong>「士、農、工、商、人口、六畜」</strong>六大四季聖籤，指點年度百業吉凶走勢：</p>
+        
+        <!-- 行業切換標籤 -->
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+          <button class="siji-btn active" id="sijiBtn_shi" onclick="switchSiji('shi')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #D48806; background:#FFFBE6; color:#D48806; cursor:pointer;">
+            🎓 士（求學官職）
+          </button>
+          <button class="siji-btn" id="sijiBtn_nong" onclick="switchSiji('nong')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+            🌾 農（生技產銷）
+          </button>
+          <button class="siji-btn" id="sijiBtn_gong" onclick="switchSiji('gong')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+            ⚙️ 工（製造科技）
+          </button>
+          <button class="siji-btn" id="sijiBtn_shang" onclick="switchSiji('shang')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+            💼 商（經商貿易）
+          </button>
+          <button class="siji-btn" id="sijiBtn_ren" onclick="switchSiji('ren')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+            👥 人口（家宅平安）
+          </button>
+        </div>
+
+        <!-- 籤詩與 AI 廟祝開示卡片 -->
+        <div id="sijiCard" style="background:#FFFDF8; border:1.5px solid #FFD591; border-radius:12px; padding:14px; box-shadow:0 4px 12px rgba(250,140,22,0.08); margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #FFE7BA; padding-bottom:8px; margin-bottom:8px;">
+            <strong style="color:#D46B08; font-size:0.95rem;" id="sijiTitle">【士運・公籤】甲申籤</strong>
+            <span style="font-size:0.72rem; background:#FFF1B8; color:#D48806; padding:2px 8px; border-radius:10px; font-weight:bold;" id="sijiBadge">中吉・守成待時</span>
+          </div>
+
+          <!-- 籤詩原文 -->
+          <div style="font-family:'Noto Serif TC', serif; font-size:0.92rem; color:#2B1810; line-height:1.7; text-align:center; padding:8px 0; background:#FFF; border-radius:8px; margin-bottom:10px; border:1px solid #FFF2E8;" id="sijiPoem">
+            只恐前途明有變<br>
+            勸君作急可宜先<br>
+            且守長江無大事<br>
+            命逢太白守身邊
+          </div>
+
+          <!-- AI 白話解讀 -->
+          <div style="font-size:0.82rem; color:#555; line-height:1.6;" id="sijiInterpret">
+            <p style="margin:3px 0;"><strong>📖 白話詳解：</strong>當前局勢表面平靜，但暗潮湧動。考生、公職與職場進階者，切莫急功近利更換跑道，宜守穩本分，待吉星太白金星護持，自能逢凶化吉安然過關。</p>
+            <p style="margin:3px 0; color:#8C5B32;"><strong>✨ 開基三媽提點：</strong>穩紮根基，靜待良機，不爭一時之長短，終成大器。</p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button class="lb-primary-btn" style="flex:1; background:#CF1322;" onclick="closeLbModal('sijiModal'); openDivinationFlow();">
+            🎋 個人困惑・個別請示三媽靈籤
+          </button>
+          <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="closeLbModal('sijiModal')">
+            我知道了
+          </button>
         </div>
       </div>
     </div>
@@ -3900,6 +4128,130 @@
       if (text) text.innerText = '點擊上方米盤，長按 3 秒靜心凝神';
       const aura = document.getElementById('shoujingRiceAura');
       if (aura) aura.style.background = 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(201,164,92,0) 70%)';
+    }
+
+    // ==============================================
+    // 萬春宮特色：新車預約淨車消煞邏輯 (Jingche Logic)
+    // ==============================================
+    function submitJingcheOrder() {
+      const owner = document.getElementById('jingcheOwner')?.value || '車主信士';
+      const plate = document.getElementById('jingchePlate')?.value || 'BMQ-1721';
+      const date = document.getElementById('jingcheDate')?.value || '近期良辰吉日';
+      
+      playCypressWoodSound();
+      alert(`🚗 感謝信士！已為愛車【${plate}】（車主：${owner}）登記萬春宮開基三媽淨車科儀！\n\n預約良辰：${date}\n廟方法師將於約定時辰於廟埕等候，法師不收紅包，隨喜添油香保行車大吉！\n已為您同步發放「開基媽祖行車數位平安護身符」！`);
+      closeLbModal('jingcheModal');
+    }
+
+    // ==============================================
+    // 萬春宮特色：求子換花與拜契做義子邏輯 (Huanhua & Baiqi Logic)
+    // ==============================================
+    function switchHuanhuaTab(tab) {
+      const tab1 = document.getElementById('huanhuaTab1');
+      const tab2 = document.getElementById('huanhuaTab2');
+      const btn1 = document.getElementById('tabHuanhuaBtn');
+      const btn2 = document.getElementById('tabBaiqiBtn');
+      if (!tab1 || !tab2) return;
+
+      if (tab === 'huanhua') {
+        tab1.style.display = 'block';
+        tab2.style.display = 'none';
+        if (btn1) { btn1.style.background = '#FFF'; btn1.style.color = '#C41D7F'; btn1.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (btn2) { btn2.style.background = 'transparent'; btn2.style.color = '#666'; btn2.style.boxShadow = 'none'; }
+      } else {
+        tab1.style.display = 'none';
+        tab2.style.display = 'block';
+        if (btn2) { btn2.style.background = '#FFF'; btn2.style.color = '#C41D7F'; btn2.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (btn1) { btn1.style.background = 'transparent'; btn1.style.color = '#666'; btn1.style.boxShadow = 'none'; }
+      }
+    }
+
+    function submitHuanhuaPrayer() {
+      const couple = document.getElementById('huanhuaCouple')?.value || '善信夫婦';
+      const target = document.getElementById('huanhuaTarget')?.value;
+      const flowerDesc = target === 'white' ? '換白花（祈求得男）' : (target === 'red' ? '換紅花（祈求千金）' : '栽花養欉（護胎平安）');
+      
+      playCypressWoodSound();
+      alert(`🌸 註生娘娘聖恩護庇！已為善信【${couple}】敬備【${flowerDesc}】祈福文疏！\n\n請依儀軌偕同另一半攜鮮花一對臨廟敬拜，擲筊確認神意，祝早生貴子、闔家歡欣！`);
+      closeLbModal('huanhuaModal');
+    }
+
+    function submitBaiqiOrder() {
+      const child = document.getElementById('baiqiChildName')?.value || '陳小信士';
+      const godSelect = document.getElementById('baiqiGod');
+      const godName = godSelect ? godSelect.options[godSelect.selectedIndex].text : '湄洲開基媽祖';
+
+      playCypressWoodSound();
+      alert(`👑 恭賀神緣結締！已為【${child}】向【${godName}】呈稟認契請示！\n\n已生成「萬春宮神明契子女榮譽疏文」，長伴孩子平安長大、智慧通達！每年神明聖誕本宮將發送祝壽香訊通知！`);
+      closeLbModal('huanhuaModal');
+    }
+
+    // ==============================================
+    // 萬春宮特色：四季公籤（士農工商）切換邏輯 (Siji Logic)
+    // ==============================================
+    const SIJI_DATA = {
+      shi: {
+        title: "【士運・公籤】甲申籤",
+        badge: "中吉・守成待時",
+        poem: "只恐前途明有變<br>勸君作急可宜先<br>且守長江無大事<br>命逢太白守身邊",
+        interpret: "當前局勢表面平靜，但暗潮湧動。考生、公職與職場進階者，切莫急功近利更換跑道，宜守穩本分，待吉星太白金星護持，自能逢凶化吉安然過關。",
+        tip: "穩紮根基，靜待良機，不爭一時之長短，終成大器。"
+      },
+      nong: {
+        title: "【農運・公籤】癸丑籤",
+        badge: "平平・深藏待發",
+        poem: "須知進退總虛言<br>看看發暗未必全<br>珠玉深藏還未變<br>心中但得枉徒然",
+        interpret: "農業生產、生物科技與產銷鏈宜防天候波動與產銷失衡。目前是休養生息、蓄積潛力的階段，不宜盲目擴張產能，沉著應變即是最佳策略。",
+        tip: "靜觀四時之變，蓄水養田，時至自然開花結果。"
+      },
+      gong: {
+        title: "【工運・公籤】壬寅籤",
+        badge: "大吉・點鐵成金",
+        poem: "佛前發誓無異心<br>且看前途得好音<br>此物原來本是鐵<br>也能變化得成金",
+        interpret: "製造業、研發工藝、工程營造與高科技技術業迎來突破年！只要堅定目標不三心二意，過去付出的汗水與基礎投資，將迎來轉化獲利與質的飛躍。",
+        tip: "心無旁騖精益求精，千錘百鍊終能百煉成鋼。"
+      },
+      shang: {
+        title: "【商運・公籤】己巳籤",
+        badge: "吉利・風平浪靜",
+        poem: "欲去長江水闊茫<br>行船把定未遭風<br>戶內用心再作福<br>看看魚水得相逢",
+        interpret: "商業貿易、零售開店與合夥投資大有可為！雖然市場競爭浩大如長江之水，但只要守正合規、控管風險，必能如魚得水，迎來豐厚利潤與貴人提攜。",
+        tip: "誠信立足大墩街，利人利己，財源滾滾茂盛。"
+      },
+      ren: {
+        title: "【人口家宅・公籤】辛卯籤",
+        badge: "逢吉・月出光輝",
+        poem: "客到前途多得利<br>君爾何故兩相疑<br>雖是中間逢進退<br>月出光輝得運時",
+        interpret: "家宅人口安泰吉祥！若有家庭猜疑或暫時紛擾，只要開誠布公相互體諒，如同雲開月明，家和萬事興，老少平安吉祥。",
+        tip: "家和百福生，慈悲善念便是最好的鎮宅之寶。"
+      }
+    };
+
+    function switchSiji(key) {
+      const data = SIJI_DATA[key];
+      if (!data) return;
+
+      document.querySelectorAll('.siji-btn').forEach(btn => {
+        btn.style.background = '#FFF';
+        btn.style.color = '#666';
+        btn.style.borderColor = '#DDD';
+      });
+
+      const activeBtn = document.getElementById(`sijiBtn_${key}`);
+      if (activeBtn) {
+        activeBtn.style.background = '#FFFBE6';
+        activeBtn.style.color = '#D48806';
+        activeBtn.style.borderColor = '#D48806';
+      }
+
+      document.getElementById('sijiTitle').innerText = data.title;
+      document.getElementById('sijiBadge').innerText = data.badge;
+      document.getElementById('sijiPoem').innerHTML = data.poem;
+      document.getElementById('sijiInterpret').innerHTML = `
+        <p style="margin:3px 0;"><strong>📖 白話詳解：</strong>${data.interpret}</p>
+        <p style="margin:3px 0; color:#8C5B32;"><strong>✨ 開基三媽提點：</strong>${data.tip}</p>
+      `;
+      playCypressWoodSound();
     }
 
     // LINE Bye 底部小撇步跑馬燈
