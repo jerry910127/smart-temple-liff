@@ -1994,16 +1994,16 @@
       </div>
     </div>
 
-    <!-- 6. 底部付費廣告版位 (Ad Banner: Y 83% ~ 92%) -->
-    <div class="lb-ad-banner" onclick="openLbModal('adModal')">
-      <div class="lb-ad-badge">付費廣告</div>
+    <!-- 6. 萬春宮特色：生肖五大凶星 AI 祭解排盤入口 (Y 83% ~ 92%) -->
+    <div class="lb-ad-banner" style="background: linear-gradient(135deg, #FFF1F0 0%, #FFF2E8 100%); border-color: #FFA39E;" onclick="openLbModal('zodiacModal')">
+      <div class="lb-ad-badge" style="background: #CF1322; color: #FFF;">萬春宮道法</div>
       <div class="lb-ad-content">
-        <span class="lb-ad-icon">🏮</span>
+        <span class="lb-ad-icon" style="font-size: 1.8rem;">🐉</span>
         <div class="lb-ad-text">
-          <div class="lb-ad-title">【宮廟慶典贊助】大甲鎮瀾宮 祈安清醮大典</div>
-          <div class="lb-ad-desc">合作宮廟開放線上登記疏文・祈福消災合家平安</div>
+          <div class="lb-ad-title" style="color: #A8071A;">【生肖歲煞】五大凶星 AI 祭解排盤</div>
+          <div class="lb-ad-desc" style="color: #666;">五鬼・天狗・白虎・刑剋・空亡・即時測算神意開示</div>
         </div>
-        <span class="lb-ad-action">贊助 &gt;</span>
+        <span class="lb-ad-action" style="color: #CF1322; font-weight: bold;">排盤 &gt;</span>
       </div>
     </div>
 
@@ -2337,8 +2337,8 @@
           <div style="background:#F6FFED; border:1px solid #B7EB8F; padding:10px; border-radius:8px; text-align:center;">
             <strong>📖 文昌功名帝君燈</strong><br><span style="font-size:0.75rem; color:#888;">考運亨通・仕途順遂</span>
           </div>
-          <div style="background:#FFF0F6; border:1px solid #FFADD2; padding:10px; border-radius:8px; text-align:center;">
-            <strong>🐉 生肖五大凶星祭解</strong><br><span style="font-size:0.75rem; color:#888;">五鬼/天狗/白虎/刑剋</span>
+          <div style="background:#FFF0F6; border:1px solid #FFADD2; padding:10px; border-radius:8px; text-align:center; cursor:pointer;" onclick="closeLbModal('lightingModal'); openLbModal('zodiacModal');">
+            <strong>🐉 生肖五大凶星祭解</strong><br><span style="font-size:0.75rem; color:#C41D7F; font-weight:bold;">點擊即刻 AI 排盤 ›</span>
           </div>
         </div>
         <div style="background:#F7F8FA; border-radius:8px; padding:8px 10px; font-size:0.78rem; color:#666;">
@@ -2405,6 +2405,82 @@
         </div>
       </div>
       <button class="lb-primary-btn" onclick="closeLbModal('festivalModal')">我知道了</button>
+    </div>
+  </div>
+
+  <!-- 7.2 萬春宮特色：生肖五大凶星 AI 祭解排盤 Modal (Zodiac Evil Star Modal) -->
+  <div class="lb-modal-overlay" id="zodiacModal" onclick="closeLbModal('zodiacModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:88vh; overflow-y:auto;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🐉 生肖五大凶星・AI 祭解排盤</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('zodiacModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.6; color:#444;">
+        <p style="margin-bottom:8px;">萬春宮道法科儀傳承：測算本命值年生肖與<strong>五鬼、天狗、白虎、刑剋、空亡</strong>之沖犯，由開基湄洲三媽賜福化解。</p>
+        
+        <!-- 生肖選擇表單 -->
+        <div style="background:#FFF9F5; border:1px solid #FFD8BF; border-radius:12px; padding:12px; margin-bottom:12px;">
+          <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+            <label style="font-weight:bold; color:#8C5B32; font-size:0.85rem; width:70px;">信士生肖：</label>
+            <select id="zodiacSelect" onchange="calcZodiacStar()" style="flex:1; padding:7px 10px; border:1.5px solid #D9D9D9; border-radius:8px; font-size:0.88rem; background:#FFF;">
+              <option value="rat">生肖 鼠 (子)</option>
+              <option value="ox">生肖 牛 (丑)</option>
+              <option value="tiger">生肖 虎 (寅)</option>
+              <option value="rabbit">生肖 兔 (卯)</option>
+              <option value="dragon" selected>生肖 龍 (辰) - 本命年</option>
+              <option value="snake">生肖 蛇 (巳)</option>
+              <option value="horse">生肖 馬 (午)</option>
+              <option value="goat">生肖 羊 (未)</option>
+              <option value="monkey">生肖 猴 (申)</option>
+              <option value="rooster">生肖 雞 (酉)</option>
+              <option value="dog">生肖 狗 (戌) - 正沖</option>
+              <option value="pig">生肖 豬 (亥)</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <label style="font-weight:bold; color:#8C5B32; font-size:0.85rem; width:70px;">求問事宜：</label>
+            <select id="zodiacConcern" onchange="calcZodiacStar()" style="flex:1; padding:7px 10px; border:1.5px solid #D9D9D9; border-radius:8px; font-size:0.88rem; background:#FFF;">
+              <option value="all">闔家平安 / 年度總運</option>
+              <option value="career">事業前程 / 防小人暗害</option>
+              <option value="health">身體健康 / 化血光之災</option>
+              <option value="money">財富投資 / 防破耗空亡</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- AI 即時排盤結果卡片 -->
+        <div id="zodiacResultCard" style="background:#FFF; border:1.5px solid #FFCCC7; border-radius:12px; padding:12px; box-shadow:0 4px 12px rgba(255,77,79,0.08);">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #FFF1F0; padding-bottom:8px; margin-bottom:8px;">
+            <div style="font-size:0.95rem; font-weight:bold; color:#CF1322;" id="zodiacResultName">
+              【生肖 龍】本命歲煞排盤
+            </div>
+            <span style="font-size:0.75rem; background:#FFF1F0; color:#CF1322; padding:2px 8px; border-radius:10px; font-weight:bold; border:1px solid #FFA39E;" id="zodiacResultBadge">
+              值年坐太歲・劍鋒凶星
+            </span>
+          </div>
+
+          <!-- 凶星與吉凶開示 -->
+          <div style="font-size:0.82rem; line-height:1.6; color:#555;" id="zodiacResultDetail">
+            <p style="margin:4px 0;"><strong>⚠️ 沖犯星煞：</strong>本命坐太歲，並逢「劍鋒、伏屍」星臨宮。</p>
+            <p style="margin:4px 0;"><strong>⚡ 潛在影響：</strong>情緒易起伏、勞心傷神，防刀剪金屬損傷與口舌紛擾。</p>
+            <p style="margin:4px 0; color:#B37FEB;"><strong>✨ 開基湄洲三媽開示：</strong>「遇變思靜，以退為進，凡事三思而後行，心存善念自有吉神暗中護庇。」</p>
+            <div style="background:#FFFBE6; border-left:3px solid #FAAD14; padding:6px 10px; border-radius:4px; margin-top:6px; font-size:0.78rem;">
+              <strong>🪔 建議萬春宮科儀：</strong>安奉值年太歲星君斗燈、行「祭劍鋒解厄科儀」，佩戴開基三媽香火袋。
+            </div>
+          </div>
+        </div>
+
+        <!-- 登記文疏與祭解按鈕 -->
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <button class="lb-primary-btn" style="flex:1; background:#CF1322;" onclick="handleZodiacRegister()">
+            ✍️ 線上登記萬春宮祭解疏文
+          </button>
+          <button class="lb-primary-btn" style="flex:1; background:#8C5B32;" onclick="closeLbModal('zodiacModal'); openDivinationFlow();">
+            🎋 抽湄洲媽靈籤請示
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -3382,6 +3458,150 @@
       if (data && data.mapUrl) {
         window.open(data.mapUrl, '_blank');
       }
+    }
+
+    // ==============================================
+    // 萬春宮特色：生肖五大凶星排盤演算法 (Zodiac Evil Star Calculation)
+    // ==============================================
+    const ZODIAC_STAR_DATA = {
+      rat: {
+        name: "生肖 鼠 (子)",
+        badge: "逢天狗凶星・血光損耗",
+        star: "天狗星、吊客星臨宮",
+        impact: "外出易生波折、慎防微恙損傷與血光之災，避免夜遊涉險險境。",
+        blessing: "「心平氣和福星聚，謹言慎行避嫌疑。湄洲聖母靈光護，遠行歸家皆吉期。」",
+        cure: "安奉萬春宮天上聖母光明燈、行「祭化天狗解厄科儀」，佩戴過爐護身符。"
+      },
+      ox: {
+        name: "生肖 牛 (丑)",
+        badge: "逢卷舌寡宿・暗小人是非",
+        star: "卷舌星、寡宿星入命",
+        impact: "人際往來易招惹口舌是非、小人暗中作祟，夫妻或情侶需防誤會猜忌。",
+        blessing: "「舌底是非休問取，心中自有定風波。三媽慧眼明秋毫，守正清寧得順和。」",
+        cure: "安奉文昌功名燈、行萬春宮「祭化五鬼防小人科儀」，飲用大墩奉茶定心。"
+      },
+      tiger: {
+        name: "生肖 虎 (寅)",
+        badge: "逢白虎大煞・官非刑剋",
+        star: "白虎凶星、天雄星坐鎮",
+        impact: "性情易躁動、恐遇意外傷災、財物損耗或合同官非，切忌與人爭勝強出頭。",
+        blessing: "「猛虎逢春亦順隨，慈航引渡化千危。積德好施仁義在，凶煞化做吉星垂。」",
+        cure: "急需至萬春宮行「制化白虎消災法會」，登記消災文疏安奉太歲斗。"
+      },
+      rabbit: {
+        name: "生肖 兔 (卯)",
+        badge: "吉星拱照・微逢暴敗空亡",
+        star: "太陰吉星臨宮，微逢暴敗",
+        impact: "整體運勢平穩向上，女性貴人相助，但切防投機破財，宜守正財。",
+        blessing: "「玉兔清暉照前路，得道多助貴人扶。開基三媽賜豐稔，家肥屋潤展宏圖。」",
+        cure: "安奉天上聖母光明燈，朔望至萬春宮敬香添油香，祈求財庫安泰。"
+      },
+      dragon: {
+        name: "生肖 龍 (辰)",
+        badge: "值年坐太歲・劍鋒凶星",
+        star: "本命太歲、劍鋒、伏屍臨宮",
+        impact: "情緒起伏較大、凡事多波折考驗，防金屬刃傷、車行損傷與勞心失眠。",
+        blessing: "「遇變思靜，以退為進。凡事三思而後行，心存善念自有吉神暗中護庇。」",
+        cure: "必安奉萬春宮「值年太歲星君燈」、行「祭劍鋒除煞科儀」，佩戴三媽香火袋。"
+      },
+      snake: {
+        name: "生肖 蛇 (巳)",
+        badge: "天喜吉星・太陽高照",
+        star: "太陽、天喜吉星入垣",
+        impact: "逢凶化吉之吉年，利於婚嫁添丁、事業開拓；惟須防得意忘形致酒色之災。",
+        blessing: "「靈蛇化龍騰萬里，吉慶盈門喜事多。常念聖母慈悲念，福澤綿長蔭薜蘿。」",
+        cure: "安奉萬春宮文昌功名燈，行善布施回饋地方，廣植福田。"
+      },
+      horse: {
+        name: "生肖 馬 (午)",
+        badge: "逢喪門災煞・家宅宜靜",
+        star: "喪門星、地喪星入宮",
+        impact: "家宅長輩健康宜加留意，少探病送喪，避免涉足陰晦場域。",
+        blessing: "「孝悌齊家神明鑒，寸心安處即蓬萊。萬春宮母垂慈蔭，解化凶星福祿來。」",
+        cure: "行萬春宮「白米米卦收驚科儀」，安奉光明燈以安元神身心。"
+      },
+      goat: {
+        name: "生肖 羊 (未)",
+        badge: "紫微龍德・吉星照耀",
+        star: "紫微高照、龍德保泰",
+        impact: "貴人星高拱，謀事多遂，逢凶化吉；惟小人暗中眼紅，宜低調行事。",
+        blessing: "「三陽開泰紫雲生，萬里鵬程任縱橫。常懷感恩修仁德，福祿壽全慶大平。」",
+        cure: "至萬春宮天井古鐘前祈福叩鐘，安奉天上聖母光明燈以固吉運。"
+      },
+      monkey: {
+        name: "生肖 猴 (申)",
+        badge: "逢五鬼官符・口舌糾葛",
+        star: "五鬼星、官符星入命",
+        impact: "小人陷害、背後中傷、破耗財帛或受朋友牽連，合夥買賣需謹慎定約。",
+        blessing: "「靈猴省思察秋毫，五鬼侵凌莫動搖。正氣常存魔自退，三媽庇佑步青霄。」",
+        cure: "行萬春宮「祭化五鬼制官符道法科儀」，登記疏文驅散陰邪。"
+      },
+      rooster: {
+        name: "生肖 雞 (酉)",
+        badge: "六合歲合・微防小耗",
+        star: "歲合吉星，微逢小耗",
+        impact: "與歲支相合，人際人脈蓬勃，合作機緣多；但有微耗花費，宜節制預算。",
+        blessing: "「金雞報曉喜臨門，和氣致祥百事純。但得勤儉修身道，自然財福永臨門。」",
+        cure: "安奉文昌功名燈，至第二市場走讀香路兌換奉茶券定性。"
+      },
+      dog: {
+        name: "生肖 狗 (戌)",
+        badge: "逢歲破大耗・正沖太歲",
+        star: "歲破凶星、大耗星正照",
+        impact: "運程波動劇烈，易有突發破耗、親友反目或事業轉折，動輒得咎，忌動土投機。",
+        blessing: "「歲破臨門休懼怕，修心向善可移山。萬春開基三媽在，力挽狂瀾保得安。」",
+        cure: "必安奉萬春宮「值年太歲星君斗燈」、行「大解厄法會」並請過爐香火隨身。"
+      },
+      pig: {
+        name: "生肖 豬 (亥)",
+        badge: "福星紅鸞・吉凶參半",
+        star: "紅鸞星動、微逢暴敗",
+        impact: "單身者良緣將至、感情甜蜜，但在職場與投資上需防小人合謀坑騙。",
+        blessing: "「紅鸞結綵喜洋洋，福宿相隨瑞氣長。守正不阿遵法度，前程錦繡姓名香。」",
+        cure: "安奉萬春宮天上聖母光明燈，祈求良緣得成、平安納吉。"
+      }
+    };
+
+    function calcZodiacStar() {
+      const zSelect = document.getElementById('zodiacSelect');
+      const cSelect = document.getElementById('zodiacConcern');
+      if (!zSelect) return;
+      const val = zSelect.value;
+      const data = ZODIAC_STAR_DATA[val] || ZODIAC_STAR_DATA['dragon'];
+      
+      const titleElem = document.getElementById('zodiacResultName');
+      const badgeElem = document.getElementById('zodiacResultBadge');
+      const detailElem = document.getElementById('zodiacResultDetail');
+
+      if (titleElem) titleElem.innerText = `【${data.name}】歲煞排盤開示`;
+      if (badgeElem) badgeElem.innerText = data.badge;
+
+      let concernTip = "";
+      if (cSelect) {
+        if (cSelect.value === 'career') concernTip = "<p style='margin:4px 0; color:#1890FF;'><strong>💼 事業提點：</strong>宜堅守本分、慎選夥伴，勿急功近利以防陷入合約紛爭。</p>";
+        else if (cSelect.value === 'health') concernTip = "<p style='margin:4px 0; color:#FA8C16;'><strong>🩺 身體健康：</strong>注意起居作息，飲食宜清淡，行車切勿貪快搶道。</p>";
+        else if (cSelect.value === 'money') concernTip = "<p style='margin:4px 0; color:#52C41A;'><strong>💰 財運指引：</strong>財庫宜守不宜冒進，遠離高風險投機，多行善布施積福。</p>";
+      }
+
+      if (detailElem) {
+        detailElem.innerHTML = `
+          <p style="margin:4px 0;"><strong>⚠️ 沖犯星煞：</strong>${data.star}</p>
+          <p style="margin:4px 0;"><strong>⚡ 歲煞影響：</strong>${data.impact}</p>
+          ${concernTip}
+          <p style="margin:4px 0; color:#8C5B32;"><strong>✨ 開基湄洲三媽聖示：</strong>${data.blessing}</p>
+          <div style="background:#FFFBE6; border-left:3px solid #FAAD14; padding:6px 10px; border-radius:4px; margin-top:8px; font-size:0.78rem;">
+            <strong>🪔 建議萬春宮化解科儀：</strong>${data.cure}
+          </div>
+        `;
+      }
+    }
+
+    function handleZodiacRegister() {
+      const zSelect = document.getElementById('zodiacSelect');
+      const val = zSelect ? zSelect.value : 'dragon';
+      const data = ZODIAC_STAR_DATA[val] || ZODIAC_STAR_DATA['dragon'];
+      alert(`🏮 感謝信士誠心！已為您記錄【${data.name}】祭解祈福疏文意向！\n萬春宮執事道長將於近期科儀朔望代信士呈稟湄洲媽祖消災解厄！`);
+      closeLbModal('zodiacModal');
     }
 
     // LINE Bye 底部小撇步跑馬燈
