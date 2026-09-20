@@ -792,20 +792,20 @@
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .lb-brand:active .lb-brand-bye-jiao {
-      transform: scale(0.92) rotate(-3deg);
+      transform: scale(0.93) translateY(1px);
     }
     .lb-jiao-svg {
-      width: 56px;
-      height: 26px;
+      width: 60px;
+      height: 28px;
       overflow: visible;
       display: block;
     }
     .lb-brand-badge {
       font-size: 0.6rem;
       font-weight: 800;
-      color: #7A0C16; /* 深緋紅 */
-      background: rgba(201, 159, 114, 0.18); /* 古法香檳金棕透光 */
-      border: 1px solid rgba(201, 159, 114, 0.45);
+      color: #981617; /* 朱砂暗紅 */
+      background: rgba(198, 143, 66, 0.16); /* 典雅金棕透光 */
+      border: 1px solid rgba(198, 143, 66, 0.42);
       padding: 1px 5px;
       border-radius: 4px;
       letter-spacing: 0.5px;
@@ -1765,45 +1765,45 @@
       <!-- 品牌標題 (X 5% ~ 30%, Y 2% ~ 7%) -->
       <div class="lb-brand" onclick="location.reload()" title="LINE Bye 智慧宮廟生活圈">
         <span class="lb-brand-line">LINE</span>
-        <span class="lb-brand-bye-jiao" title="聖杯吉祥造型">
-          <svg class="lb-jiao-svg" viewBox="0 0 56 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <span class="lb-brand-bye-jiao" title="聖筊微笑半月造型（朱砂暗紅與深緋紅，嵌典雅金棕 BYE）">
+          <svg class="lb-jiao-svg" viewBox="0 0 62 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <!-- 古法香檳金棕漸層 (籤筒與金漆牌匾溫潤光澤) -->
-              <linearGradient id="jiaoGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#E4C197"/>
-                <stop offset="35%" stop-color="#D6AD82"/>
-                <stop offset="85%" stop-color="#C99F72"/>
-                <stop offset="100%" stop-color="#B28453"/>
-              </linearGradient>
-              <!-- 筊背立體高光 -->
-              <linearGradient id="jiaoRidgeHighlight" x1="20%" y1="0%" x2="80%" y2="100%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/>
-                <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.1"/>
-                <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
-              </linearGradient>
-              <filter id="jiaoDropShadow" x="-10%" y="-10%" width="130%" height="130%">
-                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(201, 159, 114, 0.45)"/>
+              <filter id="jiaoSmileShadow" x="-10%" y="-10%" width="125%" height="130%">
+                <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="rgba(107, 10, 13, 0.4)"/>
               </filter>
             </defs>
-            <!-- 筊主體 (月牙形聖杯造型) -->
-            <path d="M 3 16.5 C 9 4.2, 33 2.5, 51 11.2 C 54.5 13.5, 54.8 17, 51.5 18.2 C 37 23.8, 18 24.2, 3 16.5 Z" 
-                  fill="url(#jiaoGoldGrad)" 
-                  stroke="#A87948" 
-                  stroke-width="1.2" 
-                  filter="url(#jiaoDropShadow)"/>
-            <!-- 筊背立體脊線光澤 -->
-            <path d="M 5 15 C 12 6.5, 33 5, 48 11.5" 
-                  stroke="url(#jiaoRidgeHighlight)" 
-                  stroke-width="1.8" 
-                  stroke-linecap="round"/>
-            <!-- BYE 深緋紅文字 -->
-            <text x="27" y="16.5" 
-                  font-size="11" 
+            <!-- 步驟 1：筊杯底座外輪廓（微笑半月形/船形底座，朱砂暗紅 #981617） -->
+            <path d="M 5 7.5 
+                     C 4 8.2, 3.5 9.8, 4.6 11.8 
+                     C 7.2 17.5, 16.5 26.5, 31 26.5 
+                     C 45.5 26.5, 54.8 17.5, 57.4 11.8 
+                     C 58.5 9.8, 58 8.2, 57 7.5 
+                     C 44 8.6, 18 8.6, 5 7.5 Z" 
+                  fill="#981617" 
+                  filter="url(#jiaoSmileShadow)"/>
+            <!-- 步驟 2：上方內凹陰影區（營造厚度與景深，宮廟深緋紅 #6B0A0D） -->
+            <path d="M 6.8 8.8 
+                     C 18 10, 44 10, 55.2 8.8 
+                     C 50.8 18.2, 42.5 19.8, 31 19.8 
+                     C 19.5 19.8, 11.2 18.2, 6.8 8.8 Z" 
+                  fill="#6B0A0D"/>
+            <!-- 步驟 3：排版與刻劃 BYE 文字（典雅金棕 #C68F42） -->
+            <text x="31" y="16.3" 
+                  font-size="10.5" 
                   font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif" 
                   font-weight="900" 
-                  fill="#7A0C16" 
-                  letter-spacing="0.5px" 
+                  fill="#C68F42" 
+                  letter-spacing="0.6px" 
                   text-anchor="middle">BYE</text>
+            <!-- 步驟 4：底部月牙高光（微笑反光亮面，豆沙肉粉 #C97779，中間厚兩端收細，85% 透明度） -->
+            <path d="M 17 23.8 C 21.5 25.5, 26 26.1, 31 26.1 C 36 26.1, 40.5 25.5, 45 23.8 C 40.5 25.1, 36 25.6, 31 25.6 C 26 25.6, 21.5 25.1, 17 23.8 Z" 
+                  fill="#C97779" 
+                  opacity="0.88"/>
+            <path d="M 18 24.1 C 22.2 25.5, 26.5 26, 31 26 C 35.5 26, 39.8 25.5, 44 24.1" 
+                  stroke="#C97779" 
+                  stroke-width="1.2" 
+                  stroke-linecap="round" 
+                  opacity="0.85"/>
           </svg>
         </span>
         <span class="lb-brand-badge">MINI</span>
