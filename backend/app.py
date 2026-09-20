@@ -361,6 +361,64 @@ async def api_interpret_fortune(request: Request):
     return {"status": "success", "reply": reply}
 
 
+@app.post("/api/touch_checkin")
+async def api_touch_checkin(request: Request):
+    """供 LINE Touch 實體碰觸感應時，記錄打卡並自動推送 LINE 官方打卡憑證"""
+    try:
+        data = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+
+    user_id = data.get("user_id")
+    route_id = data.get("route_id", "wenchang")
+    try:
+        cp_index = int(data.get("checkpoint_index", 0))
+    except (ValueError, TypeError):
+        cp_index = 0
+
+    TEMPLE_NAMES = {
+        "wenchang": ["台北文昌宮 (雙連)", "大龍峒保安宮文昌殿", "新莊文昌祠"],
+        "yuelao": ["台北霞海城隍廟", "艋舺龍山寺月老廳", "大稻埕慈聖宮"],
+        "mazu": ["北投關渡宮", "松山慈祐宮", "士林慈諴宮"],
+        "baishatun": ["白沙屯拱天宮", "通霄慈惠宮", "北港朝天宮"]
+    }
+    names = TEMPLE_NAMES.get(route_id, ["宮廟"])
+    temple_name = names[cp_index] if 0 <= cp_index < len(names) else names[0]
+
+    log_event(f"信徒 [{user_id}] 透過 LINE Touch 實體感應完成【{temple_name}】打卡！")
+
+    # 透過 LINE Messaging API 自動推送專屬數位香火憑證
+    if user_id and LINE_CHANNEL_ACCESS_TOKEN:
+        with ApiClient(configuration) as api_client:
+            messaging_api = MessagingApi(api_client)
+            push_text = (
+                f"🎉【LINE Touch 實體感應打卡成功】\n\n"
+                f"恭賀信士親臨參拜【{temple_name}】！\n"
+                f"已為您成功蓋印第 {cp_index + 1} 枚數位足跡。\n"
+                f"神尊威靈護佑，祈願所求皆遂、平安吉祥！\n\n"
+                f"👉 點此開啟參拜足跡進度地圖：\n"
+                f"https://liff.line.me/2011668576-3Qay1nBv?route={route_id}"
+            )
+            try:
+                messaging_api.push_message(
+                    PushMessageRequest(
+                        to=user_id,
+                        messages=[TextMessage(text=push_text)]
+                    )
+                )
+                log_event(f"已成功推送 LINE Touch 憑證給信徒 [{user_id}]！")
+            except Exception as e:
+                log_event(f"推送 Touch 憑證失敗: {e}")
+
+    return {
+        "status": "success",
+        "route_id": route_id,
+        "checkpoint_index": cp_index,
+        "temple_name": temple_name,
+        "message": f"已成功記錄【{temple_name}】LINE Touch 足跡"
+    }
+
+
 @app.get("/")
 def root():
     return {

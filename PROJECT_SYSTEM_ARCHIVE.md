@@ -63,6 +63,10 @@ PORT=8000
 * `POST /api/interpret_fortune`
   * 提供純網頁端免切換 LINE 的線上即時解籤 API。
   * 傳入格式：`{"text": "籤詩內容或問題"}`，回傳官方客觀解籤。
+* `POST /api/touch_checkin`
+  * 接收實體 LINE Touch (NFC 標籤) 碰觸打卡或前端打卡請求，記錄打卡軌跡並透過 LINE Messaging API 即時推播數位香火憑證到信眾聊天室。
+  * 傳入格式：`{"user_id": "U1234...", "route_id": "wenchang", "checkpoint_index": 0}`
+  * 回傳格式：`{"status": "ok", "message": "打卡成功", "checkpoint": "台北文昌宮", "pushed": true}`
 * `GET /logs`
   * 伺服器日誌端點（保留最近 100 筆事件），方便免登入 Render 後台即時除錯。
 * `GET /`
@@ -212,6 +216,16 @@ PORT=8000
   * 腳印 2（右腳）：半透明/待感應狀態（感應後轉為金色）
   * 虛線路徑 2：由腳印 2 延伸至腳印 3
   * 腳印 3（左腳）：半透明/待感應狀態
+* **LINE Touch 實體 NFC 標籤規格與 URL 喚醒規範**：
+  * 宮廟現場實體 NFC 晶片標籤（NTAG213 / NTAG215 等）寫入之 NDEF 網址格式：
+    `https://liff.line.me/2011668576-3Qay1nBv?action=touch&route={route_id}&cp={checkpoint_index}`
+    （例如：`https://liff.line.me/2011668576-3Qay1nBv?action=touch&route=wenchang&cp=0`）
+  * **手機碰觸行為**：
+    1. iOS / Android 感應到標籤後，自動以 LINE MINI App / LIFF 喚醒開啟「LINE Bye 智慧宮廟」。
+    2. 前端 `checkLineTouchEntry()` 解析 URL 參數中的 `action=touch`、`route` 與 `cp`。
+    3. 自動直接跳入該路線詳情頁（例如文昌宮路線）。
+    4. 自動點亮對應站點足跡（腳印變金亮、進度累加、播放震動與音效）。
+    5. 前端非同步呼叫後端 `/api/touch_checkin`，後端即時推播「🪔 參拜足跡打卡成功憑證」至信眾 LINE 聊天室，並附帶足跡地圖召回按鈕。
 * **LINE Touch / 定位微型感應業務邏輯**：
   * GPS 即時測距：透過 `navigator.geolocation` 計算與廟宇直線距離
   * 當距離 $\le 50\text{m}$ 或點擊「📡 LINE Touch 打卡」/「模擬 LINE Touch 感應」時：
@@ -219,6 +233,7 @@ PORT=8000
     2. 對應腳印點亮轉為綠色實線發光
     3. 頂部計數即時跳動（如 1/3 ➔ 2/3 ➔ 3/3 大圓滿）
     4. 震動回饋與彈出恭賀足跡解鎖提示
+    5. 自動呼叫後端 `/api/touch_checkin` 推播數位憑證
 
 ---
 
@@ -230,7 +245,7 @@ PORT=8000
 
 ### 2. 電腦版無法回傳籤詩到聊天室？
 * **原因**：外開瀏覽器或電腦端沒有原生 LINE 聊天視窗上下文。
-* **解決方案**：透過 `liff.getProfile()` 取得 `userId`，呼叫後端 `/api/push_fortune`，手機端 LINE 聊天室秒收到籤詩與 AI 霸總解籤。
+* **解決方案**：透過 `liff.getProfile()` 取得 `userId`，呼叫後端 `/api/push_fortune`，手機端 LINE 聊天室秒收到籤詩與官方客觀解籤。
 
 ### 3. Render 免費層休眠 (Cold Start) 如何解決？
 * **機制**：免費層 15 分鐘無請求會休眠，重啟需 30~50 秒。

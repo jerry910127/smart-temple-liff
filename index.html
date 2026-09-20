@@ -2693,15 +2693,19 @@
         await liff.init({ liffId: MY_LIFF_ID });
         if (liff.isLoggedIn()) {
           const profile = await liff.getProfile();
+          window.currentLineUserId = profile.userId;
           document.getElementById('userGreeting').innerText = `信士 ${profile.displayName}，請靜心祈願`;
           const profileNameElem = document.getElementById('lbUserProfileName');
           if (profileNameElem) profileNameElem.innerText = `信士 ${profile.displayName}`;
         } else {
           document.getElementById('userGreeting').innerText = "信士 請靜心向福運神尊祈願";
         }
+        // 檢查是否有 LINE Touch 實體感應喚醒參數
+        checkLineTouchEntry();
       } catch (err) {
         console.warn("LIFF 連線提示:", err);
         document.getElementById('userGreeting').innerText = "靈籤入微 ｜ 智慧宮廟文化生活圈";
+        checkLineTouchEntry();
       }
     }
 
@@ -2951,12 +2955,58 @@
       // 震動回饋
       if (navigator.vibrate) navigator.vibrate([80, 50, 120]);
 
+      // 同步回傳後端 API 記錄打卡並自動推送 LINE 憑證
+      sendTouchCheckinToBackend(activeRouteId, checkpointIdx);
+
       // 恭賀提示
       const completedCount = route.checkpoints.filter(c => c.completed).length;
       if (completedCount === route.totalSteps) {
         alert(`🎉 恭賀大圓滿！\n您已完成「${route.name}」全部 3 座宮廟行腳巡禮！\n神尊威靈加被，福壽康泰！`);
       } else {
         alert(`🎉 LINE Touch 感應成功！\n已為您解鎖【${cp.name}】數位足跡！\n目前已蒐集 ${completedCount}/${route.totalSteps} 個腳印。`);
+      }
+    }
+
+    // 檢查是否有 LINE Touch 實體 NFC/URL 感應進入
+    function checkLineTouchEntry() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isTouch = urlParams.get('touch') === '1' || urlParams.get('action') === 'touch';
+      if (isTouch) {
+        const routeId = urlParams.get('route') || 'wenchang';
+        const cpIdx = parseInt(urlParams.get('cp') || '0', 10);
+        openRouteDetailPage(routeId);
+        setTimeout(() => {
+          triggerManualBeacon(cpIdx);
+        }, 600);
+      }
+    }
+
+    // 發送打卡資料至後端 API (/api/touch_checkin)
+    async function sendTouchCheckinToBackend(routeId, checkpointIdx) {
+      let userId = window.currentLineUserId;
+      if (!userId && typeof liff !== 'undefined' && liff.isLoggedIn && liff.isLoggedIn()) {
+        try {
+          const profile = await liff.getProfile();
+          userId = profile.userId;
+          window.currentLineUserId = userId;
+        } catch (e) {}
+      }
+
+      if (!userId) return;
+
+      try {
+        await fetch('https://smart-temple-liff.onrender.com/api/touch_checkin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: userId,
+            route_id: routeId,
+            checkpoint_index: checkpointIdx
+          })
+        });
+        console.log(`LINE Touch 打卡已成功同步至後端: route=${routeId}, cp=${checkpointIdx}`);
+      } catch (err) {
+        console.warn("LINE Touch 後端同步提示:", err);
       }
     }
 
