@@ -37,9 +37,9 @@
 在 `backend/.env` 或 Render 後台 Environment Variables 需設定：
 
 ```env
-LINE_CHANNEL_SECRET=d17ea5b0159bcb2985396186a3279dcb
-LINE_CHANNEL_ACCESS_TOKEN=ZZZ2jYlPyqxzNpoUyqVd5zBCq6phjA8voG12JjYAnYLW2y+xybTBrLf4Oxsasl+H9ENpS3RevFy7SVQheDW0mHKGqpk3kloUv7AzUl2lMOaypqpKJ17oEzRqvECFaxUIwFYF3a488f2XQ+I0OTSh7gdB04t89/1O/w1cDnyilFU=
-NVIDIA_API_KEY=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
+LINE_CHANNEL_SECRET=your_line_channel_secret_here
+LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token_here
+NVIDIA_API_KEY=your_nvidia_api_key_here
 PORT=8000
 ```
 

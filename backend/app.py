@@ -46,10 +46,10 @@ def log_event(msg: str):
     SERVER_LOGS.append(entry)
     print(entry, flush=True)
 
-# 環境變數設定
-LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "d17ea5b0159bcb2985396186a3279dcb").strip()
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "ZZZ2jYlPyqxzNpoUyqVd5zBCq6phjA8voG12JjYAnYLW2y+xybTBrLf4Oxsasl+H9ENpS3RevFy7SVQheDW0mHKGqpk3kloUv7AzUl2lMOaypqpKJ17oEzRqvECFaxUIwFYF3a488f2XQ+I0OTSh7gdB04t89/1O/w1cDnyilFU=").strip()
-NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "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").strip()
+# 環境變數設定（請於 Render 後台或本地 .env 設定，嚴禁在公開代碼中硬編碼）
+LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "").strip()
+LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "").strip()
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(LINE_CHANNEL_SECRET)
