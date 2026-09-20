@@ -2092,6 +2092,23 @@
       </div>
     </section>
 
+    <!-- 4.8 萬春宮專屬 LINE 官方貼圖橫幅 (Sticker Banner) -->
+    <section style="padding: 0 5% 10px 5%;">
+      <div style="background: linear-gradient(135deg, #FFF0F6 0%, #FFE4ED 100%); border: 1.5px solid #FFADD2; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; box-shadow: 0 3px 12px rgba(235, 47, 150, 0.08);" onclick="openLbModal('stickerModal')">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <img src="assets/stickers/萬春宮媽祖貼圖_03_穩啦.png" alt="穩啦貼圖" style="width:48px; height:42px; object-fit:contain;" />
+          <div>
+            <div style="font-size:0.86rem; font-weight:bold; color:#C41D7F; display:flex; align-items:center; gap:4px;">
+              <span>🎁 開基媽祖 LINE 官方貼圖</span>
+              <span style="font-size:0.6rem; background:#C41D7F; color:#FFF; padding:1px 5px; border-radius:6px;">全套16款</span>
+            </div>
+            <div style="font-size:0.68rem; color:#888; margin-top:2px;">加入好友免費下載・水逆退散・穩啦！</div>
+          </div>
+        </div>
+        <span style="font-size:0.75rem; font-weight:bold; color:#C41D7F;">免費領 &gt;</span>
+      </div>
+    </section>
+
     <!-- 5. 底部跑馬燈橫條 (Footer Tips: Y 75% ~ 83%) -->
     <div class="lb-footer-bar" onclick="cycleLbTip()">
       <div class="lb-footer-ticker">
@@ -2790,6 +2807,121 @@
         </div>
 
         <button class="lb-primary-btn" onclick="closeLbModal('calendarModal')">關閉行事曆</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.15 萬春宮特色：開基媽祖全套 LINE 官方貼圖專區 Modal (Stickers Modal) -->
+  <div class="lb-modal-overlay" id="stickerModal" onclick="closeLbModal('stickerModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:88vh; overflow-y:auto;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🎁 萬春宮・開基媽祖開運貼圖</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('stickerModal')">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.6; color:#444;">
+        <div style="background: linear-gradient(135deg, #FFF0F6 0%, #FFE4ED 100%); border: 1.5px solid #FFADD2; border-radius: 12px; padding: 12px; margin-bottom: 12px; display:flex; gap:10px; align-items:center;">
+          <img src="assets/stickers/萬春宮媽祖貼圖_03_穩啦.png" alt="媽祖穩啦" style="width:58px; height:50px; object-fit:contain;" />
+          <div>
+            <div style="font-weight:bold; color:#C41D7F; font-size:0.92rem;">✨ 全套 16 款大字版・神明庇佑</div>
+            <div style="font-size:0.75rem; color:#666; margin-top:2px;">加入萬春宮官方 LINE 帳號，立即可在聊天室免費領取並永久收藏！</div>
+          </div>
+        </div>
+
+        <p style="margin-bottom:8px; font-weight:bold; color:#8C5B32;">👀 貼圖全覽（點擊可放大觀看）：</p>
+
+        <!-- 16 款貼圖 4x4 網格 -->
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:14px;">
+          <!-- 01 早安 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_01_早安.png', '早安')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_01_早安.png" alt="早安" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">早安</div>
+          </div>
+          <!-- 02 晚安 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_02_晚安.png', '晚安')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_02_晚安.png" alt="晚安" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">晚安</div>
+          </div>
+          <!-- 03 穩啦 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_03_穩啦.png', '穩啦')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_03_穩啦.png" alt="穩啦" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">穩啦</div>
+          </div>
+          <!-- 04 收到 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_04_收到.png', '收到')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_04_收到.png" alt="收到" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">收到</div>
+          </div>
+          <!-- 05 謝謝 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_05_謝謝.png', '謝謝')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_05_謝謝.png" alt="謝謝" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">謝謝</div>
+          </div>
+          <!-- 06 拜託 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_06_拜託.png', '拜託')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_06_拜託.png" alt="拜託" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">拜託</div>
+          </div>
+          <!-- 07 辛苦了 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_07_辛苦了.png', '辛苦了')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_07_辛苦了.png" alt="辛苦了" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">辛苦了</div>
+          </div>
+          <!-- 08 加油 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_08_加油.png', '加油')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_08_加油.png" alt="加油" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">加油</div>
+          </div>
+          <!-- 09 笑死 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_09_笑死.png', '笑死')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_09_笑死.png" alt="笑死" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">笑死</div>
+          </div>
+          <!-- 10 真的假的 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_10_真的假的.png', '真的假的')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_10_真的假的.png" alt="真的假的" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">真的假的</div>
+          </div>
+          <!-- 11 哭哭 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_11_哭哭.png', '哭哭')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_11_哭哭.png" alt="哭哭" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">哭哭</div>
+          </div>
+          <!-- 12 太讚了 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_12_太讚了.png', '太讚了')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_12_太讚了.png" alt="太讚了" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">太讚了</div>
+          </div>
+          <!-- 13 水逆退散 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_13_水逆退散.png', '水逆退散')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_13_水逆退散.png" alt="水逆退散" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">水逆退散</div>
+          </div>
+          <!-- 14 吃飽沒 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_14_吃飽沒.png', '吃飽沒')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_14_吃飽沒.png" alt="吃飽沒" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">吃飽沒</div>
+          </div>
+          <!-- 15 發大財 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_15_發大財.png', '發大財')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_15_發大財.png" alt="發大財" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">發大財</div>
+          </div>
+          <!-- 16 莫慌 -->
+          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_16_莫慌.png', '莫慌')">
+            <img src="assets/stickers/萬春宮媽祖貼圖_16_莫慌.png" alt="莫慌" style="width:100%; height:54px; object-fit:contain;" />
+            <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">莫慌</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button class="lb-primary-btn" style="flex:1; background:#06C755;" onclick="downloadMazuStickers()">
+            📲 加入好友・一鍵免費領取貼圖包
+          </button>
+          <button class="lb-primary-btn" style="flex:1; background:#8C5B32;" onclick="shareStickersToFriend()">
+            📤 轉發好友分享功德
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -4621,6 +4753,39 @@
       playCypressWoodSound();
       alert(`🎉 恭喜【${student}】（${school}）報名成功！\n\n參賽組別：${category}\n報名准考序號：【${regId}】\n\n系統已將參賽須知與初選報到卡發送至您的 LINE 帳號，請於比賽當日憑此序號至萬春宮廟埕現場報到領取專用紙張！`);
       closeLbModal('contestModal');
+    }
+
+    // ==============================================
+    // 萬春宮特色：開基媽祖 LINE 官方貼圖互動邏輯 (Stickers Logic)
+    // ==============================================
+    function previewSticker(imgUrl, stickerName) {
+      playCypressWoodSound();
+      alert(`🏮 萬春宮開基媽祖貼圖【${stickerName}】\n規格：370 × 320 px (LINE 官方透明背規格)\n此款貼圖可於加入萬春宮官方 LINE 帳號後免費下載！`);
+    }
+
+    function downloadMazuStickers() {
+      playCypressWoodSound();
+      if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
+        alert("🎉 感謝善信！已為您導向萬春宮 LINE 官方帳號！\n點擊「加入好友」後，聊天室將立即自動推送【全套16款開基媽祖開運貼圖】領取連結！");
+        window.open('https://line.me/R/ti/p/@326watsb', '_blank');
+      } else {
+        alert("🎉 感謝善信支持萬春宮！\n請掃描或點擊加入萬春宮官方 LINE 帳號 (@326watsb)，即可在聊天室一鍵免費領取全套 16 款大字版開運貼圖！");
+      }
+    }
+
+    function shareStickersToFriend() {
+      playCypressWoodSound();
+      const shareText = "🏮 台中藍興媽祖 萬春宮・三百年開基媽祖全套 16 款 LINE 開運貼圖免費領取！\n穩啦、水逆退散、早安祈福，加入好友立刻用：\nhttps://jerry910127.github.io/smart-temple-liff/";
+      if (navigator.share) {
+        navigator.share({
+          title: "萬春宮開基媽祖 LINE 官方貼圖",
+          text: shareText,
+          url: "https://jerry910127.github.io/smart-temple-liff/"
+        }).catch(err => console.log(err));
+      } else {
+        navigator.clipboard.writeText(shareText);
+        alert("📋 貼圖分享連結與祝禱文已成功複製到剪貼簿！\n可直接貼至 LINE 家族或好友群組分享媽祖庇佑福緣！");
+      }
     }
 
     // LINE Bye 底部小撇步跑馬燈
