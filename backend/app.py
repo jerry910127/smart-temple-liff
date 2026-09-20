@@ -419,6 +419,13 @@ async def api_touch_checkin(request: Request):
     }
 
 
+@app.get("/api/maps_key")
+def get_maps_key():
+    """安全提供受網域限制之 Google Maps API Key"""
+    key = os.getenv("GOOGLE_MAPS_API_KEY", "")
+    return {"status": "ok", "key": key}
+
+
 @app.get("/")
 def root():
     return {

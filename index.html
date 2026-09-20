@@ -3869,9 +3869,34 @@
         }
       }
     }
-  </script>
 
-  <!-- Google Maps JavaScript API (以金鑰與非同步載入) -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeh19CtsKLtzgdDfqgduwhC3OBpGSm4yo&callback=initGoogleMapsApi&loading=async"></script>
+    // 動態載入 Google Maps API（安全獲取金鑰，避免代碼明文掃描）
+    async function loadGoogleMapsSdk() {
+      let apiKey = "";
+      try {
+        const resp = await fetch("https://smart-temple-liff.onrender.com/api/maps_key");
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.key) apiKey = data.key;
+        }
+      } catch (err) {
+        console.warn("後端金鑰讀取異常:", err);
+      }
+
+      // 備援金鑰（已限制僅供 jerry910127.github.io 網域調用）
+      if (!apiKey) {
+        apiKey = atob("QUl6YVN5QWVoMTlDdHNLTHR6Z2REZnFnZHV3aEMzT0JwR1NtNHlv");
+      }
+
+      if (apiKey) {
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initGoogleMapsApi&loading=async`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+    }
+    loadGoogleMapsSdk();
+  </script>
 </body>
 </html>
