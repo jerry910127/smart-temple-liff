@@ -1152,7 +1152,7 @@
       -webkit-backdrop-filter: blur(10px);
       border-top: 1px solid #ECEEF2;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       align-items: center;
       padding: 0 1% env(safe-area-inset-bottom, 0px);
       z-index: 100;
@@ -1947,6 +1947,46 @@
       </button>
     </section>
 
+    <!-- 3.5 三百年巡禮實境尋寶・闖關挑戰卡 (Quest Card: LINE Touch 實境集章) -->
+    <section style="padding: 0 5% 10px 5%;">
+      <div style="background: linear-gradient(135deg, #F0FAF3 0%, #E6F8EE 100%); border: 1.5px solid #85E0A3; border-radius: 14px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(6, 199, 85, 0.09); cursor: pointer;" onclick="openRouteListPage()">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:1.2rem;">🗺️</span>
+            <strong style="font-size:0.92rem; color:#0D5426;">大墩三百年古蹟巡禮・實境尋寶</strong>
+          </div>
+          <span style="background:#06C755; color:#FFF; font-size:0.68rem; font-weight:800; padding:2px 8px; border-radius:12px; box-shadow:0 1px 4px rgba(6,199,85,0.35);">
+            集章中 1/3
+          </span>
+        </div>
+
+        <!-- 3 個站點蓋印微視圖 -->
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:8px;">
+          <div style="background:#FFF; border:1px solid #B7EB8F; border-radius:8px; padding:6px; text-align:center;">
+            <div style="font-size:1.1rem;">⛩️</div>
+            <div style="font-size:0.72rem; font-weight:bold; color:#06C755;">天后牌樓</div>
+            <div style="font-size:0.6rem; color:#06C755; font-weight:800;">✅ 已蓋章</div>
+          </div>
+          <div style="background:#FFF; border:1px dashed #DDD; border-radius:8px; padding:6px; text-align:center;">
+            <div style="font-size:1.1rem;">👑</div>
+            <div style="font-size:0.72rem; font-weight:bold; color:#333;">聖母大殿</div>
+            <div style="font-size:0.6rem; color:#FA8C16; font-weight:bold;">📡 距 100m</div>
+          </div>
+          <div style="background:#FFF; border:1px dashed #DDD; border-radius:8px; padding:6px; text-align:center;">
+            <div style="font-size:1.1rem;">🔔</div>
+            <div style="font-size:0.72rem; font-weight:bold; color:#333;">天井古鐘</div>
+            <div style="font-size:0.6rem; color:#999;">🔒 待靠近</div>
+          </div>
+        </div>
+
+        <!-- 獎勵誘因文案 -->
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.85); padding:6px 10px; border-radius:8px; font-size:0.74rem;">
+          <span style="color:#0D5426;">🎁 <strong>集滿 3 章解鎖：</strong>開基媽祖過爐平安米＋神兵虛寶</span>
+          <span style="color:#06C755; font-weight:bold; font-size:0.78rem;">進入尋寶地圖 &gt;</span>
+        </div>
+      </div>
+    </section>
+
     <!-- 4. 附近廟宇探索區 (Near Temples: Y 45% ~ 78%) -->
     <section class="lb-temple-section">
       <div class="lb-section-header">
@@ -2082,6 +2122,11 @@
       <button class="lb-dock-item" onclick="openDivinationFlow()">
         <span class="lb-dock-icon">🎋</span>
         <span class="lb-dock-label">湄洲靈籤</span>
+      </button>
+      <button class="lb-dock-item" onclick="openRouteListPage()" style="position:relative;">
+        <span class="lb-dock-icon" style="transform:scale(1.15);">👣</span>
+        <span style="position:absolute; top:2px; right:10px; background:#06C755; color:#FFF; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:8px; line-height:1; box-shadow:0 1px 4px rgba(6,199,85,0.4);">1/3章</span>
+        <span class="lb-dock-label" style="color:#06C755; font-weight:800;">尋寶巡禮</span>
       </button>
       <button class="lb-dock-item" onclick="openLbModal('zodiacModal')" style="position:relative;">
         <span class="lb-dock-icon">🐉</span>
