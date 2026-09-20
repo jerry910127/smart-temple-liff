@@ -779,26 +779,41 @@
     }
     .lb-brand-line {
       color: #2B1810; /* 沉穩檀木黑 */
-      font-size: 1.32rem;
+      font-size: 1.35rem;
       font-weight: 900;
       letter-spacing: -0.4px;
       line-height: 1;
     }
     .lb-brand-bye-jiao {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      padding: 4px 14px 6px 14px;
       line-height: 1;
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .lb-brand:active .lb-brand-bye-jiao {
       transform: scale(0.93) translateY(1px);
     }
-    .lb-jiao-svg {
-      width: 50px;
-      height: 32px;
+    .lb-jiao-bg {
+      position: absolute;
+      inset: -4px -8px;
+      width: calc(100% + 16px);
+      height: calc(100% + 8px);
+      z-index: 1;
+      pointer-events: none;
       overflow: visible;
-      display: block;
+    }
+    .lb-brand-bye-text {
+      position: relative;
+      z-index: 2;
+      color: #C68F42; /* 典雅金棕，宮廟牌匾金漆色 */
+      font-size: 1.35rem; /* 與 LINE 完全等大等重 */
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      line-height: 1;
+      text-shadow: 0 1px 2px rgba(50, 5, 5, 0.6);
     }
     .lb-brand-badge {
       font-size: 0.6rem;
@@ -1766,44 +1781,38 @@
       <div class="lb-brand" onclick="location.reload()" title="LINE Bye 智慧宮廟生活圈">
         <span class="lb-brand-line">LINE</span>
         <span class="lb-brand-bye-jiao" title="聖筊微笑半月造型（朱砂暗紅與深緋紅，嵌典雅金棕 BYE）">
-          <svg class="lb-jiao-svg" viewBox="0 0 100 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 筊向量底座（微笑半月形/船形底座） -->
+          <svg class="lb-jiao-bg" viewBox="0 0 105 52" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <filter id="jiaoLipShadow" x="-15%" y="-10%" width="130%" height="135%">
-                <feDropShadow dx="0" dy="2.5" stdDeviation="3" flood-color="rgba(107, 10, 13, 0.45)"/>
+                <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(107, 10, 13, 0.45)"/>
               </filter>
             </defs>
             <!-- 步驟 1：筊杯底座外輪廓（微笑半月形/船形底座，朱砂暗紅 #981617） -->
-            <path d="M 12 16.5 
-                     C 25 21.5, 75 21.5, 88 16.5 
-                     C 91.5 18, 92 21.5, 89.5 26.5 
-                     C 85 46, 70 58.5, 50 58.5 
-                     C 30 58.5, 15 46, 10.5 26.5 
-                     C 8 21.5, 8.5 18, 12 16.5 Z" 
+            <path d="M 10 12 
+                     C 28 17, 77 17, 95 12 
+                     C 99 15, 100 18, 97 23 
+                     C 90 41, 73 50, 52.5 50 
+                     C 32 50, 15 41, 8 23 
+                     C 5 18, 6 15, 10 12 Z" 
                   fill="#981617" 
                   filter="url(#jiaoLipShadow)"/>
             <!-- 步驟 2：上方內凹陰影區（營造厚度與景深，宮廟深緋紅 #6B0A0D） -->
-            <path d="M 15 18.5 
-                     C 27 23, 73 23, 85 18.5 
-                     C 82.5 39, 68 45.5, 50 45.5 
-                     C 32 45.5, 17.5 39, 15 18.5 Z" 
+            <path d="M 13 14 
+                     C 29 18.5, 76 18.5, 92 14 
+                     C 88 34, 71 39.5, 52.5 39.5 
+                     C 34 39.5, 17 34, 13 14 Z" 
                   fill="#6B0A0D"/>
-            <!-- 步驟 3：排版與刻劃 BYE 文字（典雅金棕 #C68F42，無襯線大器置中） -->
-            <text x="50" y="36.5" 
-                  font-size="14" 
-                  font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif" 
-                  font-weight="900" 
-                  fill="#C68F42" 
-                  letter-spacing="0.8px" 
-                  text-anchor="middle">BYE</text>
             <!-- 步驟 4：疊加底部月牙高光（微笑反光亮面，豆沙肉粉 #C97779，中間厚兩端收細，88% 透明度） -->
-            <path d="M 23.5 39.5 
-                     C 30.5 50.5, 39.5 54, 50 54 
-                     C 60.5 54, 69.5 50.5, 76.5 39.5 
-                     C 68.5 48.5, 59.5 51.5, 50 51.5 
-                     C 40.5 51.5, 31.5 48.5, 23.5 39.5 Z" 
+            <path d="M 24 35 
+                     C 32 44, 42 46.5, 52.5 46.5 
+                     C 63 46.5, 73 44, 81 35 
+                     C 72 42.5, 62.5 44.5, 52.5 44.5 
+                     C 42.5 44.5, 33 42.5, 24 35 Z" 
                   fill="#C97779" 
                   opacity="0.88"/>
           </svg>
+          <span class="lb-brand-bye-text">BYE</span>
         </span>
         <span class="lb-brand-badge">MINI</span>
       </div>
