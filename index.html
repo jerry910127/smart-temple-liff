@@ -1839,6 +1839,15 @@
       </div>
     </header>
 
+    <!-- 1.5 香火即時動態跑馬燈 (Social Proof & Urgency) -->
+    <div style="background: linear-gradient(90deg, #FFF1F0 0%, #FFFBE6 100%); border-bottom: 1px solid #FFCCC7; padding: 6px 5%; display: flex; align-items: center; justify-content: space-between; font-size: 0.74rem; color: #8C5B32;">
+      <div style="display:flex; align-items:center; gap:6px; overflow:hidden; white-space:nowrap;">
+        <span style="background:#CF1322; color:#FFF; font-size:0.62rem; font-weight:800; padding:1px 6px; border-radius:10px; animation:pulseAura 1.5s infinite alternate;">香火鼎盛</span>
+        <span id="livePrayerTicker" style="overflow:hidden; text-overflow:ellipsis;">🔥 今日已有 <strong>328</strong> 位信士線上點燈植福・祈求元辰光彩</span>
+      </div>
+      <span style="color:#CF1322; font-weight:bold; cursor:pointer; white-space:nowrap; margin-left:4px;" onclick="openLbModal('lightingModal')">我要點燈 ›</span>
+    </div>
+
     <!-- 2. 主題推薦橫幅 (Hero Banner: Y 8% ~ 32%) -->
     <section class="lb-hero-section">
       <div class="lb-hero-card" onclick="openLbModal('heroDetailModal')" style="background: linear-gradient(135deg, #FFF4EB 0%, #FFE2D1 100%); border-color: #FFC9A8;">
@@ -2064,7 +2073,7 @@
       </div>
     </div>
 
-    <!-- 7. 底部導航欄 (Bottom Dock: Y 92% ~ 100%) -->
+    <!-- 7. 底部導航欄 (Bottom Dock: 固定置底) -->
     <nav class="lb-bottom-dock">
       <button class="lb-dock-item active" onclick="openHomePage()">
         <span class="lb-dock-icon">🏠</span>
@@ -2074,12 +2083,14 @@
         <span class="lb-dock-icon">🎋</span>
         <span class="lb-dock-label">湄洲靈籤</span>
       </button>
-      <button class="lb-dock-item" onclick="openLbModal('zodiacModal')">
+      <button class="lb-dock-item" onclick="openLbModal('zodiacModal')" style="position:relative;">
         <span class="lb-dock-icon">🐉</span>
+        <span style="position:absolute; top:2px; right:14px; background:#FF4D4F; color:#FFF; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:8px; line-height:1;">沖煞</span>
         <span class="lb-dock-label">生肖歲煞</span>
       </button>
-      <button class="lb-dock-item" onclick="openCouponModal()">
+      <button class="lb-dock-item" onclick="openCouponModal()" style="position:relative;">
         <span class="lb-dock-icon">🎟️</span>
+        <span style="position:absolute; top:2px; right:14px; background:#FA8C16; color:#FFF; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:8px; line-height:1;">折15</span>
         <span class="lb-dock-label">奉茶優惠</span>
       </button>
       <button class="lb-dock-item" onclick="openLbModal('profileModal')">
@@ -2494,15 +2505,31 @@
             <div>已點亮：<strong id="roomLightDays" style="color:#FFF;">1</strong> 天</div>
             <div>積累功德值：<strong id="roomMeritCount" style="color:#FFF;">88</strong> 點</div>
           </div>
+
+          <!-- 7日連續添油進度條 (Streak Mechanism) -->
+          <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:8px 10px; margin-top:10px; text-align:left;">
+            <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#FFD591; margin-bottom:4px;">
+              <span>🌟 連續添油進度：<strong id="streakDayCount">3</strong>/7 天</span>
+              <span style="color:#FFF;">解鎖開基媽祖七星護體</span>
+            </div>
+            <div style="width:100%; height:6px; background:rgba(255,255,255,0.2); border-radius:3px; overflow:hidden;">
+              <div id="streakBar" style="width:42%; height:100%; background:linear-gradient(90deg, #FAAD14 0%, #52C41A 100%); transition:width 0.3s;"></div>
+            </div>
+          </div>
         </div>
 
-        <!-- 每日供奉互動按鈕 -->
-        <div style="display:flex; gap:10px;">
-          <button class="lb-primary-btn" style="flex:1; background:#D48806;" onclick="addLightOil()">
-            💧 每日誠心添油香 (+5功德)
-          </button>
-          <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="switchLightingTab('register')">
-            ➕ 加安其他燈座
+        <!-- 每日供奉互動按鈕群 -->
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;">
+            <button class="lb-primary-btn" style="flex:1; background:#D48806;" onclick="addLightOil()">
+              💧 免費每日添油 (+5功德)
+            </button>
+            <button class="lb-primary-btn" style="flex:1; background:linear-gradient(135deg, #722ED1 0%, #B37FEB 100%);" onclick="buyGlazeOil()">
+              ✨ 升級七寶琉璃油 ($30)
+            </button>
+          </div>
+          <button class="lb-primary-btn" style="background:#444; padding:8px 0; font-size:0.8rem;" onclick="switchLightingTab('register')">
+            ➕ 為親友加安其他燈座
           </button>
         </div>
       </div>
@@ -4270,10 +4297,20 @@
       switchLightingTab('room');
     }
 
+    let lightStreak = 3;
+
     function addLightOil() {
       virtualRoomState.merit += 5;
+      lightStreak = Math.min(7, lightStreak + 1);
+      
       const countElem = document.getElementById('roomMeritCount');
       if (countElem) countElem.innerText = virtualRoomState.merit;
+
+      const streakDayElem = document.getElementById('streakDayCount');
+      if (streakDayElem) streakDayElem.innerText = lightStreak;
+
+      const streakBar = document.getElementById('streakBar');
+      if (streakBar) streakBar.style.width = `${Math.round((lightStreak / 7) * 100)}%`;
 
       const aura = document.getElementById('virtualLightAura');
       if (aura) {
@@ -4283,7 +4320,38 @@
         }, 300);
       }
       playCypressWoodSound();
-      alert('💧 感謝信士虔誠添油香！功德值 +5，神光普照元辰光彩！');
+      
+      if (lightStreak === 7) {
+        alert('🎉 恭喜善信！已達成連續 7 天誠心添油香！\n已為您解鎖【開基媽祖七星護體光環】，常保元辰光彩、災厄不侵！');
+      } else {
+        alert(`💧 感謝信士虔誠添油香！功德值 +5！\n連續添油已累積 ${lightStreak}/7 天，再堅持 ${7 - lightStreak} 天即可解鎖七星護體大功德！`);
+      }
+    }
+
+    function buyGlazeOil() {
+      playCypressWoodSound();
+      virtualRoomState.merit += 50;
+      lightStreak = 7;
+      
+      const countElem = document.getElementById('roomMeritCount');
+      if (countElem) countElem.innerText = virtualRoomState.merit;
+
+      const streakDayElem = document.getElementById('streakDayCount');
+      if (streakDayElem) streakDayElem.innerText = lightStreak;
+
+      const streakBar = document.getElementById('streakBar');
+      if (streakBar) streakBar.style.width = '100%';
+
+      const aura = document.getElementById('virtualLightAura');
+      if (aura) {
+        aura.style.background = 'radial-gradient(circle, rgba(179,127,235,0.8) 0%, rgba(114,46,209,0) 70%)';
+        aura.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        setTimeout(() => {
+          aura.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 400);
+      }
+
+      alert('✨ 感謝信士發心！已透過 LINE Pay 成功奉納 $30 元升級【萬春宮・七寶琉璃金油】！\n\n功德值爆發 +50，元辰燈光芒升級為尊榮七彩琉璃光，連續添油進度直接滿額解鎖！');
     }
 
     // ==============================================
@@ -4494,10 +4562,31 @@
     ];
     let lbTipIndex = 0;
 
+    // LINE Bye 頂部香火即時跑馬燈（Social Proof & Urgency）
+    const LIVE_PRAYER_MSGS = [
+      "🔥 今日已有 <strong>328</strong> 位信士線上點燈植福・祈求元辰光彩",
+      "🐉 丙午流年：本月生肖<strong>【龍、狗】</strong>沖犯星煞，建議盡早祭解",
+      "🌾 萬春秋祭普施：愛心白米累計已達 <strong>842</strong> 包，將全數轉贈社福",
+      "🚗 預約淨車熱絡：本週吉日尚餘 <strong>3</strong> 個灑淨名額，保行車吉慶",
+      "🌸 註生娘娘喜訊：本月已有 <strong>46</strong> 對信徒夫妻敬呈換花疏文"
+    ];
+    let livePrayerIndex = 0;
+
     function initLbFooterTicker() {
       setInterval(() => {
         cycleLbTip();
       }, 5000);
+
+      setInterval(() => {
+        const liveElem = document.getElementById('livePrayerTicker');
+        if (!liveElem) return;
+        liveElem.style.opacity = '0';
+        setTimeout(() => {
+          livePrayerIndex = (livePrayerIndex + 1) % LIVE_PRAYER_MSGS.length;
+          liveElem.innerHTML = LIVE_PRAYER_MSGS[livePrayerIndex];
+          liveElem.style.opacity = '1';
+        }, 300);
+      }, 4000);
     }
 
     function cycleLbTip() {
