@@ -1819,7 +1819,7 @@
       <div class="lb-section-header">
         <div class="lb-section-title">
           <span>⛩️ 附近廟宇</span>
-          <span style="font-size:0.65rem; color:#06C755; background:#E8F8EE; border:1px solid rgba(6,199,85,0.3); padding:1px 6px; border-radius:10px; font-weight:700; margin-left:6px;">📡 BT 微型感應</span>
+          <span style="font-size:0.65rem; color:#06C755; background:#E8F8EE; border:1px solid rgba(6,199,85,0.3); padding:1px 6px; border-radius:10px; font-weight:700; margin-left:6px;">📡 LINE Touch 感應</span>
         </div>
         <span class="lb-section-more" onclick="openLbModal('allTemplesModal')">探索更多 &gt;</span>
       </div>
@@ -2017,7 +2017,7 @@
     <div class="route-tips-footer" onclick="cycleLbTip()">
       <span class="route-tips-badge">足跡 tips</span>
       <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="routeListTipText">
-        親臨合作廟宇 50 公尺範圍內，LINE Beacon 藍牙將自動感應蓋印數位足跡
+        親臨合作廟宇 50 公尺範圍內，LINE Touch 感應將自動蓋印數位足跡
       </span>
     </div>
   </div>
@@ -2051,7 +2051,7 @@
       </div>
       <div class="detail-target-badge" id="detailTargetBadge">共 3 個</div>
       <div style="font-size:0.75rem; color:#888; margin-top:2px;">
-        靠近宮廟 50 公尺開啟藍牙自動感應蓋章
+        靠近宮廟 50 公尺開啟藍牙與 LINE Touch 自動感應蓋章
       </div>
     </section>
 
@@ -2063,7 +2063,7 @@
     <!-- 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) -->
     <section class="visual-track-container">
       <div style="position:absolute; top:12px; left:5%; font-size:0.75rem; font-weight:800; color:#8C5B32;">
-        🗺️ 實體尋寶軌跡 (LINE Beacon 連線中)
+        🗺️ 實體尋寶軌跡 (LINE Touch 感應連線中)
       </div>
 
       <!-- 向量足跡地圖畫布 -->
@@ -2115,7 +2115,7 @@
       <!-- 快速微型測試工具列 -->
       <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
         <button class="checkpoint-beacon-btn" onclick="simulateNextBeacon()">
-          📡 模擬抵達宮廟（Beacon 打卡）
+          📡 模擬走入宮廟（LINE Touch 感應）
         </button>
         <button class="checkpoint-beacon-btn" style="background:#FFF; border-color:#DDD; color:#666;" onclick="refreshGpsLocation()">
           🔄 重新定位
@@ -2198,8 +2198,8 @@
           各大宮廟中秋良緣特別祈福登記開放中，線上即可同步點燈。
         </div>
         <div style="padding:10px 0;">
-          <strong style="color:#1890FF;">【Beacon 參拜集章】</strong><br>
-          抵達全台合作廟宇開啟手機藍牙，即可自動蓋上數位寺廟足跡章！
+          <strong style="color:#1890FF;">【LINE Touch 參拜集章】</strong><br>
+          抵達全台合作廟宇靠近 LINE Touch 感應點，即可自動蓋上數位寺廟足跡章！
         </div>
       </div>
       <button class="lb-primary-btn" onclick="closeLbModal('bellModal')">關閉通知</button>
@@ -2284,9 +2284,9 @@
             <span style="font-size:1.5rem;">⚪</span><br><strong>台北行天宮</strong><br><span style="color:#999; font-size:0.72rem;">尚未集章</span>
           </div>
         </div>
-        <p style="font-size:0.8rem; color:#777;">抵達廟宇現場開啟手機藍牙，LINE Beacon 將自動完成足跡蓋印！</p>
+        <p style="font-size:0.8rem; color:#777;">抵達廟宇現場靠近 LINE Touch，將自動完成足跡蓋印！</p>
       </div>
-      <button class="lb-primary-btn" onclick="closeLbModal('footprintModal')">確認足跡</button>
+      <button class="lb-primary-btn" onclick="closeLbModal('footprintModal'); openRouteListPage();">前往路線總覽</button>
     </div>
   </div>
 
@@ -2602,7 +2602,7 @@
       "【參拜動線】遵循「左青龍進、右白虎出」，象徵入吉出凶、福澤迎祥。",
       "【神意確證】抽得靈籤後須連續擲出「三聖筊」，方能領受神意正籤。",
       "【祈福心態】一事一問最相應，求籤在於解心結，正向面對人生起伏。",
-      "【線下集章】抵達實體宮廟開啟藍牙，LINE Beacon 自動為您蓋上「廟宇小腳印」。"
+      "【線下集章】抵達實體宮廟靠近 LINE Touch，自動為您蓋上「廟宇數位足跡」。"
     ];
     let currentTipIndex = 0;
 
@@ -2880,7 +2880,7 @@
                 </div>
               </div>
               <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="triggerManualBeacon(${idx})">
-                ${isDone ? '已蓋印 ✓' : '📡 現場打卡'}
+                ${isDone ? '已蓋印 ✓' : '📡 LINE Touch 打卡'}
               </button>
             </div>
           `;
@@ -2932,7 +2932,7 @@
       }
     }
 
-    // 模擬或點擊站點觸發 LINE Beacon 打卡
+    // 模擬或點擊站點觸發 LINE Touch 打卡
     function triggerManualBeacon(checkpointIdx) {
       const route = ROUTES_DATA[activeRouteId];
       if (!route) return;
@@ -2956,7 +2956,7 @@
       if (completedCount === route.totalSteps) {
         alert(`🎉 恭賀大圓滿！\n您已完成「${route.name}」全部 3 座宮廟行腳巡禮！\n神尊威靈加被，福壽康泰！`);
       } else {
-        alert(`🎉 LINE Beacon 藍牙微型感應成功！\n已為您解鎖【${cp.name}】數位足跡！\n目前已蒐集 ${completedCount}/${route.totalSteps} 個腳印。`);
+        alert(`🎉 LINE Touch 感應成功！\n已為您解鎖【${cp.name}】數位足跡！\n目前已蒐集 ${completedCount}/${route.totalSteps} 個腳印。`);
       }
     }
 
@@ -3080,7 +3080,7 @@
       "右手插香敬神最誠心，左青龍進、右白虎出吉祥如意",
       "默念信士姓名、農曆生辰、居住地址，神意指點更相應",
       "求籤須連續擲得三個聖筊，一事一問心誠則靈",
-      "抵達實體廟宇開啟藍牙，LINE Beacon 自動蓋上參拜足跡章",
+      "抵達合作廟宇靠近感應點，LINE Touch 自動蓋上參拜足跡章",
       "遇挫折別氣餒，心念沉澱再擲，神明自會指點迷津",
       "到訪月老廟誠心祈願，紅線隨身攜帶早逢天定良緣"
     ];
