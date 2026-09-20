@@ -13,20 +13,37 @@
 
   <style>
     :root {
+      /* === 萬春宮大地色與宮廟朱紅統一色彩體系 (Unified Temple Earth & Crimson Palette) === */
+      --temple-red: #A62824;          /* 核心宮廟朱紅 / 硃砂紅 */
+      --temple-red-dark: #7A1916;     /* 深緋紅 / 沉穩檀紅 */
+      --temple-red-light: #FDF2F0;    /* 朱紅淡雅透光底色 */
+      --temple-red-border: #F3C5C2;   /* 朱紅細邊框 */
+      
+      --earth-wood: #8C5B32;          /* 沉穩檜木棕 / 大地深棕 */
+      --earth-wood-dark: #5C381E;     /* 深楠木黑棕 */
+      --earth-wood-light: #FAF5F0;    /* 溫潤木質透光淺色 */
+      --earth-wood-border: #E8D8C8;   /* 檜木淺邊框 */
+      
+      --temple-gold: #C68F42;         /* 殿堂泥金 / 典雅金棕 */
+      --temple-gold-light: #FFF9EE;   /* 泥金明亮背景 */
+      --temple-gold-border: #F2DAAB;  /* 泥金邊框 */
+      
+      --bg-light-washi: #FAF7F2;      /* 溫潤宣紙象牙白（全站基底） */
+      --washi-card: #FFFFFF;          /* 卡片純淨白底 */
+      --washi-border: #EADBCE;        /* 雅緻宣紙邊框色 */
+      
       --bg-dark: #1f1d1b;
       --bg-card: #282522;
-      --bg-light-washi: #f7f4ed;
-      --washi-border: #e0d8c7;
       --hinoki-wood: #c89666;
       --hinoki-dark: #8c5b32;
       --deep-ochre: #8b3a2b;
       --deep-ochre-dark: #662217;
       --muted-gold: #c9a45c;
       --warm-gray: #423d39;
-      --text-main: #2b2623;
-      --text-muted: #736b63;
+      --text-main: #231C18;           /* 沉穩墨黑 */
+      --text-muted: #7A6F66;          /* 溫和大地次要文字 */
       --text-light: #f5f2eb;
-      --text-dim: #b8b0a5;
+      --text-dim: #A89E94;
     }
 
     * {
@@ -41,8 +58,8 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Noto Sans TC', -apple-system, sans-serif;
-      background: #F5F6F8;
-      color: #111111;
+      background: #F9F7F3;
+      color: #231C18;
       user-select: none;
     }
 
@@ -745,8 +762,8 @@
       height: 100%;
       max-width: 480px;
       margin: 0 auto;
-      background: #F5F6F8;
-      color: #111111;
+      background: #F9F7F3;
+      color: #231C18;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -765,7 +782,7 @@
       justify-content: space-between;
       padding: 0 5%;
       background: #FFFFFF;
-      border-bottom: 1px solid #ECEEF2;
+      border-bottom: 1px solid #ECE7E1;
       position: sticky;
       top: 0;
       z-index: 50;
@@ -842,11 +859,11 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      color: #333333;
+      color: #5C381E;
       transition: background 0.15s, transform 0.1s;
     }
     .lb-icon-btn:active {
-      background: #ECEEF2;
+      background: #F3ECE4;
       transform: scale(0.92);
     }
     .lb-icon-dot {
@@ -855,7 +872,7 @@
       right: 3px;
       width: 7px;
       height: 7px;
-      background: #FF4B4B;
+      background: #A62824;
       border-radius: 50%;
       border: 1.5px solid #FFFFFF;
     }
@@ -872,8 +889,8 @@
     .lb-hero-card {
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #FFF7F0 0%, #FFEADA 100%);
-      border: 1.5px solid #FFD6B5;
+      background: linear-gradient(135deg, #FFFDF8 0%, #F8EFE4 100%);
+      border: 1.5px solid #E8D5C1;
       border-radius: 16px;
       padding: 14px 16px;
       position: relative;
@@ -881,7 +898,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 16px rgba(255, 122, 69, 0.08);
+      box-shadow: 0 4px 16px rgba(140, 91, 50, 0.08);
       cursor: pointer;
       transition: transform 0.15s ease;
     }
@@ -898,8 +915,8 @@
     .lb-hero-tag {
       font-size: 0.72rem;
       font-weight: 800;
-      color: #FF5A1F;
-      background: rgba(255, 90, 31, 0.14);
+      color: #A62824;
+      background: rgba(166, 40, 36, 0.12);
       padding: 2px 8px;
       border-radius: 10px;
       display: inline-block;
@@ -909,26 +926,26 @@
     .lb-hero-title {
       font-size: 1.15rem;
       font-weight: 900;
-      color: #191919;
+      color: #231C18;
       line-height: 1.25;
       margin-bottom: 2px;
     }
     .lb-hero-subtitle {
       font-size: 0.86rem;
       font-weight: 700;
-      color: #4A4A4A;
+      color: #7A1916;
       margin-bottom: 2px;
     }
     .lb-hero-desc {
       font-size: 0.76rem;
-      color: #7A7A7A;
+      color: #7A6F66;
       margin-bottom: 8px;
     }
     .lb-hero-btn {
       display: inline-flex;
       align-items: center;
       gap: 3px;
-      background: #FF5A1F;
+      background: #A62824;
       color: #FFFFFF;
       font-size: 0.75rem;
       font-weight: 800;
@@ -937,7 +954,7 @@
       align-self: flex-start;
       border: none;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(255, 90, 31, 0.25);
+      box-shadow: 0 2px 8px rgba(166, 40, 36, 0.25);
     }
     .lb-hero-right {
       position: absolute;
@@ -964,7 +981,7 @@
       align-items: center;
       background: #FFFFFF;
       margin-bottom: 8px;
-      border-bottom: 1px solid #ECEEF2;
+      border-bottom: 1px solid #ECE7E1;
     }
     .lb-quick-item {
       display: flex;
@@ -980,7 +997,7 @@
       transition: background 0.15s;
     }
     .lb-quick-item:active {
-      background: #F5F6F8;
+      background: #F8F4EE;
     }
     .lb-quick-icon {
       width: 46px;
@@ -990,7 +1007,7 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 5px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 8px rgba(140, 91, 50, 0.08);
       transition: transform 0.15s;
     }
     .lb-quick-item:active .lb-quick-icon {
@@ -999,7 +1016,7 @@
     .lb-quick-label {
       font-size: 0.76rem;
       font-weight: 700;
-      color: #2B2B2B;
+      color: #231C18;
     }
 
     /* 4. 附近廟宇探索區 (Near Temples: Y 45% ~ 78%) */
@@ -1020,16 +1037,16 @@
     .lb-section-title {
       font-size: 1.05rem;
       font-weight: 900;
-      color: #111111;
+      color: #231C18;
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .lb-section-more {
       font-size: 0.78rem;
-      color: #888888;
+      color: #8C5B32;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
     }
     .lb-temple-carousel {
       display: grid;
@@ -1040,12 +1057,12 @@
     .lb-temple-card {
       background: #FFFFFF;
       border-radius: 12px;
-      border: 1px solid #ECEEF2;
+      border: 1px solid #ECE7E1;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 10px rgba(140, 91, 50, 0.04);
       cursor: pointer;
       transition: transform 0.15s;
     }
@@ -1060,7 +1077,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #F8F9FA;
+      background: #FAF6F0;
     }
     .lb-temple-info {
       padding: 6px 8px 8px 8px;
@@ -1072,7 +1089,7 @@
     .lb-temple-name {
       font-size: 0.8rem;
       font-weight: 800;
-      color: #191919;
+      color: #231C18;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1080,8 +1097,9 @@
     .lb-temple-tag {
       font-size: 0.62rem;
       font-weight: 700;
-      color: #FF5A1F;
-      background: #FFF1EB;
+      color: #A62824;
+      background: #FDF2F0;
+      border: 1px solid #F3C5C2;
       padding: 1px 4px;
       border-radius: 3px;
       display: inline-block;
@@ -1091,9 +1109,9 @@
     .lb-temple-btn {
       font-size: 0.68rem;
       font-weight: 700;
-      color: #06C755;
-      background: #F0FAF3;
-      border: 1px solid #D2F2DD;
+      color: #8C5B32;
+      background: #FAF5F0;
+      border: 1px solid #E8D8C8;
       border-radius: 5px;
       padding: 2px 0;
       text-align: center;
@@ -1106,7 +1124,7 @@
       min-height: 44px;
       margin: 8px 5% 0 5%;
       border-radius: 10px;
-      background: #191919;
+      background: #3A2E28;
       color: #FFFFFF;
       display: flex;
       align-items: center;
@@ -1122,7 +1140,7 @@
       overflow: hidden;
     }
     .lb-footer-badge {
-      background: #06C755;
+      background: #A62824;
       color: #FFFFFF;
       font-size: 0.65rem;
       font-weight: 800;
@@ -1131,7 +1149,7 @@
       white-space: nowrap;
     }
     .lb-footer-text {
-      color: #E6E6E6;
+      color: #EFE9E2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1150,13 +1168,13 @@
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border-top: 1px solid #ECEEF2;
+      border-top: 1px solid #ECE7E1;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       align-items: center;
       padding: 0 1% env(safe-area-inset-bottom, 0px);
       z-index: 100;
-      box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 -3px 12px rgba(140, 91, 50, 0.06);
     }
     .lb-dock-item {
       display: flex;
@@ -1166,7 +1184,7 @@
       cursor: pointer;
       background: none;
       border: none;
-      color: #888888;
+      color: #8C827A;
       padding: 4px 0;
       transition: color 0.15s, transform 0.1s;
     }
@@ -1174,7 +1192,7 @@
       transform: scale(0.92);
     }
     .lb-dock-item.active {
-      color: #06C755;
+      color: #A62824;
     }
     .lb-dock-icon {
       font-size: 1.25rem;
@@ -1194,7 +1212,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(35, 28, 24, 0.65);
       backdrop-filter: blur(4px);
       z-index: 200;
       display: flex;
@@ -1218,7 +1236,7 @@
       overflow-y: auto;
       transform: translateY(100%);
       transition: transform 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.15);
-      color: #191919;
+      color: #231C18;
     }
     .lb-modal-overlay.visible .lb-sheet {
       transform: translateY(0);
@@ -1226,7 +1244,7 @@
     .lb-sheet-bar {
       width: 36px;
       height: 4px;
-      background: #E0E0E0;
+      background: #E5DDD3;
       border-radius: 2px;
       margin: 0 auto 14px auto;
     }
@@ -1239,16 +1257,16 @@
     .lb-sheet-title {
       font-size: 1.18rem;
       font-weight: 900;
-      color: #191919;
+      color: #231C18;
     }
     .lb-sheet-close {
-      background: #F5F6F8;
+      background: #F7F3EE;
       border: none;
       border-radius: 50%;
       width: 28px;
       height: 28px;
       font-size: 1.1rem;
-      color: #777;
+      color: #7A6F66;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -1256,7 +1274,7 @@
     }
     .lb-primary-btn {
       width: 100%;
-      background: #06C755;
+      background: #A62824;
       color: #FFFFFF;
       font-weight: 800;
       font-size: 0.95rem;
@@ -1265,7 +1283,12 @@
       border: none;
       cursor: pointer;
       margin-top: 14px;
-      box-shadow: 0 4px 12px rgba(6, 199, 85, 0.25);
+      box-shadow: 0 4px 12px rgba(166, 40, 36, 0.25);
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .lb-primary-btn:active {
+      transform: scale(0.98);
+      opacity: 0.92;
     }
 
     /* zenApp 頂部返回首頁按鈕 */
@@ -1301,8 +1324,8 @@
       flex-shrink: 0;
       min-height: 56px;
       margin: 8px 5% 14px 5%;
-      background: linear-gradient(135deg, #FFF9F0 0%, #FFF2E2 100%);
-      border: 1.2px solid #FFE2C2;
+      background: linear-gradient(135deg, #FFFDF8 0%, #FAF2E8 100%);
+      border: 1.2px solid #E8D8C8;
       border-radius: 12px;
       padding: 8px 12px;
       display: flex;
@@ -1310,7 +1333,7 @@
       justify-content: space-between;
       position: relative;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(250, 140, 22, 0.08);
+      box-shadow: 0 2px 8px rgba(140, 91, 50, 0.06);
       transition: transform 0.15s ease;
     }
     .lb-ad-banner:active {
@@ -1322,9 +1345,9 @@
       right: 8px;
       font-size: 0.58rem;
       font-weight: 700;
-      color: #FA8C16;
-      background: rgba(250, 140, 22, 0.12);
-      border: 1px solid rgba(250, 140, 22, 0.3);
+      color: #8C5B32;
+      background: rgba(140, 91, 50, 0.12);
+      border: 1px solid rgba(140, 91, 50, 0.28);
       padding: 1px 5px;
       border-radius: 4px;
       letter-spacing: 0.3px;
@@ -1347,14 +1370,14 @@
     .lb-ad-title {
       font-size: 0.78rem;
       font-weight: 800;
-      color: #A83800;
+      color: #A62824;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .lb-ad-desc {
       font-size: 0.68rem;
-      color: #8C5B32;
+      color: #7A6F66;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1362,7 +1385,7 @@
     .lb-ad-action {
       font-size: 0.72rem;
       font-weight: 800;
-      color: #FA8C16;
+      color: #8C5B32;
       white-space: nowrap;
     }
 
@@ -1375,7 +1398,7 @@
       max-width: 480px;
       height: 100vh;
       height: 100dvh;
-      background: #FAFAFB;
+      background: #F9F7F3;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -1394,19 +1417,19 @@
       justify-content: space-between;
       padding: 0 5%;
       background: #FFFFFF;
-      border-bottom: 1px solid #ECEEF2;
+      border-bottom: 1px solid #ECE7E1;
       position: sticky;
       top: 0;
       z-index: 50;
     }
     .route-nav-btn {
-      background: #F5F6F8;
-      border: 1px solid #E5E7EB;
+      background: #F7F3EE;
+      border: 1px solid #E5DDD3;
       border-radius: 50%;
       width: 36px;
       height: 36px;
       padding: 0;
-      color: #333333;
+      color: #5C381E;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -1414,13 +1437,13 @@
       transition: background 0.15s, transform 0.1s;
     }
     .route-nav-btn:active {
-      background: #E8EAED;
+      background: #EFE9E0;
       transform: scale(0.92);
     }
     .route-nav-title {
       font-size: 1.15rem;
       font-weight: 900;
-      color: #111111;
+      color: #231C18;
       text-align: center;
       letter-spacing: -0.3px;
     }
@@ -1430,13 +1453,13 @@
       padding: 12px 5%;
     }
     .route-hero-card {
-      background: linear-gradient(135deg, #FFF0E6 0%, #FFDFCA 100%);
-      border: 1.5px solid #FFC49F;
+      background: linear-gradient(135deg, #FFFDF8 0%, #F5EBE1 100%);
+      border: 1.5px solid #E8D5C1;
       border-radius: 16px;
       padding: 14px 16px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 14px rgba(255, 90, 31, 0.09);
+      box-shadow: 0 4px 14px rgba(140, 91, 50, 0.08);
       cursor: pointer;
       transition: transform 0.15s;
     }
@@ -1445,7 +1468,7 @@
     }
     .route-hero-badge {
       display: inline-block;
-      background: #FF4D4F;
+      background: #A62824;
       color: #FFFFFF;
       font-size: 0.7rem;
       font-weight: 900;
@@ -1457,19 +1480,19 @@
     .route-hero-title {
       font-size: 1.18rem;
       font-weight: 900;
-      color: #1A1A1A;
+      color: #231C18;
       margin-bottom: 2px;
     }
     .route-hero-desc {
       font-size: 0.76rem;
-      color: #666666;
+      color: #7A6F66;
       margin-bottom: 10px;
     }
     .route-hero-more-btn {
       display: inline-flex;
       align-items: center;
       gap: 3px;
-      background: #FF5A1F;
+      background: #A62824;
       color: #FFFFFF;
       font-size: 0.74rem;
       font-weight: 800;
@@ -1489,19 +1512,19 @@
     }
     .route-list-item-card {
       background: #FFFFFF;
-      border: 1px solid #ECEEF2;
+      border: 1px solid #ECE7E1;
       border-radius: 14px;
       padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 2px 6px rgba(140, 91, 50, 0.03);
       transition: transform 0.15s, border-color 0.15s;
     }
     .route-list-item-card:active {
       transform: scale(0.985);
-      border-color: #06C755;
+      border-color: #A62824;
     }
     .route-card-left {
       display: flex;
@@ -1520,12 +1543,12 @@
     .route-card-title {
       font-size: 0.95rem;
       font-weight: 900;
-      color: #191919;
+      color: #231C18;
       margin-bottom: 2px;
     }
     .route-card-sub {
       font-size: 0.72rem;
-      color: #888888;
+      color: #8C827A;
     }
     .route-card-right {
       display: flex;
@@ -1537,8 +1560,9 @@
       font-weight: 700;
       padding: 2px 8px;
       border-radius: 10px;
-      background: #E8F8EE;
-      color: #06C755;
+      background: #FDF2F0;
+      color: #A62824;
+      border: 1px solid #F3C5C2;
     }
 
     /* Page 2 & 3: 底部常駐 Tips 橫條 (Tips Bar: Y 85% ~ 93%) */
@@ -1546,15 +1570,15 @@
       margin-top: auto;
       padding: 10px 5%;
       background: #FFFFFF;
-      border-top: 1px solid #ECEEF2;
+      border-top: 1px solid #ECE7E1;
       display: flex;
       align-items: center;
       gap: 8px;
       font-size: 0.76rem;
-      color: #555555;
+      color: #7A6F66;
     }
     .route-tips-badge {
-      background: #06C755;
+      background: #A62824;
       color: #FFFFFF;
       font-size: 0.65rem;
       font-weight: 800;
@@ -1569,7 +1593,7 @@
     .detail-progress-panel {
       background: #FFFFFF;
       padding: 16px 5%;
-      border-bottom: 1px solid #ECEEF2;
+      border-bottom: 1px solid #ECE7E1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1579,12 +1603,12 @@
     .detail-progress-title {
       font-size: 1.22rem;
       font-weight: 900;
-      color: #111111;
+      color: #231C18;
       text-align: center;
       margin-bottom: 4px;
     }
     .detail-progress-highlight {
-      color: #06C755;
+      color: #A62824;
       font-size: 1.48rem;
       margin: 0 4px;
     }
@@ -1592,9 +1616,9 @@
       position: absolute;
       right: 5%;
       top: 16px;
-      background: #F5F6F8;
-      border: 1px solid #E2E4E8;
-      color: #666666;
+      background: #F7F3EE;
+      border: 1px solid #E5DDD3;
+      color: #7A6F66;
       font-size: 0.72rem;
       font-weight: 800;
       padding: 3px 10px;
@@ -1605,14 +1629,14 @@
     .checkpoints-container {
       padding: 12px 5%;
       background: #FFFFFF;
-      border-bottom: 1px solid #ECEEF2;
+      border-bottom: 1px solid #ECE7E1;
     }
     .checkpoint-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 8px 0;
-      border-bottom: 1px dashed #EEE;
+      border-bottom: 1px dashed #ECE7E1;
     }
     .checkpoint-item:last-child {
       border-bottom: none;
@@ -1626,8 +1650,8 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: #F0F2F5;
-      color: #666;
+      background: #F7F3EE;
+      color: #8C827A;
       font-size: 0.82rem;
       font-weight: 900;
       display: flex;
@@ -1636,24 +1660,24 @@
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .checkpoint-circle.completed {
-      background: #06C755;
+      background: #A62824;
       color: #FFFFFF;
-      box-shadow: 0 2px 8px rgba(6, 199, 85, 0.35);
+      box-shadow: 0 2px 8px rgba(166, 40, 36, 0.35);
     }
     .checkpoint-name {
       font-size: 0.88rem;
       font-weight: 800;
-      color: #222;
+      color: #231C18;
     }
     .checkpoint-dist {
       font-size: 0.72rem;
-      color: #888;
+      color: #8C827A;
       margin-top: 1px;
     }
     .checkpoint-beacon-btn {
-      background: #F0F7FF;
-      border: 1px solid #BAE0FF;
-      color: #0958D9;
+      background: #FAF5F0;
+      border: 1px solid #E8D8C8;
+      color: #8C5B32;
       font-size: 0.7rem;
       font-weight: 700;
       padding: 4px 10px;
@@ -1666,9 +1690,9 @@
       transform: scale(0.95);
     }
     .checkpoint-beacon-btn.completed {
-      background: #E8F8EE;
-      border-color: #B7EB8F;
-      color: #389E0D;
+      background: #FDF2F0;
+      border-color: #F3C5C2;
+      color: #A62824;
       cursor: default;
     }
 
@@ -1682,17 +1706,17 @@
       align-items: stretch;
       position: relative;
       min-height: 310px;
-      background: linear-gradient(180deg, #FAFAFB 0%, #F5F6F8 100%);
+      background: linear-gradient(180deg, #FAF7F2 0%, #F5EFE8 100%);
     }
     .track-map-wrapper {
       width: 100%;
       height: 260px;
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 16px rgba(140, 91, 50, 0.08);
       position: relative;
-      border: 1px solid #E5E7EB;
-      background: #EAEAEA;
+      border: 1px solid #E8D8C8;
+      background: #EAE6DF;
     }
     #googleMapTrack {
       width: 100%;
@@ -1706,12 +1730,12 @@
     .gmap-info-title {
       font-size: 0.9rem;
       font-weight: 800;
-      color: #1F2937;
+      color: #231C18;
       margin-bottom: 3px;
     }
     .gmap-info-status {
       font-size: 0.72rem;
-      color: #06C755;
+      color: #A62824;
       font-weight: 700;
       margin-bottom: 6px;
     }
@@ -1724,7 +1748,7 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: #06C755;
+      background: #A62824;
       color: #FFF !important;
       padding: 4px 8px;
       border-radius: 6px;
@@ -1748,7 +1772,7 @@
       transform: scale(1.06);
     }
     .footprint-unlocked {
-      filter: drop-shadow(0 4px 10px rgba(6, 199, 85, 0.45));
+      filter: drop-shadow(0 4px 10px rgba(166, 40, 36, 0.45));
     }
     .footprint-locked {
       opacity: 0.35;
@@ -1840,23 +1864,23 @@
     </header>
 
     <!-- 1.5 香火即時動態跑馬燈 (Social Proof & Urgency) -->
-    <div style="background: linear-gradient(90deg, #FFF1F0 0%, #FFFBE6 100%); border-bottom: 1px solid #FFCCC7; padding: 6px 5%; display: flex; align-items: center; justify-content: space-between; font-size: 0.74rem; color: #8C5B32;">
+    <div style="background: #FDF4F2; border-bottom: 1px solid #F3C5C2; padding: 6px 5%; display: flex; align-items: center; justify-content: space-between; font-size: 0.74rem; color: #8C5B32;">
       <div style="display:flex; align-items:center; gap:6px; overflow:hidden; white-space:nowrap;">
-        <span style="background:#CF1322; color:#FFF; font-size:0.62rem; font-weight:800; padding:1px 6px; border-radius:10px; animation:pulseAura 1.5s infinite alternate;">香火鼎盛</span>
-        <span id="livePrayerTicker" style="overflow:hidden; text-overflow:ellipsis;">🔥 今日已有 <strong>328</strong> 位信士線上點燈植福・祈求元辰光彩</span>
+        <span style="background:#A62824; color:#FFF; font-size:0.62rem; font-weight:800; padding:1px 6px; border-radius:10px; animation:pulseAura 1.5s infinite alternate;">香火鼎盛</span>
+        <span id="livePrayerTicker" style="overflow:hidden; text-overflow:ellipsis; color:#5C381E;">🔥 今日已有 <strong>328</strong> 位信士線上點燈植福・祈求元辰光彩</span>
       </div>
-      <span style="color:#CF1322; font-weight:bold; cursor:pointer; white-space:nowrap; margin-left:4px;" onclick="openLbModal('lightingModal')">我要點燈 ›</span>
+      <span style="color:#A62824; font-weight:bold; cursor:pointer; white-space:nowrap; margin-left:4px;" onclick="openLbModal('lightingModal')">我要點燈 ›</span>
     </div>
 
     <!-- 2. 主題推薦橫幅 (Hero Banner: Y 8% ~ 32%) -->
     <section class="lb-hero-section">
-      <div class="lb-hero-card" onclick="openLbModal('heroDetailModal')" style="background: linear-gradient(135deg, #FFF4EB 0%, #FFE2D1 100%); border-color: #FFC9A8;">
+      <div class="lb-hero-card" onclick="openLbModal('heroDetailModal')">
         <div class="lb-hero-left">
-          <span class="lb-hero-tag" style="background:#800D13; color:#FFE082;">🏮 三百年開基媽祖</span>
-          <h2 class="lb-hero-title" style="font-size:1.22rem; color:#2B1810;">台中藍興媽祖 萬春宮</h2>
-          <div class="lb-hero-subtitle" style="color:#7A0C16; font-weight:800;">康熙六十年湄洲開基正身三媽</div>
+          <span class="lb-hero-tag">🏮 三百年開基媽祖</span>
+          <h2 class="lb-hero-title">台中藍興媽祖 萬春宮</h2>
+          <div class="lb-hero-subtitle">康熙六十年湄洲開基正身三媽</div>
           <div class="lb-hero-desc">大墩三百載・護國庇民安</div>
-          <button class="lb-hero-btn" onclick="event.stopPropagation(); openLbModal('heroDetailModal');" style="background:#7A0C16; color:#FFF;">
+          <button class="lb-hero-btn" onclick="event.stopPropagation(); openLbModal('heroDetailModal');">
             <span>探索廟史 &gt;</span>
           </button>
         </div>
@@ -1865,20 +1889,20 @@
         <div class="lb-hero-right">
           <svg width="96" height="96" viewBox="0 0 100 100" fill="none">
             <!-- 媽祖神聖金色祥光 -->
-            <circle cx="56" cy="46" r="38" fill="rgba(201, 143, 66, 0.15)"/>
+            <circle cx="56" cy="46" r="38" fill="rgba(198, 143, 66, 0.15)"/>
             <!-- 祥雲繚繞成聖母如意雲紋 -->
             <path d="M38 58 C32 40, 24 32, 38 20 C46 12, 60 20, 52 32 C46 40, 56 46, 50 56" stroke="#C68F42" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 3"/>
-            <path d="M52 56 C58 38, 70 32, 62 20 C54 12, 44 20, 52 30" stroke="#E52B2B" stroke-width="2" stroke-linecap="round"/>
+            <path d="M52 56 C58 38, 70 32, 62 20 C54 12, 44 20, 52 30" stroke="#A62824" stroke-width="2" stroke-linecap="round"/>
             <!-- 萬春宮三炷虔心立香 -->
             <line x1="44" y1="56" x2="40" y2="92" stroke="#8C5B32" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="48" y1="54" x2="47" y2="92" stroke="#7A0C16" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="48" y1="54" x2="47" y2="92" stroke="#7A1916" stroke-width="2.5" stroke-linecap="round"/>
             <line x1="53" y1="56" x2="55" y2="92" stroke="#8C5B32" stroke-width="2.5" stroke-linecap="round"/>
             <!-- 靈動火光紅暈 -->
-            <circle cx="44" cy="56" r="2.5" fill="#FF4D4F"/>
-            <circle cx="48" cy="54" r="3" fill="#FFA940"/>
-            <circle cx="53" cy="56" r="2.5" fill="#FF4D4F"/>
+            <circle cx="44" cy="56" r="2.5" fill="#A62824"/>
+            <circle cx="48" cy="54" r="3" fill="#C68F42"/>
+            <circle cx="53" cy="56" r="2.5" fill="#A62824"/>
             <!-- 萬春宮百年紅錦流蘇與開運平安扣 -->
-            <path d="M26 62 Q45 74 68 60" stroke="#7A0C16" stroke-width="2" stroke-linecap="round"/>
+            <path d="M26 62 Q45 74 68 60" stroke="#7A1916" stroke-width="2" stroke-linecap="round"/>
             <circle cx="46" cy="71" r="5" fill="#C68F42" stroke="#FFF" stroke-width="1.5"/>
           </svg>
         </div>
@@ -1889,8 +1913,8 @@
     <section class="lb-quick-grid">
       <!-- 功能 1：線上解籤（湄洲媽靈籤） -->
       <button class="lb-quick-item" onclick="openDivinationFlow()">
-        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #FFE8D6 0%, #FFD0B5 100%); color:#E05315;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="lb-quick-icon" style="background: #FDF2F0; color:#A62824; border:1px solid #F3C5C2;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="5" y="9" width="14" height="13" rx="2"/>
             <path d="M9 9V4l3-2 3 2v5"/>
             <line x1="12" y1="2" x2="12" y2="9"/>
@@ -1903,8 +1927,8 @@
 
       <!-- 功能 2：點燈專區（祈安點燈） -->
       <button class="lb-quick-item" onclick="openLbModal('lightingModal')">
-        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #FFF1B8 0%, #FFE58F 100%); color:#D48806;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="lb-quick-icon" style="background: #FFF9EE; color:#C68F42; border:1px solid #F2DAAB;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 18h6"/>
             <path d="M10 22h4"/>
             <path d="M12 2a7 7 0 0 0-7 7c0 3.03 1.5 5.5 3.5 6.5V17a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-1.5c2-1 3.5-3.47 3.5-6.5a7 7 0 0 0-7-7z"/>
@@ -1917,8 +1941,8 @@
 
       <!-- 功能 3：參拜足跡（三百年巡禮） -->
       <button class="lb-quick-item" onclick="openRouteListPage()">
-        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #D9F7BE 0%, #B7EB8F 100%); color:#389E0D;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="lb-quick-icon" style="background: #FAF5F0; color:#8C5B32; border:1px solid #E8D8C8;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 16v-2.38C4 11.5 6.5 9 9.62 9h4.76C17.5 9 20 11.5 20 13.62V16"/>
             <ellipse cx="12" cy="18" rx="7" ry="3"/>
             <circle cx="8" cy="6" r="1.5" fill="currentColor"/>
@@ -1931,8 +1955,8 @@
 
       <!-- 功能 4：白米收驚（安魂制煞） -->
       <button class="lb-quick-item" onclick="openLbModal('shoujingModal')">
-        <div class="lb-quick-icon" style="background: linear-gradient(135deg, #EFDBFF 0%, #D3ADF7 100%); color:#722ED1;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="lb-quick-icon" style="background: #FAF5F0; color:#5C381E; border:1px solid #E5DDD3;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2v4"/>
             <path d="M12 18v4"/>
             <path d="M4.93 4.93l2.83 2.83"/>
@@ -1949,40 +1973,40 @@
 
     <!-- 3.5 三百年巡禮實境尋寶・闖關挑戰卡 (Quest Card: LINE Touch 實境集章) -->
     <section style="padding: 0 5% 10px 5%;">
-      <div style="background: linear-gradient(135deg, #F0FAF3 0%, #E6F8EE 100%); border: 1.5px solid #85E0A3; border-radius: 14px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(6, 199, 85, 0.09); cursor: pointer;" onclick="openRouteDetailPage('wanchun')">
+      <div style="background: linear-gradient(135deg, #FFFDF9 0%, #FAF4EC 100%); border: 1.5px solid #E8D5C1; border-radius: 14px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(140, 91, 50, 0.08); cursor: pointer;" onclick="openRouteDetailPage('wanchun')">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <div style="display:flex; align-items:center; gap:6px;">
             <span style="font-size:1.2rem;">🗺️</span>
-            <strong style="font-size:0.92rem; color:#0D5426;">大墩三百年古蹟巡禮・實境尋寶</strong>
+            <strong style="font-size:0.92rem; color:#5C381E;">大墩三百年古蹟巡禮・實境尋寶</strong>
           </div>
-          <span style="background:#06C755; color:#FFF; font-size:0.68rem; font-weight:800; padding:2px 8px; border-radius:12px; box-shadow:0 1px 4px rgba(6,199,85,0.35);">
+          <span style="background:#A62824; color:#FFF; font-size:0.68rem; font-weight:800; padding:2px 8px; border-radius:12px; box-shadow:0 1px 4px rgba(166,40,36,0.25);">
             集章中 1/3
           </span>
         </div>
 
         <!-- 3 個站點蓋印微視圖 -->
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:8px;">
-          <div style="background:#FFF; border:1px solid #B7EB8F; border-radius:8px; padding:6px; text-align:center;">
+          <div style="background:#FFF; border:1px solid #F3C5C2; border-radius:8px; padding:6px; text-align:center;">
             <div style="font-size:1.1rem;">⛩️</div>
-            <div style="font-size:0.72rem; font-weight:bold; color:#06C755;">天后牌樓</div>
-            <div style="font-size:0.6rem; color:#06C755; font-weight:800;">✅ 已蓋章</div>
+            <div style="font-size:0.72rem; font-weight:bold; color:#A62824;">天后牌樓</div>
+            <div style="font-size:0.6rem; color:#A62824; font-weight:800;">✅ 已蓋章</div>
           </div>
-          <div style="background:#FFF; border:1px dashed #DDD; border-radius:8px; padding:6px; text-align:center;">
+          <div style="background:#FFF; border:1px dashed #E5DDD3; border-radius:8px; padding:6px; text-align:center;">
             <div style="font-size:1.1rem;">👑</div>
-            <div style="font-size:0.72rem; font-weight:bold; color:#333;">聖母大殿</div>
-            <div style="font-size:0.6rem; color:#FA8C16; font-weight:bold;">📡 距 100m</div>
+            <div style="font-size:0.72rem; font-weight:bold; color:#5C381E;">聖母大殿</div>
+            <div style="font-size:0.6rem; color:#8C5B32; font-weight:bold;">📡 距 100m</div>
           </div>
-          <div style="background:#FFF; border:1px dashed #DDD; border-radius:8px; padding:6px; text-align:center;">
+          <div style="background:#FFF; border:1px dashed #E5DDD3; border-radius:8px; padding:6px; text-align:center;">
             <div style="font-size:1.1rem;">🔔</div>
-            <div style="font-size:0.72rem; font-weight:bold; color:#333;">天井古鐘</div>
-            <div style="font-size:0.6rem; color:#999;">🔒 待靠近</div>
+            <div style="font-size:0.72rem; font-weight:bold; color:#5C381E;">天井古鐘</div>
+            <div style="font-size:0.6rem; color:#8C827A;">🔒 待靠近</div>
           </div>
         </div>
 
         <!-- 獎勵誘因文案 -->
-        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.85); padding:6px 10px; border-radius:8px; font-size:0.74rem;">
-          <span style="color:#0D5426;">🎁 <strong>集滿 3 章解鎖：</strong>開基媽祖過爐平安米＋神兵虛寶</span>
-          <span style="color:#06C755; font-weight:bold; font-size:0.78rem;">進入尋寶地圖 &gt;</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.9); border:1px solid #EFE7DE; padding:6px 10px; border-radius:8px; font-size:0.74rem;">
+          <span style="color:#5C381E;">🎁 <strong>集滿 3 章解鎖：</strong>開基媽祖過爐平安米＋神兵虛寶</span>
+          <span style="color:#A62824; font-weight:bold; font-size:0.78rem;">進入尋寶地圖 &gt;</span>
         </div>
       </div>
     </section>
@@ -1992,7 +2016,7 @@
       <div class="lb-section-header">
         <div class="lb-section-title">
           <span>⛩️ 台中中區文化香路</span>
-          <span style="font-size:0.65rem; color:#06C755; background:#E8F8EE; border:1px solid rgba(6,199,85,0.3); padding:1px 6px; border-radius:10px; font-weight:700; margin-left:6px;">📡 LINE Touch 感應</span>
+          <span style="font-size:0.65rem; color:#A62824; background:#FDF2F0; border:1px solid #F3C5C2; padding:1px 6px; border-radius:10px; font-weight:700; margin-left:6px;">📡 LINE Touch 感應</span>
         </div>
         <span class="lb-section-more" onclick="openRouteListPage()">探索更多 &gt;</span>
       </div>
@@ -2001,7 +2025,7 @@
       <div class="lb-temple-carousel">
         <!-- 卡片 1：萬春宮 -->
         <div class="lb-temple-card" onclick="openTempleModal('wanchun')">
-          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FDE3CF 0%, #F9D0B4 100%);">
+          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FFF7ED 0%, #F5EBE1 100%);">
             <span style="font-size:2rem;">🏮</span>
             <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#8C5B32; font-weight:bold;">本廟 0m</div>
           </div>
@@ -2016,31 +2040,31 @@
 
         <!-- 卡片 2：第二市場 六角樓 -->
         <div class="lb-temple-card" onclick="openTempleModal('market2')">
-          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FFE6E6 0%, #FFD1D1 100%);">
+          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FAF4EC 0%, #EFE5D8 100%);">
             <span style="font-size:2rem;">🥟</span>
-            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#A8071A; font-weight:bold;">350 m</div>
+            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#8C5B32; font-weight:bold;">350 m</div>
           </div>
           <div class="lb-temple-info">
             <div>
               <div class="lb-temple-name">台中第二市場</div>
               <span class="lb-temple-tag">六角樓・百年老店</span>
             </div>
-            <div class="lb-temple-btn">more</div>
+            <div class="lb-temple-btn">看更多</div>
           </div>
         </div>
 
         <!-- 卡片 3：綠川・柳川水岸 -->
         <div class="lb-temple-card" onclick="openTempleModal('river')">
-          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);">
+          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #F8F5F0 0%, #EDE6DC 100%);">
             <span style="font-size:2rem;">🌊</span>
-            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#0050B3; font-weight:bold;">600 m</div>
+            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#5C381E; font-weight:bold;">600 m</div>
           </div>
           <div class="lb-temple-info">
             <div>
               <div class="lb-temple-name">綠川柳川香路</div>
-              <span class="lb-temple-tag">大墩迎神歷史廊道</span>
+              <span class="lb-temple-tag">迎神歷史廊道</span>
             </div>
-            <div class="lb-temple-btn">more</div>
+            <div class="lb-temple-btn">看更多</div>
           </div>
         </div>
       </div>
@@ -2050,62 +2074,62 @@
     <section style="padding: 0 5% 10px 5%;">
       <div style="font-size: 0.85rem; font-weight: 800; color: #8C5B32; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
         <span>✨ 萬春宮・特色祈安與文教公益</span>
-        <span style="font-size: 0.7rem; color: #999;">正統科儀・慈善文教</span>
+        <span style="font-size: 0.7rem; color: #8C827A;">正統科儀・慈善文教</span>
       </div>
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
         <!-- 卡片 1：預約淨車 -->
-        <div style="background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%); border: 1px solid #91D5FF; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer;" onclick="openLbModal('jingcheModal')">
+        <div style="background: #FFFFFF; border: 1px solid #E8D8C8; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04);" onclick="openLbModal('jingcheModal')">
           <div style="font-size: 1.4rem; margin-bottom: 2px;">🚗</div>
-          <div style="font-size: 0.76rem; font-weight: bold; color: #0050B3;">淨車消煞</div>
-          <div style="font-size: 0.63rem; color: #555; transform: scale(0.92);">愛車灑淨護身符</div>
+          <div style="font-size: 0.76rem; font-weight: bold; color: #5C381E;">淨車消煞</div>
+          <div style="font-size: 0.63rem; color: #7A6F66; transform: scale(0.92);">愛車灑淨護身符</div>
         </div>
         <!-- 卡片 2：換花拜契 -->
-        <div style="background: linear-gradient(135deg, #FFF0F6 0%, #FFD6E7 100%); border: 1px solid #FFADD2; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer;" onclick="openLbModal('huanhuaModal')">
+        <div style="background: #FFFFFF; border: 1px solid #E8D8C8; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04);" onclick="openLbModal('huanhuaModal')">
           <div style="font-size: 1.4rem; margin-bottom: 2px;">🌸</div>
-          <div style="font-size: 0.76rem; font-weight: bold; color: #C41D7F;">換花拜契</div>
-          <div style="font-size: 0.63rem; color: #555; transform: scale(0.92);">求子・神明義子</div>
+          <div style="font-size: 0.76rem; font-weight: bold; color: #A62824;">換花拜契</div>
+          <div style="font-size: 0.63rem; color: #7A6F66; transform: scale(0.92);">求子・神明義子</div>
         </div>
         <!-- 卡片 3：四季國運籤 -->
-        <div style="background: linear-gradient(135deg, #FFFBE6 0%, #FFE58F 100%); border: 1px solid #FFD666; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer;" onclick="openLbModal('sijiModal')">
+        <div style="background: #FFFFFF; border: 1px solid #E8D8C8; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04);" onclick="openLbModal('sijiModal')">
           <div style="font-size: 1.4rem; margin-bottom: 2px;">📜</div>
-          <div style="font-size: 0.76rem; font-weight: bold; color: #D48806;">四季公籤</div>
-          <div style="font-size: 0.63rem; color: #555; transform: scale(0.92);">士農工商國運</div>
+          <div style="font-size: 0.76rem; font-weight: bold; color: #8C5B32;">四季公籤</div>
+          <div style="font-size: 0.63rem; color: #7A6F66; transform: scale(0.92);">士農工商國運</div>
         </div>
         <!-- 卡片 4：普施愛心認捐 -->
-        <div style="background: linear-gradient(135deg, #F6FFED 0%, #D9F7BE 100%); border: 1px solid #B7EB8F; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer;" onclick="openLbModal('charityModal')">
+        <div style="background: #FFFFFF; border: 1px solid #E8D8C8; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04);" onclick="openLbModal('charityModal')">
           <div style="font-size: 1.4rem; margin-bottom: 2px;">🌾</div>
-          <div style="font-size: 0.76rem; font-weight: bold; color: #389E0D;">普施轉贈</div>
-          <div style="font-size: 0.63rem; color: #555; transform: scale(0.92);">愛心白米轉贈社福</div>
+          <div style="font-size: 0.76rem; font-weight: bold; color: #5C381E;">普施轉贈</div>
+          <div style="font-size: 0.63rem; color: #7A6F66; transform: scale(0.92);">愛心白米轉贈社福</div>
         </div>
         <!-- 卡片 5：萬春盃文教競賽 -->
-        <div style="background: linear-gradient(135deg, #F0F5FF 0%, #D6E4FF 100%); border: 1px solid #ADC6FF; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer;" onclick="openLbModal('contestModal')">
+        <div style="background: #FFFFFF; border: 1px solid #E8D8C8; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04);" onclick="openLbModal('contestModal')">
           <div style="font-size: 1.4rem; margin-bottom: 2px;">🖌️</div>
-          <div style="font-size: 0.76rem; font-weight: bold; color: #1D39C4;">萬春盃比賽</div>
-          <div style="font-size: 0.63rem; color: #555; transform: scale(0.92);">學童書法・繪畫賽</div>
+          <div style="font-size: 0.76rem; font-weight: bold; color: #8C5B32;">萬春盃比賽</div>
+          <div style="font-size: 0.63rem; color: #7A6F66; transform: scale(0.92);">學童書法・繪畫賽</div>
         </div>
         <!-- 卡片 6：神佛聖誕行事曆 -->
-        <div style="background: linear-gradient(135deg, #FFF7E6 0%, #FFE7BA 100%); border: 1px solid #FFD591; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer;" onclick="openLbModal('calendarModal')">
+        <div style="background: #FFFFFF; border: 1px solid #E8D8C8; border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04);" onclick="openLbModal('calendarModal')">
           <div style="font-size: 1.4rem; margin-bottom: 2px;">🏮</div>
-          <div style="font-size: 0.76rem; font-weight: bold; color: #D46B08;">聖誕日曆</div>
-          <div style="font-size: 0.63rem; color: #555; transform: scale(0.92);">年度法會聖誕吉期</div>
+          <div style="font-size: 0.76rem; font-weight: bold; color: #A62824;">聖誕日曆</div>
+          <div style="font-size: 0.63rem; color: #7A6F66; transform: scale(0.92);">年度法會聖誕吉期</div>
         </div>
       </div>
     </section>
 
     <!-- 4.8 萬春宮專屬 LINE 官方貼圖橫幅 (Sticker Banner) -->
     <section style="padding: 0 5% 10px 5%;">
-      <div style="background: linear-gradient(135deg, #FFF0F6 0%, #FFE4ED 100%); border: 1.5px solid #FFADD2; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; box-shadow: 0 3px 12px rgba(235, 47, 150, 0.08);" onclick="openLbModal('stickerModal')">
+      <div style="background: linear-gradient(135deg, #FFFDF8 0%, #FAF3EA 100%); border: 1.5px solid #E8D8C8; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; box-shadow: 0 3px 12px rgba(140, 91, 50, 0.06);" onclick="openLbModal('stickerModal')">
         <div style="display:flex; align-items:center; gap:10px;">
           <img src="assets/stickers/萬春宮媽祖貼圖_03_穩啦.png" alt="穩啦貼圖" style="width:48px; height:42px; object-fit:contain;" />
           <div>
-            <div style="font-size:0.86rem; font-weight:bold; color:#C41D7F; display:flex; align-items:center; gap:4px;">
+            <div style="font-size:0.86rem; font-weight:bold; color:#A62824; display:flex; align-items:center; gap:4px;">
               <span>🎁 開基媽祖 LINE 官方貼圖</span>
-              <span style="font-size:0.6rem; background:#C41D7F; color:#FFF; padding:1px 5px; border-radius:6px;">全套16款</span>
+              <span style="font-size:0.6rem; background:#A62824; color:#FFF; padding:1px 5px; border-radius:6px;">全套16款</span>
             </div>
-            <div style="font-size:0.68rem; color:#888; margin-top:2px;">加入好友免費下載・水逆退散・穩啦！</div>
+            <div style="font-size:0.68rem; color:#7A6F66; margin-top:2px;">加入好友免費下載・水逆退散・穩啦！</div>
           </div>
         </div>
-        <span style="font-size:0.75rem; font-weight:bold; color:#C41D7F;">免費領 &gt;</span>
+        <span style="font-size:0.75rem; font-weight:bold; color:#A62824;">免費領 &gt;</span>
       </div>
     </section>
 
@@ -2142,12 +2166,12 @@
       </button>
       <button class="lb-dock-item" onclick="openRouteDetailPage('wanchun')" style="position:relative;">
         <span class="lb-dock-icon" style="transform:scale(1.15);">👣</span>
-        <span style="position:absolute; top:2px; right:10px; background:#06C755; color:#FFF; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:8px; line-height:1; box-shadow:0 1px 4px rgba(6,199,85,0.4);">1/3章</span>
-        <span class="lb-dock-label" style="color:#06C755; font-weight:800;">尋寶巡禮</span>
+        <span style="position:absolute; top:2px; right:10px; background:#A62824; color:#FFF; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:8px; line-height:1; box-shadow:0 1px 4px rgba(166,40,36,0.3);">1/3章</span>
+        <span class="lb-dock-label" style="color:#A62824; font-weight:800;">尋寶巡禮</span>
       </button>
       <button class="lb-dock-item" onclick="openLbModal('zodiacModal')" style="position:relative;">
         <span class="lb-dock-icon">🐉</span>
-        <span style="position:absolute; top:2px; right:14px; background:#FF4D4F; color:#FFF; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:8px; line-height:1;">沖煞</span>
+        <span style="position:absolute; top:2px; right:14px; background:#8C5B32; color:#FFF; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:8px; line-height:1;">沖煞</span>
         <span class="lb-dock-label">生肖歲煞</span>
       </button>
       <button class="lb-dock-item" onclick="openLbModal('profileModal')">
@@ -2435,17 +2459,17 @@
         <button class="lb-sheet-close" onclick="closeLbModal('settingsModal')">✕</button>
       </div>
       <div style="font-size:0.86rem; line-height:1.8; color:#444;">
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #EEE;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #ECE7E1;">
           <span>沉穩檜木擲筊音效</span>
-          <strong style="color:#06C755;">開啟 (ON)</strong>
+          <strong style="color:#A62824;">開啟 (ON)</strong>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #EEE;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #ECE7E1;">
           <span>解籤角色風格</span>
-          <strong style="color:#06C755;">萬春宮老廟祝（溫暖慈悲）</strong>
+          <strong style="color:#8C5B32;">萬春宮老廟祝（溫暖慈悲）</strong>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #EEE;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #ECE7E1;">
           <span>線上對帳末五碼申報</span>
-          <button style="background:#06C755; color:#FFF; border:none; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer;" onclick="prompt('請輸入您的銀行匯款帳號末五碼與奉納項目：', '12345 光明燈'); alert('✅ 已向萬春宮執事提交對帳登記！');">快速登記</button>
+          <button style="background:#A62824; color:#FFF; border:none; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer;" onclick="prompt('請輸入您的銀行匯款帳號末五碼與奉納項目：', '12345 光明燈'); alert('✅ 已向萬春宮執事提交對帳登記！');">快速登記</button>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
           <span>LINE MINI App 版本</span>
@@ -2466,11 +2490,11 @@
       </div>
 
       <!-- 頁籤切換：1. 線上安奉文疏 / 2. 我的虛擬點燈房 -->
-      <div style="display:flex; background:#F5F6F8; border-radius:10px; padding:3px; margin-bottom:12px;">
-        <button id="tabLightRegisterBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:#FFF; color:#CF1322; box-shadow:0 1px 4px rgba(0,0,0,0.08); cursor:pointer;" onclick="switchLightingTab('register')">
+      <div style="display:flex; background:#FAF5F0; border-radius:10px; padding:3px; margin-bottom:12px; border:1px solid #E8D8C8;">
+        <button id="tabLightRegisterBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:#FFF; color:#A62824; box-shadow:0 1px 4px rgba(0,0,0,0.08); cursor:pointer;" onclick="switchLightingTab('register')">
           ✍️ 線上填寫疏文
         </button>
-        <button id="tabLightRoomBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:transparent; color:#666; cursor:pointer;" onclick="switchLightingTab('room')">
+        <button id="tabLightRoomBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:transparent; color:#8C5B32; cursor:pointer;" onclick="switchLightingTab('room')">
           🪔 虛擬元辰燈房
         </button>
       </div>
@@ -2482,33 +2506,33 @@
           
           <!-- 燈種選擇卡 -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
-            <div class="light-type-opt selected" id="optLight_guangming" onclick="selectLightType('guangming', '✨ 天上聖母光明燈', 600)" style="background:#FFFBE6; border:2px solid #FAAD14; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
-              <strong style="color:#D48806; font-size:0.85rem;">✨ 聖母光明燈</strong><br>
-              <span style="font-size:0.72rem; color:#888;">元辰光彩・出入平安</span><br>
-              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$600 / 盞</span>
+            <div class="light-type-opt selected" id="optLight_guangming" onclick="selectLightType('guangming', '✨ 天上聖母光明燈', 600)" style="background:#FFF9EE; border:2px solid #C68F42; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#C68F42; font-size:0.85rem;">✨ 聖母光明燈</strong><br>
+              <span style="font-size:0.72rem; color:#8C5B32;">元辰光彩・出入平安</span><br>
+              <span style="font-size:0.75rem; color:#A62824; font-weight:bold;">$600 / 盞</span>
             </div>
-            <div class="light-type-opt" id="optLight_taishui" onclick="selectLightType('taishui', '🛡️ 值年太歲星君燈', 600)" style="background:#FFF1F0; border:1px solid #FFA39E; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
-              <strong style="color:#CF1322; font-size:0.85rem;">🛡️ 太歲星君燈</strong><br>
-              <span style="font-size:0.72rem; color:#888;">沖犯太歲・化險為夷</span><br>
-              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$600 / 盞</span>
+            <div class="light-type-opt" id="optLight_taishui" onclick="selectLightType('taishui', '🛡️ 值年太歲星君燈', 600)" style="background:#FDF2F0; border:1px solid #F3C5C2; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#A62824; font-size:0.85rem;">🛡️ 太歲星君燈</strong><br>
+              <span style="font-size:0.72rem; color:#8C5B32;">沖犯太歲・化險為夷</span><br>
+              <span style="font-size:0.75rem; color:#A62824; font-weight:bold;">$600 / 盞</span>
             </div>
-            <div class="light-type-opt" id="optLight_wenchang" onclick="selectLightType('wenchang', '📖 文昌功名帝君燈', 600)" style="background:#F6FFED; border:1px solid #B7EB8F; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
-              <strong style="color:#389E0D; font-size:0.85rem;">📖 文昌功名燈</strong><br>
-              <span style="font-size:0.72rem; color:#888;">考運亨通・仕途順遂</span><br>
-              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$600 / 盞</span>
+            <div class="light-type-opt" id="optLight_wenchang" onclick="selectLightType('wenchang', '📖 文昌功名帝君燈', 600)" style="background:#FAF5F0; border:1px solid #E8D8C8; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#8C5B32; font-size:0.85rem;">📖 文昌功名燈</strong><br>
+              <span style="font-size:0.72rem; color:#8C5B32;">考運亨通・仕途順遂</span><br>
+              <span style="font-size:0.75rem; color:#A62824; font-weight:bold;">$600 / 盞</span>
             </div>
-            <div class="light-type-opt" id="optLight_caishen" onclick="selectLightType('caishen', '💰 五路八路發財燈', 800)" style="background:#FFF9E6; border:1px solid #FFE58F; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
-              <strong style="color:#D46B08; font-size:0.85rem;">💰 八路發財燈</strong><br>
-              <span style="font-size:0.72rem; color:#888;">正偏財旺・生意興隆</span><br>
-              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$800 / 盞</span>
+            <div class="light-type-opt" id="optLight_caishen" onclick="selectLightType('caishen', '💰 五路八路發財燈', 800)" style="background:#FFF9EE; border:1px solid #E8D8C8; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#C68F42; font-size:0.85rem;">💰 八路發財燈</strong><br>
+              <span style="font-size:0.72rem; color:#8C5B32;">正偏財旺・生意興隆</span><br>
+              <span style="font-size:0.75rem; color:#A62824; font-weight:bold;">$800 / 盞</span>
             </div>
           </div>
 
           <!-- 疏文填寫表單 -->
-          <div style="background:#FFFDF9; border:1px solid #FFE4D6; border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div style="background:#FFFDF9; border:1px solid #E8D8C8; border-radius:10px; padding:12px; margin-bottom:12px;">
             <div style="font-weight:bold; color:#8C5B32; font-size:0.85rem; margin-bottom:8px; display:flex; justify-content:space-between;">
               <span>📜 祈安奉納文疏</span>
-              <span id="lightSelectedText" style="color:#CF1322;">✨ 天上聖母光明燈 ($600)</span>
+              <span id="lightSelectedText" style="color:#A62824;">✨ 天上聖母光明燈 ($600)</span>
             </div>
             <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
               <label style="font-size:0.8rem; color:#555;">信士姓名：</label>
@@ -2529,13 +2553,13 @@
           </div>
 
           <!-- 生肖五大凶星聯動提點 -->
-          <div style="background:#FFF0F6; border:1px solid #FFADD2; border-radius:8px; padding:8px 10px; font-size:0.78rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="closeLbModal('lightingModal'); openLbModal('zodiacModal');">
+          <div style="background:#FDF2F0; border:1px solid #F3C5C2; border-radius:8px; padding:8px 10px; font-size:0.78rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="closeLbModal('lightingModal'); openLbModal('zodiacModal');">
             <span>🐉 <strong>今年是否有沖犯星煞？</strong>點擊立即排盤</span>
-            <span style="color:#C41D7F; font-weight:bold;">測算 ›</span>
+            <span style="color:#A62824; font-weight:bold;">測算 ›</span>
           </div>
         </div>
 
-        <button class="lb-primary-btn" style="background:#CF1322;" onclick="submitLightingOrder()">
+        <button class="lb-primary-btn" style="background:#A62824;" onclick="submitLightingOrder()">
           🙏 LINE Pay 奉納登記・點亮元辰燈
         </button>
       </div>
@@ -2603,9 +2627,9 @@
       </div>
       <div style="font-size:0.86rem; line-height:1.7; color:#444;">
         <p>萬春宮三百年古蹟巡禮蓋章進度：</p>
-        <div style="background:#F0FAF3; border:1px solid #D2F2DD; padding:12px; border-radius:10px; margin:10px 0; display:flex; align-items:center; justify-content:space-around;">
+        <div style="background:#FAF5F0; border:1px solid #E8D8C8; padding:12px; border-radius:10px; margin:10px 0; display:flex; align-items:center; justify-content:space-around;">
           <div style="text-align:center;">
-            <span style="font-size:1.5rem;">⛩️</span><br><strong>天后閣牌樓</strong><br><span style="color:#06C755; font-size:0.72rem;">已蓋章完成</span>
+            <span style="font-size:1.5rem;">⛩️</span><br><strong>天后閣牌樓</strong><br><span style="color:#A62824; font-size:0.72rem; font-weight:bold;">已蓋章完成</span>
           </div>
           <div style="text-align:center;">
             <span style="font-size:1.5rem;">⚪</span><br><strong>聖母大殿</strong><br><span style="color:#999; font-size:0.72rem;">尚未集章</span>
@@ -2629,17 +2653,17 @@
         <button class="lb-sheet-close" onclick="closeLbModal('festivalModal')">✕</button>
       </div>
       <div style="font-size:0.86rem; line-height:1.7; color:#444;">
-        <div style="padding:8px 0; border-bottom:1px solid #EEE;">
+        <div style="padding:8px 0; border-bottom:1px solid #ECE7E1;">
           <strong>🧧 農曆正月初一至初五</strong><br>
-          <span style="color:#FF5A1F;">新春開正祈福・安奉太歲斗燈</span> — 迎春接福、消災植福。
+          <span style="color:#A62824;">新春開正祈福・安奉太歲斗燈</span> — 迎春接福、消災植福。
         </div>
-        <div style="padding:8px 0; border-bottom:1px solid #EEE;">
+        <div style="padding:8px 0; border-bottom:1px solid #ECE7E1;">
           <strong>🌊 農曆三月廿三日</strong><br>
-          <span style="color:#06C755;">天上聖母開基三媽聖誕千秋</span> — 祝壽大典、市區出巡安座。
+          <span style="color:#A62824;">天上聖母開基三媽聖誕千秋</span> — 祝壽大典、市區出巡安座。
         </div>
-        <div style="padding:8px 0; border-bottom:1px solid #EEE;">
+        <div style="padding:8px 0; border-bottom:1px solid #ECE7E1;">
           <strong>🍂 農曆九月初九日</strong><br>
-          <span style="color:#1890FF;">天上聖母羽化昇天成道秋祭</span> — 禮斗祈安消災三朝清醮。
+          <span style="color:#8C5B32;">天上聖母羽化昇天成道秋祭</span> — 禮斗祈安消災三朝清醮。
         </div>
         <div style="padding:8px 0;">
           <strong>🍚 萬春宮常設科儀</strong><br>
@@ -2661,7 +2685,7 @@
       <div style="font-size:0.86rem; line-height:1.6; color:#444;">
         <p style="margin-bottom:8px;">萬春宮秉持<strong>「食物不浪費，愛心大家做」</strong>慈善宗旨，每年農曆七月中元普度與九月初九天上聖母飛昇秋祭清醮，信眾敬獻之贊普白米與民生物資，法會圓滿後全數轉贈台中在地孤兒院、安養機構與弱勢家庭。</p>
         
-        <div style="background:#F6FFED; border:1px solid #B7EB8F; border-radius:12px; padding:12px; margin-bottom:12px;">
+        <div style="background:#FAF5F0; border:1px solid #E8D8C8; border-radius:12px; padding:12px; margin-bottom:12px;">
           <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
             <label style="font-size:0.8rem; color:#555; font-weight:bold;">認捐善信：</label>
             <input type="text" id="charityDonor" placeholder="善信大名" value="林善心" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
@@ -2685,11 +2709,11 @@
           </div>
         </div>
 
-        <div style="background:#FFFDF9; border:1px dashed #D48806; padding:10px; border-radius:8px; font-size:0.78rem; color:#8C5B32; margin-bottom:12px;">
+        <div style="background:#FFFDF9; border:1px dashed #C68F42; padding:10px; border-radius:8px; font-size:0.78rem; color:#8C5B32; margin-bottom:12px;">
           ✨ <strong>透明徵信承諾：</strong>贊普完成後，系統將自動於 LINE 官方帳號發送<strong>「開基三媽功德收據」</strong>與社福團體受贈證明。
         </div>
 
-        <button class="lb-primary-btn" style="background:#389E0D;" onclick="submitCharityDonation()">
+        <button class="lb-primary-btn" style="background:#A62824;" onclick="submitCharityDonation()">
           🙏 LINE Pay 愛心認捐・祈安植福
         </button>
       </div>
@@ -2708,8 +2732,8 @@
         <p style="margin-bottom:8px;">萬春宮長年深耕中台灣文教，每年國曆 7 月舉辦<strong>「萬春盃學童書法暨繪畫比賽」</strong>，弘揚中華文字書道與媽祖慈悲文化，歷年吸引數千名中小學生熱烈角逐！</p>
         
         <!-- 比賽資訊與線上報名 -->
-        <div style="background:#F0F5FF; border:1px solid #ADC6FF; border-radius:12px; padding:12px; margin-bottom:12px;">
-          <div style="font-weight:bold; color:#1D39C4; margin-bottom:6px; font-size:0.88rem;">📢 第 28 屆萬春盃競賽簡章重點</div>
+        <div style="background:#FAF5F0; border:1px solid #E8D8C8; border-radius:12px; padding:12px; margin-bottom:12px;">
+          <div style="font-weight:bold; color:#8C5B32; margin-bottom:6px; font-size:0.88rem;">📢 第 28 屆萬春盃競賽簡章重點</div>
           <ul style="padding-left:18px; margin:4px 0; font-size:0.8rem; color:#444; line-height:1.7;">
             <li><strong>比賽組別：</strong>國小低年級、中年級、高年級組、國中組</li>
             <li><strong>書法主題：</strong>媽祖慈悲對聯、唐宋勸善詩詞現場揮毫</li>
@@ -2719,7 +2743,7 @@
         </div>
 
         <!-- 快速報名表單 -->
-        <div style="background:#FFF; border:1px solid #E5E7EB; border-radius:10px; padding:12px; margin-bottom:12px;">
+        <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:12px; margin-bottom:12px;">
           <div style="font-weight:bold; color:#333; font-size:0.82rem; margin-bottom:8px;">✍️ 選手線上快速登記預約</div>
           <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
             <label style="font-size:0.8rem; color:#555;">學生姓名：</label>
@@ -2738,7 +2762,7 @@
           </div>
         </div>
 
-        <button class="lb-primary-btn" style="background:#1D39C4;" onclick="submitContestRegistration()">
+        <button class="lb-primary-btn" style="background:#8C5B32;" onclick="submitContestRegistration()">
           📝 提交萬春盃參賽登記・領取准考報名序號
         </button>
       </div>
@@ -2757,52 +2781,52 @@
         <p style="margin-bottom:8px;">萬春宮歲次神佛千秋聖誕吉期（可一鍵預約 LINE 祝壽提醒通知）：</p>
         
         <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
-          <div style="background:#FFF9F5; border:1px solid #FFD8BF; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="background:#FAF5F0; border:1px solid #E8D8C8; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <strong style="color:#D46B08;">正月初一至初五</strong>
+              <strong style="color:#8C5B32;">正月初一至初五</strong>
               <div style="font-size:0.8rem; color:#666;">新春開正、接財神、初四抽公籤</div>
             </div>
-            <button style="background:#D46B08; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已為您設定正月初一開正祝壽推播提醒！')">設提醒</button>
+            <button style="background:#8C5B32; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已為您設定正月初一開正祝壽推播提醒！')">設提醒</button>
           </div>
 
-          <div style="background:#FFF9F5; border:1px solid #FFD8BF; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="background:#FAF5F0; border:1px solid #E8D8C8; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <strong style="color:#D46B08;">正月十三 / 十五</strong>
+              <strong style="color:#8C5B32;">正月十三 / 十五</strong>
               <div style="font-size:0.8rem; color:#666;">關聖帝君飛昇 / 上元天官大帝聖誕（天官賜福）</div>
             </div>
-            <button style="background:#D46B08; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已為您設定上元天官大帝聖誕提醒！')">設提醒</button>
+            <button style="background:#8C5B32; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已為您設定上元天官大帝聖誕提醒！')">設提醒</button>
           </div>
 
-          <div style="background:#FFF9F5; border:1px solid #FFD8BF; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="background:#FAF5F0; border:1px solid #E8D8C8; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <strong style="color:#D46B08;">二月初二 / 初三 / 十九</strong>
+              <strong style="color:#8C5B32;">二月初二 / 初三 / 十九</strong>
               <div style="font-size:0.8rem; color:#666;">福德正神土地公 / 文昌帝君 / 觀音佛祖佛誕</div>
             </div>
-            <button style="background:#D46B08; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已為您設定文昌帝君考季祈福提醒！')">設提醒</button>
+            <button style="background:#8C5B32; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已為您設定文昌帝君考季祈福提醒！')">設提醒</button>
           </div>
 
-          <div style="background:#FFF1F0; border:1.5px solid #FFA39E; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="background:#FDF2F0; border:1.5px solid #F3C5C2; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <strong style="color:#CF1322;">三月廿三（年度最盛大）</strong>
+              <strong style="color:#A62824;">三月廿三（年度最盛大）</strong>
               <div style="font-size:0.8rem; color:#666;">天上聖母開基正身三媽聖誕千秋</div>
             </div>
-            <button style="background:#CF1322; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已設定湄洲媽祖聖誕年度大典推播通知！')">設提醒</button>
+            <button style="background:#A62824; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已設定湄洲媽祖聖誕年度大典推播通知！')">設提醒</button>
           </div>
 
-          <div style="background:#FFF9F5; border:1px solid #FFD8BF; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="background:#FAF5F0; border:1px solid #E8D8C8; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <strong style="color:#D46B08;">七月十五 / 八月十五</strong>
+              <strong style="color:#8C5B32;">七月十五 / 八月十五</strong>
               <div style="font-size:0.8rem; color:#666;">中元普度超拔法會 / 中秋福德正神千秋</div>
             </div>
-            <button style="background:#D46B08; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已設定中元普度與中秋祈福提醒！')">設提醒</button>
+            <button style="background:#8C5B32; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已設定中元普度與中秋祈福提醒！')">設提醒</button>
           </div>
 
-          <div style="background:#FFF9F5; border:1px solid #FFD8BF; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="background:#FAF5F0; border:1px solid #E8D8C8; padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <strong style="color:#D46B08;">九月初九</strong>
+              <strong style="color:#8C5B32;">九月初九</strong>
               <div style="font-size:0.8rem; color:#666;">天上聖母飛昇成道紀念秋祭清醮</div>
             </div>
-            <button style="background:#D46B08; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已設定媽祖成道秋祭大典提醒！')">設提醒</button>
+            <button style="background:#8C5B32; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="alert('🔔 已設定媽祖成道秋祭大典提醒！')">設提醒</button>
           </div>
         </div>
 
@@ -2820,10 +2844,10 @@
         <button class="lb-sheet-close" onclick="closeLbModal('stickerModal')">✕</button>
       </div>
       <div style="font-size:0.86rem; line-height:1.6; color:#444;">
-        <div style="background: linear-gradient(135deg, #FFF0F6 0%, #FFE4ED 100%); border: 1.5px solid #FFADD2; border-radius: 12px; padding: 12px; margin-bottom: 12px; display:flex; gap:10px; align-items:center;">
+        <div style="background: #FDF2F0; border: 1.5px solid #F3C5C2; border-radius: 12px; padding: 12px; margin-bottom: 12px; display:flex; gap:10px; align-items:center;">
           <img src="assets/stickers/萬春宮媽祖貼圖_03_穩啦.png" alt="媽祖穩啦" style="width:58px; height:50px; object-fit:contain;" />
           <div>
-            <div style="font-weight:bold; color:#C41D7F; font-size:0.92rem;">✨ 全套 16 款大字版・神明庇佑</div>
+            <div style="font-weight:bold; color:#A62824; font-size:0.92rem;">✨ 全套 16 款大字版・神明庇佑</div>
             <div style="font-size:0.75rem; color:#666; margin-top:2px;">加入萬春宮官方 LINE 帳號，立即可在聊天室免費領取並永久收藏！</div>
           </div>
         </div>
@@ -2833,89 +2857,89 @@
         <!-- 16 款貼圖 4x4 網格 -->
         <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:14px;">
           <!-- 01 早安 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_01_早安.png', '早安')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_01_早安.png', '早安')">
             <img src="assets/stickers/萬春宮媽祖貼圖_01_早安.png" alt="早安" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">早安</div>
           </div>
           <!-- 02 晚安 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_02_晚安.png', '晚安')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_02_晚安.png', '晚安')">
             <img src="assets/stickers/萬春宮媽祖貼圖_02_晚安.png" alt="晚安" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">晚安</div>
           </div>
           <!-- 03 穩啦 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_03_穩啦.png', '穩啦')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_03_穩啦.png', '穩啦')">
             <img src="assets/stickers/萬春宮媽祖貼圖_03_穩啦.png" alt="穩啦" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">穩啦</div>
           </div>
           <!-- 04 收到 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_04_收到.png', '收到')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_04_收到.png', '收到')">
             <img src="assets/stickers/萬春宮媽祖貼圖_04_收到.png" alt="收到" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">收到</div>
           </div>
           <!-- 05 謝謝 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_05_謝謝.png', '謝謝')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_05_謝謝.png', '謝謝')">
             <img src="assets/stickers/萬春宮媽祖貼圖_05_謝謝.png" alt="謝謝" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">謝謝</div>
           </div>
           <!-- 06 拜託 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_06_拜託.png', '拜託')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_06_拜託.png', '拜託')">
             <img src="assets/stickers/萬春宮媽祖貼圖_06_拜託.png" alt="拜託" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">拜託</div>
           </div>
           <!-- 07 辛苦了 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_07_辛苦了.png', '辛苦了')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_07_辛苦了.png', '辛苦了')">
             <img src="assets/stickers/萬春宮媽祖貼圖_07_辛苦了.png" alt="辛苦了" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">辛苦了</div>
           </div>
           <!-- 08 加油 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_08_加油.png', '加油')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_08_加油.png', '加油')">
             <img src="assets/stickers/萬春宮媽祖貼圖_08_加油.png" alt="加油" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">加油</div>
           </div>
           <!-- 09 笑死 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_09_笑死.png', '笑死')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_09_笑死.png', '笑死')">
             <img src="assets/stickers/萬春宮媽祖貼圖_09_笑死.png" alt="笑死" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">笑死</div>
           </div>
           <!-- 10 真的假的 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_10_真的假的.png', '真的假的')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_10_真的假的.png', '真的假的')">
             <img src="assets/stickers/萬春宮媽祖貼圖_10_真的假的.png" alt="真的假的" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">真的假的</div>
           </div>
           <!-- 11 哭哭 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_11_哭哭.png', '哭哭')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_11_哭哭.png', '哭哭')">
             <img src="assets/stickers/萬春宮媽祖貼圖_11_哭哭.png" alt="哭哭" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">哭哭</div>
           </div>
           <!-- 12 太讚了 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_12_太讚了.png', '太讚了')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_12_太讚了.png', '太讚了')">
             <img src="assets/stickers/萬春宮媽祖貼圖_12_太讚了.png" alt="太讚了" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">太讚了</div>
           </div>
           <!-- 13 水逆退散 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_13_水逆退散.png', '水逆退散')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_13_水逆退散.png', '水逆退散')">
             <img src="assets/stickers/萬春宮媽祖貼圖_13_水逆退散.png" alt="水逆退散" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">水逆退散</div>
           </div>
           <!-- 14 吃飽沒 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_14_吃飽沒.png', '吃飽沒')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_14_吃飽沒.png', '吃飽沒')">
             <img src="assets/stickers/萬春宮媽祖貼圖_14_吃飽沒.png" alt="吃飽沒" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">吃飽沒</div>
           </div>
           <!-- 15 發大財 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_15_發大財.png', '發大財')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_15_發大財.png', '發大財')">
             <img src="assets/stickers/萬春宮媽祖貼圖_15_發大財.png" alt="發大財" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">發大財</div>
           </div>
           <!-- 16 莫慌 -->
-          <div style="background:#FFF; border:1px solid #EEE; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_16_莫慌.png', '莫慌')">
+          <div style="background:#FFF; border:1px solid #ECE7E1; border-radius:10px; padding:6px 4px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:pointer;" onclick="previewSticker('assets/stickers/萬春宮媽祖貼圖_16_莫慌.png', '莫慌')">
             <img src="assets/stickers/萬春宮媽祖貼圖_16_莫慌.png" alt="莫慌" style="width:100%; height:54px; object-fit:contain;" />
             <div style="font-size:0.68rem; color:#555; font-weight:bold; margin-top:2px;">莫慌</div>
           </div>
         </div>
 
         <div style="display:flex; gap:10px;">
-          <button class="lb-primary-btn" style="flex:1; background:#06C755;" onclick="downloadMazuStickers()">
+          <button class="lb-primary-btn" style="flex:1; background:#A62824;" onclick="downloadMazuStickers()">
             📲 加入好友・一鍵免費領取貼圖包
           </button>
           <button class="lb-primary-btn" style="flex:1; background:#8C5B32;" onclick="shareStickersToFriend()">
@@ -2938,7 +2962,7 @@
         <p style="margin-bottom:8px;">萬春宮道法科儀傳承：測算本命值年生肖與<strong>五鬼、天狗、白虎、刑剋、空亡</strong>之沖犯，由開基湄洲三媽賜福化解。</p>
         
         <!-- 生肖選擇表單 -->
-        <div style="background:#FFF9F5; border:1px solid #FFD8BF; border-radius:12px; padding:12px; margin-bottom:12px;">
+        <div style="background:#FAF5F0; border:1px solid #E8D8C8; border-radius:12px; padding:12px; margin-bottom:12px;">
           <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
             <label style="font-weight:bold; color:#8C5B32; font-size:0.85rem; width:70px;">信士生肖：</label>
             <select id="zodiacSelect" onchange="calcZodiacStar()" style="flex:1; padding:7px 10px; border:1.5px solid #D9D9D9; border-radius:8px; font-size:0.88rem; background:#FFF;">
@@ -2968,12 +2992,12 @@
         </div>
 
         <!-- AI 即時排盤結果卡片 -->
-        <div id="zodiacResultCard" style="background:#FFF; border:1.5px solid #FFCCC7; border-radius:12px; padding:12px; box-shadow:0 4px 12px rgba(255,77,79,0.08);">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #FFF1F0; padding-bottom:8px; margin-bottom:8px;">
-            <div style="font-size:0.95rem; font-weight:bold; color:#CF1322;" id="zodiacResultName">
+        <div id="zodiacResultCard" style="background:#FFF; border:1.5px solid #F3C5C2; border-radius:12px; padding:12px; box-shadow:0 4px 12px rgba(166,40,36,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #FAF5F0; padding-bottom:8px; margin-bottom:8px;">
+            <div style="font-size:0.95rem; font-weight:bold; color:#A62824;" id="zodiacResultName">
               【生肖 龍】本命歲煞排盤
             </div>
-            <span style="font-size:0.75rem; background:#FFF1F0; color:#CF1322; padding:2px 8px; border-radius:10px; font-weight:bold; border:1px solid #FFA39E;" id="zodiacResultBadge">
+            <span style="font-size:0.75rem; background:#FDF2F0; color:#A62824; padding:2px 8px; border-radius:10px; font-weight:bold; border:1px solid #F3C5C2;" id="zodiacResultBadge">
               值年坐太歲・劍鋒凶星
             </span>
           </div>
@@ -2982,8 +3006,8 @@
           <div style="font-size:0.82rem; line-height:1.6; color:#555;" id="zodiacResultDetail">
             <p style="margin:4px 0;"><strong>⚠️ 沖犯星煞：</strong>本命坐太歲，並逢「劍鋒、伏屍」星臨宮。</p>
             <p style="margin:4px 0;"><strong>⚡ 潛在影響：</strong>情緒易起伏、勞心傷神，防刀剪金屬損傷與口舌紛擾。</p>
-            <p style="margin:4px 0; color:#B37FEB;"><strong>✨ 開基湄洲三媽開示：</strong>「遇變思靜，以退為進，凡事三思而後行，心存善念自有吉神暗中護庇。」</p>
-            <div style="background:#FFFBE6; border-left:3px solid #FAAD14; padding:6px 10px; border-radius:4px; margin-top:6px; font-size:0.78rem;">
+            <p style="margin:4px 0; color:#8C5B32;"><strong>✨ 開基湄洲三媽開示：</strong>「遇變思靜，以退為進，凡事三思而後行，心存善念自有吉神暗中護庇。」</p>
+            <div style="background:#FFF9EE; border-left:3px solid #C68F42; padding:6px 10px; border-radius:4px; margin-top:6px; font-size:0.78rem;">
               <strong>🪔 建議萬春宮科儀：</strong>安奉值年太歲星君斗燈、行「祭劍鋒解厄科儀」，佩戴開基三媽香火袋。
             </div>
           </div>
@@ -2991,7 +3015,7 @@
 
         <!-- 登記文疏與祭解按鈕 -->
         <div style="display:flex; gap:10px; margin-top:14px;">
-          <button class="lb-primary-btn" style="flex:1; background:#CF1322;" onclick="handleZodiacRegister()">
+          <button class="lb-primary-btn" style="flex:1; background:#A62824;" onclick="handleZodiacRegister()">
             ✍️ 線上登記萬春宮祭解疏文
           </button>
           <button class="lb-primary-btn" style="flex:1; background:#8C5B32;" onclick="closeLbModal('zodiacModal'); openDivinationFlow();">
@@ -3038,7 +3062,7 @@
 
         <!-- 步驟一：選擇收驚對象與受驚因緣 -->
         <div id="shoujingStep1">
-          <div style="background:#FFFDF9; border:1px solid #FFE4D6; border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div style="background:#FAF5F0; border:1px solid #E8D8C8; border-radius:10px; padding:12px; margin-bottom:12px;">
             <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
               <label style="font-size:0.8rem; color:#555; font-weight:bold;">受驚善信：</label>
               <input type="text" id="shoujingName" placeholder="信士姓名" value="陳信士" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
@@ -3081,28 +3105,28 @@
 
         <!-- 步驟二：安魂成果與三媽賜符 (預設隱藏) -->
         <div id="shoujingStep2" style="display:none; text-align:center;">
-          <div style="background:#FFF; border:1.5px solid #52C41A; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 4px 12px rgba(82,196,26,0.1);">
+          <div style="background:#FFF; border:1.5px solid #E8D8C8; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 4px 12px rgba(140,91,50,0.08);">
             <span style="font-size:2.5rem;">✨</span>
-            <div style="font-size:1.1rem; font-weight:bold; color:#237804; margin:6px 0;">
+            <div style="font-size:1.1rem; font-weight:bold; color:#8C5B32; margin:6px 0;">
               【魂魄歸體・元辰安泰】
             </div>
-            <div style="font-size:0.82rem; color:#555; line-height:1.7; text-align:left; background:#F6FFED; padding:10px 12px; border-radius:8px; margin:10px 0;">
+            <div style="font-size:0.82rem; color:#555; line-height:1.7; text-align:left; background:#FAF5F0; padding:10px 12px; border-radius:8px; margin:10px 0; border:1px solid #E8D8C8;">
               <p style="margin:2px 0;"><strong>🌾 白米卦象：</strong>米粒齊整圓潤，主浮煞盡散，驚擾已隨青煙化去。</p>
               <p style="margin:2px 0;"><strong>📜 湄洲三媽敕令神咒：</strong>「天清地寧，三魂歸體，七魄守形，神刀一下，萬煞潛藏。急急如律令！」</p>
               <p style="margin:2px 0; color:#8C5B32;"><strong>🍵 廟祝奉茶撫慰：</strong>「心安即是家鄉，飲一杯熱茶，今夜定得甘甜好眠。」</p>
             </div>
             
             <!-- 數位開運安神符 -->
-            <div style="background:#FFF9F0; border:1px dashed #FAAD14; padding:8px; border-radius:8px; font-size:0.78rem; color:#D46B08;">
+            <div style="background:#FFF9EE; border:1px dashed #C68F42; padding:8px; border-radius:8px; font-size:0.78rem; color:#8C5B32;">
               🪔 已為您加持「開基三媽安魂保命神符」，護佑身心平安！
             </div>
           </div>
 
           <div style="display:flex; gap:10px;">
-            <button class="lb-primary-btn" style="flex:1; background:#06C755;" onclick="openCouponModal(); closeLbModal('shoujingModal');">
+            <button class="lb-primary-btn" style="flex:1; background:#A62824;" onclick="openCouponModal(); closeLbModal('shoujingModal');">
               🍵 領取奉茶優惠溫潤定神
             </button>
-            <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="resetShoujingView()">
+            <button class="lb-primary-btn" style="flex:1; background:#5C381E;" onclick="resetShoujingView()">
               🔄 為親友再收一次
             </button>
           </div>
@@ -3123,7 +3147,7 @@
         <p style="margin-bottom:8px;"><strong>【萬春宮正統淨車科儀】</strong><br>
         新車牽回、行經事故路段、出入穢地或遇車關擦撞，由廟方法師以三媽淨水符灑淨車身四輪、誦咒解化車關煞氣，確保行車出入大吉平安（法師不收紅包，隨喜添油香）。</p>
 
-        <div style="background:#F0F7FF; border:1px solid #BAE7FF; border-radius:10px; padding:12px; margin-bottom:12px;">
+        <div style="background:#FAF5F0; border:1px solid #E8D8C8; border-radius:10px; padding:12px; margin-bottom:12px;">
           <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
             <label style="font-size:0.8rem; color:#555; font-weight:bold;">車主姓名：</label>
             <input type="text" id="jingcheOwner" placeholder="車主姓名" value="王信士" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
@@ -3147,15 +3171,15 @@
           </div>
         </div>
 
-        <div style="background:#FFFBE6; border-left:3px solid #FAAD14; padding:8px 12px; border-radius:4px; font-size:0.76rem; color:#8C5B32; margin-bottom:12px;">
+        <div style="background:#FFF9EE; border-left:3px solid #C68F42; padding:8px 12px; border-radius:4px; font-size:0.76rem; color:#8C5B32; margin-bottom:12px;">
           📌 <strong>淨車當日須知：</strong>請依約定吉時將愛車開至萬春宮廟前廣場停妥，先入大殿向開基媽祖稟報，法師即行淨化開光儀軌。
         </div>
 
         <div style="display:flex; gap:10px;">
-          <button class="lb-primary-btn" style="flex:1; background:#0050B3;" onclick="submitJingcheOrder()">
+          <button class="lb-primary-btn" style="flex:1; background:#8C5B32;" onclick="submitJingcheOrder()">
             🚗 預約良辰淨車・領數位行車符
           </button>
-          <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="closeLbModal('jingcheModal')">
+          <button class="lb-primary-btn" style="flex:1; background:#5C381E;" onclick="closeLbModal('jingcheModal')">
             關閉
           </button>
         </div>
@@ -3173,11 +3197,11 @@
       </div>
 
       <!-- 頁籤切換：1. 求子換花 / 2. 神明拜契認義子 -->
-      <div style="display:flex; background:#F5F6F8; border-radius:10px; padding:3px; margin-bottom:12px;">
-        <button id="tabHuanhuaBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:#FFF; color:#C41D7F; box-shadow:0 1px 4px rgba(0,0,0,0.08); cursor:pointer;" onclick="switchHuanhuaTab('huanhua')">
+      <div style="display:flex; background:#FAF5F0; border-radius:10px; padding:3px; margin-bottom:12px; border:1px solid #E8D8C8;">
+        <button id="tabHuanhuaBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:#FFF; color:#A62824; box-shadow:0 1px 4px rgba(0,0,0,0.08); cursor:pointer;" onclick="switchHuanhuaTab('huanhua')">
           🌸 註生娘娘換花求子
         </button>
-        <button id="tabBaiqiBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:transparent; color:#666; cursor:pointer;" onclick="switchHuanhuaTab('baiqi')">
+        <button id="tabBaiqiBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:transparent; color:#8C5B32; cursor:pointer;" onclick="switchHuanhuaTab('baiqi')">
           👑 拜契神明做義子
         </button>
       </div>
@@ -3187,7 +3211,7 @@
         <div style="font-size:0.85rem; line-height:1.6; color:#444;">
           <p style="margin-bottom:8px;">依循道法本命花欉儀軌：每人在陰司皆有一株本命花樹，白花主男、紅花主女。萬春宮註生娘娘慈悲，助夫妻添花換花、祈求麟兒鳳女。</p>
           
-          <div style="background:#FFF0F6; border:1px solid #FFD6E7; border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div style="background:#FDF2F0; border:1px solid #F3C5C2; border-radius:10px; padding:12px; margin-bottom:12px;">
             <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
               <label style="font-size:0.8rem; color:#555; font-weight:bold;">善信夫婦：</label>
               <input type="text" id="huanhuaCouple" placeholder="夫與妻姓名" value="林善信・李信女" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
@@ -3202,11 +3226,11 @@
             </div>
           </div>
 
-          <div style="background:#FFF; border:1px dashed #FF85C0; padding:10px; border-radius:8px; font-size:0.78rem; color:#C41D7F; margin-bottom:12px;">
+          <div style="background:#FFFDF9; border:1px dashed #A62824; padding:10px; border-radius:8px; font-size:0.78rem; color:#A62824; margin-bottom:12px;">
             ✨ <strong>註生娘娘換花古禮：</strong>夫妻偕同來廟備鮮花一對、素果香燭，於殿前焚香稟白後，擲出三聖筊應允，即可將廟中供花與自備鮮花相換帶回安奉。
           </div>
 
-          <button class="lb-primary-btn" style="background:#C41D7F;" onclick="submitHuanhuaPrayer()">
+          <button class="lb-primary-btn" style="background:#A62824;" onclick="submitHuanhuaPrayer()">
             🌺 線上敬呈換花疏文・祈得貴子
           </button>
         </div>
@@ -3218,7 +3242,7 @@
           <p style="margin-bottom:8px;"><strong>【拜契神明・契子女福緣】</strong><br>
           為祈求孩子好養易帶、乖巧聰穎，或信士成年後求神明常佑，可拜萬春宮神尊為「義父義母」，終身蒙神恩加被。</p>
           
-          <div style="background:#FFFBE6; border:1px solid #FFE58F; border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div style="background:#FFF9EE; border:1px solid #E8D8C8; border-radius:10px; padding:12px; margin-bottom:12px;">
             <div style="display:grid; grid-template-columns:75px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
               <label style="font-size:0.8rem; color:#555; font-weight:bold;">拜契信士：</label>
               <input type="text" id="baiqiChildName" placeholder="孩子或信士姓名" value="陳小信士 (3歲)" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
@@ -3234,11 +3258,11 @@
             </div>
           </div>
 
-          <div style="background:#F6FFED; border:1px dashed #73D13D; padding:10px; border-radius:8px; font-size:0.78rem; color:#389E0D; margin-bottom:12px;">
+          <div style="background:#FAF5F0; border:1px dashed #8C5B32; padding:10px; border-radius:8px; font-size:0.78rem; color:#8C5B32; margin-bottom:12px;">
             🪔 <strong>認契規範：</strong>未滿16歲由父母代求，滿16歲可自請。獲賜三聖杯即正式頒發「大墩萬春宮契子認契書」，並於神明聖誕推播祝壽提醒。
           </div>
 
-          <button class="lb-primary-btn" style="background:#D48806;" onclick="submitBaiqiOrder()">
+          <button class="lb-primary-btn" style="background:#8C5B32;" onclick="submitBaiqiOrder()">
             📜 線上請示拜契・生成數位認契書
           </button>
         </div>
@@ -3260,32 +3284,32 @@
         
         <!-- 行業切換標籤 -->
         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
-          <button class="siji-btn active" id="sijiBtn_shi" onclick="switchSiji('shi')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #D48806; background:#FFFBE6; color:#D48806; cursor:pointer;">
+          <button class="siji-btn active" id="sijiBtn_shi" onclick="switchSiji('shi')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #C68F42; background:#FFF9EE; color:#8C5B32; cursor:pointer;">
             🎓 士（求學官職）
           </button>
-          <button class="siji-btn" id="sijiBtn_nong" onclick="switchSiji('nong')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+          <button class="siji-btn" id="sijiBtn_nong" onclick="switchSiji('nong')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #ECE7E1; background:#FFF; color:#666; cursor:pointer;">
             🌾 農（生技產銷）
           </button>
-          <button class="siji-btn" id="sijiBtn_gong" onclick="switchSiji('gong')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+          <button class="siji-btn" id="sijiBtn_gong" onclick="switchSiji('gong')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #ECE7E1; background:#FFF; color:#666; cursor:pointer;">
             ⚙️ 工（製造科技）
           </button>
-          <button class="siji-btn" id="sijiBtn_shang" onclick="switchSiji('shang')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+          <button class="siji-btn" id="sijiBtn_shang" onclick="switchSiji('shang')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #ECE7E1; background:#FFF; color:#666; cursor:pointer;">
             💼 商（經商貿易）
           </button>
-          <button class="siji-btn" id="sijiBtn_ren" onclick="switchSiji('ren')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #DDD; background:#FFF; color:#666; cursor:pointer;">
+          <button class="siji-btn" id="sijiBtn_ren" onclick="switchSiji('ren')" style="padding:6px 12px; font-size:0.8rem; font-weight:bold; border-radius:20px; border:1px solid #ECE7E1; background:#FFF; color:#666; cursor:pointer;">
             👥 人口（家宅平安）
           </button>
         </div>
 
         <!-- 籤詩與 AI 廟祝開示卡片 -->
-        <div id="sijiCard" style="background:#FFFDF8; border:1.5px solid #FFD591; border-radius:12px; padding:14px; box-shadow:0 4px 12px rgba(250,140,22,0.08); margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #FFE7BA; padding-bottom:8px; margin-bottom:8px;">
-            <strong style="color:#D46B08; font-size:0.95rem;" id="sijiTitle">【士運・公籤】甲申籤</strong>
-            <span style="font-size:0.72rem; background:#FFF1B8; color:#D48806; padding:2px 8px; border-radius:10px; font-weight:bold;" id="sijiBadge">中吉・守成待時</span>
+        <div id="sijiCard" style="background:#FFFDF8; border:1.5px solid #E8D8C8; border-radius:12px; padding:14px; box-shadow:0 4px 12px rgba(140,91,50,0.06); margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ECE7E1; padding-bottom:8px; margin-bottom:8px;">
+            <strong style="color:#A62824; font-size:0.95rem;" id="sijiTitle">【士運・公籤】甲申籤</strong>
+            <span style="font-size:0.72rem; background:#FFF9EE; color:#C68F42; padding:2px 8px; border-radius:10px; font-weight:bold; border:1px solid #E8D8C8;" id="sijiBadge">中吉・守成待時</span>
           </div>
 
           <!-- 籤詩原文 -->
-          <div style="font-family:'Noto Serif TC', serif; font-size:0.92rem; color:#2B1810; line-height:1.7; text-align:center; padding:8px 0; background:#FFF; border-radius:8px; margin-bottom:10px; border:1px solid #FFF2E8;" id="sijiPoem">
+          <div style="font-family:'Noto Serif TC', serif; font-size:0.92rem; color:#2B1810; line-height:1.7; text-align:center; padding:8px 0; background:#FFF; border-radius:8px; margin-bottom:10px; border:1px solid #ECE7E1;" id="sijiPoem">
             只恐前途明有變<br>
             勸君作急可宜先<br>
             且守長江無大事<br>
@@ -3300,10 +3324,10 @@
         </div>
 
         <div style="display:flex; gap:10px;">
-          <button class="lb-primary-btn" style="flex:1; background:#CF1322;" onclick="closeLbModal('sijiModal'); openDivinationFlow();">
+          <button class="lb-primary-btn" style="flex:1; background:#A62824;" onclick="closeLbModal('sijiModal'); openDivinationFlow();">
             🎋 個人困惑・個別請示三媽靈籤
           </button>
-          <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="closeLbModal('sijiModal')">
+          <button class="lb-primary-btn" style="flex:1; background:#5C381E;" onclick="closeLbModal('sijiModal')">
             我知道了
           </button>
         </div>
@@ -3890,10 +3914,10 @@
     // 廢除手繪尋寶步道，保留空函數以相容既有呼叫
     function switchTrackView(type) {}
 
-    // 產生客製化足跡 Marker SVG 圖標（已打卡為常亮綠金腳印，未打卡為質感灰色腳印）
+    // 產生客製化足跡 Marker SVG 圖標（已打卡為常亮宮廟硃砂紅腳印，未打卡為沉穩檜木棕腳印）
     function getFootprintMarkerIcon(isDone, code) {
-      const pinBg = isDone ? "#06C755" : "#6B7280";
-      const iconFill = isDone ? "#FFFFFF" : "#E5E7EB";
+      const pinBg = isDone ? "#A62824" : "#8C5B32";
+      const iconFill = isDone ? "#FFFFFF" : "#FAF5F0";
       const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="38" height="48" viewBox="0 0 38 48">
           <defs>
@@ -4000,7 +4024,7 @@
       gMapPolyline = new google.maps.Polyline({
         path: pathCoordinates,
         geodesic: true,
-        strokeColor: '#06C755',
+        strokeColor: '#A62824',
         strokeOpacity: 0.85,
         strokeWeight: 4
       });
@@ -4017,7 +4041,7 @@
             icon: {
               path: google.maps.SymbolPath.CIRCLE,
               scale: 7,
-              fillColor: "#1B72E8",
+              fillColor: "#8C5B32",
               fillOpacity: 1,
               strokeColor: "#FFFFFF",
               strokeWeight: 2
@@ -4065,7 +4089,7 @@
                 <div>
                   <div class="checkpoint-name">${cp.name}</div>
                   <div class="checkpoint-dist" id="cpDist_${idx}">
-                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : '・待感應'}
+                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#A62824; font-weight:bold;">已解鎖</span>' : '・待感應'}
                   </div>
                 </div>
               </div>
@@ -4457,13 +4481,13 @@
       if (tab === 'register') {
         regView.style.display = 'block';
         roomView.style.display = 'none';
-        if (regBtn) { regBtn.style.background = '#FFF'; regBtn.style.color = '#CF1322'; regBtn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
-        if (roomBtn) { roomBtn.style.background = 'transparent'; roomBtn.style.color = '#666'; roomBtn.style.boxShadow = 'none'; }
+        if (regBtn) { regBtn.style.background = '#FFF'; regBtn.style.color = '#A62824'; regBtn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (roomBtn) { roomBtn.style.background = 'transparent'; roomBtn.style.color = '#8C5B32'; roomBtn.style.boxShadow = 'none'; }
       } else {
         regView.style.display = 'none';
         roomView.style.display = 'block';
-        if (roomBtn) { roomBtn.style.background = '#FFF'; roomBtn.style.color = '#CF1322'; roomBtn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
-        if (regBtn) { regBtn.style.background = 'transparent'; regBtn.style.color = '#666'; regBtn.style.boxShadow = 'none'; }
+        if (roomBtn) { roomBtn.style.background = '#FFF'; roomBtn.style.color = '#A62824'; roomBtn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (regBtn) { regBtn.style.background = 'transparent'; regBtn.style.color = '#8C5B32'; regBtn.style.boxShadow = 'none'; }
       }
     }
 
@@ -4628,13 +4652,13 @@
       if (tab === 'huanhua') {
         tab1.style.display = 'block';
         tab2.style.display = 'none';
-        if (btn1) { btn1.style.background = '#FFF'; btn1.style.color = '#C41D7F'; btn1.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
-        if (btn2) { btn2.style.background = 'transparent'; btn2.style.color = '#666'; btn2.style.boxShadow = 'none'; }
+        if (btn1) { btn1.style.background = '#FFF'; btn1.style.color = '#A62824'; btn1.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (btn2) { btn2.style.background = 'transparent'; btn2.style.color = '#8C5B32'; btn2.style.boxShadow = 'none'; }
       } else {
         tab1.style.display = 'none';
         tab2.style.display = 'block';
-        if (btn2) { btn2.style.background = '#FFF'; btn2.style.color = '#C41D7F'; btn2.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
-        if (btn1) { btn1.style.background = 'transparent'; btn1.style.color = '#666'; btn1.style.boxShadow = 'none'; }
+        if (btn2) { btn2.style.background = '#FFF'; btn2.style.color = '#A62824'; btn2.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (btn1) { btn1.style.background = 'transparent'; btn1.style.color = '#8C5B32'; btn1.style.boxShadow = 'none'; }
       }
     }
 
@@ -4706,14 +4730,14 @@
       document.querySelectorAll('.siji-btn').forEach(btn => {
         btn.style.background = '#FFF';
         btn.style.color = '#666';
-        btn.style.borderColor = '#DDD';
+        btn.style.borderColor = '#ECE7E1';
       });
 
       const activeBtn = document.getElementById(`sijiBtn_${key}`);
       if (activeBtn) {
-        activeBtn.style.background = '#FFFBE6';
-        activeBtn.style.color = '#D48806';
-        activeBtn.style.borderColor = '#D48806';
+        activeBtn.style.background = '#FFF9EE';
+        activeBtn.style.color = '#8C5B32';
+        activeBtn.style.borderColor = '#C68F42';
       }
 
       document.getElementById('sijiTitle').innerText = data.title;
