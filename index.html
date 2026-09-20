@@ -234,52 +234,78 @@
       to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    /* 檜木籤筒與籤枝展示區 */
+    /* 檜木籤筒與籤枝 60FPS 物理展示舞台 */
     .cylinder-stage {
       position: relative;
       width: 100%;
-      height: 360px;
+      height: 375px;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
-      margin: auto 0;
+      margin: 8px 0;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
     }
-
-    .zen-cylinder {
-      width: 185px;
-      height: auto;
-      filter: drop-shadow(0 16px 20px rgba(0,0,0,0.6));
-      transform-origin: bottom center;
-      transition: transform 0.2s ease;
-      z-index: 5;
+    .cylinder-stage:active {
+      cursor: grabbing;
     }
-
-    .zen-cylinder.shake-active {
-      animation: cylinder_shake 0.1s infinite alternate !important;
+    #cylinderCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
     }
-
-    @keyframes cylinder_shake {
-      0% { transform: translateY(0) rotate(-4deg); }
-      100% { transform: translateY(-8px) rotate(4deg); }
-    }
-
-    /* 抽出的靈籤竹枝 */
-    .drawn-spear {
+    .cylinder-progress-wrap {
       position: absolute;
-      bottom: 110px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      width: 32px;
-      height: auto;
+      width: 220px;
+      height: 9px;
+      background: rgba(35, 20, 16, 0.85);
+      border: 1px solid rgba(226, 180, 106, 0.5);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 14px rgba(0,0,0,0.7);
+      z-index: 10;
       opacity: 0;
-      z-index: 4;
-      transition: bottom 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.4s ease;
-      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
+      transition: opacity 0.3s;
+      pointer-events: none;
     }
-
-    .drawn-spear.risen {
+    .cylinder-progress-wrap.active {
       opacity: 1;
-      bottom: 215px;
+    }
+    .cylinder-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #A62824 0%, #E2B46A 100%);
+      border-radius: 4px;
+      transition: width 0.05s linear;
+      box-shadow: 0 0 10px rgba(226, 180, 106, 0.8);
+    }
+    .cylinder-sound-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(38, 34, 32, 0.88);
+      border: 1px solid rgba(201, 164, 92, 0.4);
+      color: #E2B46A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 35;
+      font-size: 15px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .cylinder-sound-btn:active {
+      transform: scale(0.92);
     }
 
     /* 禪風引導卡片 (和紙風微浮雕) */
@@ -3915,12 +3941,15 @@
         搖動靈籤筒後，須連續擲得<strong>三個聖杯</strong>方為媽祖聖意應允。
       </div>
 
-      <!-- 檜木籤筒與籤枝 -->
-      <div class="cylinder-stage">
-        <!-- 抽出竹籤 -->
-        <img class="drawn-spear" id="drawnSpear" src="assets/zen/zen_spear.svg" alt="靈籤" />
-        <!-- 檜木籤筒 -->
-        <img class="zen-cylinder" id="zenCylinder" src="assets/zen/zen_cylinder.svg" alt="福運籤筒" />
+      <!-- 音效開關按鈕 -->
+      <button class="cylinder-sound-btn" id="btnCylinderSound" onclick="toggleCylinderSound()" title="音效切換">🔊</button>
+
+      <!-- 檜木籤筒與籤枝 60FPS 物理舞台 -->
+      <div class="cylinder-stage" id="stageContainer">
+        <canvas id="cylinderCanvas"></canvas>
+        <div class="cylinder-progress-wrap" id="pbarWrap">
+          <div class="cylinder-progress-fill" id="pbarFill"></div>
+        </div>
       </div>
 
       <!-- 底部操作列 -->
@@ -3928,6 +3957,9 @@
         <button class="zen-btn" id="shakeBtn" onclick="handleStartShake()">
           <span>誠 心 搖 籤</span>
         </button>
+        <div class="zen-shake-hint" style="font-size:0.75rem; color:#b5987c; margin-top:8px; letter-spacing:1px; text-align:center;">
+          點擊「誠心搖籤」或直接在籤筒上左右滑動搖晃
+        </div>
       </div>
 
       <!-- 抽籤完成確認彈窗 -->
@@ -4095,13 +4127,15 @@
     ];
     let currentTipIndex = 0;
 
-    // 經典六十甲子靈籤詩庫
+    // 經典六十甲子靈籤詩庫（對應 7 款正統檜木竹籤刻印）
     const LOTS_DATABASE = [
-      { id: 1, name: "第一籤【甲子】", rank: "大吉", poem: "日出便見風雲散，光明清淨照世間。\n一向前途通大道，萬事清吉保平安。", desc: "【解曰】凡事大吉，前程光明。雲開見日，所求必應，貴人相扶。" },
+      { id: 1, name: "第一籤【甲子】", rank: "上上大吉", poem: "日出便見風雲散，光明清淨照世間。\n一向前途通大道，萬事清吉保平安。", desc: "【解曰】凡事大吉，前程光明。雲開見日，所求必應，貴人相扶。" },
       { id: 2, name: "第二籤【乙丑】", rank: "上吉", poem: "雲開月出正分明，不須進退問前程。\n婚姻皆由天注定，和合相調萬事成。", desc: "【解曰】事有機緣，毋須躊躇。順應天時，心誠則靈，自有好結果。" },
       { id: 3, name: "第三籤【丙寅】", rank: "中平", poem: "財中漸漸見分明，花開花謝結子成。\n寬心且看月中桂，郎君即便見太平。", desc: "【解曰】作事遲疑，後得亨通。守己安分，靜候佳音，秋冬大利。" },
       { id: 4, name: "第四籤【丁卯】", rank: "上吉", poem: "風恬浪靜可行舟，恰是中秋月一輪。\n凡事不須多憂慮，福祿自有天安排。", desc: "【解曰】前程順遂，平安吉慶。泰運亨通，福緣自來，無須煩憂。" },
-      { id: 5, name: "第五籤【戊辰】", rank: "中吉", poem: "客到前途多得利，君爾何故兩相疑。\n若問前程皆順利，百事亨通不用悲。", desc: "【解曰】出外求謀，貴人引路。放下疑慮，專心致志，所行皆順。" }
+      { id: 5, name: "第五籤【戊辰】", rank: "中吉", poem: "客到前途多得利，君爾何故兩相疑。\n若問前程皆順利，百事亨通不用悲。", desc: "【解曰】出外求謀，貴人引路。放下疑慮，專心致志，所行皆順。" },
+      { id: 6, name: "第六籤【己巳】", rank: "上上", poem: "風雲際會自相通，此去逢時運更崇。\n若得貴人相引處，乘軒踏玉步青雲。", desc: "【解曰】得時得運，貴人提拔。宏圖大展，步步高升，謀事如意。" },
+      { id: 7, name: "第七籤【庚午】", rank: "大吉", poem: "仙鶴呈祥日正長，雲開月出見清光。\n行藏順遂皆如意，百福駢臻萬事昌。", desc: "【解曰】迎祥納吉，前程萬里。家運興旺，所求多遂，吉慶滿門。" }
     ];
 
     let currentLot = null;
@@ -4264,6 +4298,7 @@
       if (vRouteList) vRouteList.style.display = 'none';
       if (vRouteDetail) vRouteDetail.style.display = 'none';
       if (vZenApp) vZenApp.style.display = 'none';
+      if (typeof pauseFortuneCylinder === 'function') pauseFortuneCylinder();
     }
 
     // 1. 打開首頁 (Page 1)
@@ -4310,6 +4345,9 @@
         zenApp.style.opacity = '1';
       }
       window.scrollTo(0, 0);
+      if (typeof initFortuneCylinder === 'function') {
+        setTimeout(initFortuneCylinder, 60);
+      }
     }
 
     function returnToLineByeHome() {
@@ -5386,27 +5424,524 @@
       }
     }
 
-    // 3. 搖動籤筒抽出籤枝
-    function handleStartShake() {
+    /* ============================================================
+       60FPS 擬真物理籤筒與竹籤撞擊聲學引擎 (Web Audio API & Canvas 2D)
+       ============================================================ */
+    class FortuneSoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playBambooClack(intensity = 0.5) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const baseFreq = 650 + Math.random() * 550; // 細長竹籤敲擊共鳴基頻
+
+        // 1. 瞬態接觸摩擦／撞擊點 (Noise Transient)
+        const bufferSize = Math.floor(this.ctx.sampleRate * 0.04);
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.2));
+        }
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = noiseBuffer;
+
+        const noiseFilter = this.ctx.createBiquadFilter();
+        noiseFilter.type = "bandpass";
+        noiseFilter.frequency.setValueAtTime(baseFreq * 1.5, now);
+        noiseFilter.Q.setValueAtTime(3.0, now);
+
+        const noiseGain = this.ctx.createGain();
+        noiseGain.gain.setValueAtTime(intensity * 0.35, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(this.ctx.destination);
+        noise.start(now);
+
+        // 2. 籤筒中空共鳴 (Hollow wood resonance)
+        const osc = this.ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(baseFreq, now);
+        osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.8, now + 0.06);
+
+        const oscGain = this.ctx.createGain();
+        oscGain.gain.setValueAtTime(intensity * 0.45, now);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+
+        osc.connect(oscGain);
+        oscGain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      }
+      playChime() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.12, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 1.2);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 1.25);
+        });
+      }
+    }
+
+    const cylinderSound = new FortuneSoundEngine();
+
+    function toggleCylinderSound() {
+      cylinderSound.enabled = !cylinderSound.enabled;
+      const btn = document.getElementById('btnCylinderSound');
+      if (btn) btn.textContent = cylinderSound.enabled ? "🔊" : "🔇";
+      if (cylinderSound.enabled) cylinderSound.init();
+    }
+
+    // 籤筒與竹籤圖片資源
+    const cylImgBody = new Image();
+    cylImgBody.src = "assets/fortune_cylinder/cylinder_body.png";
+    const cylImgBack = new Image();
+    cylImgBack.src = "assets/fortune_cylinder/cylinder_back.png";
+
+    const cylStickImages = [];
+    for (let i = 1; i <= 7; i++) {
+      const img = new Image();
+      img.src = `assets/fortune_cylinder/sticks/stick_${i}.png`;
+      cylStickImages.push(img);
+    }
+    const cylStickBlank = new Image();
+    cylStickBlank.src = "assets/fortune_cylinder/sticks/stick_blank.png";
+
+    // 籤筒剛體物理狀態
+    const cylinderObj = {
+      x: 0,
+      y: 0,
+      baseX: 0,
+      baseY: 0,
+      vx: 0,
+      vy: 0,
+      angle: 0,
+      vAngle: 0
+    };
+
+    const TOTAL_CYLINDER_STICKS = 24;
+    const cylinderSticks = [];
+    let cylinderCanvas = null;
+    let cylinderCtx = null;
+    let cylViewW = 0, cylViewH = 0, cylScale = 0.45;
+    let cylinderAnimActive = false;
+    let cylLastTime = 0;
+
+    let cylIsDragging = false;
+    let cylDragStartX = 0, cylDragPrevX = 0, cylLastDragTime = 0;
+    let cylShakeProgress = 0;
+    const CYL_SHAKE_GOAL = 100;
+    let cylChosenStick = null;
+    let cylinderGameState = "IDLE"; // "IDLE", "SHAKING", "EMERGING", "REVEALED"
+    let cylButtonShakeTimer = null;
+
+    function initCylinderSticks() {
+      cylinderSticks.length = 0;
+      const rimWidth = 260;
+      for (let i = 0; i < TOTAL_CYLINDER_STICKS; i++) {
+        const spreadRatio = (i / (TOTAL_CYLINDER_STICKS - 1)) * 2 - 1; // -1 to 1
+        const xOffset = spreadRatio * (rimWidth * 0.42);
+        const restingY = -180 + Math.sin(i * 1.7) * 28 + (Math.random() - 0.5) * 15;
+        const restingAngle = spreadRatio * 0.16 + (Math.random() - 0.5) * 0.08;
+
+        const lotIdx = i % LOTS_DATABASE.length;
+        cylinderSticks.push({
+          id: i,
+          lot: LOTS_DATABASE[lotIdx],
+          img: cylStickImages[lotIdx] || cylStickBlank,
+          x: xOffset,
+          y: restingY,
+          baseX: xOffset,
+          baseY: restingY,
+          vx: 0,
+          vy: 0,
+          angle: restingAngle,
+          baseAngle: restingAngle,
+          vAngle: 0,
+          height: 440,
+          width: 38,
+          isChosen: false,
+          elevation: 0,
+          emergeProgress: 0
+        });
+      }
+    }
+
+    function resizeCylinderCanvas() {
+      const container = document.getElementById("stageContainer");
+      if (!container || !cylinderCanvas) return;
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      cylViewW = rect.width;
+      cylViewH = rect.height;
+      cylinderCanvas.width = cylViewW * dpr;
+      cylinderCanvas.height = cylViewH * dpr;
+      cylinderCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cylScale = Math.min(cylViewH / 940, cylViewW / 620);
+      if (cylScale > 0.65) cylScale = 0.65;
+      if (cylScale < 0.34) cylScale = 0.34;
+
+      cylinderObj.baseX = cylViewW / 2;
+      cylinderObj.baseY = cylViewH * 0.60;
+      if (cylinderObj.x === 0 && cylinderObj.y === 0) {
+        cylinderObj.x = cylinderObj.baseX;
+        cylinderObj.y = cylinderObj.baseY;
+      }
+    }
+
+    function initFortuneCylinder() {
+      if (!cylinderCanvas) {
+        cylinderCanvas = document.getElementById("cylinderCanvas");
+        if (!cylinderCanvas) return;
+        cylinderCtx = cylinderCanvas.getContext("2d");
+        setupCylinderPointerEvents();
+        window.addEventListener("resize", resizeCylinderCanvas);
+      }
+      resizeCylinderCanvas();
+      if (cylinderSticks.length === 0) {
+        initCylinderSticks();
+      }
+      if (!cylinderAnimActive) {
+        cylinderAnimActive = true;
+        cylLastTime = performance.now();
+        requestAnimationFrame(cylinderLoop);
+      }
+    }
+
+    function pauseFortuneCylinder() {
+      cylinderAnimActive = false;
+      if (cylButtonShakeTimer) {
+        clearInterval(cylButtonShakeTimer);
+        cylButtonShakeTimer = null;
+      }
+    }
+
+    function setupCylinderPointerEvents() {
+      const stage = document.getElementById("stageContainer");
+      if (!stage) return;
+
+      function onPointerDown(e) {
+        if (cylinderGameState !== "IDLE" && cylinderGameState !== "SHAKING") return;
+        cylinderSound.init();
+        cylIsDragging = true;
+        cylDragStartX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        cylDragPrevX = cylDragStartX;
+        cylLastDragTime = performance.now();
+        const pbarWrap = document.getElementById("pbarWrap");
+        if (pbarWrap) pbarWrap.classList.add("active");
+      }
+
+      function onPointerMove(e) {
+        if (!cylIsDragging) return;
+        const currentX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        const now = performance.now();
+        const dt = Math.max(1, now - cylLastDragTime);
+        const dx = currentX - cylDragPrevX;
+        cylDragPrevX = currentX;
+        cylLastDragTime = now;
+
+        const velocity = (dx / dt) * 16.0;
+        cylinderObj.vx += velocity * 0.4;
+        cylinderObj.vAngle += (velocity * 0.003);
+
+        const absSpeed = Math.abs(velocity);
+        if (absSpeed > 5) {
+          addCylinderShakeEnergy(absSpeed * 0.45);
+        }
+      }
+
+      function onPointerUp() {
+        cylIsDragging = false;
+      }
+
+      stage.addEventListener("mousedown", onPointerDown);
+      window.addEventListener("mousemove", onPointerMove);
+      window.addEventListener("mouseup", onPointerUp);
+
+      stage.addEventListener("touchstart", onPointerDown, { passive: true });
+      window.addEventListener("touchmove", onPointerMove, { passive: true });
+      window.addEventListener("touchend", onPointerUp);
+    }
+
+    function addCylinderShakeEnergy(amount) {
+      if (cylinderGameState === "EMERGING" || cylinderGameState === "REVEALED") return;
+      cylShakeProgress = Math.min(CYL_SHAKE_GOAL, cylShakeProgress + amount);
+      const pbarFill = document.getElementById("pbarFill");
+      if (pbarFill) {
+        pbarFill.style.width = `${(cylShakeProgress / CYL_SHAKE_GOAL) * 100}%`;
+      }
+
+      // 籤枝跳動與相互碰撞
+      cylinderSticks.forEach(st => {
+        st.vy -= Math.random() * amount * 1.5;
+        st.vAngle += (Math.random() - 0.5) * 0.03 * amount;
+      });
+
+      if (Math.random() < 0.65) {
+        cylinderSound.playBambooClack(Math.min(1.0, amount * 0.08 + 0.3));
+      }
+
+      if (cylShakeProgress >= CYL_SHAKE_GOAL && cylinderGameState !== "EMERGING") {
+        launchFortuneEmergence();
+      }
+    }
+
+    function triggerAutoShake() {
+      if (cylinderGameState !== "IDLE" && cylinderGameState !== "SHAKING") return;
+      cylinderSound.init();
+      const pbarWrap = document.getElementById("pbarWrap");
+      if (pbarWrap) pbarWrap.classList.add("active");
+      cylinderGameState = "SHAKING";
+
       const shakeBtn = document.getElementById('shakeBtn');
-      const cylinder = document.getElementById('zenCylinder');
-      const spear = document.getElementById('drawnSpear');
+      if (shakeBtn) shakeBtn.disabled = true;
 
-      shakeBtn.disabled = true;
-      cylinder.classList.add('shake-active');
+      let step = 0;
+      if (cylButtonShakeTimer) clearInterval(cylButtonShakeTimer);
+      cylButtonShakeTimer = setInterval(() => {
+        step++;
+        const dir = (step % 2 === 0 ? 1 : -1);
+        cylinderObj.vx += dir * 28;
+        cylinderObj.vAngle += dir * 0.08;
+        addCylinderShakeEnergy(14);
 
-      // 隨機抽取一支靈籤
-      currentLot = LOTS_DATABASE[Math.floor(Math.random() * LOTS_DATABASE.length)];
+        if (step > 12 || cylinderGameState === "EMERGING") {
+          clearInterval(cylButtonShakeTimer);
+          cylButtonShakeTimer = null;
+        }
+      }, 120);
+    }
 
-      setTimeout(() => {
-        cylinder.classList.remove('shake-active');
-        spear.classList.add('risen');
+    function launchFortuneEmergence() {
+      cylinderGameState = "EMERGING";
+      const pbarWrap = document.getElementById("pbarWrap");
+      if (pbarWrap) pbarWrap.classList.remove("active");
 
-        setTimeout(() => {
-          document.getElementById('readyLotName').innerText = currentLot.name;
-          document.getElementById('spearReadyModal').classList.add('visible');
-        }, 700);
-      }, 1800);
+      // 隨機抽選一支靈籤
+      const targetIdx = Math.floor(Math.random() * LOTS_DATABASE.length);
+      cylChosenStick = cylinderSticks.find(s => s.lot.id === LOTS_DATABASE[targetIdx].id) || cylinderSticks[0];
+      cylChosenStick.isChosen = true;
+      currentLot = cylChosenStick.lot;
+
+      cylinderSound.playChime();
+    }
+
+    function updateCylinderPhysics(dt) {
+      cylinderObj.baseX = cylViewW / 2;
+      cylinderObj.baseY = cylViewH * 0.60;
+
+      // 1. 籤筒回正物理
+      const kSpring = 0.08;
+      const kDamp = 0.84;
+      const kRotSpring = 0.09;
+      const kRotDamp = 0.82;
+
+      const fx = (cylinderObj.baseX - cylinderObj.x) * kSpring;
+      cylinderObj.vx = (cylinderObj.vx + fx) * kDamp;
+      cylinderObj.x += cylinderObj.vx;
+
+      const fAngle = (0 - cylinderObj.angle) * kRotSpring;
+      cylinderObj.vAngle = (cylinderObj.vAngle + fAngle) * kRotDamp;
+      cylinderObj.angle += cylinderObj.vAngle;
+      cylinderObj.angle = Math.max(-0.35, Math.min(0.35, cylinderObj.angle));
+
+      // 閒置衰減
+      if (!cylIsDragging && cylinderGameState === "IDLE" && cylShakeProgress > 0) {
+        cylShakeProgress = Math.max(0, cylShakeProgress - dt * 15);
+        const pbarFill = document.getElementById("pbarFill");
+        const pbarWrap = document.getElementById("pbarWrap");
+        if (pbarFill) pbarFill.style.width = `${(cylShakeProgress / CYL_SHAKE_GOAL) * 100}%`;
+        if (cylShakeProgress === 0 && pbarWrap) pbarWrap.classList.remove("active");
+      }
+
+      // 2. 24 根竹籤物理動態
+      const stickSpring = 0.12;
+      const stickDamping = 0.82;
+      const angleSpring = 0.14;
+      const angleDamping = 0.85;
+
+      const cylAccelX = cylinderObj.vx;
+      const cylAngleVel = cylinderObj.vAngle;
+
+      for (let i = 0; i < cylinderSticks.length; i++) {
+        const s = cylinderSticks[i];
+
+        if (s.isChosen && cylinderGameState === "EMERGING") {
+          s.emergeProgress += dt * 0.85;
+          s.y -= dt * 260; // 向上升騰
+          s.angle += (0 - s.angle) * 0.1; // 直立
+
+          if (s.emergeProgress >= 1.0 && cylinderGameState === "EMERGING") {
+            cylinderGameState = "REVEALED";
+            // 顯示確認彈窗
+            document.getElementById('readyLotName').innerText = currentLot.name;
+            document.getElementById('spearReadyModal').classList.add('visible');
+          }
+          continue;
+        }
+
+        // 垂直彈性擺動
+        const distY = s.baseY - s.y;
+        const fy = distY * stickSpring;
+        s.vy = (s.vy + fy - Math.abs(cylAccelX) * 0.35) * stickDamping;
+        s.y += s.vy;
+
+        // 角度慣性與擺動
+        const fAng = (s.baseAngle - s.angle) * angleSpring;
+        s.vAngle = (s.vAngle + fAng - cylAngleVel * 0.8) * angleDamping;
+        s.angle += s.vAngle;
+
+        // 籤筒壁碰撞限制
+        const maxAngle = 0.32;
+        if (s.angle > maxAngle) {
+          s.angle = maxAngle;
+          s.vAngle = -s.vAngle * 0.4;
+        } else if (s.angle < -maxAngle) {
+          s.angle = -maxAngle;
+          s.vAngle = -s.vAngle * 0.4;
+        }
+
+        // 竹籤間相互擠壓碰撞
+        if (i > 0) {
+          const prev = cylinderSticks[i - 1];
+          const diffAng = s.angle - prev.angle;
+          if (Math.abs(diffAng) < 0.02) {
+            const push = (0.02 - Math.abs(diffAng)) * 0.5;
+            s.angle += push;
+            prev.angle -= push;
+          }
+        }
+      }
+    }
+
+    function renderCylinder() {
+      if (!cylinderCtx || cylViewW === 0) return;
+      cylinderCtx.clearRect(0, 0, cylViewW, cylViewH);
+
+      cylinderCtx.save();
+      cylinderCtx.translate(cylinderObj.x, cylinderObj.y);
+      cylinderCtx.scale(cylScale, cylScale);
+      cylinderCtx.rotate(cylinderObj.angle);
+
+      const cx = -512;
+      const cy = -512;
+
+      // 1. 動態案桌暗影
+      cylinderCtx.save();
+      cylinderCtx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      cylinderCtx.beginPath();
+      const shadowShiftX = cylinderObj.angle * 80;
+      cylinderCtx.ellipse(cx + 502 + shadowShiftX, cy + 960, 200, 32, 0, 0, Math.PI * 2);
+      cylinderCtx.fill();
+      cylinderCtx.restore();
+
+      // 2. 籤筒後緣（內部凹槽腔體）
+      if (cylImgBack.complete) {
+        cylinderCtx.drawImage(cylImgBack, cx, cy, 1024, 1024);
+      }
+
+      // 3. 24 根竹籤層（在後筒與前筒之間動態撞擊）
+      for (let i = 0; i < cylinderSticks.length; i++) {
+        const s = cylinderSticks[i];
+        if (s.isChosen && cylinderGameState === "REVEALED") continue;
+
+        cylinderCtx.save();
+        cylinderCtx.translate(cx + 502 + s.x, cy + 248 + s.y);
+        cylinderCtx.rotate(s.angle);
+
+        const img = s.img.complete ? s.img : cylStickBlank;
+        if (img.complete) {
+          cylinderCtx.drawImage(img, -s.width / 2, 0, s.width, s.height);
+        }
+
+        cylinderCtx.fillStyle = "rgba(10, 5, 2, 0.4)";
+        cylinderCtx.fillRect(-s.width / 2, 220, s.width, s.height - 220);
+        cylinderCtx.restore();
+      }
+
+      // 4. 籤筒前緣高清檜木主體
+      if (cylImgBody.complete) {
+        cylinderCtx.drawImage(cylImgBody, cx, cy, 1024, 1024);
+      }
+
+      // 5. 獲選升騰的籤枝（金色神光，前置於籤筒之上）
+      if (cylChosenStick && (cylinderGameState === "EMERGING" || cylinderGameState === "REVEALED")) {
+        cylinderCtx.save();
+        cylinderCtx.translate(cx + 502 + cylChosenStick.x, cy + 248 + cylChosenStick.y);
+        cylinderCtx.rotate(cylChosenStick.angle);
+
+        cylinderCtx.shadowColor = "rgba(255, 215, 110, 0.95)";
+        cylinderCtx.shadowBlur = 35;
+
+        const img = cylChosenStick.img.complete ? cylChosenStick.img : cylStickBlank;
+        if (img.complete) {
+          cylinderCtx.drawImage(img, -cylChosenStick.width / 2, 0, cylChosenStick.width, cylChosenStick.height);
+        }
+        cylinderCtx.restore();
+      }
+
+      cylinderCtx.restore();
+    }
+
+    function cylinderLoop(now) {
+      if (!cylinderAnimActive) return;
+      const dt = Math.min(0.05, (now - cylLastTime) / 1000.0);
+      cylLastTime = now;
+
+      updateCylinderPhysics(dt);
+      renderCylinder();
+
+      requestAnimationFrame(cylinderLoop);
+    }
+
+    function resetCylinderDraw() {
+      cylShakeProgress = 0;
+      const pbarFill = document.getElementById("pbarFill");
+      const pbarWrap = document.getElementById("pbarWrap");
+      if (pbarFill) pbarFill.style.width = "0%";
+      if (pbarWrap) pbarWrap.classList.remove("active");
+      cylinderGameState = "IDLE";
+      if (cylChosenStick) cylChosenStick.isChosen = false;
+      cylChosenStick = null;
+      initCylinderSticks();
+      const shakeBtn = document.getElementById('shakeBtn');
+      if (shakeBtn) shakeBtn.disabled = false;
+    }
+
+    // 3. 搖動籤筒抽出籤枝按鈕入口
+    function handleStartShake() {
+      if (cylinderGameState !== "IDLE" && cylinderGameState !== "SHAKING") return;
+      triggerAutoShake();
     }
 
     // 4. 前往擲筊舞台
@@ -5415,6 +5950,7 @@
       document.getElementById('sceneShake').classList.remove('active');
       document.getElementById('sceneToss').classList.add('active');
 
+      pauseFortuneCylinder();
       consecutiveSheng = 0;
       updateShengProgress();
       restorePoeToRest();
@@ -5632,8 +6168,8 @@
       document.getElementById('omikujiOverlay').classList.remove('visible');
       document.getElementById('sceneShake').classList.add('active');
 
-      document.getElementById('shakeBtn').disabled = false;
-      document.getElementById('drawnSpear').classList.remove('risen');
+      resetCylinderDraw();
+      initFortuneCylinder();
       document.getElementById('spearReadyModal').classList.remove('visible');
 
       document.getElementById('tossBtn').style.display = 'inline-flex';
