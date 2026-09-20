@@ -773,43 +773,58 @@
     .lb-brand {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       cursor: pointer;
       user-select: none;
     }
     .lb-brand-line {
       color: #2B1810; /* 沉穩檀木黑 */
-      font-size: 1.32rem;
+      font-size: 1.35rem;
       font-weight: 900;
       letter-spacing: -0.4px;
       line-height: 1;
     }
     .lb-brand-bye-jiao {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      padding: 4px 10px 4px 10px;
       line-height: 1;
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .lb-brand:active .lb-brand-bye-jiao {
       transform: scale(0.92) rotate(-3deg);
     }
-    .lb-jiao-svg {
-      width: 56px;
-      height: 26px;
+    .lb-jiao-bg {
+      position: absolute;
+      inset: -3px -6px;
+      width: calc(100% + 12px);
+      height: calc(100% + 6px);
+      z-index: 1;
+      pointer-events: none;
       overflow: visible;
-      display: block;
+    }
+    .lb-brand-bye-text {
+      position: relative;
+      z-index: 2;
+      color: #FFF6E5; /* 溫潤金箔白，在朱紅神光筊身上醒目生輝 */
+      font-size: 1.35rem; /* 與 LINE 字體大小完全一致 */
+      font-weight: 900;
+      letter-spacing: -0.2px;
+      line-height: 1;
+      text-shadow: 0 1px 3px rgba(80, 0, 0, 0.7);
     }
     .lb-brand-badge {
       font-size: 0.6rem;
       font-weight: 800;
-      color: #7A0C16; /* 深緋紅 */
-      background: rgba(201, 159, 114, 0.18); /* 古法香檳金棕透光 */
-      border: 1px solid rgba(201, 159, 114, 0.45);
+      color: #D92525; /* 朱紅神光 */
+      background: rgba(229, 43, 43, 0.12);
+      border: 1px solid rgba(229, 43, 43, 0.35);
       padding: 1px 5px;
       border-radius: 4px;
       letter-spacing: 0.5px;
-      margin-left: 1px;
+      margin-left: 2px;
     }
     .lb-header-icons {
       display: flex;
@@ -1765,46 +1780,42 @@
       <!-- 品牌標題 (X 5% ~ 30%, Y 2% ~ 7%) -->
       <div class="lb-brand" onclick="location.reload()" title="LINE Bye 智慧宮廟生活圈">
         <span class="lb-brand-line">LINE</span>
-        <span class="lb-brand-bye-jiao" title="聖杯吉祥造型">
-          <svg class="lb-jiao-svg" viewBox="0 0 56 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <span class="lb-brand-bye-jiao" title="朱紅光聖杯吉祥造型">
+          <!-- 筊向量底座 (朱紅神光) -->
+          <svg class="lb-jiao-bg" viewBox="0 0 78 40" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <!-- 古法香檳金棕漸層 (籤筒與金漆牌匾溫潤光澤) -->
-              <linearGradient id="jiaoGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#E4C197"/>
-                <stop offset="35%" stop-color="#D6AD82"/>
-                <stop offset="85%" stop-color="#C99F72"/>
-                <stop offset="100%" stop-color="#B28453"/>
+              <!-- 朱紅光漸層 (宮廟正統朱砂赤木漆 + 靈動紅光) -->
+              <linearGradient id="zhuHongGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF5C5C"/>
+                <stop offset="25%" stop-color="#E52B2B"/>
+                <stop offset="70%" stop-color="#C41C1C"/>
+                <stop offset="100%" stop-color="#800D13"/>
               </linearGradient>
-              <!-- 筊背立體高光 -->
-              <linearGradient id="jiaoRidgeHighlight" x1="20%" y1="0%" x2="80%" y2="100%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/>
-                <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.1"/>
-                <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+              <!-- 筊背立體金紅高光 -->
+              <linearGradient id="zhuHongHighlight" x1="15%" y1="0%" x2="85%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.65"/>
+                <stop offset="40%" stop-color="#FFA8A8" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#4A0508" stop-opacity="0.3"/>
               </linearGradient>
-              <filter id="jiaoDropShadow" x="-10%" y="-10%" width="130%" height="130%">
-                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(201, 159, 114, 0.45)"/>
+              <!-- 朱紅光暈 (神明聖筊朱紅神光) -->
+              <filter id="zhuHongGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3.5" flood-color="#D92525" flood-opacity="0.6"/>
+                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FF4D4F" flood-opacity="0.35"/>
               </filter>
             </defs>
             <!-- 筊主體 (月牙形聖杯造型) -->
-            <path d="M 3 16.5 C 9 4.2, 33 2.5, 51 11.2 C 54.5 13.5, 54.8 17, 51.5 18.2 C 37 23.8, 18 24.2, 3 16.5 Z" 
-                  fill="url(#jiaoGoldGrad)" 
-                  stroke="#A87948" 
+            <path d="M 4 24 C 12 6, 46 4, 71 16 C 76 19, 76 25, 71 27 C 52 35, 25 36, 4 24 Z" 
+                  fill="url(#zhuHongGrad)" 
+                  stroke="#FFA39E" 
                   stroke-width="1.2" 
-                  filter="url(#jiaoDropShadow)"/>
-            <!-- 筊背立體脊線光澤 -->
-            <path d="M 5 15 C 12 6.5, 33 5, 48 11.5" 
-                  stroke="url(#jiaoRidgeHighlight)" 
-                  stroke-width="1.8" 
+                  filter="url(#zhuHongGlow)"/>
+            <!-- 筊背立體弧光 -->
+            <path d="M 7 22 C 16 9, 46 8, 67 17" 
+                  stroke="url(#zhuHongHighlight)" 
+                  stroke-width="2.2" 
                   stroke-linecap="round"/>
-            <!-- BYE 深緋紅文字 -->
-            <text x="27" y="16.5" 
-                  font-size="11" 
-                  font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif" 
-                  font-weight="900" 
-                  fill="#7A0C16" 
-                  letter-spacing="0.5px" 
-                  text-anchor="middle">BYE</text>
           </svg>
+          <span class="lb-brand-bye-text">BYE</span>
         </span>
         <span class="lb-brand-badge">MINI</span>
       </div>
