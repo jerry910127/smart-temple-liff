@@ -1634,15 +1634,89 @@
 
     /* 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) */
     .visual-track-container {
-      padding: 16px 5%;
+      padding: 14px 4%;
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: flex-start;
+      align-items: stretch;
       position: relative;
-      min-height: 230px;
+      min-height: 310px;
       background: linear-gradient(180deg, #FAFAFB 0%, #F5F6F8 100%);
+    }
+    .track-map-wrapper {
+      width: 100%;
+      height: 230px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      position: relative;
+      border: 1px solid #E5E7EB;
+      background: #EAEAEA;
+    }
+    #googleMapTrack {
+      width: 100%;
+      height: 100%;
+    }
+    .track-view-switch {
+      display: inline-flex;
+      align-items: center;
+      background: #E5E7EB;
+      padding: 3px;
+      border-radius: 20px;
+      gap: 2px;
+    }
+    .track-switch-btn {
+      padding: 3px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 16px;
+      border: none;
+      background: transparent;
+      color: #6B7280;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .track-switch-btn.active {
+      background: #FFFFFF;
+      color: #111827;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+    .gmap-infowindow {
+      padding: 6px 4px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      min-width: 150px;
+    }
+    .gmap-info-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #1F2937;
+      margin-bottom: 3px;
+    }
+    .gmap-info-status {
+      font-size: 0.72rem;
+      color: #06C755;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .gmap-info-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .gmap-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #06C755;
+      color: #FFF !important;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
     }
     .track-svg-canvas {
       width: 100%;
@@ -2062,59 +2136,74 @@
 
     <!-- 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) -->
     <section class="visual-track-container">
-      <div style="position:absolute; top:12px; left:5%; font-size:0.75rem; font-weight:800; color:#8C5B32;">
-        🗺️ 實體尋寶軌跡 (LINE Touch 感應連線中)
+      <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-size:0.75rem; font-weight:800; color:#8C5B32; display:flex; align-items:center; gap:4px;">
+          <span>🗺️ 巡禮足跡地圖</span>
+          <span style="font-size:0.65rem; background:#EBF8F2; color:#06C755; padding:2px 6px; border-radius:10px; border:1px solid #B7EB8F; font-weight:bold;">LINE Touch 連線中</span>
+        </div>
+        <!-- 雙視角切換器 -->
+        <div class="track-view-switch">
+          <button class="track-switch-btn active" id="btnSwitchGoogleMap" onclick="switchTrackView('map')">🗺️ Google 地圖</button>
+          <button class="track-switch-btn" id="btnSwitchSvg" onclick="switchTrackView('svg')">🎨 尋寶步道</button>
+        </div>
       </div>
 
-      <!-- 向量足跡地圖畫布 -->
-      <svg class="track-svg-canvas" viewBox="0 0 360 210" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- 蜿蜒虛線路徑 1 (腳印 1 -> 腳印 2) -->
-        <path id="trackPath1" d="M 75 160 C 100 130, 140 135, 175 105" stroke="#D1D5DB" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
-        <!-- 蜿蜒虛線路徑 2 (腳印 2 -> 腳印 3) -->
-        <path id="trackPath2" d="M 195 90 C 230 65, 250 75, 285 45" stroke="#D1D5DB" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+      <!-- 1. Google 地圖容器 (預設顯示) -->
+      <div class="track-map-wrapper" id="googleMapWrapper">
+        <div id="googleMapTrack"></div>
+      </div>
 
-        <!-- 腳印 1 (左腳：X 15%~30%, Y 75%~88%) -->
-        <g id="footprintSvg_0" class="footprint-node footprint-unlocked" transform="translate(60, 145)" onclick="simulateBeaconFromMap(0)">
-          <!-- 腳掌輪廓 -->
-          <path id="footprintShape_0" d="M12 25 C7 25 3 20 3 14 C3 8 7 3 13 2 C18 1 23 5 23 12 C23 20 18 25 12 25 Z" fill="#06C755"/>
-          <!-- 五個腳趾 -->
-          <circle id="toe0_1" cx="5" cy="0" r="2.2" fill="#06C755"/>
-          <circle id="toe0_2" cx="10" cy="-2" r="2.5" fill="#06C755"/>
-          <circle id="toe0_3" cx="15" cy="-2" r="2.5" fill="#06C755"/>
-          <circle id="toe0_4" cx="20" cy="0" r="2.2" fill="#06C755"/>
-          <circle id="toe0_5" cx="24" cy="3" r="1.8" fill="#06C755"/>
-          <!-- 站點代號 -->
-          <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">A</text>
-        </g>
+      <!-- 2. 向量足跡地圖畫布 (切換至手繪時顯示) -->
+      <div id="svgTrackWrapper" style="display:none; width:100%; justify-content:center;">
+        <svg class="track-svg-canvas" viewBox="0 0 360 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 蜿蜒虛線路徑 1 (腳印 1 -> 腳印 2) -->
+          <path id="trackPath1" d="M 75 160 C 100 130, 140 135, 175 105" stroke="#D1D5DB" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+          <!-- 蜿蜒虛線路徑 2 (腳印 2 -> 腳印 3) -->
+          <path id="trackPath2" d="M 195 90 C 230 65, 250 75, 285 45" stroke="#D1D5DB" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
 
-        <!-- 腳印 2 (右腳：X 45%~60%, Y 65%~78%) -->
-        <g id="footprintSvg_1" class="footprint-node footprint-locked" transform="translate(175, 85)" onclick="simulateBeaconFromMap(1)">
-          <!-- 腳掌輪廓 (右腳微傾) -->
-          <path id="footprintShape_1" d="M14 25 C19 25 23 20 23 14 C23 8 19 3 13 2 C8 1 3 5 3 12 C3 20 8 25 14 25 Z" fill="#9CA3AF"/>
-          <!-- 五個腳趾 -->
-          <circle id="toe1_1" cx="21" cy="0" r="2.2" fill="#9CA3AF"/>
-          <circle id="toe1_2" cx="16" cy="-2" r="2.5" fill="#9CA3AF"/>
-          <circle id="toe1_3" cx="11" cy="-2" r="2.5" fill="#9CA3AF"/>
-          <circle id="toe1_4" cx="6" cy="0" r="2.2" fill="#9CA3AF"/>
-          <circle id="toe1_5" cx="2" cy="3" r="1.8" fill="#9CA3AF"/>
-          <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">B</text>
-        </g>
+          <!-- 腳印 1 (左腳：X 15%~30%, Y 75%~88%) -->
+          <g id="footprintSvg_0" class="footprint-node footprint-unlocked" transform="translate(60, 145)" onclick="simulateBeaconFromMap(0)">
+            <!-- 腳掌輪廓 -->
+            <path id="footprintShape_0" d="M12 25 C7 25 3 20 3 14 C3 8 7 3 13 2 C18 1 23 5 23 12 C23 20 18 25 12 25 Z" fill="#06C755"/>
+            <!-- 五個腳趾 -->
+            <circle id="toe0_1" cx="5" cy="0" r="2.2" fill="#06C755"/>
+            <circle id="toe0_2" cx="10" cy="-2" r="2.5" fill="#06C755"/>
+            <circle id="toe0_3" cx="15" cy="-2" r="2.5" fill="#06C755"/>
+            <circle id="toe0_4" cx="20" cy="0" r="2.2" fill="#06C755"/>
+            <circle id="toe0_5" cx="24" cy="3" r="1.8" fill="#06C755"/>
+            <!-- 站點代號 -->
+            <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">A</text>
+          </g>
 
-        <!-- 腳印 3 (左腳：X 70%~85%, Y 80%~93%) -->
-        <g id="footprintSvg_2" class="footprint-node footprint-locked" transform="translate(280, 25)" onclick="simulateBeaconFromMap(2)">
-          <path id="footprintShape_2" d="M12 25 C7 25 3 20 3 14 C3 8 7 3 13 2 C18 1 23 5 23 12 C23 20 18 25 12 25 Z" fill="#9CA3AF"/>
-          <circle id="toe2_1" cx="5" cy="0" r="2.2" fill="#9CA3AF"/>
-          <circle id="toe2_2" cx="10" cy="-2" r="2.5" fill="#9CA3AF"/>
-          <circle id="toe2_3" cx="15" cy="-2" r="2.5" fill="#9CA3AF"/>
-          <circle id="toe2_4" cx="20" cy="0" r="2.2" fill="#9CA3AF"/>
-          <circle id="toe2_5" cx="24" cy="3" r="1.8" fill="#9CA3AF"/>
-          <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">C</text>
-        </g>
-      </svg>
+          <!-- 腳印 2 (右腳：X 45%~60%, Y 65%~78%) -->
+          <g id="footprintSvg_1" class="footprint-node footprint-locked" transform="translate(175, 85)" onclick="simulateBeaconFromMap(1)">
+            <!-- 腳掌輪廓 (右腳微傾) -->
+            <path id="footprintShape_1" d="M14 25 C19 25 23 20 23 14 C23 8 19 3 13 2 C8 1 3 5 3 12 C3 20 8 25 14 25 Z" fill="#9CA3AF"/>
+            <!-- 五個腳趾 -->
+            <circle id="toe1_1" cx="21" cy="0" r="2.2" fill="#9CA3AF"/>
+            <circle id="toe1_2" cx="16" cy="-2" r="2.5" fill="#9CA3AF"/>
+            <circle id="toe1_3" cx="11" cy="-2" r="2.5" fill="#9CA3AF"/>
+            <circle id="toe1_4" cx="6" cy="0" r="2.2" fill="#9CA3AF"/>
+            <circle id="toe1_5" cx="2" cy="3" r="1.8" fill="#9CA3AF"/>
+            <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">B</text>
+          </g>
+
+          <!-- 腳印 3 (左腳：X 70%~85%, Y 80%~93%) -->
+          <g id="footprintSvg_2" class="footprint-node footprint-locked" transform="translate(280, 25)" onclick="simulateBeaconFromMap(2)">
+            <path id="footprintShape_2" d="M12 25 C7 25 3 20 3 14 C3 8 7 3 13 2 C18 1 23 5 23 12 C23 20 18 25 12 25 Z" fill="#9CA3AF"/>
+            <circle id="toe2_1" cx="5" cy="0" r="2.2" fill="#9CA3AF"/>
+            <circle id="toe2_2" cx="10" cy="-2" r="2.5" fill="#9CA3AF"/>
+            <circle id="toe2_3" cx="15" cy="-2" r="2.5" fill="#9CA3AF"/>
+            <circle id="toe2_4" cx="20" cy="0" r="2.2" fill="#9CA3AF"/>
+            <circle id="toe2_5" cx="24" cy="3" r="1.8" fill="#9CA3AF"/>
+            <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">C</text>
+          </g>
+        </svg>
+      </div>
 
       <!-- 快速微型測試工具列 -->
-      <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
-        <button class="checkpoint-beacon-btn" onclick="simulateNextBeacon()">
+      <div style="margin-top:10px; width:100%; display:flex; align-items:center; gap:8px;">
+        <button class="checkpoint-beacon-btn" style="flex:1;" onclick="simulateNextBeacon()">
           📡 模擬走入宮廟（LINE Touch 感應）
         </button>
         <button class="checkpoint-beacon-btn" style="background:#FFF; border-color:#DDD; color:#666;" onclick="refreshGpsLocation()">
@@ -2805,6 +2894,11 @@
       if (vRouteDetail) vRouteDetail.style.display = 'flex';
       window.scrollTo(0, 0);
       refreshGpsLocation();
+      setTimeout(() => {
+        if (isGoogleMapsLoaded && currentTrackView === 'map') {
+          renderGoogleMap(activeRouteId);
+        }
+      }, 150);
     }
 
     // 既有線上解籤求籤流程入口
@@ -2846,6 +2940,203 @@
           }
         }
       }
+    }
+
+    /* =======================================================
+       Google Maps JavaScript API 整合模組 (真實經緯度與足跡打卡)
+       ======================================================= */
+    let gMapInstance = null;
+    let gMapMarkers = [];
+    let gMapPolyline = null;
+    let gMapUserMarker = null;
+    let isGoogleMapsLoaded = false;
+    let currentTrackView = 'map'; // 'map' or 'svg'
+
+    // Google Maps API 初始化回調函數
+    window.initGoogleMapsApi = function() {
+      isGoogleMapsLoaded = true;
+      console.log("✅ Google Maps API 載入成功");
+      const vRouteDetail = document.getElementById('pageRouteDetail');
+      if (vRouteDetail && vRouteDetail.style.display !== 'none' && currentTrackView === 'map') {
+        renderGoogleMap(activeRouteId);
+      }
+    };
+
+    // Google Maps 授權或網域限制降級防護 (若未綁定成功時自動優雅降級為手繪尋寶步道)
+    window.gm_authFailure = function() {
+      console.warn("⚠️ Google Maps 授權設定中或網域限制，已自動切換為尋寶步道視圖。");
+      switchTrackView('svg');
+    };
+
+    // 切換「Google 實體地圖」與「尋寶步道」視角
+    function switchTrackView(type) {
+      currentTrackView = type;
+      const mapWrap = document.getElementById('googleMapWrapper');
+      const svgWrap = document.getElementById('svgTrackWrapper');
+      const btnMap = document.getElementById('btnSwitchGoogleMap');
+      const btnSvg = document.getElementById('btnSwitchSvg');
+
+      if (type === 'map') {
+        if (mapWrap) mapWrap.style.display = 'block';
+        if (svgWrap) svgWrap.style.display = 'none';
+        if (btnMap) btnMap.classList.add('active');
+        if (btnSvg) btnSvg.classList.remove('active');
+        setTimeout(() => {
+          if (isGoogleMapsLoaded && gMapInstance) {
+            google.maps.event.trigger(gMapInstance, 'resize');
+            renderGoogleMap(activeRouteId);
+          }
+        }, 80);
+      } else {
+        if (mapWrap) mapWrap.style.display = 'none';
+        if (svgWrap) svgWrap.style.display = 'flex';
+        if (btnMap) btnMap.classList.remove('active');
+        if (btnSvg) btnSvg.classList.add('active');
+      }
+    }
+
+    // 產生客製化足跡 Marker SVG 圖標（已打卡為常亮綠金腳印，未打卡為質感灰色腳印）
+    function getFootprintMarkerIcon(isDone, code) {
+      const pinBg = isDone ? "#06C755" : "#6B7280";
+      const iconFill = isDone ? "#FFFFFF" : "#E5E7EB";
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="48" viewBox="0 0 38 48">
+          <defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/>
+            </filter>
+          </defs>
+          <path d="M19 46 C19 46, 3 30, 3 19 C3 10.16 10.16 3 19 3 C27.84 3 35 10.16 35 19 C35 30, 19 46, 19 46 Z" fill="${pinBg}" stroke="#FFFFFF" stroke-width="2" filter="url(#shadow)"/>
+          <path d="M16 26 C13 26 11 23 11 19.5 C11 16 13 13 16 13 C19 13 21 16 21 19.5 C21 23 19 26 16 26 Z" fill="${iconFill}"/>
+          <circle cx="12" cy="11.5" r="1.3" fill="${iconFill}"/>
+          <circle cx="15" cy="10.2" r="1.5" fill="${iconFill}"/>
+          <circle cx="18" cy="10.5" r="1.4" fill="${iconFill}"/>
+          <circle cx="20.5" cy="12" r="1.2" fill="${iconFill}"/>
+          <circle cx="27" cy="11" r="6.5" fill="#FFFFFF"/>
+          <text x="27" y="14" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" fill="${pinBg}" text-anchor="middle">${code}</text>
+        </svg>
+      `;
+      return {
+        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+        scaledSize: new google.maps.Size(38, 48),
+        anchor: new google.maps.Point(19, 46)
+      };
+    }
+
+    // 渲染 Google Maps 地圖實體、標註站點與巡禮軌跡折線
+    function renderGoogleMap(routeId) {
+      if (!isGoogleMapsLoaded || typeof google === 'undefined' || !google.maps) return;
+      const route = ROUTES_DATA[routeId];
+      if (!route) return;
+
+      const mapContainer = document.getElementById('googleMapTrack');
+      if (!mapContainer) return;
+
+      if (!gMapInstance) {
+        gMapInstance = new google.maps.Map(mapContainer, {
+          zoom: 13,
+          center: { lat: 25.0594, lng: 121.5208 },
+          disableDefaultUI: true,
+          zoomControl: true,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+          styles: [
+            { featureType: "poi.business", stylers: [{ visibility: "off" }] },
+            { featureType: "transit", stylers: [{ visibility: "simplified" }] }
+          ]
+        });
+      }
+
+      // 清除舊 Markers
+      gMapMarkers.forEach(m => m.setMap(null));
+      gMapMarkers = [];
+
+      // 清除舊 Polyline
+      if (gMapPolyline) {
+        gMapPolyline.setMap(null);
+        gMapPolyline = null;
+      }
+
+      const bounds = new google.maps.LatLngBounds();
+      const pathCoordinates = [];
+
+      // 放置宮廟站點 Marker
+      route.checkpoints.forEach((cp, idx) => {
+        const pos = { lat: cp.lat, lng: cp.lng };
+        pathCoordinates.push(pos);
+        bounds.extend(pos);
+
+        const isDone = cp.completed;
+        const marker = new google.maps.Marker({
+          position: pos,
+          map: gMapInstance,
+          title: cp.name,
+          icon: getFootprintMarkerIcon(isDone, cp.code || String.fromCharCode(65 + idx)),
+          animation: isDone ? google.maps.Animation.DROP : null
+        });
+
+        // 資訊彈窗 (InfoWindow)
+        const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${cp.lat},${cp.lng}`;
+        const distStr = cp.computedDist != null ? `${cp.computedDist.toFixed(1)} km` : `${cp.defaultDist} km`;
+        const infoContent = `
+          <div class="gmap-infowindow">
+            <div class="gmap-info-title">${cp.name}</div>
+            <div class="gmap-info-status">
+              ${isDone ? '✅ 已解鎖蓋印足跡' : '📍 距離約 ' + distStr + ' (待感應)'}
+            </div>
+            <div class="gmap-info-actions">
+              <a href="${navUrl}" target="_blank" class="gmap-nav-btn">
+                🧭 Google 導航
+              </a>
+              ${!isDone ? `<button class="gmap-nav-btn" style="background:#8C5B32;" onclick="triggerManualBeacon(${idx})">📡 感應打卡</button>` : ''}
+            </div>
+          </div>
+        `;
+        const infoWindow = new google.maps.InfoWindow({ content: infoContent });
+        marker.addListener('click', () => {
+          infoWindow.open(gMapInstance, marker);
+        });
+
+        gMapMarkers.push(marker);
+      });
+
+      // 繪製巡禮路線折線 (Polyline)
+      gMapPolyline = new google.maps.Polyline({
+        path: pathCoordinates,
+        geodesic: true,
+        strokeColor: '#06C755',
+        strokeOpacity: 0.85,
+        strokeWeight: 4
+      });
+      gMapPolyline.setMap(gMapInstance);
+
+      // 標註信徒當前定位點
+      if (userCurrentCoords) {
+        bounds.extend(userCurrentCoords);
+        if (!gMapUserMarker) {
+          gMapUserMarker = new google.maps.Marker({
+            position: userCurrentCoords,
+            map: gMapInstance,
+            title: "信士當前位置",
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 7,
+              fillColor: "#1B72E8",
+              fillOpacity: 1,
+              strokeColor: "#FFFFFF",
+              strokeWeight: 2
+            }
+          });
+        } else {
+          gMapUserMarker.setPosition(userCurrentCoords);
+          gMapUserMarker.setMap(gMapInstance);
+        }
+      }
+
+      // 自動縮放讓所有宮廟進入視野
+      google.maps.event.trigger(gMapInstance, 'resize');
+      gMapInstance.fitBounds(bounds, { top: 35, right: 35, bottom: 35, left: 35 });
     }
 
     // 渲染頁面三（打卡詳情）視圖
@@ -2893,6 +3184,11 @@
 
       // 4. 更新 SVG 足跡地圖視覺
       updateSvgTrackVisual(route);
+
+      // 5. 更新 Google Maps 足跡地圖
+      if (isGoogleMapsLoaded && currentTrackView === 'map') {
+        renderGoogleMap(routeId);
+      }
     }
 
     // 更新 SVG 地圖中腳印與路徑的解鎖狀態
@@ -3061,6 +3357,28 @@
               triggerManualBeacon(idx);
             }
           });
+
+          // 若 Google Maps 已載入且為地圖視角，更新用戶在地圖上的當前定位標記
+          if (isGoogleMapsLoaded && gMapInstance && currentTrackView === 'map') {
+            if (!gMapUserMarker) {
+              gMapUserMarker = new google.maps.Marker({
+                position: userCurrentCoords,
+                map: gMapInstance,
+                title: "信士當前位置",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 7,
+                  fillColor: "#1B72E8",
+                  fillOpacity: 1,
+                  strokeColor: "#FFFFFF",
+                  strokeWeight: 2
+                }
+              });
+            } else {
+              gMapUserMarker.setPosition(userCurrentCoords);
+              gMapUserMarker.setMap(gMapInstance);
+            }
+          }
         },
         (err) => {
           console.log("GPS 定位略過，採用預設地理標籤距離:", err.message);
@@ -3514,7 +3832,7 @@
 
             if (resp.ok) {
               sendBtn.innerHTML = "<span>✅ 已成功送達 LINE 聊天室！</span>";
-              alert("🎉 恭喜！靈籤已成功傳送至您的 LINE 聊天室！\n老廟祝阿伯正在為您解籤，請打開手機或電腦版 LINE 查看！");
+              alert("🎉 恭喜！靈籤已成功傳送至您的 LINE 聊天室！\n線上智能客服正在為您客觀解籤，請打開手機或電腦版 LINE 查看！");
             } else {
               throw new Error("伺服器回應異常");
             }
@@ -3533,5 +3851,8 @@
       }
     }
   </script>
+
+  <!-- Google Maps JavaScript API (以金鑰與非同步載入) -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeh19CtsKLtzgdDfqgduwhC3OBpGSm4yo&callback=initGoogleMapsApi&loading=async"></script>
 </body>
 </html>
