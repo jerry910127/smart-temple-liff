@@ -1252,7 +1252,417 @@
       transform: scale(0.95);
       background: rgba(55, 48, 44, 0.95);
     }
-  </style>
+
+    /* =======================================================
+       首頁付費廣告版位 (Ad Banner: Y 83% ~ 92%)
+       ======================================================= */
+    .lb-ad-banner {
+      flex: 0 0 9%;
+      min-height: 56px;
+      max-height: 66px;
+      margin: 6px 5% 8px 5%;
+      background: linear-gradient(135deg, #FFF9F0 0%, #FFF2E2 100%);
+      border: 1.2px solid #FFE2C2;
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(250, 140, 22, 0.08);
+      transition: transform 0.15s ease;
+    }
+    .lb-ad-banner:active {
+      transform: scale(0.985);
+    }
+    .lb-ad-badge {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #FA8C16;
+      background: rgba(250, 140, 22, 0.12);
+      border: 1px solid rgba(250, 140, 22, 0.3);
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+    .lb-ad-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding-right: 48px;
+    }
+    .lb-ad-icon {
+      font-size: 1.45rem;
+    }
+    .lb-ad-text {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .lb-ad-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #A83800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lb-ad-desc {
+      font-size: 0.68rem;
+      color: #8C5B32;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lb-ad-action {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #FA8C16;
+      white-space: nowrap;
+    }
+
+    /* =======================================================
+       頁面二：參拜足跡總覽列表頁 (Footprint Route List)
+       頁面三：路線進度與打卡詳情頁 (Footprint Route Detail)
+       ======================================================= */
+    .route-page-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      height: 100dvh;
+      background: #FAFAFB;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
+      font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', 'Segoe UI', Roboto, sans-serif;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* 頂部導航列 (Header: Y 0% ~ 8%) */
+    .route-nav-header {
+      height: 52px;
+      flex: 0 0 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      background: #FFFFFF;
+      border-bottom: 1px solid #ECEEF2;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .route-nav-btn {
+      background: #F5F6F8;
+      border: 1px solid #E5E7EB;
+      border-radius: 16px;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #333333;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .route-nav-btn:active {
+      background: #E8EAED;
+      transform: scale(0.95);
+    }
+    .route-nav-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #111111;
+      text-align: center;
+      letter-spacing: -0.3px;
+    }
+
+    /* Page 2: 熱門推薦路線橫幅 (Hero Route Card: Y 10% ~ 28%) */
+    .route-hero-section {
+      padding: 12px 5%;
+    }
+    .route-hero-card {
+      background: linear-gradient(135deg, #FFF0E6 0%, #FFDFCA 100%);
+      border: 1.5px solid #FFC49F;
+      border-radius: 16px;
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(255, 90, 31, 0.09);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .route-hero-card:active {
+      transform: scale(0.985);
+    }
+    .route-hero-badge {
+      display: inline-block;
+      background: #FF4D4F;
+      color: #FFFFFF;
+      font-size: 0.7rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .route-hero-title {
+      font-size: 1.18rem;
+      font-weight: 900;
+      color: #1A1A1A;
+      margin-bottom: 2px;
+    }
+    .route-hero-desc {
+      font-size: 0.76rem;
+      color: #666666;
+      margin-bottom: 10px;
+    }
+    .route-hero-more-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #FF5A1F;
+      color: #FFFFFF;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      float: right;
+    }
+
+    /* Page 2: 直列主題路線卡片群 (Route Cards List: Y 30% ~ 85%) */
+    .route-cards-list {
+      padding: 4px 5% 16px 5%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .route-list-item-card {
+      background: #FFFFFF;
+      border: 1px solid #ECEEF2;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .route-list-item-card:active {
+      transform: scale(0.985);
+      border-color: #06C755;
+    }
+    .route-card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .route-card-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+    }
+    .route-card-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #191919;
+      margin-bottom: 2px;
+    }
+    .route-card-sub {
+      font-size: 0.72rem;
+      color: #888888;
+    }
+    .route-card-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .route-card-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #E8F8EE;
+      color: #06C755;
+    }
+
+    /* Page 2 & 3: 底部常駐 Tips 橫條 (Tips Bar: Y 85% ~ 93%) */
+    .route-tips-footer {
+      margin-top: auto;
+      padding: 10px 5%;
+      background: #FFFFFF;
+      border-top: 1px solid #ECEEF2;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+      color: #555555;
+    }
+    .route-tips-badge {
+      background: #06C755;
+      color: #FFFFFF;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* =======================================================
+       Page 3: 路線進度與打卡詳情 (Route Detail)
+       ======================================================= */
+    .detail-progress-panel {
+      background: #FFFFFF;
+      padding: 16px 5%;
+      border-bottom: 1px solid #ECEEF2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .detail-progress-title {
+      font-size: 1.22rem;
+      font-weight: 900;
+      color: #111111;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .detail-progress-highlight {
+      color: #06C755;
+      font-size: 1.48rem;
+      margin: 0 4px;
+    }
+    .detail-target-badge {
+      position: absolute;
+      right: 5%;
+      top: 16px;
+      background: #F5F6F8;
+      border: 1px solid #E2E4E8;
+      color: #666666;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    /* 打卡站點清單 (Checkpoints List: Y 24% ~ 50%) */
+    .checkpoints-container {
+      padding: 12px 5%;
+      background: #FFFFFF;
+      border-bottom: 1px solid #ECEEF2;
+    }
+    .checkpoint-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed #EEE;
+    }
+    .checkpoint-item:last-child {
+      border-bottom: none;
+    }
+    .checkpoint-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .checkpoint-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #F0F2F5;
+      color: #666;
+      font-size: 0.82rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .checkpoint-circle.completed {
+      background: #06C755;
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(6, 199, 85, 0.35);
+    }
+    .checkpoint-name {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #222;
+    }
+    .checkpoint-dist {
+      font-size: 0.72rem;
+      color: #888;
+      margin-top: 1px;
+    }
+    .checkpoint-beacon-btn {
+      background: #F0F7FF;
+      border: 1px solid #BAE0FF;
+      color: #0958D9;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .checkpoint-beacon-btn:active {
+      transform: scale(0.95);
+    }
+    .checkpoint-beacon-btn.completed {
+      background: #E8F8EE;
+      border-color: #B7EB8F;
+      color: #389E0D;
+      cursor: default;
+    }
+
+    /* 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) */
+    .visual-track-container {
+      padding: 16px 5%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-height: 230px;
+      background: linear-gradient(180deg, #FAFAFB 0%, #F5F6F8 100%);
+    }
+    .track-svg-canvas {
+      width: 100%;
+      max-width: 360px;
+      height: 210px;
+      overflow: visible;
+    }
+    .footprint-node {
+      cursor: pointer;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .footprint-node:hover {
+      transform: scale(1.06);
+    }
+    .footprint-unlocked {
+      filter: drop-shadow(0 4px 10px rgba(6, 199, 85, 0.45));
+    }
+    .footprint-locked {
+      opacity: 0.35;
+    }
 </head>
 <body>
 
@@ -1372,7 +1782,7 @@
       </button>
 
       <!-- 功能 3：參拜足跡（腳印圖示） -->
-      <button class="lb-quick-item" onclick="openLbModal('footprintModal')">
+      <button class="lb-quick-item" onclick="openRouteListPage()">
         <div class="lb-quick-icon" style="background: linear-gradient(135deg, #D9F7BE 0%, #B7EB8F 100%); color:#389E0D;">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 16v-2.38C4 11.5 6.5 9 9.62 9h4.76C17.5 9 20 11.5 20 13.62V16"/>
@@ -1408,6 +1818,7 @@
       <div class="lb-section-header">
         <div class="lb-section-title">
           <span>⛩️ 附近廟宇</span>
+          <span style="font-size:0.65rem; color:#06C755; background:#E8F8EE; border:1px solid rgba(6,199,85,0.3); padding:1px 6px; border-radius:10px; font-weight:700; margin-left:6px;">📡 BT 微型感應</span>
         </div>
         <span class="lb-section-more" onclick="openLbModal('allTemplesModal')">探索更多 &gt;</span>
       </div>
@@ -1461,7 +1872,7 @@
       </div>
     </section>
 
-    <!-- 5. 底部跑馬燈橫條 (Footer Tips: Y 78% ~ 87%) -->
+    <!-- 5. 底部跑馬燈橫條 (Footer Tips: Y 75% ~ 83%) -->
     <div class="lb-footer-bar" onclick="cycleLbTip()">
       <div class="lb-footer-ticker">
         <span class="lb-footer-badge">拜拜小撇步</span>
@@ -1469,9 +1880,22 @@
       </div>
     </div>
 
-    <!-- 6. 底部導航欄 (Bottom Dock: Y 87% ~ 100%) -->
+    <!-- 6. 底部付費廣告版位 (Ad Banner: Y 83% ~ 92%) -->
+    <div class="lb-ad-banner" onclick="openLbModal('adModal')">
+      <div class="lb-ad-badge">付費廣告</div>
+      <div class="lb-ad-content">
+        <span class="lb-ad-icon">🏮</span>
+        <div class="lb-ad-text">
+          <div class="lb-ad-title">【宮廟慶典贊助】大甲鎮瀾宮 祈安清醮大典</div>
+          <div class="lb-ad-desc">合作宮廟開放線上登記疏文・祈福消災合家平安</div>
+        </div>
+        <span class="lb-ad-action">贊助 &gt;</span>
+      </div>
+    </div>
+
+    <!-- 7. 底部導航欄 (Bottom Dock: Y 92% ~ 100%) -->
     <nav class="lb-bottom-dock">
-      <button class="lb-dock-item active" onclick="location.reload()">
+      <button class="lb-dock-item active" onclick="openHomePage()">
         <span class="lb-dock-icon">🏠</span>
         <span class="lb-dock-label">首頁</span>
       </button>
@@ -1488,6 +1912,223 @@
         <span class="lb-dock-label">信士中心</span>
       </button>
     </nav>
+  </div>
+
+  <!-- ==============================================
+       頁面二：參拜足跡總覽列表頁 (Page 2: Route Index)
+       ============================================== -->
+  <div class="route-page-container" id="pageRouteList" style="display:none;">
+    <!-- 頂部導航列 (Header: Y 0% ~ 8%) -->
+    <header class="route-nav-header">
+      <!-- 返回鍵 (< 回 line bye: X 5% ~ 12%, Y 2% ~ 6%) -->
+      <button class="route-nav-btn" onclick="openHomePage()" title="回 LINE Bye 主首頁">
+        <span style="font-size:1.1rem; line-height:1;">‹</span>
+        <span>回首頁</span>
+      </button>
+
+      <!-- 標題 (參拜足跡: X 35% ~ 65%, Y 2% ~ 6% 置中) -->
+      <div class="route-nav-title">參拜足跡</div>
+
+      <!-- 關閉鍵 (X 回 line: X 88% ~ 95%, Y 2% ~ 6%) -->
+      <button class="route-nav-btn" onclick="closeLiffToChat()" title="關閉並回 LINE 聊天室" style="color:#666;">
+        <span>✕</span>
+        <span>回 LINE</span>
+      </button>
+    </header>
+
+    <!-- 熱門推薦路線橫幅 (Hero Route Card: Y 10% ~ 28%) -->
+    <section class="route-hero-section">
+      <div class="route-hero-card" onclick="openRouteDetailPage('baishatun')">
+        <span class="route-hero-badge">🔥 [HOT] 熱門推薦</span>
+        <div class="route-hero-title">熱門路線 - 白沙屯繞境</div>
+        <div class="route-hero-desc">全台矚目長程徒步進香，百年信仰心靈行腳・即時追轎解鎖</div>
+        <button class="route-hero-more-btn" onclick="event.stopPropagation(); openRouteDetailPage('baishatun');">
+          <span>more</span>
+          <span>&gt;</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 直列主題路線卡片群 (Route Cards List: Y 30% ~ 85%) -->
+    <section class="route-cards-list">
+      <!-- 卡片 1：文昌宮 -->
+      <div class="route-list-item-card" onclick="openRouteDetailPage('wenchang')">
+        <div class="route-card-left">
+          <div class="route-card-icon-box" style="background:#E6F7FF; color:#0050B3;">📖</div>
+          <div>
+            <div class="route-card-title">文昌宮</div>
+            <div class="route-card-sub">求學業、功名仕途行腳・金榜題名</div>
+          </div>
+        </div>
+        <div class="route-card-right">
+          <span class="route-card-tag" id="routeTag_wenchang">進度 1/3</span>
+          <span style="color:#BBB; font-weight:bold;">&gt;</span>
+        </div>
+      </div>
+
+      <!-- 卡片 2：月老廟 -->
+      <div class="route-list-item-card" onclick="openRouteDetailPage('yuelao')">
+        <div class="route-card-left">
+          <div class="route-card-icon-box" style="background:#FFF0F6; color:#C41D7F;">💖</div>
+          <div>
+            <div class="route-card-title">月老廟</div>
+            <div class="route-card-sub">求姻緣、脫單主題路線・牽引良緣</div>
+          </div>
+        </div>
+        <div class="route-card-right">
+          <span class="route-card-tag" id="routeTag_yuelao">進度 1/3</span>
+          <span style="color:#BBB; font-weight:bold;">&gt;</span>
+        </div>
+      </div>
+
+      <!-- 卡片 3：媽祖廟 -->
+      <div class="route-list-item-card" onclick="openRouteDetailPage('mazu')">
+        <div class="route-card-left">
+          <div class="route-card-icon-box" style="background:#FFF7E6; color:#D46B08;">🏮</div>
+          <div>
+            <div class="route-card-title">媽祖廟</div>
+            <div class="route-card-sub">巡禮祈福路線・護國佑民合家平安</div>
+          </div>
+        </div>
+        <div class="route-card-right">
+          <span class="route-card-tag" id="routeTag_mazu">進度 1/3</span>
+          <span style="color:#BBB; font-weight:bold;">&gt;</span>
+        </div>
+      </div>
+
+      <!-- 卡片 4：白沙屯繞境 -->
+      <div class="route-list-item-card" onclick="openRouteDetailPage('baishatun')">
+        <div class="route-card-left">
+          <div class="route-card-icon-box" style="background:#F6FFED; color:#389E0D;">👣</div>
+          <div>
+            <div class="route-card-title">白沙屯繞境</div>
+            <div class="route-card-sub">節慶長程跟轎進度・神威顯赫徒步巡香</div>
+          </div>
+        </div>
+        <div class="route-card-right">
+          <span class="route-card-tag" id="routeTag_baishatun">進度 1/3</span>
+          <span style="color:#BBB; font-weight:bold;">&gt;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 底部常駐區 (Tips Bar: Y 85% ~ 93%) -->
+    <div class="route-tips-footer" onclick="cycleLbTip()">
+      <span class="route-tips-badge">足跡 tips</span>
+      <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="routeListTipText">
+        親臨合作廟宇 50 公尺範圍內，LINE Beacon 藍牙將自動感應蓋印數位足跡
+      </span>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       頁面三：路線進度與打卡詳情頁 (Page 3: Route Detail)
+       ============================================== -->
+  <div class="route-page-container" id="pageRouteDetail" style="display:none;">
+    <!-- 頂部導航列 (Header: Y 0% ~ 8%) -->
+    <header class="route-nav-header">
+      <!-- 返回鍵 (< 回到列表: X 5% ~ 12%, Y 2% ~ 6%) -->
+      <button class="route-nav-btn" onclick="openRouteListPage()" title="回到路線列表">
+        <span style="font-size:1.1rem; line-height:1;">‹</span>
+        <span>回列表</span>
+      </button>
+
+      <!-- 路線標題 (如 文昌宮: X 35% ~ 65%, Y 2% ~ 6% 置中) -->
+      <div class="route-nav-title" id="detailRouteTitle">文昌宮</div>
+
+      <!-- 首頁鍵 (🏠 line bye 之頁: X 88% ~ 95%, Y 2% ~ 6%) -->
+      <button class="route-nav-btn" onclick="openHomePage()" title="回 LINE Bye 首頁">
+        <span>🏠</span>
+        <span>首頁</span>
+      </button>
+    </header>
+
+    <!-- 個人收集進度指示 (Progress Header: Y 10% ~ 22%) -->
+    <section class="detail-progress-panel">
+      <div class="detail-progress-title">
+        目前已蒐集 <span class="detail-progress-highlight" id="detailCollectedCount">1</span> 個腳印
+      </div>
+      <div class="detail-target-badge" id="detailTargetBadge">共 3 個</div>
+      <div style="font-size:0.75rem; color:#888; margin-top:2px;">
+        靠近宮廟 50 公尺開啟藍牙自動感應蓋章
+      </div>
+    </section>
+
+    <!-- 打卡站點清單與距離導引 (Checkpoints List: Y 24% ~ 50%) -->
+    <section class="checkpoints-container" id="detailCheckpointsList">
+      <!-- 動態注入站點 Ⓐ, Ⓑ, Ⓒ -->
+    </section>
+
+    <!-- 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) -->
+    <section class="visual-track-container">
+      <div style="position:absolute; top:12px; left:5%; font-size:0.75rem; font-weight:800; color:#8C5B32;">
+        🗺️ 實體尋寶軌跡 (LINE Beacon 連線中)
+      </div>
+
+      <!-- 向量足跡地圖畫布 -->
+      <svg class="track-svg-canvas" viewBox="0 0 360 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 蜿蜒虛線路徑 1 (腳印 1 -> 腳印 2) -->
+        <path id="trackPath1" d="M 75 160 C 100 130, 140 135, 175 105" stroke="#D1D5DB" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+        <!-- 蜿蜒虛線路徑 2 (腳印 2 -> 腳印 3) -->
+        <path id="trackPath2" d="M 195 90 C 230 65, 250 75, 285 45" stroke="#D1D5DB" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+
+        <!-- 腳印 1 (左腳：X 15%~30%, Y 75%~88%) -->
+        <g id="footprintSvg_0" class="footprint-node footprint-unlocked" transform="translate(60, 145)" onclick="simulateBeaconFromMap(0)">
+          <!-- 腳掌輪廓 -->
+          <path id="footprintShape_0" d="M12 25 C7 25 3 20 3 14 C3 8 7 3 13 2 C18 1 23 5 23 12 C23 20 18 25 12 25 Z" fill="#06C755"/>
+          <!-- 五個腳趾 -->
+          <circle id="toe0_1" cx="5" cy="0" r="2.2" fill="#06C755"/>
+          <circle id="toe0_2" cx="10" cy="-2" r="2.5" fill="#06C755"/>
+          <circle id="toe0_3" cx="15" cy="-2" r="2.5" fill="#06C755"/>
+          <circle id="toe0_4" cx="20" cy="0" r="2.2" fill="#06C755"/>
+          <circle id="toe0_5" cx="24" cy="3" r="1.8" fill="#06C755"/>
+          <!-- 站點代號 -->
+          <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">A</text>
+        </g>
+
+        <!-- 腳印 2 (右腳：X 45%~60%, Y 65%~78%) -->
+        <g id="footprintSvg_1" class="footprint-node footprint-locked" transform="translate(175, 85)" onclick="simulateBeaconFromMap(1)">
+          <!-- 腳掌輪廓 (右腳微傾) -->
+          <path id="footprintShape_1" d="M14 25 C19 25 23 20 23 14 C23 8 19 3 13 2 C8 1 3 5 3 12 C3 20 8 25 14 25 Z" fill="#9CA3AF"/>
+          <!-- 五個腳趾 -->
+          <circle id="toe1_1" cx="21" cy="0" r="2.2" fill="#9CA3AF"/>
+          <circle id="toe1_2" cx="16" cy="-2" r="2.5" fill="#9CA3AF"/>
+          <circle id="toe1_3" cx="11" cy="-2" r="2.5" fill="#9CA3AF"/>
+          <circle id="toe1_4" cx="6" cy="0" r="2.2" fill="#9CA3AF"/>
+          <circle id="toe1_5" cx="2" cy="3" r="1.8" fill="#9CA3AF"/>
+          <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">B</text>
+        </g>
+
+        <!-- 腳印 3 (左腳：X 70%~85%, Y 80%~93%) -->
+        <g id="footprintSvg_2" class="footprint-node footprint-locked" transform="translate(280, 25)" onclick="simulateBeaconFromMap(2)">
+          <path id="footprintShape_2" d="M12 25 C7 25 3 20 3 14 C3 8 7 3 13 2 C18 1 23 5 23 12 C23 20 18 25 12 25 Z" fill="#9CA3AF"/>
+          <circle id="toe2_1" cx="5" cy="0" r="2.2" fill="#9CA3AF"/>
+          <circle id="toe2_2" cx="10" cy="-2" r="2.5" fill="#9CA3AF"/>
+          <circle id="toe2_3" cx="15" cy="-2" r="2.5" fill="#9CA3AF"/>
+          <circle id="toe2_4" cx="20" cy="0" r="2.2" fill="#9CA3AF"/>
+          <circle id="toe2_5" cx="24" cy="3" r="1.8" fill="#9CA3AF"/>
+          <text x="13" y="16" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">C</text>
+        </g>
+      </svg>
+
+      <!-- 快速微型測試工具列 -->
+      <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+        <button class="checkpoint-beacon-btn" onclick="simulateNextBeacon()">
+          📡 模擬抵達宮廟（Beacon 打卡）
+        </button>
+        <button class="checkpoint-beacon-btn" style="background:#FFF; border-color:#DDD; color:#666;" onclick="refreshGpsLocation()">
+          🔄 重新定位
+        </button>
+      </div>
+    </section>
+
+    <!-- 底部常駐區 -->
+    <div class="route-tips-footer">
+      <span class="route-tips-badge">打卡守則</span>
+      <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+        集滿 3 個數位足跡即可解鎖神明庇佑徽章與廟宇限定香火禮
+      </span>
+    </div>
   </div>
 
   <!-- ==============================================
@@ -1671,6 +2312,28 @@
         </div>
       </div>
       <button class="lb-primary-btn" onclick="closeLbModal('festivalModal')">我知道了</button>
+    </div>
+  </div>
+
+  <!-- 7.5 付費廣告詳細 Modal -->
+  <div class="lb-modal-overlay" id="adModal" onclick="closeLbModal('adModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🏮 宮廟年度盛典贊助</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('adModal')">✕</button>
+      </div>
+      <div style="font-size:0.88rem; line-height:1.7; color:#444;">
+        <p><strong>【大甲鎮瀾宮 重建祈安清醮大典】</strong></p>
+        <div style="background:#FFF9F0; border:1px solid #FFE2C2; padding:12px; border-radius:10px; margin:10px 0;">
+          <strong>線上敬備消災疏文・合家平安</strong><br>
+          傳承百年香火盛典，信士免親赴現場，亦可於線上填寫祈福疏文，由執事代行稟告大甲媽祖。<br>
+          <span style="color:#A83800; font-size:0.78rem;">★ 凡登記即獲大甲媽過爐平安香火袋宅配送達</span>
+        </div>
+      </div>
+      <button class="lb-primary-btn" onclick="alert('感謝信士支持！已為您記錄贊助意願，將由廟方執事專人聯繫。'); closeLbModal('adModal');">
+        🙏 誠心參與祈福贊助
+      </button>
     </div>
   </div>
 
@@ -2042,19 +2705,317 @@
     }
 
     // ==============================================
-    // LINE Bye 頁面導航與彈窗互動
+    // LINE Bye 頁面導航與三大核心頁面狀態切換 (SPA Router)
     // ==============================================
+    const ROUTES_DATA = {
+      wenchang: {
+        id: "wenchang",
+        name: "文昌宮",
+        subtitle: "求學業、功名仕途行腳・金榜題名",
+        badge: "功名利祿",
+        totalSteps: 3,
+        checkpoints: [
+          { id: "wc_1", code: "Ⓐ", name: "台北文昌宮 (雙連)", lat: 25.0594, lng: 121.5208, defaultDist: 0.8, completed: true },
+          { id: "wc_2", code: "Ⓑ", name: "大龍峒保安宮文昌殿", lat: 25.0735, lng: 121.5152, defaultDist: 2.1, completed: false },
+          { id: "wc_3", code: "Ⓒ", name: "新莊文昌祠 (古蹟)", lat: 25.0345, lng: 121.4501, defaultDist: 6.4, completed: false }
+        ]
+      },
+      yuelao: {
+        id: "yuelao",
+        name: "月老廟",
+        subtitle: "求姻緣、脫單主題路線・牽引良緣",
+        badge: "天賜良緣",
+        totalSteps: 3,
+        checkpoints: [
+          { id: "yl_1", code: "Ⓐ", name: "台北霞海城隍廟", lat: 25.0558, lng: 121.5101, defaultDist: 1.5, completed: true },
+          { id: "yl_2", code: "Ⓑ", name: "艋舺龍山寺月老廳", lat: 25.0371, lng: 121.4999, defaultDist: 2.8, completed: false },
+          { id: "yl_3", code: "Ⓒ", name: "大稻埕慈聖宮", lat: 25.0601, lng: 121.5113, defaultDist: 1.9, completed: false }
+        ]
+      },
+      mazu: {
+        id: "mazu",
+        name: "媽祖廟",
+        subtitle: "巡禮祈福路線・護國佑民合家平安",
+        badge: "慈航普渡",
+        totalSteps: 3,
+        checkpoints: [
+          { id: "mz_1", code: "Ⓐ", name: "北投關渡宮", lat: 25.1177, lng: 121.4637, defaultDist: 8.5, completed: true },
+          { id: "mz_2", code: "Ⓑ", name: "松山慈祐宮", lat: 25.0506, lng: 121.5779, defaultDist: 5.2, completed: false },
+          { id: "mz_3", code: "Ⓒ", name: "士林慈諴宮", lat: 25.0886, lng: 121.5246, defaultDist: 3.6, completed: false }
+        ]
+      },
+      baishatun: {
+        id: "baishatun",
+        name: "白沙屯繞境",
+        subtitle: "節慶長程跟轎進度・神威顯赫徒步巡香",
+        badge: "神威萬里",
+        totalSteps: 3,
+        checkpoints: [
+          { id: "bst_1", code: "Ⓐ", name: "白沙屯拱天宮 (起駕)", lat: 24.5683, lng: 120.7108, defaultDist: 102.0, completed: true },
+          { id: "bst_2", code: "Ⓑ", name: "通霄慈惠宮 (中繼駐駕)", lat: 24.4901, lng: 120.6789, defaultDist: 110.5, completed: false },
+          { id: "bst_3", code: "Ⓒ", name: "北港朝天宮 (刈火進香)", lat: 23.5689, lng: 120.3045, defaultDist: 215.0, completed: false }
+        ]
+      }
+    };
+
+    let activeRouteId = 'wenchang';
+    let userCurrentCoords = null;
+
+    function hideAllAppViews() {
+      const vHome = document.getElementById('lineByeHome');
+      const vRouteList = document.getElementById('pageRouteList');
+      const vRouteDetail = document.getElementById('pageRouteDetail');
+      const vZenApp = document.getElementById('zenApp');
+      if (vHome) vHome.style.display = 'none';
+      if (vRouteList) vRouteList.style.display = 'none';
+      if (vRouteDetail) vRouteDetail.style.display = 'none';
+      if (vZenApp) vZenApp.style.display = 'none';
+    }
+
+    // 1. 打開首頁 (Page 1)
+    function openHomePage() {
+      hideAllAppViews();
+      const vHome = document.getElementById('lineByeHome');
+      if (vHome) vHome.style.display = 'flex';
+      window.scrollTo(0, 0);
+    }
+
+    // 2. 打開頁面二：參拜足跡總覽列表 (Page 2)
+    function openRouteListPage() {
+      hideAllAppViews();
+      updateAllRouteSummaryTags();
+      const vRouteList = document.getElementById('pageRouteList');
+      if (vRouteList) vRouteList.style.display = 'flex';
+      window.scrollTo(0, 0);
+    }
+
+    // 3. 打開頁面三：特定路線打卡與進度詳情 (Page 3)
+    function openRouteDetailPage(routeId) {
+      if (routeId && ROUTES_DATA[routeId]) {
+        activeRouteId = routeId;
+      }
+      hideAllAppViews();
+      renderRouteDetailView(activeRouteId);
+      const vRouteDetail = document.getElementById('pageRouteDetail');
+      if (vRouteDetail) vRouteDetail.style.display = 'flex';
+      window.scrollTo(0, 0);
+      refreshGpsLocation();
+    }
+
+    // 既有線上解籤求籤流程入口
     function openDivinationFlow() {
-      document.getElementById('lineByeHome').style.display = 'none';
+      hideAllAppViews();
       const zenApp = document.getElementById('zenApp');
-      zenApp.style.display = 'block';
-      zenApp.style.opacity = '1';
+      if (zenApp) {
+        zenApp.style.display = 'block';
+        zenApp.style.opacity = '1';
+      }
+      window.scrollTo(0, 0);
     }
 
     function returnToLineByeHome() {
-      document.getElementById('zenApp').style.display = 'none';
-      const lineByeHome = document.getElementById('lineByeHome');
-      lineByeHome.style.display = 'flex';
+      openHomePage();
+    }
+
+    // 關閉 LIFF 返回 LINE 聊天室
+    function closeLiffToChat() {
+      if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
+        liff.closeWindow();
+      } else {
+        alert("已結束足跡瀏覽，點擊確認返回首頁。");
+        openHomePage();
+      }
+    }
+
+    // 更新列表頁各卡片的進度標籤
+    function updateAllRouteSummaryTags() {
+      for (const [rId, route] of Object.entries(ROUTES_DATA)) {
+        const completedCount = route.checkpoints.filter(c => c.completed).length;
+        const tagElem = document.getElementById(`routeTag_${rId}`);
+        if (tagElem) {
+          tagElem.innerText = `進度 ${completedCount}/${route.totalSteps}`;
+          if (completedCount === route.totalSteps) {
+            tagElem.style.background = '#FFF0F6';
+            tagElem.style.color = '#EB2F96';
+            tagElem.innerText = `✨ 已圓滿 (3/3)`;
+          }
+        }
+      }
+    }
+
+    // 渲染頁面三（打卡詳情）視圖
+    function renderRouteDetailView(routeId) {
+      const route = ROUTES_DATA[routeId];
+      if (!route) return;
+
+      // 1. 頂部標題
+      const titleElem = document.getElementById('detailRouteTitle');
+      if (titleElem) titleElem.innerText = route.name;
+
+      // 2. 收集進度指示
+      const completedCount = route.checkpoints.filter(c => c.completed).length;
+      const countElem = document.getElementById('detailCollectedCount');
+      if (countElem) countElem.innerText = completedCount;
+      const badgeElem = document.getElementById('detailTargetBadge');
+      if (badgeElem) badgeElem.innerText = `共 ${route.totalSteps} 個`;
+
+      // 3. 打卡站點清單
+      const listContainer = document.getElementById('detailCheckpointsList');
+      if (listContainer) {
+        listContainer.innerHTML = route.checkpoints.map((cp, idx) => {
+          const isDone = cp.completed;
+          const distStr = cp.computedDist != null ? `${cp.computedDist.toFixed(1)} km` : `${cp.defaultDist} km`;
+          return `
+            <div class="checkpoint-item" id="cpRow_${idx}">
+              <div class="checkpoint-left">
+                <div class="checkpoint-circle ${isDone ? 'completed' : ''}" id="cpCircle_${idx}">
+                  ${isDone ? '✓' : cp.code}
+                </div>
+                <div>
+                  <div class="checkpoint-name">${cp.name}</div>
+                  <div class="checkpoint-dist" id="cpDist_${idx}">
+                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : '・待感應'}
+                  </div>
+                </div>
+              </div>
+              <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="triggerManualBeacon(${idx})">
+                ${isDone ? '已蓋印 ✓' : '📡 現場打卡'}
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 4. 更新 SVG 足跡地圖視覺
+      updateSvgTrackVisual(route);
+    }
+
+    // 更新 SVG 地圖中腳印與路徑的解鎖狀態
+    function updateSvgTrackVisual(route) {
+      const cps = route.checkpoints;
+      cps.forEach((cp, idx) => {
+        const svgNode = document.getElementById(`footprintSvg_${idx}`);
+        const shapePath = document.getElementById(`footprintShape_${idx}`);
+        const isDone = cp.completed;
+
+        if (svgNode) {
+          if (isDone) {
+            svgNode.classList.remove('footprint-locked');
+            svgNode.classList.add('footprint-unlocked');
+          } else {
+            svgNode.classList.remove('footprint-unlocked');
+            svgNode.classList.add('footprint-locked');
+          }
+        }
+        if (shapePath) {
+          shapePath.setAttribute('fill', isDone ? '#06C755' : '#9CA3AF');
+        }
+        for (let t = 1; t <= 5; t++) {
+          const toe = document.getElementById(`toe${idx}_${t}`);
+          if (toe) toe.setAttribute('fill', isDone ? '#06C755' : '#9CA3AF');
+        }
+      });
+
+      // 連接線染色
+      const path1 = document.getElementById('trackPath1');
+      if (path1) {
+        const path1Active = cps[0].completed && cps[1].completed;
+        path1.setAttribute('stroke', path1Active ? '#06C755' : '#D1D5DB');
+        path1.setAttribute('stroke-width', path1Active ? '3.5' : '3');
+      }
+      const path2 = document.getElementById('trackPath2');
+      if (path2) {
+        const path2Active = cps[1].completed && cps[2].completed;
+        path2.setAttribute('stroke', path2Active ? '#06C755' : '#D1D5DB');
+        path2.setAttribute('stroke-width', path2Active ? '3.5' : '3');
+      }
+    }
+
+    // 模擬或點擊站點觸發 LINE Beacon 打卡
+    function triggerManualBeacon(checkpointIdx) {
+      const route = ROUTES_DATA[activeRouteId];
+      if (!route) return;
+      const cp = route.checkpoints[checkpointIdx];
+      if (!cp) return;
+
+      if (cp.completed) {
+        alert(`【${cp.name}】已於先前完成數位足跡感應！`);
+        return;
+      }
+
+      cp.completed = true;
+      renderRouteDetailView(activeRouteId);
+      updateAllRouteSummaryTags();
+
+      // 震動回饋
+      if (navigator.vibrate) navigator.vibrate([80, 50, 120]);
+
+      // 恭賀提示
+      const completedCount = route.checkpoints.filter(c => c.completed).length;
+      if (completedCount === route.totalSteps) {
+        alert(`🎉 恭賀大圓滿！\n您已完成「${route.name}」全部 3 座宮廟行腳巡禮！\n神尊威靈加被，福壽康泰！`);
+      } else {
+        alert(`🎉 LINE Beacon 藍牙微型感應成功！\n已為您解鎖【${cp.name}】數位足跡！\n目前已蒐集 ${completedCount}/${route.totalSteps} 個腳印。`);
+      }
+    }
+
+    function simulateBeaconFromMap(idx) {
+      triggerManualBeacon(idx);
+    }
+
+    // 模擬下一座宮廟打卡
+    function simulateNextBeacon() {
+      const route = ROUTES_DATA[activeRouteId];
+      if (!route) return;
+      const nextIdx = route.checkpoints.findIndex(c => !c.completed);
+      if (nextIdx !== -1) {
+        triggerManualBeacon(nextIdx);
+      } else {
+        alert(`✨ 本路線【${route.name}】所有站點已全數完成打卡！`);
+      }
+    }
+
+    // GPS 距離試算（Haversine formula）
+    function calculateHaversine(lat1, lon1, lat2, lon2) {
+      const R = 6371; // km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function refreshGpsLocation() {
+      if (!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          userCurrentCoords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+          const route = ROUTES_DATA[activeRouteId];
+          if (!route) return;
+
+          route.checkpoints.forEach((cp, idx) => {
+            const dist = calculateHaversine(userCurrentCoords.lat, userCurrentCoords.lng, cp.lat, cp.lng);
+            cp.computedDist = dist;
+            const distElem = document.getElementById(`cpDist_${idx}`);
+            if (distElem) {
+              distElem.innerHTML = `📍 距離 ${dist.toFixed(1)} km ${cp.completed ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : '・待感應'}`;
+            }
+            // 若在 50 公尺內 (0.05 km) 且未打卡，自動觸發感應
+            if (dist <= 0.05 && !cp.completed) {
+              triggerManualBeacon(idx);
+            }
+          });
+        },
+        (err) => {
+          console.log("GPS 定位略過，採用預設地理標籤距離:", err.message);
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
+      );
     }
 
     function openLbModal(modalId) {
