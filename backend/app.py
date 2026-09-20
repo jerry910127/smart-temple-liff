@@ -50,6 +50,7 @@ def log_event(msg: str):
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "").strip()
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "").strip()
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
+NVIDIA_MODEL = os.getenv("NVIDIA_MODEL", "meta/llama-3.2-11b-vision-instruct").strip()
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(LINE_CHANNEL_SECRET)
@@ -58,7 +59,7 @@ nvidia_client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=NVIDIA_API_KEY,
     max_retries=0,
-    timeout=6.0
+    timeout=10.0
 )
 
 # 頂級霸道總裁 Persona Prompt
@@ -81,22 +82,24 @@ DOMINEERING_CEO_PROMPT = """你是掌控全球萬億商業帝國的「霸道總�
 
 
 def call_nvidia_ai(user_message: str) -> str:
-    """調用 NVIDIA NIM 極速模型 (Llama-3.2 11B)，化身霸道總裁專屬回覆"""
+    """調用 NVIDIA NIM 模型，化身霸道總裁專屬回覆"""
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
-    max_tok = 280 if is_fortune else 120
+    max_tok = 512 if "muse" in NVIDIA_MODEL else (280 if is_fortune else 120)
+    timeout_sec = 12.0 if "muse" in NVIDIA_MODEL else 5.5
 
     try:
         response = nvidia_client.chat.completions.create(
-            model="meta/llama-3.2-11b-vision-instruct",
+            model=NVIDIA_MODEL,
             messages=[
                 {"role": "system", "content": DOMINEERING_CEO_PROMPT},
                 {"role": "user", "content": user_message}
             ],
             temperature=0.8,
             max_tokens=max_tok,
-            timeout=5.5
+            timeout=timeout_sec
         )
-        content = response.choices[0].message.content
+        msg = response.choices[0].message
+        content = msg.content or getattr(msg, "reasoning_content", "")
         if content and content.strip():
             return content.strip()
     except Exception as e:
@@ -214,9 +217,10 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
 def call_nvidia_vision(image_b64: str) -> str:
     """調用 NVIDIA NIM 視覺模型辨識照片（霸道總裁看照片風格）"""
+    timeout_sec = 15.0 if "muse" in NVIDIA_MODEL else 8.0
     try:
         response = nvidia_client.chat.completions.create(
-            model="meta/llama-3.2-11b-vision-instruct",
+            model=NVIDIA_MODEL,
             messages=[
                 {
                     "role": "system",
@@ -234,10 +238,11 @@ def call_nvidia_vision(image_b64: str) -> str:
                 }
             ],
             temperature=0.7,
-            max_tokens=300,
-            timeout=8.0
+            max_tokens=512 if "muse" in NVIDIA_MODEL else 300,
+            timeout=timeout_sec
         )
-        content = response.choices[0].message.content
+        msg = response.choices[0].message
+        content = msg.content or getattr(msg, "reasoning_content", "")
         if content and content.strip():
             return content.strip()
     except Exception as e:
