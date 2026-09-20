@@ -1909,21 +1909,21 @@
         <span class="lb-quick-label">三百年巡禮</span>
       </button>
 
-      <!-- 功能 4：節慶專區（法會科儀） -->
-      <button class="lb-quick-item" onclick="openLbModal('festivalModal')">
+      <!-- 功能 4：白米收驚（安魂制煞） -->
+      <button class="lb-quick-item" onclick="openLbModal('shoujingModal')">
         <div class="lb-quick-icon" style="background: linear-gradient(135deg, #EFDBFF 0%, #D3ADF7 100%); color:#722ED1;">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 19L19 5"/>
-            <path d="M12 4l3 3-9 9-3-3z"/>
-            <path d="M18 10l2-2"/>
-            <path d="M15 3l1 2"/>
-            <path d="M21 7l-2 1"/>
-            <path d="M18 16l3 1"/>
-            <path d="M14 20l2 2"/>
-            <path d="M8 22l1-3"/>
+            <path d="M12 2v4"/>
+            <path d="M12 18v4"/>
+            <path d="M4.93 4.93l2.83 2.83"/>
+            <path d="M16.24 16.24l2.83 2.83"/>
+            <path d="M2 12h4"/>
+            <path d="M18 12h4"/>
+            <path d="M4.93 19.07l2.83-2.83"/>
+            <path d="M16.24 7.76l2.83-2.83"/>
           </svg>
         </div>
-        <span class="lb-quick-label">法會科儀</span>
+        <span class="lb-quick-label">白米收驚</span>
       </button>
     </section>
 
@@ -2321,37 +2321,124 @@
     </div>
   </div>
 
-  <!-- 5. 點燈專區 Modal (萬春宮道法特色) -->
+  <!-- 5. 點燈專區 Modal (萬春宮線上文疏登記 + 虛擬點燈房) -->
   <div class="lb-modal-overlay" id="lightingModal" onclick="closeLbModal('lightingModal')">
-    <div class="lb-sheet" onclick="event.stopPropagation()">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:88vh; overflow-y:auto;">
       <div class="lb-sheet-bar"></div>
       <div class="lb-sheet-header">
-        <div class="lb-sheet-title">🏮 萬春宮・祈安點燈與凶星祭解</div>
+        <div class="lb-sheet-title">🏮 萬春宮・祈安點燈與文疏登記</div>
         <button class="lb-sheet-close" onclick="closeLbModal('lightingModal')">✕</button>
       </div>
-      <div style="font-size:0.86rem; line-height:1.7; color:#444;">
-        <p>萬春宮三百年道法科儀・為信士安奉整年吉慶光明：</p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0;">
-          <div style="background:#FFFBE6; border:1px solid #FFE58F; padding:10px; border-radius:8px; text-align:center;">
-            <strong>✨ 天上聖母光明燈</strong><br><span style="font-size:0.75rem; color:#888;">元辰光彩・出入平安</span>
+
+      <!-- 頁籤切換：1. 線上安奉文疏 / 2. 我的虛擬點燈房 -->
+      <div style="display:flex; background:#F5F6F8; border-radius:10px; padding:3px; margin-bottom:12px;">
+        <button id="tabLightRegisterBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:#FFF; color:#CF1322; box-shadow:0 1px 4px rgba(0,0,0,0.08); cursor:pointer;" onclick="switchLightingTab('register')">
+          ✍️ 線上填寫疏文
+        </button>
+        <button id="tabLightRoomBtn" style="flex:1; padding:7px 0; font-size:0.82rem; font-weight:bold; border-radius:8px; border:none; background:transparent; color:#666; cursor:pointer;" onclick="switchLightingTab('room')">
+          🪔 虛擬元辰燈房
+        </button>
+      </div>
+
+      <!-- 分頁 A：填寫疏文與選擇燈種 -->
+      <div id="lightingTabRegister">
+        <div style="font-size:0.84rem; line-height:1.6; color:#444;">
+          <p style="margin-bottom:8px;">萬春宮道長將於每月初一、十五朔望吉日，備香花果品焚表誦經：</p>
+          
+          <!-- 燈種選擇卡 -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+            <div class="light-type-opt selected" id="optLight_guangming" onclick="selectLightType('guangming', '✨ 天上聖母光明燈', 600)" style="background:#FFFBE6; border:2px solid #FAAD14; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#D48806; font-size:0.85rem;">✨ 聖母光明燈</strong><br>
+              <span style="font-size:0.72rem; color:#888;">元辰光彩・出入平安</span><br>
+              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$600 / 盞</span>
+            </div>
+            <div class="light-type-opt" id="optLight_taishui" onclick="selectLightType('taishui', '🛡️ 值年太歲星君燈', 600)" style="background:#FFF1F0; border:1px solid #FFA39E; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#CF1322; font-size:0.85rem;">🛡️ 太歲星君燈</strong><br>
+              <span style="font-size:0.72rem; color:#888;">沖犯太歲・化險為夷</span><br>
+              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$600 / 盞</span>
+            </div>
+            <div class="light-type-opt" id="optLight_wenchang" onclick="selectLightType('wenchang', '📖 文昌功名帝君燈', 600)" style="background:#F6FFED; border:1px solid #B7EB8F; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#389E0D; font-size:0.85rem;">📖 文昌功名燈</strong><br>
+              <span style="font-size:0.72rem; color:#888;">考運亨通・仕途順遂</span><br>
+              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$600 / 盞</span>
+            </div>
+            <div class="light-type-opt" id="optLight_caishen" onclick="selectLightType('caishen', '💰 五路八路發財燈', 800)" style="background:#FFF9E6; border:1px solid #FFE58F; padding:8px; border-radius:8px; text-align:center; cursor:pointer;">
+              <strong style="color:#D46B08; font-size:0.85rem;">💰 八路發財燈</strong><br>
+              <span style="font-size:0.72rem; color:#888;">正偏財旺・生意興隆</span><br>
+              <span style="font-size:0.75rem; color:#CF1322; font-weight:bold;">$800 / 盞</span>
+            </div>
           </div>
-          <div style="background:#FFF1F0; border:1px solid #FFA39E; padding:10px; border-radius:8px; text-align:center;">
-            <strong>🛡️ 值年太歲安奉</strong><br><span style="font-size:0.75rem; color:#888;">沖犯太歲・消災解厄</span>
+
+          <!-- 疏文填寫表單 -->
+          <div style="background:#FFFDF9; border:1px solid #FFE4D6; border-radius:10px; padding:12px; margin-bottom:12px;">
+            <div style="font-weight:bold; color:#8C5B32; font-size:0.85rem; margin-bottom:8px; display:flex; justify-content:space-between;">
+              <span>📜 祈安奉納文疏</span>
+              <span id="lightSelectedText" style="color:#CF1322;">✨ 天上聖母光明燈 ($600)</span>
+            </div>
+            <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555;">信士姓名：</label>
+              <input type="text" id="lightPayerName" placeholder="例如：陳信士" value="王信士" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+            </div>
+            <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555;">農曆生辰：</label>
+              <input type="text" id="lightPayerBirth" placeholder="例如：甲子年三月十五日吉時" value="甲辰年吉月吉日" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+            </div>
+            <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555;">現居地址：</label>
+              <input type="text" id="lightPayerAddr" placeholder="祈福文疏上奏天曹之住所" value="台中市中區成功路" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+            </div>
+            <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center;">
+              <label style="font-size:0.8rem; color:#555;">祈願文疏：</label>
+              <input type="text" id="lightPayerWish" placeholder="例如：闔家平安、消災植福" value="闔家身體安康，萬事逢春吉祥" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+            </div>
           </div>
-          <div style="background:#F6FFED; border:1px solid #B7EB8F; padding:10px; border-radius:8px; text-align:center;">
-            <strong>📖 文昌功名帝君燈</strong><br><span style="font-size:0.75rem; color:#888;">考運亨通・仕途順遂</span>
-          </div>
-          <div style="background:#FFF0F6; border:1px solid #FFADD2; padding:10px; border-radius:8px; text-align:center; cursor:pointer;" onclick="closeLbModal('lightingModal'); openLbModal('zodiacModal');">
-            <strong>🐉 生肖五大凶星祭解</strong><br><span style="font-size:0.75rem; color:#C41D7F; font-weight:bold;">點擊即刻 AI 排盤 ›</span>
+
+          <!-- 生肖五大凶星聯動提點 -->
+          <div style="background:#FFF0F6; border:1px solid #FFADD2; border-radius:8px; padding:8px 10px; font-size:0.78rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="closeLbModal('lightingModal'); openLbModal('zodiacModal');">
+            <span>🐉 <strong>今年是否有沖犯星煞？</strong>點擊立即排盤</span>
+            <span style="color:#C41D7F; font-weight:bold;">測算 ›</span>
           </div>
         </div>
-        <div style="background:#F7F8FA; border-radius:8px; padding:8px 10px; font-size:0.78rem; color:#666;">
-          📌 線上登記完成後，廟方道長將於朔望吉日焚香奏表，代信士安奉疏文。
+
+        <button class="lb-primary-btn" style="background:#CF1322;" onclick="submitLightingOrder()">
+          🙏 LINE Pay 奉納登記・點亮元辰燈
+        </button>
+      </div>
+
+      <!-- 分頁 B：虛擬元辰點燈房 (Virtual Light Room) -->
+      <div id="lightingTabRoom" style="display:none; text-align:center;">
+        <div style="background: radial-gradient(circle, #3D1014 0%, #170507 100%); border-radius:14px; padding:20px 12px; color:#FFF; margin-bottom:12px; position:relative; overflow:hidden; border:1.5px solid #C68F42;">
+          <div style="font-size:0.75rem; color:#E8B878; letter-spacing:2px; margin-bottom:4px;">台中藍興媽祖 萬春宮</div>
+          <div style="font-size:1.15rem; font-weight:bold; color:#FFD591; margin-bottom:12px;">殿前專屬虛擬燈座</div>
+          
+          <!-- 3D 擬真發光蓮花燈與光芒動畫 -->
+          <div style="position:relative; width:100px; height:100px; margin:0 auto 10px auto;">
+            <div id="virtualLightAura" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:90px; height:90px; border-radius:50%; background:radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,77,79,0) 70%); animation:pulseAura 2s infinite alternate;"></div>
+            <div style="font-size:3.5rem; line-height:100px; position:relative; z-index:2;" id="virtualLightFlame">🪔</div>
+          </div>
+
+          <div style="font-size:1rem; font-weight:bold; color:#FFF;" id="roomDonorName">王信士 之元辰燈</div>
+          <div style="font-size:0.78rem; color:#FFCCC7; margin-top:3px;" id="roomLightType">✨ 天上聖母光明燈・常年供奉</div>
+          <div style="font-size:0.72rem; color:#D9D9D9; margin-top:6px; background:rgba(255,255,255,0.1); display:inline-block; padding:2px 10px; border-radius:12px;" id="roomWishText">
+            願望：「闔家身體安康，萬事逢春吉祥」
+          </div>
+          
+          <div style="margin-top:14px; display:flex; justify-content:center; gap:16px; font-size:0.78rem; color:#E8B878;">
+            <div>已點亮：<strong id="roomLightDays" style="color:#FFF;">1</strong> 天</div>
+            <div>積累功德值：<strong id="roomMeritCount" style="color:#FFF;">88</strong> 點</div>
+          </div>
+        </div>
+
+        <!-- 每日供奉互動按鈕 -->
+        <div style="display:flex; gap:10px;">
+          <button class="lb-primary-btn" style="flex:1; background:#D48806;" onclick="addLightOil()">
+            💧 每日誠心添油香 (+5功德)
+          </button>
+          <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="switchLightingTab('register')">
+            ➕ 加安其他燈座
+          </button>
         </div>
       </div>
-      <button class="lb-primary-btn" onclick="alert('🎉 感謝信士誠心！線上祈安點燈登記功能即將連線萬春宮廟務系統！'); closeLbModal('lightingModal');">
-        確認登記點燈
-      </button>
     </div>
   </div>
 
@@ -2507,6 +2594,93 @@
       <button class="lb-primary-btn" onclick="alert('感謝信士支持！已為您記錄贊助意願，將由廟方執事專人聯繫。'); closeLbModal('adModal');">
         🙏 誠心參與祈福贊助
       </button>
+    </div>
+  </div>
+
+  <!-- 7.8 萬春宮特色：白米收驚安魂互動小工具 (White Rice Exorcism Modal) -->
+  <div class="lb-modal-overlay" id="shoujingModal" onclick="closeLbModal('shoujingModal')">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:88vh; overflow-y:auto;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title">🍚 萬春宮・正統白米收驚科儀</div>
+        <button class="lb-sheet-close" onclick="closeLbModal('shoujingModal')">✕</button>
+      </div>
+
+      <div style="font-size:0.86rem; line-height:1.6; color:#444;">
+        <p style="margin-bottom:8px;">依循清代閩南宮廟古法：取淨碗盛滿白米、以信士隨身衣物封盤，由道長焚香叩請<strong>開基湄洲正身三媽</strong>下降，收攝驚魂、解化煞氣、安鎮三魂七魄。</p>
+
+        <!-- 步驟一：選擇收驚對象與受驚因緣 -->
+        <div id="shoujingStep1">
+          <div style="background:#FFFDF9; border:1px solid #FFE4D6; border-radius:10px; padding:12px; margin-bottom:12px;">
+            <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555; font-weight:bold;">受驚善信：</label>
+              <input type="text" id="shoujingName" placeholder="信士姓名" value="陳信士" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem;" />
+            </div>
+            <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.8rem; color:#555; font-weight:bold;">驚擾因由：</label>
+              <select id="shoujingReason" style="padding:6px 10px; border:1px solid #DDD; border-radius:6px; font-size:0.85rem; background:#FFF;">
+                <option value="nightmare">夜夢不寧 / 噩夢心悸驚醒</option>
+                <option value="accident">車行受驚 / 行經險晦路段</option>
+                <option value="stress">心神恍惚 / 工作學業壓力窒息</option>
+                <option value="child">幼童夜啼 / 啼哭無常驚煞</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 互動安魂盤舞台 -->
+          <div style="background: radial-gradient(circle, #2E1B10 0%, #150D08 100%); border-radius:14px; padding:24px 12px; text-align:center; color:#FFF; margin-bottom:12px; position:relative; overflow:hidden; border:1.5px solid #C68F42;">
+            <div style="font-size:0.75rem; color:#D4A373; margin-bottom:6px;">【大墩開基三媽 安神米卦盤】</div>
+            
+            <!-- 擬真白米米卦圖示與呼吸光圈 -->
+            <div style="position:relative; width:110px; height:110px; margin:0 auto 12px auto; display:flex; align-items:center; justify-content:center;">
+              <div id="shoujingRiceAura" style="position:absolute; width:100px; height:100px; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(201,164,92,0) 70%);"></div>
+              <div id="shoujingRiceBowl" style="font-size:3.8rem; line-height:110px; cursor:pointer; user-select:none; transition:transform 0.2s;" onclick="triggerShoujingHold()">
+                🍚
+              </div>
+            </div>
+
+            <div id="shoujingStatusText" style="font-size:0.9rem; font-weight:bold; color:#FFD591;">
+              點擊上方米盤，長按 3 秒靜心凝神
+            </div>
+            <div style="font-size:0.72rem; color:#BBB; margin-top:4px;">
+              觀想開基三媽慈光撫頂・心神歸位
+            </div>
+          </div>
+
+          <button class="lb-primary-btn" id="shoujingStartBtn" style="background:#8C5B32;" onclick="startShoujingRitual()">
+            🕊️ 啟動白米收驚・焚香誦咒安神
+          </button>
+        </div>
+
+        <!-- 步驟二：安魂成果與三媽賜符 (預設隱藏) -->
+        <div id="shoujingStep2" style="display:none; text-align:center;">
+          <div style="background:#FFF; border:1.5px solid #52C41A; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 4px 12px rgba(82,196,26,0.1);">
+            <span style="font-size:2.5rem;">✨</span>
+            <div style="font-size:1.1rem; font-weight:bold; color:#237804; margin:6px 0;">
+              【魂魄歸體・元辰安泰】
+            </div>
+            <div style="font-size:0.82rem; color:#555; line-height:1.7; text-align:left; background:#F6FFED; padding:10px 12px; border-radius:8px; margin:10px 0;">
+              <p style="margin:2px 0;"><strong>🌾 白米卦象：</strong>米粒齊整圓潤，主浮煞盡散，驚擾已隨青煙化去。</p>
+              <p style="margin:2px 0;"><strong>📜 湄洲三媽敕令神咒：</strong>「天清地寧，三魂歸體，七魄守形，神刀一下，萬煞潛藏。急急如律令！」</p>
+              <p style="margin:2px 0; color:#8C5B32;"><strong>🍵 廟祝奉茶撫慰：</strong>「心安即是家鄉，飲一杯熱茶，今夜定得甘甜好眠。」</p>
+            </div>
+            
+            <!-- 數位開運安神符 -->
+            <div style="background:#FFF9F0; border:1px dashed #FAAD14; padding:8px; border-radius:8px; font-size:0.78rem; color:#D46B08;">
+              🪔 已為您加持「開基三媽安魂保命神符」，護佑身心平安！
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px;">
+            <button class="lb-primary-btn" style="flex:1; background:#06C755;" onclick="openCouponModal(); closeLbModal('shoujingModal');">
+              🍵 領取奉茶優惠溫潤定神
+            </button>
+            <button class="lb-primary-btn" style="flex:1; background:#555;" onclick="resetShoujingView()">
+              🔄 為親友再收一次
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -3606,6 +3780,126 @@
       const data = ZODIAC_STAR_DATA[val] || ZODIAC_STAR_DATA['dragon'];
       alert(`🏮 感謝信士誠心！已為您記錄【${data.name}】祭解祈福疏文意向！\n萬春宮執事道長將於近期科儀朔望代信士呈稟湄洲媽祖消災解厄！`);
       closeLbModal('zodiacModal');
+    }
+
+    // ==============================================
+    // 萬春宮特色：線上點燈與虛擬元辰燈房互動邏輯 (Lighting & Virtual Light Room)
+    // ==============================================
+    let currentSelectedLight = { key: 'guangming', title: '✨ 天上聖母光明燈', price: 600 };
+    let virtualRoomState = { days: 1, merit: 88, name: '王信士', type: '✨ 天上聖母光明燈', wish: '闔家身體安康，萬事逢春吉祥' };
+
+    function switchLightingTab(tab) {
+      const regView = document.getElementById('lightingTabRegister');
+      const roomView = document.getElementById('lightingTabRoom');
+      const regBtn = document.getElementById('tabLightRegisterBtn');
+      const roomBtn = document.getElementById('tabLightRoomBtn');
+      if (!regView || !roomView) return;
+
+      if (tab === 'register') {
+        regView.style.display = 'block';
+        roomView.style.display = 'none';
+        if (regBtn) { regBtn.style.background = '#FFF'; regBtn.style.color = '#CF1322'; regBtn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (roomBtn) { roomBtn.style.background = 'transparent'; roomBtn.style.color = '#666'; roomBtn.style.boxShadow = 'none'; }
+      } else {
+        regView.style.display = 'none';
+        roomView.style.display = 'block';
+        if (roomBtn) { roomBtn.style.background = '#FFF'; roomBtn.style.color = '#CF1322'; roomBtn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)'; }
+        if (regBtn) { regBtn.style.background = 'transparent'; regBtn.style.color = '#666'; regBtn.style.boxShadow = 'none'; }
+      }
+    }
+
+    function selectLightType(key, title, price) {
+      currentSelectedLight = { key, title, price };
+      document.querySelectorAll('.light-type-opt').forEach(el => {
+        el.style.borderWidth = '1px';
+      });
+      const chosen = document.getElementById(`optLight_${key}`);
+      if (chosen) chosen.style.borderWidth = '2.5px';
+      const labelElem = document.getElementById('lightSelectedText');
+      if (labelElem) labelElem.innerText = `${title} ($${price})`;
+    }
+
+    function submitLightingOrder() {
+      const name = document.getElementById('lightPayerName')?.value || '王信士';
+      const birth = document.getElementById('lightPayerBirth')?.value || '吉月吉日';
+      const addr = document.getElementById('lightPayerAddr')?.value || '台中市中區成功路';
+      const wish = document.getElementById('lightPayerWish')?.value || '闔家身體安康，萬事逢春吉祥';
+
+      virtualRoomState.name = name;
+      virtualRoomState.type = currentSelectedLight.title;
+      virtualRoomState.wish = wish;
+      virtualRoomState.days = 1;
+      virtualRoomState.merit = 100;
+
+      // 更新虛擬燈房視圖
+      document.getElementById('roomDonorName').innerText = `${name} 之元辰燈`;
+      document.getElementById('roomLightType').innerText = `${currentSelectedLight.title}・常年供奉`;
+      document.getElementById('roomWishText').innerText = `願望：「${wish}」`;
+      document.getElementById('roomLightDays').innerText = virtualRoomState.days;
+      document.getElementById('roomMeritCount').innerText = virtualRoomState.merit;
+
+      alert(`🎉 感謝信士誠心！已透過 LINE Pay 成功奉納 ${currentSelectedLight.title}（新台幣 $${currentSelectedLight.price} 元）！\n\n文疏已存檔備呈萬春宮大殿，現已為您在殿前點亮【專屬虛擬元辰燈】！`);
+      switchLightingTab('room');
+    }
+
+    function addLightOil() {
+      virtualRoomState.merit += 5;
+      const countElem = document.getElementById('roomMeritCount');
+      if (countElem) countElem.innerText = virtualRoomState.merit;
+
+      const aura = document.getElementById('virtualLightAura');
+      if (aura) {
+        aura.style.transform = 'translate(-50%, -50%) scale(1.35)';
+        setTimeout(() => {
+          aura.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 300);
+      }
+      playCypressWoodSound();
+      alert('💧 感謝信士虔誠添油香！功德值 +5，神光普照元辰光彩！');
+    }
+
+    // ==============================================
+    // 萬春宮特色：白米收驚安魂儀軌互動 (White Rice Exorcism Ritual)
+    // ==============================================
+    let shoujingHolding = false;
+
+    function triggerShoujingHold() {
+      const bowl = document.getElementById('shoujingRiceBowl');
+      const text = document.getElementById('shoujingStatusText');
+      if (bowl) bowl.style.transform = 'scale(1.18)';
+      if (text) text.innerText = '靜心持念開基三媽... 魂魄安穩！';
+      playCypressWoodSound();
+      setTimeout(() => {
+        if (bowl) bowl.style.transform = 'scale(1)';
+      }, 300);
+    }
+
+    function startShoujingRitual() {
+      const btn = document.getElementById('shoujingStartBtn');
+      const text = document.getElementById('shoujingStatusText');
+      const aura = document.getElementById('shoujingRiceAura');
+      if (btn) { btn.disabled = true; btn.innerText = '🕊️ 焚香誦咒收煞中（請屏息凝神）...'; }
+      if (text) text.innerText = '誦咒：「天清地寧，三魂歸體，七魄守形」...';
+      if (aura) aura.style.background = 'radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(201,164,92,0) 70%)';
+
+      playCypressWoodSound();
+      setTimeout(() => { playCypressWoodSound(); }, 600);
+      setTimeout(() => { playCypressWoodSound(); }, 1200);
+
+      setTimeout(() => {
+        document.getElementById('shoujingStep1').style.display = 'none';
+        document.getElementById('shoujingStep2').style.display = 'block';
+        if (btn) { btn.disabled = false; btn.innerText = '🕊️ 啟動白米收驚・焚香誦咒安神'; }
+      }, 1800);
+    }
+
+    function resetShoujingView() {
+      document.getElementById('shoujingStep1').style.display = 'block';
+      document.getElementById('shoujingStep2').style.display = 'none';
+      const text = document.getElementById('shoujingStatusText');
+      if (text) text.innerText = '點擊上方米盤，長按 3 秒靜心凝神';
+      const aura = document.getElementById('shoujingRiceAura');
+      if (aura) aura.style.background = 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(201,164,92,0) 70%)';
     }
 
     // LINE Bye 底部小撇步跑馬燈
