@@ -773,46 +773,47 @@
     .lb-brand {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       cursor: pointer;
       user-select: none;
     }
-    .lb-brand-box {
+    .lb-brand-line {
+      color: #2B1810; /* 沉穩檀木黑 (亦可切換為 #7A0C16 深緋紅) */
+      font-size: 1.32rem;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+      line-height: 1;
+    }
+    .lb-brand-bye-pill {
       display: inline-flex;
       align-items: center;
-      background: #4A2E1B; /* 咖啡色底 */
-      border: 1.5px solid #6B4226;
-      border-radius: 8px;
-      padding: 3px 9px 4px 9px;
-      box-shadow: 0 2px 6px rgba(74, 46, 27, 0.22);
-      transition: transform 0.15s ease, background 0.15s ease;
-    }
-    .lb-brand:active .lb-brand-box {
-      transform: scale(0.96);
-      background: #3B2313;
-    }
-    .lb-brand-line {
-      color: #FF3B30; /* 紅字 */
-      font-size: 1.2rem;
+      justify-content: center;
+      background: linear-gradient(135deg, #D6AD82 0%, #C99F72 100%); /* 古法香檳金棕，帶有籤筒與金漆牌匾溫潤光澤 */
+      color: #7A0C16; /* 深緋紅文字 */
+      font-size: 0.92rem;
       font-weight: 900;
-      letter-spacing: -0.2px;
+      letter-spacing: 0.4px;
+      padding: 3px 9px 3px 9px;
+      border-radius: 14px; /* 溫潤膠囊造型 */
+      border: 1px solid rgba(179, 137, 95, 0.45);
+      box-shadow: 0 2px 6px rgba(201, 159, 114, 0.35);
+      line-height: 1.1;
+      transition: transform 0.15s ease, filter 0.15s ease;
     }
-    .lb-brand-bye {
-      color: #FF5252; /* 紅字 */
-      font-size: 1.2rem;
-      font-weight: 900;
-      margin-left: 2px;
-      letter-spacing: -0.3px;
+    .lb-brand:active .lb-brand-bye-pill {
+      transform: scale(0.95);
+      filter: brightness(0.95);
     }
     .lb-brand-badge {
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       font-weight: 800;
-      color: #D32F2F; /* 紅字 */
-      background: #FDF2E9; /* 溫潤淺咖啡木質底 */
-      border: 1px solid rgba(211, 47, 47, 0.35);
-      padding: 2px 6px;
-      border-radius: 5px;
+      color: #7A0C16; /* 深緋紅 */
+      background: rgba(201, 159, 114, 0.18); /* 古法香檳金棕透光 */
+      border: 1px solid rgba(201, 159, 114, 0.45);
+      padding: 1px 5px;
+      border-radius: 4px;
       letter-spacing: 0.5px;
+      margin-left: 1px;
     }
     .lb-header-icons {
       display: flex;
@@ -1767,9 +1768,8 @@
     <header class="lb-header">
       <!-- 品牌標題 (X 5% ~ 30%, Y 2% ~ 7%) -->
       <div class="lb-brand" onclick="location.reload()" title="LINE Bye 智慧宮廟生活圈">
-        <div class="lb-brand-box">
-          <span class="lb-brand-line">LINE</span><span class="lb-brand-bye">Bye</span>
-        </div>
+        <span class="lb-brand-line">LINE</span>
+        <span class="lb-brand-bye-pill">BYE</span>
         <span class="lb-brand-badge">MINI</span>
       </div>
 
