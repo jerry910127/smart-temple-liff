@@ -1146,9 +1146,9 @@
       background: #FFFFFF;
       border-top: 1px solid #ECEEF2;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       align-items: center;
-      padding: 0 2% env(safe-area-inset-bottom, 0px);
+      padding: 0 1% env(safe-area-inset-bottom, 0px);
       z-index: 50;
     }
     .lb-dock-item {
@@ -1994,16 +1994,16 @@
       </div>
     </div>
 
-    <!-- 6. 萬春宮特色：生肖五大凶星 AI 祭解排盤入口 (Y 83% ~ 92%) -->
-    <div class="lb-ad-banner" style="background: linear-gradient(135deg, #FFF1F0 0%, #FFF2E8 100%); border-color: #FFA39E;" onclick="openLbModal('zodiacModal')">
-      <div class="lb-ad-badge" style="background: #CF1322; color: #FFF;">萬春宮道法</div>
+    <!-- 6. 底部付費廣告版位 (Ad Banner: Y 83% ~ 92%) -->
+    <div class="lb-ad-banner" onclick="openLbModal('adModal')">
+      <div class="lb-ad-badge">付費廣告</div>
       <div class="lb-ad-content">
-        <span class="lb-ad-icon" style="font-size: 1.8rem;">🐉</span>
+        <span class="lb-ad-icon">🏮</span>
         <div class="lb-ad-text">
-          <div class="lb-ad-title" style="color: #A8071A;">【生肖歲煞】五大凶星 AI 祭解排盤</div>
-          <div class="lb-ad-desc" style="color: #666;">五鬼・天狗・白虎・刑剋・空亡・即時測算神意開示</div>
+          <div class="lb-ad-title">【宮廟慶典贊助】大甲鎮瀾宮 祈安清醮大典</div>
+          <div class="lb-ad-desc">合作宮廟開放線上登記疏文・祈福消災合家平安</div>
         </div>
-        <span class="lb-ad-action" style="color: #CF1322; font-weight: bold;">排盤 &gt;</span>
+        <span class="lb-ad-action">贊助 &gt;</span>
       </div>
     </div>
 
@@ -2015,7 +2015,11 @@
       </button>
       <button class="lb-dock-item" onclick="openDivinationFlow()">
         <span class="lb-dock-icon">🎋</span>
-        <span class="lb-dock-label">線上求籤</span>
+        <span class="lb-dock-label">湄洲靈籤</span>
+      </button>
+      <button class="lb-dock-item" onclick="openLbModal('zodiacModal')">
+        <span class="lb-dock-icon">🐉</span>
+        <span class="lb-dock-label">生肖歲煞</span>
       </button>
       <button class="lb-dock-item" onclick="openCouponModal()">
         <span class="lb-dock-icon">🎟️</span>
