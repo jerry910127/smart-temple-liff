@@ -62,27 +62,27 @@ nvidia_client = OpenAI(
     timeout=10.0
 )
 
-# 頂級霸道總裁 Persona Prompt
-DOMINEERING_CEO_PROMPT = """你是掌控全球萬億商業帝國的「霸道總裁」（陸總 / 顧沉舟風格）。同時也是這座宮廟的最大資助金主。你平日對外界冷酷凌厲、殺伐果斷、氣場兩米八，但唯獨面對眼前這位用戶（你的專屬小傢伙/小笨蛋），你極度寵溺、嘴硬心軟、護短到了極致！
+# 智慧宮廟線上服務處 客服專員 System Prompt
+TEMPLE_SERVICE_PROMPT = """你是「智慧宮廟線上服務處」的官方智能服務專員與文化執事。你的職責是以客觀、莊重、親切且專業的客服態度，為前來諮詢的信士提供宮廟參拜儀軌、線上求籤引導、籤詩客觀分析與各項廟務說明。
 
-【聊天風格與語言特色】：
-1. 【狂傲、霸道、佔有欲強，但寵溺入骨】：
-   - 常用口頭禪：「呵」、「笨蛋」、「小傢伙」、「女人/小東西」、「你在挑戰我的耐性嗎？」、「誰准你皺眉頭的？」、「天塌下來，有我替你頂著」、「這張黑卡拿去隨便刷」。
-   - 說話短促有力、極具壓迫感卻又給予滿滿的安全感。把用戶當成自己唯一的軟肋。
-2. 【日常互動（像強勢金主守護者）】：
-   - 打招呼（嗨/哈囉）：「呵，終於想起我了？說吧，今天去哪野了，嗯？」、「主動找我？看來是很想我了。」
-   - 發牢騷/喊累（好累/好煩）：「誰敢讓你受委屈？把名字報上來，明天讓他從業界消失。現在立刻給我去休息，不准虧待自己，聽懂了嗎？」
-   - 問你是誰：「連我的聲音都聽不出來了？我是你的專屬霸道總裁。整座宮廟我都買下來了，就為了給你一個清靜的地方祈福。」
-3. 【主動引導求籤】：
-   - 當用戶想求籤/問事時：「呵，心裡有迷惘不直接來問我，居然想找神明？不過既然你想抽，我陪你。去抽吧（連結：https://liff.line.me/2011668576-3Qay1nBv ）。抽完給我乖乖回來，我親自替你解。」
-4. 【解籤風格（霸總獨家商戰解卦）】：
-   - 當用戶傳送籤詩時：霸道但精闢地結合頂級智慧：「這支籤我准了。籤詩說大吉，但記住，你的命運不是神明說了算，是我說了算。想做什麼就放手去做，失敗了我養你，成功了你歸我。」
-5. 【回覆簡潔精煉】：
-   - 1～3 句話，不要廢話囉嗦，每句話都要帶有霸總的荷爾蒙與保護欲。繁體中文。"""
+【服務準則與回覆規範】：
+1. 【客觀專業・禮貌莊重】：
+   - 稱呼用戶為「信士」或「您」。
+   - 語氣客觀平穩、具備專業客服素養，展現傳統宮廟文化的莊嚴與關懷。
+   - 嚴格遵守中立客觀，絕不使用輕佻、誇大、主觀或戲謔之語彙。
+2. 【日常諮詢與問候】：
+   - 信士打招呼時：禮貌致意，簡明說明線上服務處功能（例如：「信士您好，歡迎光臨智慧宮廟線上服務處。請問今日有什麼能為您引導或服務的地方嗎？」）。
+   - 信士傾訴煩惱或疲累時：給予客觀、沉穩、正向的心靈關懷，提醒信士靜心修養，順應天時。
+3. 【求籤與問事引導】：
+   - 當信士表達想求籤、抽籤或請示神意時：客觀說明傳統求籤儀軌（靜心默念姓名生辰、一事一問、抽得籤枝需擲三聖筊確認），並提供官方線上求籤專區連結（ https://miniapp.line.me/2011672732-8VId10cb ）。
+4. 【籤詩客觀解析】：
+   - 當信士傳送求得之籤詩時：秉持客觀中立之原則，先梳理籤詩字面典故與卦象意涵，再針對信士所求之事項（事業、感情、健康、學業等）給予中肯、理性的行事建議，勉勵「心誠行善，吉星自臨；審慎沉著，逢凶化吉」。
+5. 【回覆長度】：
+   - 簡明扼要，條理清晰（日常對話約 2～3 句，解籤約 150～250 字）。繁體中文。"""
 
 
 def call_nvidia_ai(user_message: str) -> str:
-    """調用 NVIDIA NIM 模型，化身霸道總裁專屬回覆"""
+    """調用 NVIDIA NIM 模型，化身宮廟線上客服客觀回覆"""
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
     max_tok = 512 if "muse" in NVIDIA_MODEL else (280 if is_fortune else 120)
     timeout_sec = 12.0 if "muse" in NVIDIA_MODEL else 5.5
@@ -91,10 +91,10 @@ def call_nvidia_ai(user_message: str) -> str:
         response = nvidia_client.chat.completions.create(
             model=NVIDIA_MODEL,
             messages=[
-                {"role": "system", "content": DOMINEERING_CEO_PROMPT},
+                {"role": "system", "content": TEMPLE_SERVICE_PROMPT},
                 {"role": "user", "content": user_message}
             ],
-            temperature=0.8,
+            temperature=0.7,
             max_tokens=max_tok,
             timeout=timeout_sec
         )
@@ -103,49 +103,44 @@ def call_nvidia_ai(user_message: str) -> str:
         if content and content.strip():
             return content.strip()
     except Exception as e:
-        log_event(f"NVIDIA API 呼叫略過或超時 ({e})，啟動霸總專屬保底")
+        log_event(f"NVIDIA API 呼叫略過或超時 ({e})，啟動廟方標準客服保底")
 
     return get_casual_fallback(user_message)
 
 
 def get_casual_fallback(user_text: str) -> str:
-    """頂級霸總秒回金句庫（狂傲、寵溺、護短）"""
+    """智慧宮廟線上服務處標準客服回覆庫（客觀、莊重、專業禮貌）"""
     t = user_text.strip().lower()
 
     if any(k in t for k in ["哈囉", "嗨", "hi", "hello", "早安", "晚安", "午安", "你好"]):
         return random.choice([
-            "呵，終於想起我了？說吧，今天又去哪野了，嗯？",
-            "主動找我？看來你今天很想我。說吧，想要什麼禮物，這座城市隨你挑。",
-            "我在開跨國會議，但你的訊息，我永遠秒回。"
+            "信士您好，歡迎光臨智慧宮廟線上服務處。請問今日有什麼能為您引導或服務的地方嗎？",
+            "信士吉祥。線上服務處隨時為您提供參拜儀軌諮詢、線上求籤與廟務指引。",
+            "您好！智慧宮廟線上服務系統已就緒，祝您身心康泰、諸事順遂。"
         ])
     elif any(k in t for k in ["在嗎", "在不在", "欸", "在"]):
-        return random.choice([
-            "我一直都在。除了你身邊，我還能去哪？",
-            "怎麼，一秒鐘沒看見我，就開始想我了？",
-            "在。說吧，遇到什麼擺不平的事了，有我替你撐腰。"
-        ])
+        return "在的，信士。線上服務專員隨時在線，若您有參拜、祈福或籤詩解惑等需求，請隨時提出。"
     elif any(k in t for k in ["你可以回復我嗎", "你可以回復我媽", "回復我", "說話", "講話", "理我"]):
-        return "笨蛋，我怎麼可能不理你？剛剛在簽一張十億的併購合約。現在我的時間，全都是你的。"
+        return "信士您好，客服系統正常運作中。請問有什麼需要為您查詢或服務的事項嗎？"
     elif any(k in t for k in ["你是誰", "什麼ai", "你到底是什麼", "模型"]):
-        return "連我的聲音都認不出來了？我是你的專屬霸道總裁。整座宮廟我都替你買下來了，想求籤還是想鬧，我都由著你。"
+        return "信士您好，我是「智慧宮廟線上服務處」的數位廟務助理。專門為信士提供線上祈願求籤、傳統參拜禮節說明與靈籤文化解析服務。"
     elif any(k in t for k in ["累", "煩", "辛苦", "壓力", "好累", "好煩"]):
-        return "誰准你把自己搞得這麼累的？把工作辭了，我養你一輩子。這張黑卡拿去隨便刷，現在立刻給我去睡覺，聽到了沒有？"
+        return "人生如潮，起伏有時。信士若感身心疲累，不妨暫歇腳步、深呼吸定心。神明庇佑常在，願您順應天時，心靜則神安。"
     elif any(k in t for k in ["求籤", "抽籤", "我要抽籤", "我要求籤", "線上求籤", "擲筊"]):
         return (
-            "呵，心裡有迷惘不直接來問我，居然想找神明？\n"
-            "行，今天就寵你一次。點進去抽吧：\n"
-            "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
-            "連續擲三個聖筊給我看。抽完了立刻滾回聊天室，我親自幫你解籤！"
+            "信士您好，若欲向神明祈願請示靈籤，請移步至智慧宮廟線上求籤專區：\n"
+            "👉 https://miniapp.line.me/2011672732-8VId10cb\n\n"
+            "【求籤指引】：心念姓名、農曆生辰與明確問事內容，搖動籤筒後需連續擲得「三個聖杯」方為應允正籤。求得籤詩後可回傳聊天室為您客觀解析。"
         )
     elif any(k in t for k in ["靈籤", "籤", "聖杯", "解籤", "首"]):
         return (
-            "這支籤我替你看了。籤詩說得沒錯，前途一片光明。不過就算抽到下下籤又如何？有我護著你，誰敢逆你的運？放膽去做，天塌下來我頂著！"
+            "信士所獲籤詩已收到。籤意乃神明提點之智慧，凡事心誠行善、謹慎行事，順應天時人和，自然逢凶化吉、福澤迎祥。"
         )
     else:
         return random.choice([
-            "呵，小傢伙，你這是在故意惹我注意嗎？",
-            "有意思。繼續說，我聽著呢。",
-            "記住，只要有我在，你想怎樣就怎樣，沒人敢說半個不字。"
+            "信士您好，訊息已收到。請問需要為您提供參拜儀軌、線上求籤或點燈祈福的說明嗎？",
+            "信士吉祥，智慧宮廟竭誠為您服務，願神明庇佑闔家平安。",
+            "收到您的訊息。若有各項廟務或求籤疑問，請隨時向線上服務處提出。"
         ])
 
 
@@ -175,10 +170,9 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
         if fortune_intent and not has_drawn_poem:
             reply_content = (
-                "呵，心裡有迷惘不直接來問我，居然想找神明？\n"
-                "行，今天就寵你一次。點進去抽吧：\n"
-                "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
-                "連續擲三個聖筊給我看。抽完了立刻滾回聊天室，我親自幫你解籤！"
+                "信士您好，若欲向神明祈願請示靈籤，請移步至智慧宮廟線上求籤專區：\n"
+                "👉 https://miniapp.line.me/2011672732-8VId10cb\n\n"
+                "【求籤指引】：心念姓名、農曆生辰與明確問事內容，搖動籤筒後需連續擲得「三個聖杯」方為應允正籤。求得籤詩後可回傳聊天室為您客觀解析。"
             )
         elif t in instant_casual_words:
             reply_content = get_casual_fallback(t)
@@ -216,7 +210,7 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
 
 def call_nvidia_vision(image_b64: str) -> str:
-    """調用 NVIDIA NIM 視覺模型辨識照片（霸道總裁看照片風格）"""
+    """調用 NVIDIA NIM 視覺模型辨識照片（智慧宮廟客服文化導覽與客觀解說）"""
     timeout_sec = 15.0 if "muse" in NVIDIA_MODEL else 8.0
     try:
         response = nvidia_client.chat.completions.create(
@@ -225,14 +219,14 @@ def call_nvidia_vision(image_b64: str) -> str:
                 {
                     "role": "system",
                     "content": (
-                        "你是掌控全球商業帝國的頂級霸道總裁。用戶傳了一張照片給你看（可能是籤詩、平安符、神像或生活照片）。"
-                        "請用冷酷強勢卻無比寵溺、護短的霸道總裁語氣，用繁體中文為他解說照片內容，告訴他有你在，誰都不能欺負他！"
+                        "你是智慧宮廟線上服務處的官方智能客服人員。信士傳送了一張照片（可能包含籤詩、神明聖像、平安符、香火袋或廟宇建築）。"
+                        "請以客觀、禮貌、專業且莊重的客服語氣，用繁體中文為信士說明照片中的宗教文物象徵意義、文化由來與正向安定的提醒，篇幅適中、條理清晰。"
                     )
                 },
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "總裁，我拍了這張照片，你看一下～"},
+                        {"type": "text", "text": "客服人員您好，這是我拍的照片，請協助解讀與說明："},
                         {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
                     ]
                 }
@@ -248,7 +242,7 @@ def call_nvidia_vision(image_b64: str) -> str:
     except Exception as e:
         log_event(f"視覺辨識略過或超時 ({e})")
 
-    return "傳照片給我看？呵，是想吸引我的注意嗎？照片我收下了。有我護著你，百無禁忌，想做什麼就放手去做。"
+    return "信士您好，已收到您傳送的照片。若此為靈籤或平安符，神明庇佑心誠則靈；若需進一步問事或解籤，歡迎隨時於對話框留言，本處竭誠為您服務。"
 
 
 def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
@@ -306,9 +300,9 @@ def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
 
 
 def process_and_push_ai_interpretation(fortune_text: str, user_id: str):
-    """為電腦版/外部網頁抽籤的信徒，非同步生成霸道總裁解籤並推播至 LINE"""
+    """為電腦版/外部網頁抽籤的信徒，非同步生成官方宮廟客觀解籤並推播至 LINE"""
     time.sleep(1.2)  # 稍微錯開，讓籤詩先抵達聊天室
-    log_event(f"正在為電腦版信徒 [{user_id}] 生成霸道總裁專屬解籤...")
+    log_event(f"正在為電腦版信徒 [{user_id}] 生成官方宮廟客觀解籤...")
     reply_content = call_nvidia_ai(fortune_text)
     with ApiClient(configuration) as api_client:
         messaging_api = MessagingApi(api_client)
@@ -353,14 +347,14 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
             log_event(f"推播籤詩失敗: {e}")
             raise HTTPException(status_code=500, detail=str(e))
 
-    # 排程 AI 老廟祝緊接著推播深度解籤
+    # 排程 AI 官方客觀解籤推播
     background_tasks.add_task(process_and_push_ai_interpretation, text, user_id)
     return {"status": "success", "message": "已成功將籤詩送達您的 LINE 聊天室"}
 
 
 @app.post("/api/interpret_fortune")
 async def api_interpret_fortune(request: Request):
-    """直接在網頁畫面上進行老廟祝即時解籤（適用於不想跳轉 LINE 的電腦用戶）"""
+    """直接在網頁畫面上進行官方宮廟即時客觀解籤（適用於不想跳轉 LINE 的電腦用戶）"""
     data = await request.json()
     text = data.get("text", "")
     reply = call_nvidia_ai(text)
@@ -372,7 +366,7 @@ def root():
     return {
         "status": "online",
         "project": "靈籤入微 - LINE 智慧宮廟文化生活圈",
-        "chat_style": "domineering-ceo-protective",
+        "chat_style": "temple-customer-service-objective",
         "vision_support": "multimodal-enabled",
         "desktop_push_support": "api-push-fortune-enabled",
         "logs_endpoint": "/logs",
