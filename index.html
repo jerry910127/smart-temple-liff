@@ -1391,20 +1391,20 @@
     .route-nav-btn {
       background: #F5F6F8;
       border: 1px solid #E5E7EB;
-      border-radius: 16px;
-      padding: 5px 10px;
-      font-size: 0.78rem;
-      font-weight: 800;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      padding: 0;
       color: #333333;
       display: inline-flex;
       align-items: center;
-      gap: 3px;
+      justify-content: center;
       cursor: pointer;
       transition: background 0.15s, transform 0.1s;
     }
     .route-nav-btn:active {
       background: #E8EAED;
-      transform: scale(0.95);
+      transform: scale(0.92);
     }
     .route-nav-title {
       font-size: 1.15rem;
@@ -2034,19 +2034,22 @@
   <div class="route-page-container" id="pageRouteList" style="display:none;">
     <!-- 頂部導航列 (Header: Y 0% ~ 8%) -->
     <header class="route-nav-header">
-      <!-- 返回鍵 (< 回 line bye: X 5% ~ 12%, Y 2% ~ 6%) -->
-      <button class="route-nav-btn" onclick="openHomePage()" title="回 LINE Bye 主首頁">
-        <span style="font-size:1.1rem; line-height:1;">‹</span>
-        <span>回首頁</span>
+      <!-- 返回鍵 (‹) -->
+      <button class="route-nav-btn" onclick="openHomePage()" title="返回首頁">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </button>
 
-      <!-- 標題 (參拜足跡: X 35% ~ 65%, Y 2% ~ 6% 置中) -->
+      <!-- 標題 (參拜足跡 置中) -->
       <div class="route-nav-title">參拜足跡</div>
 
-      <!-- 關閉鍵 (X 回 line: X 88% ~ 95%, Y 2% ~ 6%) -->
-      <button class="route-nav-btn" onclick="closeLiffToChat()" title="關閉並回 LINE 聊天室" style="color:#666;">
-        <span>✕</span>
-        <span>回 LINE</span>
+      <!-- 首頁鍵 (房子圖示) -->
+      <button class="route-nav-btn" onclick="openHomePage()" title="回首頁">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
       </button>
     </header>
 
@@ -2141,19 +2144,22 @@
   <div class="route-page-container" id="pageRouteDetail" style="display:none;">
     <!-- 頂部導航列 (Header: Y 0% ~ 8%) -->
     <header class="route-nav-header">
-      <!-- 返回鍵 (< 回到列表: X 5% ~ 12%, Y 2% ~ 6%) -->
-      <button class="route-nav-btn" onclick="openRouteListPage()" title="回到路線列表">
-        <span style="font-size:1.1rem; line-height:1;">‹</span>
-        <span>回列表</span>
+      <!-- 返回鍵 (‹ 回到列表) -->
+      <button class="route-nav-btn" onclick="openRouteListPage()" title="返回路線列表">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </button>
 
       <!-- 路線標題 (如 文昌宮: X 35% ~ 65%, Y 2% ~ 6% 置中) -->
       <div class="route-nav-title" id="detailRouteTitle">文昌宮</div>
 
-      <!-- 首頁鍵 (🏠 line bye 之頁: X 88% ~ 95%, Y 2% ~ 6%) -->
-      <button class="route-nav-btn" onclick="openHomePage()" title="回 LINE Bye 首頁">
-        <span>🏠</span>
-        <span>首頁</span>
+      <!-- 首頁鍵 (房子圖示) -->
+      <button class="route-nav-btn" onclick="openHomePage()" title="回首頁">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
       </button>
     </header>
 
