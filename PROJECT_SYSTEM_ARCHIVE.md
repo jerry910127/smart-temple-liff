@@ -212,14 +212,13 @@ PORT=8000
   * 左側圓圈：已完成為綠色勾勾 `✓`，未完成為代號 Ⓐ / Ⓑ / Ⓒ
   * 右側即時計算實體直線距離（`距離 0.8 km`）
 * **動態視覺化足跡地圖區 (Visual Track: $Y \approx 52\% \sim 95\%$)**：
-  * **雙視角切換器 (Dual View Switch)**：
-    * `🗺️ Google 地圖` 模式（預設）：載入 Google Maps JavaScript API，繪製宮廟真實地理位置底圖、客製化足跡 Marker、金綠色巡禮路徑 Polyline、信徒即時 GPS 藍點與「🧭 Google 導航」按鈕。
-    * `🎨 尋寶步道` 模式：向量 SVG 蜿蜒虛線手繪路徑與擬真腳印，支援無網路或離線情境。
-  * **客製化足跡圖釘 (Custom Footprint Marker)**：
-    * 未打卡站點：低對比灰色圖釘與小腳印，標註站點代號（Ⓐ、Ⓑ、Ⓒ）。
-    * 已打卡站點：亮綠色 / 金色常亮光環腳印圖釘，點擊彈出 InfoWindow 顯示已解鎖與導航按鈕。
-  * **Google Maps 授權降級防護 (`window.gm_authFailure`)**：
-    * 若遇金鑰配額或網域限制尚未生效，系統自動無縫降級至「🎨 尋寶步道」手繪圖，確保用戶體驗不中斷。
+  * **全面採用實體 Google Maps 足跡地圖（原卡通手繪「尋寶步道」已正式廢除）**：
+    * 載入 Google Maps JavaScript API，以現代高質感地圖容器（高度 260px，圓角 14px）呈現宮廟真實地理座標底圖。
+    * **客製化足跡圖釘 (Custom Footprint Marker)**：
+      * 未打卡站點：低對比質感灰色圖釘與微型腳印，標註站點代號（Ⓐ、Ⓑ、Ⓒ）。
+      * 已打卡站點：亮綠色 / 金色常亮光環腳印圖釘，點擊彈出 InfoWindow 顯示站點名稱、打卡狀態與「🧭 Google 導航」按鈕。
+    * **金色巡禮路徑 (Polyline)**：自動將各宮廟站點以金綠色平滑航線連接，標繪參拜信眾神聖進香軌跡。
+    * **即時定位整合**：藍色即時 GPS 圓點動態標定信士所在位置，結合 LINE Touch 感應自動完成點亮打卡。
 * **LINE Touch 實體 NFC 標籤規格與 URL 喚醒規範**：
   * 宮廟現場實體 NFC 晶片標籤（NTAG213 / NTAG215 等）寫入之 NDEF 網址格式：
     `https://liff.line.me/2011668576-3Qay1nBv?action=touch&route={route_id}&cp={checkpoint_index}`
