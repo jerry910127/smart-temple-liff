@@ -1975,15 +1975,6 @@
 
       <!-- 右側功能圖示群 (X 55% ~ 95%, Y 2% ~ 7%) -->
       <div class="lb-header-icons">
-        <!-- 優惠券 (標籤框) -->
-        <button class="lb-icon-btn" onclick="openCouponModal()" title="商圈優惠券">
-          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
-            <line x1="9" y1="12" x2="9.01" y2="12"/><line x1="15" y1="12" x2="15.01" y2="12"/>
-          </svg>
-          <span class="lb-icon-dot"></span>
-        </button>
-
         <!-- 說明 (?) -->
         <button class="lb-icon-btn" onclick="openLbModal('helpModal')" title="參拜指引">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2066,7 +2057,7 @@
     <section class="lb-nearby-section" style="padding: 0 5% 10px 5%;">
       <div style="background: linear-gradient(135deg, #FFFDF9 0%, #FAF4EC 100%); border: 1.5px solid #E8D5C1; border-radius: 14px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(140, 91, 50, 0.08);">
         
-        <!-- 頂部定位狀態與集章進度 -->
+        <!-- 頂部定位狀態 -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <div style="display:flex; align-items:center; gap:6px;">
             <span style="display:flex; align-items:center; color:#A62824;">
@@ -2083,11 +2074,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 參拜足跡總覽徽章 -->
-          <span id="nearbyStampBadge" onclick="openRouteListPage()" style="background:#A62824; color:#FFF; font-size:0.68rem; font-weight:800; padding:3px 9px; border-radius:12px; box-shadow:0 1px 4px rgba(166,40,36,0.25); cursor:pointer;" title="查看參拜腳印">
-            👣 參拜足跡 1/3
-          </span>
         </div>
 
         <!-- 動態周邊中小廟宇卡片網格 (由 JS 依據 GPS 距離即時由近至遠渲染 3 座) -->
