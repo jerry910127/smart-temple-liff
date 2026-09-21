@@ -3890,6 +3890,31 @@
     </div>
   </div>
 
+  <!-- 10. 商圈奉茶優惠券 Modal (獨立商圈券，首頁點擊開啟) -->
+  <div class="lb-modal-overlay" id="couponModal" onclick="closeCouponModal()">
+    <div class="lb-sheet" onclick="event.stopPropagation()">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title" style="display:flex; align-items:center; gap:6px;">
+          <span>🍵</span> 商圈奉茶・現折優惠券
+        </div>
+        <button class="lb-sheet-close" onclick="closeCouponModal()">✕</button>
+      </div>
+      <div style="font-size:0.86rem; line-height:1.7; color:#444; text-align:center; padding:8px 0;">
+        <p style="color:#666; font-size:0.82rem; margin-bottom:12px;">結帳時出示專屬優惠代碼，享全台合作手搖飲、咖啡門市現折：</p>
+        <div style="background:#FAF5F0; border:1.5px dashed #C68F42; border-radius:12px; padding:16px; margin-bottom:14px;">
+          <div style="font-size:0.75rem; color:#8C5B32; font-weight:bold; margin-bottom:4px;">全台合作手搖飲 / 咖啡通用</div>
+          <div style="font-size:1.3rem; font-weight:bold; color:#A62824; margin-bottom:10px;">🥤 現折 15 元／85 折</div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
+            <span id="couponCodeText" style="font-family:monospace; font-size:1.1rem; font-weight:bold; color:#1C1614; background:#FFF; border:1px solid #DDD; padding:6px 14px; border-radius:6px; letter-spacing:2px;">TEMPLE88</span>
+            <button onclick="copyCouponCode()" style="background:#A62824; color:#FFF; border:none; padding:7px 14px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">複製代碼</button>
+          </div>
+        </div>
+        <button class="lb-primary-btn" style="background:#8C5B32;" onclick="closeCouponModal()">關閉</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==============================================
        求籤與擲筊核心舞台 (預設隱藏，點擊「線上解籤」進入)
        ============================================== -->
@@ -3971,40 +3996,6 @@
     </div>
 
     <!-- ==============================================
-         心理學行為增強：奉茶解躁飲料折扣券 Modal
-         ============================================== -->
-    <div class="zen-modal" id="couponModal">
-      <div class="coupon-badge">🍵 奉茶定心・聚氣蓄力</div>
-      <div class="zen-modal-title" style="font-size:1.25rem;">喝口好茶，手氣正旺別放棄！</div>
-      <div class="zen-modal-body" style="margin-bottom:8px;">
-        擲筊求籤，貴在心誠堅持！剛才氣場已達關鍵臨界點，神意正在強烈凝聚！<br>
-        特批奉上一杯清涼甘露，為你消燥解煩、定心安神：
-      </div>
-
-      <div class="coupon-ticket">
-        <div class="coupon-badge">全台合作手搖飲 / 咖啡通用</div>
-        <div class="coupon-discount">🥤 現折 15 元／85 折</div>
-        <div class="coupon-desc">結帳出示折扣代碼，消暑降火心誠則靈</div>
-        <div class="coupon-code-box">
-          <span class="coupon-code" id="couponCodeText">TEMPLE88</span>
-          <button class="coupon-copy-btn" onclick="copyCouponCode()">複製代碼</button>
-        </div>
-      </div>
-
-      <div class="pity-buff-alert">
-        ✨ <strong>好茶定心加持</strong>：飲茶沉澱後，神意契合度微幅再加 <span style="color:#ffd875; font-weight:bold;">+5%</span>！<br>
-        目前總勝算已提升至 <span id="modalResonanceRate" style="color:#ffd875; font-size:1.05rem; font-weight:bold;">63%</span>，手感正熱，趁勝追擊！
-      </div>
-
-      <button class="zen-btn" style="margin-top:14px;" onclick="claimCouponAndContinue()">
-        <span>🥤 飲茶定心・一鼓作氣再擲！</span>
-      </button>
-      <button class="zen-btn zen-btn-secondary" style="margin-top:8px; font-size:0.85rem; padding:8px;" onclick="closeCouponModal()">
-        <span>稍後再領</span>
-      </button>
-    </div>
-
-    <!-- ==============================================
          第二幕：傳統硃砂紅筊・請示神意
          ============================================== -->
     <div class="shrine-scene" id="sceneToss">
@@ -4017,9 +4008,6 @@
           <div class="sheng-dot" id="dot3"></div>
         </div>
         <div class="sheng-dot-tip" id="shengTipText">尚需連續擲出 3 個聖杯</div>
-        <div class="pity-boost-indicator" id="pityBoostIndicator" style="display:none;">
-          <span>✨ 誠心靈動共鳴值：<strong id="pityRateText">50%</strong>・差臨門一腳，別收手！</span>
-        </div>
       </div>
 
       <!-- 筊杯拋擲舞台 -->
@@ -4144,10 +4132,9 @@
     let pityShengBonus = 0;
     let couponOffered = false;
 
-    // 心理學可變比率增強時制（Variable Ratio Schedule）：
-    // 每次未中微幅調高 +4%，領券奉茶定心 +5%，上限鎖在 70%（黃金心流區間，維持高度博弈懸念與多巴胺渴求）
+    // 動態機率運算（平滑運算，在背後自然調節，神不知鬼不覺，絕不對外顯示任何勝率或%數）
     function getDynamicRates() {
-      const dynamicSheng = Math.min(70, 50 + (failureStreak * 4) + pityShengBonus);
+      const dynamicSheng = Math.min(70, 50 + (failureStreak * 4));
       const remaining = 100 - dynamicSheng;
       return {
         sheng: dynamicSheng,
@@ -4157,19 +4144,7 @@
     }
 
     function updatePityIndicator() {
-      const indicator = document.getElementById('pityBoostIndicator');
-      const rateText = document.getElementById('pityRateText');
-      if (!indicator || !rateText) return;
-
-      const rates = getDynamicRates();
-      const currentRate = Math.round(rates.sheng);
-      const bonus = currentRate - 50;
-      if (bonus > 0) {
-        rateText.innerText = `${currentRate}%（已蓄力 +${bonus}%）`;
-        indicator.style.display = 'inline-flex';
-      } else {
-        indicator.style.display = 'none';
-      }
+      // 純淨神聖儀軌：完全不對外顯示任何勝率或機率%數，一切自然運轉（神不知鬼不覺）
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -6928,65 +6903,36 @@
             document.getElementById('resetBtn').style.display = 'none';
           }
         } else {
-          // 未獲聖杯：累加失敗次數，激發心理學動態微調與近失效應
+          // 未獲聖杯：累加失敗次數，背景平滑微調（神不知鬼不覺，無任何彈窗干擾）
           failureStreak++;
           consecutiveSheng = 0;
           updateShengProgress();
           updatePityIndicator();
 
-          // 心理學挫折補償與防流失機制：累計未中 2 次（耐性臨界點），彈出飲料折扣券留住心流！
-          if (failureStreak >= 2 && !couponOffered) {
-            setTimeout(() => {
-              openCouponModal();
-            }, 600);
-          }
-
-          // 讓人上癮的關鍵：消除阻力，提供「立即再擲」主按鈕，保留「放回換抽」次按鈕
+          // 保持純淨神聖儀軌，消除任何浮誇或商業券提示
           tossBtn.style.display = 'inline-flex';
           tossBtn.disabled = false;
-          const currentShengRate = Math.round(getDynamicRates().sheng);
-          document.getElementById('tossBtnLabel').innerText = currentShengRate >= 58 ? '🔥 差一點！定心再擲' : '✨ 靈氣凝聚・誠心再擲';
+          document.getElementById('tossBtnLabel').innerText = '誠 心 再 擲';
           document.getElementById('resetBtn').style.display = 'inline-flex';
         }
       }, 1750);
     }
 
-    // 心理學飲料折扣券控制
+    // 商圈奉茶折扣券控制（獨立商圈優惠，不在抽籤擲筊中彈出干擾）
     function openCouponModal() {
-      couponOffered = true;
-      const modalRate = document.getElementById('modalResonanceRate');
-      if (modalRate) {
-        const potentialRate = Math.min(70, 50 + (failureStreak * 4) + 5);
-        modalRate.innerText = `${potentialRate}%`;
-      }
-      document.getElementById('couponModal').classList.add('visible');
+      openLbModal('couponModal');
     }
 
     function closeCouponModal() {
-      document.getElementById('couponModal').classList.remove('visible');
+      closeLbModal('couponModal');
     }
 
     function copyCouponCode() {
-      const code = document.getElementById('couponCodeText').innerText;
+      const code = 'TEMPLE88';
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(code).catch(() => {});
       }
-      alert(`🎉 飲料折扣代碼【${code}】已成功複製到剪貼簿！\n至全台合作手搖茶飲或超商結帳出示即享折抵！`);
-    }
-
-    function claimCouponAndContinue() {
-      copyCouponCode();
-      pityShengBonus = 5; // 心理學微調：+5% 幸運光環，維持真實博弈懸念與多巴胺高峰
-      updatePityIndicator();
-      closeCouponModal();
-
-      // 零摩擦沉浸體驗：免退回搖籤，原案立刻誠心續擲！
-      document.getElementById('resetBtn').style.display = 'inline-flex';
-      const tossBtn = document.getElementById('tossBtn');
-      tossBtn.style.display = 'inline-flex';
-      tossBtn.disabled = false;
-      document.getElementById('tossBtnLabel').innerText = '🔥 飲茶聚氣・誠心再擲！';
-      restorePoeToRest();
+      alert(`🎉 奉茶折扣代碼【${code}】已成功複製到剪貼簿！\n至全台合作手搖茶飲或門市結帳出示即享折抵！`);
     }
 
     // 重置回到第一幕搖籤
