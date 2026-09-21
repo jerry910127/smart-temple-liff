@@ -4025,14 +4025,14 @@
       <!-- 筊杯拋擲舞台 -->
       <div class="toss-stage">
         <!-- 左紅筊 (凸/陽面) -->
-        <img class="poe-item poe-left" id="poeLeft" src="assets/zen/cypress_convex.svg" alt="左筊" />
+        <img class="poe-item poe-left" id="poeLeft" src="assets/zen/cypress_convex.svg?v=red" alt="左筊" />
         <!-- 右紅筊 (平/陰面) -->
-        <img class="poe-item poe-right" id="poeRight" src="assets/zen/cypress_flat.svg" alt="右筊" />
+        <img class="poe-item poe-right" id="poeRight" src="assets/zen/cypress_flat.svg?v=red" alt="右筊" />
 
         <!-- 落地神意通知展示框 -->
         <div class="toss-result-view" id="resultView">
           <div class="toss-result-header">✦ 神 意 昭 示 ✦</div>
-          <img id="resultImage" src="assets/zen/cypress_sheng.svg" alt="擲筊結果" />
+          <img id="resultImage" src="assets/zen/cypress_sheng.svg?v=red" alt="擲筊結果" />
           <br>
           <span class="result-badge badge-sheng" id="resultBadge">【聖杯】神明首肯</span>
           <div id="resultTip" style="font-size:0.75rem; color:#D5C5B5; margin-top:8px; line-height:1.4;">一陽一陰・神明應允・所求吉祥圓滿</div>
@@ -6795,8 +6795,8 @@
       resultView.classList.remove('active');
       left.className = 'poe-item poe-left';
       right.className = 'poe-item poe-right';
-      left.src = 'assets/zen/cypress_convex.svg';
-      right.src = 'assets/zen/cypress_flat.svg';
+      left.src = 'assets/zen/cypress_convex.svg?v=red';
+      right.src = 'assets/zen/cypress_flat.svg?v=red';
       left.style.opacity = '1';
       right.style.opacity = '1';
 
@@ -6817,7 +6817,7 @@
           rightForm: 'convex',
           title: '【笑杯】神明微笑傾聽・靈感蓄力中！',
           badgeClass: 'badge-xiao',
-          imageSrc: 'assets/zen/cypress_xiao.svg'
+          imageSrc: 'assets/zen/cypress_xiao.svg?v=red'
         };
       } else if (roll < (rates.xiao + rates.yin)) {
         // 陰杯（雙平/陰面）
@@ -6827,7 +6827,7 @@
           rightForm: 'flat',
           title: '【陰杯】神明提點凝神・手氣漸旺！',
           badgeClass: 'badge-yin',
-          imageSrc: 'assets/zen/cypress_yin.svg'
+          imageSrc: 'assets/zen/cypress_yin.svg?v=red'
         };
       } else {
         // 聖杯（一凸一平）
@@ -6838,7 +6838,7 @@
           rightForm: isLeftConvex ? 'flat' : 'convex',
           title: '【聖杯】神明首肯！',
           badgeClass: 'badge-sheng',
-          imageSrc: 'assets/zen/cypress_sheng.svg'
+          imageSrc: 'assets/zen/cypress_sheng.svg?v=red'
         };
       }
     }
@@ -6879,8 +6879,8 @@
         isTossing = false;
 
         // 落地切換材質
-        left.src = outcome.leftForm === 'convex' ? 'assets/zen/cypress_convex.svg' : 'assets/zen/cypress_flat.svg';
-        right.src = outcome.rightForm === 'convex' ? 'assets/zen/cypress_convex.svg' : 'assets/zen/cypress_flat.svg';
+        left.src = outcome.leftForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=red' : 'assets/zen/cypress_flat.svg?v=red';
+        right.src = outcome.rightForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=red' : 'assets/zen/cypress_flat.svg?v=red';
 
         // 隱藏空中兩杯，由神意通知框獨佔呈現單對筊杯，徹底防重疊成四個杯
         left.style.opacity = '0';
