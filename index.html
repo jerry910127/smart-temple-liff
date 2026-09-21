@@ -4399,6 +4399,55 @@
       }
     }
 
+    function hideAllAppViews() {
+      const vHome = document.getElementById('lineByeHome');
+      const vRouteList = document.getElementById('pageRouteList');
+      const vRouteDetail = document.getElementById('pageRouteDetail');
+      const vLighting = document.getElementById('pageLighting');
+      const vZenApp = document.getElementById('zenApp');
+      if (vHome) vHome.style.display = 'none';
+      if (vRouteList) vRouteList.style.display = 'none';
+      if (vRouteDetail) vRouteDetail.style.display = 'none';
+      if (vLighting) vLighting.style.display = 'none';
+      if (vZenApp) vZenApp.style.display = 'none';
+      if (typeof pauseFortuneCylinder === 'function') pauseFortuneCylinder();
+    }
+
+    // 打開祈安點燈與文教公益大項專頁
+    function openLightingPage() {
+      hideAllAppViews();
+      const vLighting = document.getElementById('pageLighting');
+      if (vLighting) vLighting.style.display = 'flex';
+      window.scrollTo(0, 0);
+    }
+
+    // 打開 LINE Bye 首頁
+    function openHomePage() {
+      hideAllAppViews();
+      const vHome = document.getElementById('lineByeHome');
+      if (vHome) vHome.style.display = 'flex';
+      window.scrollTo(0, 0);
+    }
+
+    // 線上解籤與靈籤流程入口
+    function openDivinationFlow() {
+      hideAllAppViews();
+      const zenApp = document.getElementById('zenApp');
+      if (zenApp) {
+        zenApp.style.display = 'block';
+        zenApp.style.opacity = '1';
+      }
+      window.scrollTo(0, 0);
+      if (typeof initFortuneCylinder === 'function') {
+        setTimeout(initFortuneCylinder, 60);
+      }
+    }
+
+    // 從求籤舞台返回 LINE Bye 首頁
+    function returnToLineByeHome() {
+      openHomePage();
+    }
+
     // 打開頁面二：參拜足跡總覽列表
     function openRouteListPage() {
       hideAllAppViews();
