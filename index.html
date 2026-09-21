@@ -6786,6 +6786,12 @@
       }
     }
 
+    // 預載筊杯材質，避免翻騰與落地時因網路延遲產生閃爍或延遲
+    ['assets/zen/cypress_convex.svg?v=v3', 'assets/zen/cypress_flat.svg?v=v3', 'assets/zen/cypress_sheng.svg?v=v3', 'assets/zen/cypress_xiao.svg?v=v3', 'assets/zen/cypress_yin.svg?v=v3'].forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
     // 重置筊杯外觀為待擲狀態
     function restorePoeToRest() {
       const left = document.getElementById('poeLeft');
@@ -6810,7 +6816,7 @@
       const roll = Math.random() * 100;
 
       if (roll < rates.xiao) {
-        // 笑杯（雙凸/陽面）
+        // 笑杯（雙凸/陽面/皆為正面朱紅）
         return {
           type: 'xiao',
           leftForm: 'convex',
@@ -6820,7 +6826,7 @@
           imageSrc: 'assets/zen/cypress_xiao.svg?v=v3'
         };
       } else if (roll < (rates.xiao + rates.yin)) {
-        // 陰杯（雙平/陰面）
+        // 陰杯（雙平/陰面/皆為陰面咖啡色）
         return {
           type: 'yin',
           leftForm: 'flat',
@@ -6830,12 +6836,11 @@
           imageSrc: 'assets/zen/cypress_yin.svg?v=v3'
         };
       } else {
-        // 聖杯（一凸一平）
-        const isLeftConvex = Math.random() > 0.5;
+        // 聖杯（一凸一平：左陽面朱紅，右陰面咖啡色，與展示圖 100% 一致）
         return {
           type: 'sheng',
-          leftForm: isLeftConvex ? 'convex' : 'flat',
-          rightForm: isLeftConvex ? 'flat' : 'convex',
+          leftForm: 'convex',
+          rightForm: 'flat',
           title: '【聖杯】神明首肯！',
           badgeClass: 'badge-sheng',
           imageSrc: 'assets/zen/cypress_sheng.svg?v=v3'
@@ -6869,18 +6874,21 @@
       left.classList.add(outcome.leftForm === 'convex' ? 'launch-convex' : 'launch-flat');
       right.classList.add(outcome.rightForm === 'convex' ? 'launch-convex' : 'launch-flat');
 
-      // 1.55 秒（著地碰撞瞬間）精準播放沉穩檜木撞擊聲
+      // 關鍵擬真修復：在拋出升至最高空（550ms，在畫面外頂端翻轉時），就將材質設定為最終落地型態！
+      // 如此一來，從天空落下至地面的整個翻滾過程、著地瞬間，顏色就是 100% 確定的最終顏色，絕不在著地後突然變色！
+      setTimeout(() => {
+        left.src = outcome.leftForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=v3' : 'assets/zen/cypress_flat.svg?v=v3';
+        right.src = outcome.rightForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=v3' : 'assets/zen/cypress_flat.svg?v=v3';
+      }, 550);
+
+      // 1.55 秒（著地碰撞瞬間）精準播放沉穩紅木撞擊聲
       setTimeout(() => {
         playCypressWoodSound();
       }, 1550);
 
-      // 動畫結束判定
+      // 動畫結束判定 (1700ms)
       setTimeout(() => {
         isTossing = false;
-
-        // 落地切換材質
-        left.src = outcome.leftForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=v3' : 'assets/zen/cypress_flat.svg?v=v3';
-        right.src = outcome.rightForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=v3' : 'assets/zen/cypress_flat.svg?v=v3';
 
         // 隱藏空中兩杯，由神意通知框獨佔呈現單對筊杯，徹底防重疊成四個杯
         left.style.opacity = '0';
