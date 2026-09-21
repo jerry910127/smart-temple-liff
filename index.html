@@ -205,8 +205,9 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 105px 20px 25px;
+      padding: 95px 16px 18px;
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     .shrine-scene.active {
@@ -333,18 +334,19 @@
       background: rgba(38, 35, 33, 0.9);
       border: 1px solid rgba(201, 164, 92, 0.35);
       border-radius: 6px;
-      padding: 12px 20px;
+      padding: 8px 16px;
       text-align: center;
       width: 90%;
-      max-width: 320px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+      max-width: 310px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      flex-shrink: 0;
     }
 
     .lot-indicator-title {
       font-family: 'Noto Serif TC', serif;
-      font-size: 1.05rem;
+      font-size: 0.96rem;
       color: var(--muted-gold);
-      margin-bottom: 6px;
+      margin-bottom: 3px;
       letter-spacing: 1px;
     }
 
@@ -353,13 +355,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      margin: 8px 0 4px;
+      gap: 10px;
+      margin: 4px 0 2px;
     }
 
     .sheng-dot {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       border: 1.5px solid var(--muted-gold);
       background: transparent;
@@ -368,32 +370,61 @@
 
     .sheng-dot.achieved {
       background: var(--muted-gold);
-      box-shadow: 0 0 10px rgba(201, 164, 92, 0.8);
+      box-shadow: 0 0 8px rgba(201, 164, 92, 0.8);
       transform: scale(1.15);
     }
 
     .sheng-dot-tip {
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       color: var(--text-dim);
       letter-spacing: 0.5px;
     }
 
-    /* 筊杯投擲舞台 */
+    /* 極窄螢幕 / 矮手機高度自適應彈性調整 */
+    @media (max-height: 680px) {
+      .shrine-scene {
+        padding: 85px 12px 14px;
+      }
+      .toss-stage {
+        height: 220px !important;
+      }
+      .poe-item {
+        width: 72px !important;
+        height: 120px !important;
+      }
+      .toss-result-view {
+        max-width: 270px !important;
+        padding: 10px 12px 10px !important;
+      }
+      .toss-result-view img {
+        max-width: 110px !important;
+      }
+      .zen-btn {
+        padding: 9px 16px !important;
+        font-size: 0.92rem !important;
+      }
+    }
+
+    /* 筊杯投擲舞台 (彈性自適應高度) */
     .toss-stage {
       position: relative;
       width: 100%;
-      height: 350px;
+      height: 260px;
+      max-height: 38vh;
       margin: auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* 左右檜木筊杯 */
     .poe-item {
       position: absolute;
       top: 50%;
-      width: 96px;
-      height: 160px;
+      width: 82px;
+      height: 138px;
       transition: opacity 0.3s ease;
-      filter: drop-shadow(0 14px 12px rgba(0,0,0,0.55));
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,0.55));
     }
 
     .poe-left {
@@ -456,24 +487,24 @@
       100% { top: 52%; left: 65%; transform: translate(-50%, -50%) rotate(720deg) scale(1); }
     }
 
-    /* 拋擲結果神意通知框（防重疊四杯） */
+    /* 拋擲結果神意通知框（防重疊四杯、俐落輕巧不壓迫遮擋按鈕） */
     .toss-result-view {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.92);
-      width: 86%;
-      max-width: 320px;
+      width: 88%;
+      max-width: 290px;
       text-align: center;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
       z-index: 25;
-      background: rgba(28, 22, 20, 0.95);
-      border: 2px solid #C68F42;
-      border-radius: 16px;
-      padding: 16px 14px 16px;
-      box-shadow: 0 14px 38px rgba(0, 0, 0, 0.7), 0 0 22px rgba(198, 143, 66, 0.35);
+      background: rgba(28, 22, 20, 0.96);
+      border: 1.5px solid #C68F42;
+      border-radius: 14px;
+      padding: 12px 14px 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 18px rgba(198, 143, 66, 0.3);
       box-sizing: border-box;
     }
 
@@ -484,38 +515,39 @@
     }
 
     .toss-result-header {
-      font-size: 0.82rem;
+      font-size: 0.74rem;
       letter-spacing: 2px;
       color: #ECC780;
       font-weight: bold;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .toss-result-view img {
-      max-width: 175px;
+      max-width: 128px;
       height: auto;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.5));
-      margin: 4px 0;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+      margin: 2px auto;
+      display: block;
     }
 
     .result-badge {
       display: inline-block;
-      margin-top: 12px;
-      padding: 6px 18px;
-      border-radius: 20px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 2px;
+      margin-top: 8px;
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
       border: 1px solid var(--muted-gold);
     }
 
-    .badge-sheng { background: rgba(139, 58, 43, 0.9); color: #fdf6e7; }
-    .badge-xiao  { background: rgba(50, 46, 43, 0.9); color: #e6dfd5; }
-    .badge-yin   { background: rgba(35, 38, 45, 0.9); color: #e8b4b4; }
+    .badge-sheng { background: rgba(139, 58, 43, 0.95); color: #fdf6e7; }
+    .badge-xiao  { background: rgba(50, 46, 43, 0.95); color: #e6dfd5; }
+    .badge-yin   { background: rgba(35, 38, 45, 0.95); color: #e8b4b4; }
 
     /* === 按鈕風格 (無印/日式簡練質感) === */
     .zen-btn {
@@ -523,11 +555,11 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      padding: 13px 24px;
+      padding: 11px 20px;
       font-family: 'Noto Serif TC', serif;
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 600;
-      letter-spacing: 3px;
+      letter-spacing: 2.5px;
       color: #fff;
       background: var(--deep-ochre);
       border: 1px solid var(--muted-gold);
@@ -535,6 +567,8 @@
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(0,0,0,0.35);
       transition: all 0.2s ease;
+      position: relative;
+      z-index: 30;
     }
 
     .zen-btn:active {
@@ -561,8 +595,11 @@
       max-width: 320px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      z-index: 20;
+      gap: 8px;
+      z-index: 30;
+      position: relative;
+      flex-shrink: 0;
+      margin-top: 4px;
     }
 
     /* === 籤枝抽出彈窗 (過渡到擲筊) === */
@@ -571,18 +608,21 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.9);
-      width: 90%;
-      max-width: 320px;
+      width: 88%;
+      max-width: 310px;
+      max-height: 82vh;
+      overflow-y: auto;
       background: rgba(35, 31, 29, 0.97);
       border: 1px solid var(--muted-gold);
-      border-radius: 6px;
-      padding: 24px 20px;
+      border-radius: 8px;
+      padding: 18px 16px;
       text-align: center;
       z-index: 40;
       opacity: 0;
       pointer-events: none;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.6);
-      transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+      transition: all 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      box-sizing: border-box;
     }
 
     .zen-modal.visible {
@@ -592,25 +632,25 @@
     }
 
     .zen-modal-tag {
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       color: var(--muted-gold);
       letter-spacing: 2px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .zen-modal-title {
       font-family: 'Noto Serif TC', serif;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .zen-modal-body {
-      font-size: 0.86rem;
+      font-size: 0.82rem;
       color: var(--text-dim);
-      line-height: 1.7;
-      margin-bottom: 20px;
+      line-height: 1.6;
+      margin-bottom: 14px;
     }
 
     /* === 心理學補償：誠心奉茶折扣券 Modal === */
@@ -619,45 +659,45 @@
       background: linear-gradient(135deg, #2a221b 0%, #1c1917 100%);
       border: 1px dashed var(--muted-gold);
       border-radius: 8px;
-      padding: 16px 14px;
-      margin: 12px 0 16px 0;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+      padding: 10px 12px;
+      margin: 8px 0 10px 0;
+      box-shadow: inset 0 0 16px rgba(0,0,0,0.5);
     }
     .coupon-ticket::before, .coupon-ticket::after {
       content: '';
       position: absolute;
       top: 50%;
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       background: #231f1d;
       border-radius: 50%;
       transform: translateY(-50%);
     }
-    .coupon-ticket::before { left: -8px; border-right: 1px dashed var(--muted-gold); }
-    .coupon-ticket::after { right: -8px; border-left: 1px dashed var(--muted-gold); }
+    .coupon-ticket::before { left: -7px; border-right: 1px dashed var(--muted-gold); }
+    .coupon-ticket::after { right: -7px; border-left: 1px dashed var(--muted-gold); }
     .coupon-badge {
       display: inline-block;
       background: rgba(201, 164, 92, 0.2);
       border: 1px solid var(--muted-gold);
       color: #f7d58b;
-      font-size: 0.75rem;
-      padding: 2px 10px;
+      font-size: 0.72rem;
+      padding: 2px 8px;
       border-radius: 12px;
       letter-spacing: 1px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .coupon-discount {
       font-family: 'Noto Serif TC', serif;
-      font-size: 1.35rem;
+      font-size: 1.18rem;
       font-weight: 700;
       color: #ffd875;
       letter-spacing: 1px;
-      margin: 4px 0;
+      margin: 2px 0;
     }
     .coupon-desc {
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       color: var(--text-dim);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .coupon-code-box {
       display: flex;
@@ -665,7 +705,7 @@
       justify-content: center;
       gap: 8px;
       background: rgba(0,0,0,0.4);
-      padding: 6px 12px;
+      padding: 4px 10px;
       border-radius: 4px;
       border: 1px solid rgba(201, 164, 92, 0.3);
     }
