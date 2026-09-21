@@ -3937,14 +3937,6 @@
       <div class="shrine-user-greeting" id="userGreeting">正在引導信士連線湄洲開基三媽...</div>
     </div>
 
-    <!-- 參拜小知識 Tips 跑馬燈 (遊戲 Loading 提示風格) -->
-    <div class="zen-tips-ticker" id="zenTipsTicker" onclick="cycleNextTip()" title="點擊切換小知識">
-      <span class="ticker-badge">💡 聖母錦囊</span>
-      <div class="ticker-content">
-        <span class="ticker-text" id="tickerText">默念姓名、農曆生辰與地址，向開基湄洲三媽稟明所求，一事一問。</span>
-      </div>
-      <span class="ticker-arrow">›</span>
-    </div>
 
     <!-- ==============================================
          第一幕：靜心祈願・搖動籤筒
@@ -4159,26 +4151,9 @@
       }
     });
 
-    // 參拜 Tips 跑馬燈輪播 (神社第一幕)
-    function initTipsTicker() {
-      setInterval(() => {
-        cycleNextTip();
-      }, 5500);
-    }
-
-    function cycleNextTip() {
-      const textElem = document.getElementById('tickerText');
-      if (!textElem) return;
-      textElem.style.opacity = '0';
-      textElem.style.transform = 'translateY(6px)';
-
-      setTimeout(() => {
-        currentTipIndex = (currentTipIndex + 1) % TEMPLE_TIPS.length;
-        textElem.innerText = TEMPLE_TIPS[currentTipIndex];
-        textElem.style.opacity = '1';
-        textElem.style.transform = 'translateY(0)';
-      }, 250);
-    }
+    // 參拜 Tips 跑馬燈輪播 (已移除)
+    function initTipsTicker() {}
+    function cycleNextTip() {}
 
     // 1. 初始化 LIFF SDK
     async function initLiffApp() {
