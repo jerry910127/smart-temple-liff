@@ -1608,6 +1608,7 @@
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(140, 91, 50, 0.03);
       transition: transform 0.15s, border-color 0.15s;
+      gap: 8px;
     }
     .route-list-item-card:active {
       transform: scale(0.985);
@@ -1616,31 +1617,42 @@
     .route-card-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
     }
     .route-card-icon-box {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.45rem;
+      flex-shrink: 0;
     }
     .route-card-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 900;
       color: #231C18;
       margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
     }
     .route-card-sub {
       font-size: 0.72rem;
       color: #8C827A;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .route-card-right {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      flex-shrink: 0;
     }
     .route-card-tag {
       font-size: 0.68rem;
@@ -1650,6 +1662,7 @@
       background: #FDF2F0;
       color: #A62824;
       border: 1px solid #F3C5C2;
+      white-space: nowrap;
     }
 
     /* Page 2 & 3: 底部常駐 Tips 橫條 (Tips Bar: Y 85% ~ 93%) */
@@ -1663,6 +1676,7 @@
       gap: 8px;
       font-size: 0.76rem;
       color: #7A6F66;
+      flex-shrink: 0;
     }
     .route-tips-badge {
       background: #A62824;
@@ -1679,30 +1693,31 @@
        ======================================================= */
     .detail-progress-panel {
       background: #FFFFFF;
-      padding: 16px 5%;
+      padding: 14px 5%;
       border-bottom: 1px solid #ECE7E1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
+      flex-shrink: 0;
     }
     .detail-progress-title {
-      font-size: 1.22rem;
+      font-size: 1.15rem;
       font-weight: 900;
       color: #231C18;
       text-align: center;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .detail-progress-highlight {
       color: #A62824;
-      font-size: 1.48rem;
+      font-size: 1.4rem;
       margin: 0 4px;
     }
     .detail-target-badge {
       position: absolute;
       right: 5%;
-      top: 16px;
+      top: 14px;
       background: #F7F3EE;
       border: 1px solid #E5DDD3;
       color: #7A6F66;
@@ -1710,13 +1725,15 @@
       font-weight: 800;
       padding: 3px 10px;
       border-radius: 12px;
+      white-space: nowrap;
     }
 
     /* 打卡站點清單 (Checkpoints List: Y 24% ~ 50%) */
     .checkpoints-container {
-      padding: 12px 5%;
+      padding: 10px 5%;
       background: #FFFFFF;
       border-bottom: 1px solid #ECE7E1;
+      flex-shrink: 0;
     }
     .checkpoint-item {
       display: flex;
@@ -1724,6 +1741,7 @@
       justify-content: space-between;
       padding: 8px 0;
       border-bottom: 1px dashed #ECE7E1;
+      gap: 8px;
     }
     .checkpoint-item:last-child {
       border-bottom: none;
@@ -1732,6 +1750,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex: 1;
+      min-width: 0;
     }
     .checkpoint-circle {
       width: 28px;
@@ -1745,6 +1765,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      flex-shrink: 0;
     }
     .checkpoint-circle.completed {
       background: #A62824;
@@ -1752,14 +1773,20 @@
       box-shadow: 0 2px 8px rgba(166, 40, 36, 0.35);
     }
     .checkpoint-name {
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 800;
       color: #231C18;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .checkpoint-dist {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: #8C827A;
       margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .checkpoint-beacon-btn {
       background: #FAF5F0;
@@ -1767,11 +1794,12 @@
       color: #8C5B32;
       font-size: 0.7rem;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 5px 9px;
       border-radius: 12px;
       cursor: pointer;
       transition: background 0.15s, transform 0.1s;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     .checkpoint-beacon-btn:active {
       transform: scale(0.95);
@@ -1785,19 +1813,19 @@
 
     /* 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) */
     .visual-track-container {
-      padding: 14px 4%;
-      flex: 1;
+      padding: 12px 4% 16px 4%;
+      flex: 1 0 auto;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: stretch;
       position: relative;
-      min-height: 310px;
       background: linear-gradient(180deg, #FAF7F2 0%, #F5EFE8 100%);
     }
     .track-map-wrapper {
       width: 100%;
-      height: 260px;
+      height: 240px;
+      min-height: 200px;
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(140, 91, 50, 0.08);
@@ -2607,11 +2635,11 @@
       </div>
 
       <!-- 快速微型測試工具列 -->
-      <div style="margin-top:10px; width:100%; display:flex; align-items:center; gap:8px;">
-        <button class="checkpoint-beacon-btn" style="flex:1; display:flex; align-items:center; justify-content:center; gap:5px;" onclick="simulateNextBeacon()">
+      <div style="margin-top:10px; width:100%; display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
+        <button class="checkpoint-beacon-btn" style="flex:1 1 180px; display:flex; align-items:center; justify-content:center; gap:5px; padding:6px 10px;" onclick="simulateNextBeacon()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M16 8a6 6 0 0 1 0 8m-8 0a6 6 0 0 1 0-8"/></svg>模擬走入宮廟（LINE Touch 感應）
         </button>
-        <button class="checkpoint-beacon-btn" style="background:#FFF; border-color:#DDD; color:#666; display:flex; align-items:center; justify-content:center; gap:4px;" onclick="refreshGpsLocation()">
+        <button class="checkpoint-beacon-btn" style="background:#FFF; border-color:#DDD; color:#666; display:flex; align-items:center; justify-content:center; gap:4px; padding:6px 10px; flex:0 0 auto;" onclick="refreshGpsLocation()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>重新定位
         </button>
       </div>
