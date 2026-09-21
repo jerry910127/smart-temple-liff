@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 260" width="160" height="260">
   <defs>
-    <!-- 平面內斂宮廟深紅漆面 -->
+    <!-- 陰面：內斂厚實咖啡色木質切面 -->
     <linearGradient id="flatWood" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#BF262C"/>
-      <stop offset="45%" stop-color="#96151A"/>
-      <stop offset="100%" stop-color="#630A0E"/>
+      <stop offset="0%" stop-color="#A57347"/>
+      <stop offset="45%" stop-color="#7B4C26"/>
+      <stop offset="100%" stop-color="#4F2B13"/>
     </linearGradient>
     <radialGradient id="innerShade" cx="50%" cy="50%" r="50%">
       <stop offset="60%" stop-color="#000" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#280406" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#261307" stop-opacity="0.38"/>
     </radialGradient>
     <filter id="softShadow2" x="-15%" y="-15%" width="130%" height="130%">
-      <feDropShadow dx="2" dy="8" stdDeviation="6" flood-color="#2d0608" flood-opacity="0.45"/>
+      <feDropShadow dx="2" dy="8" stdDeviation="6" flood-color="#241205" flood-opacity="0.45"/>
     </filter>
   </defs>
 
-  <!-- 平切半月身 (紅筊平面) -->
+  <!-- 平切半月身 (陰面咖啡色) -->
   <path d="M 80 15 
            C 135 45, 145 150, 105 235 
            C 95 250, 80 252, 75 238 
@@ -30,11 +30,11 @@
            C 50 170, 48 85, 80 15 Z" 
         fill="url(#innerShade)"/>
 
-  <!-- 漆面同心微紋 -->
-  <path d="M 68 60 C 95 85, 115 130, 92 205" stroke="#420608" stroke-width="1.8" stroke-opacity="0.35" fill="none"/>
-  <path d="M 65 95 C 88 115, 102 150, 86 215" stroke="#420608" stroke-width="1.5" stroke-opacity="0.3" fill="none"/>
-  <path d="M 72 40 C 105 70, 122 120, 98 190" stroke="#420608" stroke-width="1.5" stroke-opacity="0.25" fill="none"/>
+  <!-- 咖啡木質同心年輪微紋 -->
+  <path d="M 68 60 C 95 85, 115 130, 92 205" stroke="#3A1C08" stroke-width="1.8" stroke-opacity="0.38" fill="none"/>
+  <path d="M 65 95 C 88 115, 102 150, 86 215" stroke="#3A1C08" stroke-width="1.5" stroke-opacity="0.32" fill="none"/>
+  <path d="M 72 40 C 105 70, 122 120, 98 190" stroke="#3A1C08" stroke-width="1.5" stroke-opacity="0.25" fill="none"/>
   
-  <!-- 微細木眼心 -->
-  <ellipse cx="88" cy="140" rx="3" ry="5" fill="#3b0507" fill-opacity="0.5"/>
+  <!-- 木心眼 -->
+  <ellipse cx="88" cy="140" rx="3" ry="5" fill="#301505" fill-opacity="0.5"/>
 </svg>
