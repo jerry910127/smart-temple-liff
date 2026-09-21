@@ -2470,119 +2470,37 @@
       </button>
     </header>
 
-    <!-- 熱門推薦路線橫幅 (Hero Route Card: Y 10% ~ 28%) -->
-    <section class="route-hero-section">
-      <div class="route-hero-card" onclick="openRouteDetailPage('wanchun')">
-        <span class="route-hero-badge">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:2px; display:inline-block;"><path d="M12 2C9 7 4 11 4 16A8 8 0 0 0 20 16C20 11 15 7 12 2Z"/></svg>核心推薦
-        </span>
-        <div class="route-hero-title">開基名剎・三百年古蹟巡禮</div>
-        <div class="route-hero-desc">大墩開基媽祖・天井咸豐古鐘、光緒御匾、道光石獅與白石龍柱・LINE Touch 實境集章</div>
-        <button class="route-hero-more-btn" onclick="event.stopPropagation(); openRouteDetailPage('wanchun');">
-          <span>more</span>
-          <span>&gt;</span>
-        </button>
+    <!-- 熱門推薦動態路線橫幅 (由 JS renderRouteListPage 動態依位置生成) -->
+    <section class="route-hero-section" id="routeHeroContainer">
+      <!-- 動態載入核心推薦香路 -->
+    </section>
+
+    <!-- 累積足跡成果提示條 -->
+    <section style="padding: 0 16px 8px;">
+      <div style="background:#FFF; border:1px solid #E8D8C8; border-radius:10px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:1.1rem;">👣</span>
+          <div>
+            <div style="font-size:0.78rem; font-weight:bold; color:#5C381E;">
+              我的參拜進度：<span id="routeListTotalStampsText" style="color:#A62824;">已打卡 0 處</span>
+            </div>
+            <div style="font-size:0.65rem; color:#7A6F66;">隨身造訪身邊廟宇，每蓋印 1 處即永久記錄</div>
+          </div>
+        </div>
+        <button onclick="resetUserFootprintsPrompt()" style="background:none; border:1px solid #E5DDD3; color:#8C5B32; font-size:0.65rem; padding:3px 7px; border-radius:6px; cursor:pointer;" title="重置本機足跡記錄">重置足跡</button>
       </div>
     </section>
 
-    <!-- 直列主題路線卡片群 (Route Cards List: Y 30% ~ 85%) -->
-    <section class="route-cards-list">
-      <!-- 卡片 1：開基名剎古蹟巡禮 -->
-      <div class="route-list-item-card" onclick="openRouteDetailPage('wanchun')">
-        <div class="route-card-left">
-          <div class="route-card-icon-box" style="background:#FDF2F0; color:#A62824;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 9 L12 4 L21 9"/>
-              <path d="M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/>
-              <line x1="9" y1="21" x2="9" y2="13"/>
-              <line x1="15" y1="21" x2="15" y2="13"/>
-              <line x1="9" y1="13" x2="15" y2="13"/>
-            </svg>
-          </div>
-          <div>
-            <div class="route-card-title">開基名剎三百年古蹟巡禮</div>
-            <div class="route-card-sub">天后閣牌樓 ➔ 聖母大殿 ➔ 天井古鐘</div>
-          </div>
-        </div>
-        <div class="route-card-right">
-          <span class="route-card-tag" id="routeTag_wanchun">進度 1/3</span>
-          <span style="color:#BBB; font-weight:bold;">&gt;</span>
-        </div>
-      </div>
-
-      <!-- 卡片 2：1917 台中七媽會世紀香路 -->
-      <div class="route-list-item-card" onclick="openRouteDetailPage('sevenmazu')">
-        <div class="route-card-left">
-          <div class="route-card-icon-box" style="background:#FAF3EA; color:#8C5B32;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 17 L4 7 L12 11 L20 7 L22 17 Z" fill="rgba(198,143,66,0.15)"/>
-              <circle cx="12" cy="5" r="1.5" fill="#C68F42"/>
-              <line x1="5" y1="20" x2="19" y2="20" stroke-width="2"/>
-              <line x1="8" y1="11" x2="8" y2="16"/>
-              <line x1="16" y1="11" x2="16" y2="16"/>
-            </svg>
-          </div>
-          <div>
-            <div class="route-card-title">1917 台中七媽會世紀香路</div>
-            <div class="route-card-sub">開基天后、彰化南瑤、鹿港天后等百年聯庄</div>
-          </div>
-        </div>
-        <div class="route-card-right">
-          <span class="route-card-tag" id="routeTag_sevenmazu">進度 0/3</span>
-          <span style="color:#BBB; font-weight:bold;">&gt;</span>
-        </div>
-      </div>
-
-      <!-- 卡片 3：大墩二十四庄祈雨除災香路 -->
-      <div class="route-list-item-card" onclick="openRouteDetailPage('rainroute')">
-        <div class="route-card-left">
-          <div class="route-card-icon-box" style="background:#FAF5EE; color:#8C5B32;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
-              <line x1="8" y1="21" x2="7" y2="23"/>
-              <line x1="12" y1="21" x2="11" y2="23"/>
-              <line x1="16" y1="21" x2="15" y2="23"/>
-            </svg>
-          </div>
-          <div>
-            <div class="route-card-title">大墩二十四庄祈雨除災香路</div>
-            <div class="route-card-sub">嘉慶大旱祈雨靈驗神蹟・水神巡境行腳</div>
-          </div>
-        </div>
-        <div class="route-card-right">
-          <span class="route-card-tag" id="routeTag_rainroute">進度 0/3</span>
-          <span style="color:#BBB; font-weight:bold;">&gt;</span>
-        </div>
-      </div>
-
-      <!-- 卡片 4：中區舊城商圈走讀 -->
-      <div class="route-list-item-card" onclick="openRouteDetailPage('oldtown')">
-        <div class="route-card-left">
-          <div class="route-card-icon-box" style="background:#FDF4F2; color:#A62824;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/>
-              <circle cx="12" cy="12" r="3"/>
-              <line x1="12" y1="9" x2="12" y2="12"/>
-              <line x1="12" y1="12" x2="14" y2="14"/>
-            </svg>
-          </div>
-          <div>
-            <div class="route-card-title">中區舊城商圈走讀</div>
-            <div class="route-card-sub">第二市場、青草街、宮原眼科、手搖奉茶合作圈</div>
-          </div>
-        </div>
-        <div class="route-card-right">
-          <span class="route-card-tag" id="routeTag_oldtown">進度 0/3</span>
-          <span style="color:#BBB; font-weight:bold;">&gt;</span>
-        </div>
-      </div>
+    <!-- 直列主題路線卡片群 (由 JS renderRouteListPage 動態遍歷渲染，絕不寫死) -->
+    <section class="route-cards-list" id="routeCardsListContainer">
+      <!-- 動態載入路線卡片群 -->
     </section>
 
     <!-- 底部常駐區 (Tips Bar: Y 85% ~ 93%) -->
     <div class="route-tips-footer" onclick="cycleLbTip()">
       <span class="route-tips-badge">足跡 tips</span>
       <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="routeListTipText">
-        親臨合作廟宇 50 公尺範圍內，LINE Touch 感應將自動蓋印數位足跡
+        親臨合作廟宇 100 公尺範圍內，LINE Touch 感應將自動蓋印數位足跡
       </span>
     </div>
   </div>
@@ -4225,94 +4143,266 @@
     // ==============================================
     // LINE Bye 頁面導航與三大核心頁面狀態切換 (SPA Router)
     // ==============================================
-    const ROUTES_DATA = {
+    // ==============================================
+    // 參拜足跡動態資料中心 (Dynamic Footprints & Routes Engine)
+    // 絕不寫死：資料庫驅動 + 本地持久化 + GPS 動態組裝路線
+    // ==============================================
+
+    // 本地持久化存儲鍵
+    const FOOTPRINTS_STORAGE_KEY = 'temple_footprints_v3';
+
+    // 取得使用者已打卡的站點 ID 清單
+    function getUserFootprints() {
+      try {
+        const raw = localStorage.getItem(FOOTPRINTS_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    // 儲存新的打卡站點
+    function saveUserFootprint(cpId) {
+      const list = getUserFootprints();
+      if (!list.includes(cpId)) {
+        list.push(cpId);
+        try {
+          localStorage.setItem(FOOTPRINTS_STORAGE_KEY, JSON.stringify(list));
+        } catch (e) {}
+      }
+      updateGlobalFootprintCounts();
+      return list;
+    }
+
+    // 檢查站點是否已蓋印打卡
+    function isCheckpointCompleted(cpId) {
+      return getUserFootprints().includes(cpId);
+    }
+
+    // 重置打卡進度（供信眾重新體驗或測試）
+    function resetUserFootprintsPrompt() {
+      if (confirm("是否確定重置所有已打卡足跡？\n重置後可重新開始蒐集 3 座宮廟平安米解鎖進度。")) {
+        localStorage.removeItem(FOOTPRINTS_STORAGE_KEY);
+        updateGlobalFootprintCounts();
+        renderRouteListPage();
+        if (typeof renderRouteDetailView === 'function') {
+          renderRouteDetailView(activeRouteId);
+        }
+        alert("已重置參拜足跡！");
+      }
+    }
+
+    // 更新全站足跡累計徽章
+    function updateGlobalFootprintCounts() {
+      const total = getUserFootprints().length;
+      const badge = document.getElementById('nearbyStampBadge');
+      if (badge) {
+        badge.innerText = `👣 參拜足跡 ${total}/3`;
+      }
+      const totalText = document.getElementById('routeListTotalStampsText');
+      if (totalText) {
+        totalText.innerText = `已打卡 ${total} 處 ${total >= 3 ? '🎉 (已獲過爐平安米兌換資格)' : `(尚差 ${Math.max(0, 3 - total)} 處)`}`;
+      }
+    }
+
+    // 主題文化香路基礎定義庫（不寫死完成狀態）
+    const BASE_THEMATIC_ROUTES = {
       wanchun: {
         id: "wanchun",
         name: "開基名剎古蹟巡禮",
-        subtitle: "天后閣牌樓 ➔ 聖母大殿 ➔ 天井古鐘",
-        badge: "開基三媽",
-        totalSteps: 3,
+        badge: "開基古剎",
+        iconColor: "#A62824",
+        iconBg: "#FDF2F0",
         checkpoints: [
-          { id: "wc_1", code: "Ⓐ", name: "天后閣牌樓 (道光石獅)", lat: 24.1430, lng: 120.6804, defaultDist: 0.05, completed: true },
-          { id: "wc_2", code: "Ⓑ", name: "聖母大殿 (光緒御匾)", lat: 24.1432, lng: 120.6806, defaultDist: 0.1, completed: false },
-          { id: "wc_3", code: "Ⓒ", name: "天井廊樓 (咸豐古鐘・蒼龍壁畫)", lat: 24.1434, lng: 120.6808, defaultDist: 0.15, completed: false }
-        ]
-      },
-      sevenmazu: {
-        id: "sevenmazu",
-        name: "1917 台中七媽會世紀香路",
-        subtitle: "開基天后、彰化南瑤、鹿港天后等百年聯庄",
-        badge: "世紀盛典",
-        totalSteps: 3,
-        checkpoints: [
-          { id: "sm_1", code: "Ⓐ", name: "開基天后宮 (七媽會聯庄)", lat: 24.1432, lng: 120.6806, defaultDist: 0.1, completed: false },
-          { id: "sm_2", code: "Ⓑ", name: "台中火車站舊站 (七媽搭車駐駕遺址)", lat: 24.1368, lng: 120.6850, defaultDist: 0.9, completed: false },
-          { id: "sm_3", code: "Ⓒ", name: "彰化南瑤宮 (笨港進香起點)", lat: 24.0674, lng: 120.5397, defaultDist: 16.5, completed: false }
-        ]
-      },
-      rainroute: {
-        id: "rainroute",
-        name: "大墩祈雨除災香路",
-        subtitle: "嘉慶大旱祈雨靈驗神蹟・水神巡境行腳",
-        badge: "甘霖護國",
-        totalSteps: 3,
-        checkpoints: [
-          { id: "rr_1", code: "Ⓐ", name: "天后古剎 (歷史祈雨壇)", lat: 24.1432, lng: 120.6806, defaultDist: 0.1, completed: false },
-          { id: "rr_2", code: "Ⓑ", name: "柳川水岸歷史步道", lat: 24.1415, lng: 120.6780, defaultDist: 0.4, completed: false },
-          { id: "rr_3", code: "Ⓒ", name: "綠川水岸親水廊道", lat: 24.1390, lng: 120.6835, defaultDist: 0.6, completed: false }
+          { id: "wc_1", code: "Ⓐ", name: "天后閣牌樓 (道光石獅)", lat: 24.1430, lng: 120.6804 },
+          { id: "wc_2", code: "Ⓑ", name: "聖母大殿 (光緒御匾)", lat: 24.1432, lng: 120.6806 },
+          { id: "wc_3", code: "Ⓒ", name: "天井廊樓 (咸豐古鐘・蒼龍壁畫)", lat: 24.1434, lng: 120.6808 }
         ]
       },
       oldtown: {
         id: "oldtown",
         name: "中區舊城商圈走讀",
-        subtitle: "第二市場、青草街、宮原眼科、手搖奉茶合作圈",
-        badge: "地方創生",
-        totalSteps: 3,
+        badge: "常民信仰",
+        iconColor: "#5C381E",
+        iconBg: "#FAF4EC",
         checkpoints: [
-          { id: "ot_1", code: "Ⓐ", name: "宮廟前埕奉茶站", lat: 24.1432, lng: 120.6806, defaultDist: 0.05, completed: false },
-          { id: "ot_2", code: "Ⓑ", name: "台中第二市場 (六角樓老店群)", lat: 24.1425, lng: 120.6789, defaultDist: 0.35, completed: false },
-          { id: "ot_3", code: "Ⓒ", name: "中區百年青草街 (降火退煞)", lat: 24.1438, lng: 120.6815, defaultDist: 0.25, completed: false }
+          { id: "ot_1", code: "Ⓐ", name: "大墩福德祠 (求財保民)", lat: 24.1418, lng: 120.6821 },
+          { id: "ot_2", code: "Ⓑ", name: "第二市場六角樓 (百年奉茶)", lat: 24.1425, lng: 120.6789 },
+          { id: "ot_3", code: "Ⓒ", name: "中區輔天宮 (尊王除瘟)", lat: 24.1445, lng: 120.6830 }
+        ]
+      },
+      rainroute: {
+        id: "rainroute",
+        name: "大墩祈雨除災香路",
+        badge: "甘霖歷史",
+        iconColor: "#8C5B32",
+        iconBg: "#FAF5EE",
+        checkpoints: [
+          { id: "rr_1", code: "Ⓐ", name: "開基天后古壇 (歷史祈雨壇)", lat: 24.1432, lng: 120.6806 },
+          { id: "rr_2", code: "Ⓑ", name: "柳川水神福德祠 (甘霖古道)", lat: 24.1402, lng: 120.6775 },
+          { id: "rr_3", code: "Ⓒ", name: "綠川親水福德爺 (巡境行腳)", lat: 24.1388, lng: 120.6840 }
+        ]
+      },
+      sevenmazu: {
+        id: "sevenmazu",
+        name: "1917 台中七媽會世紀香路",
+        badge: "世紀盛典",
+        iconColor: "#C68F42",
+        iconBg: "#FFF9EE",
+        checkpoints: [
+          { id: "sm_1", code: "Ⓐ", name: "天后聖母大殿 (七媽會聯庄主座)", lat: 24.1432, lng: 120.6806 },
+          { id: "sm_2", code: "Ⓑ", name: "台中火車站舊站 (鐵道駐駕遺址)", lat: 24.1368, lng: 120.6850 },
+          { id: "sm_3", code: "Ⓒ", name: "彰化南瑤宮分靈站 (百年進香步道)", lat: 24.1420, lng: 120.6800 }
         ]
       }
     };
 
-    let activeRouteId = 'wanchun';
+    // 運行時動態香路總表（ROUTES_DATA）
+    let ROUTES_DATA = {};
+    let activeRouteId = 'nearby_dynamic';
     let userCurrentCoords = null;
 
-    function hideAllAppViews() {
-      const vHome = document.getElementById('lineByeHome');
-      const vRouteList = document.getElementById('pageRouteList');
-      const vRouteDetail = document.getElementById('pageRouteDetail');
-      const vLighting = document.getElementById('pageLighting');
-      const vZenApp = document.getElementById('zenApp');
-      if (vHome) vHome.style.display = 'none';
-      if (vRouteList) vRouteList.style.display = 'none';
-      if (vRouteDetail) vRouteDetail.style.display = 'none';
-      if (vLighting) vLighting.style.display = 'none';
-      if (vZenApp) vZenApp.style.display = 'none';
-      if (typeof pauseFortuneCylinder === 'function') pauseFortuneCylinder();
+    // 動態更新 ROUTES_DATA：依據使用者實際位置自動組裝身邊中小廟宇路線
+    function rebuildDynamicRoutes(userLat, userLng) {
+      ROUTES_DATA = {};
+
+      // 1. 動態組裝第一條「身邊周邊中小廟宇巡禮」 (Dynamic Nearby Walking Tour)
+      let sortedTemples = ALL_TEMPLES_DB.map(t => {
+        const dist = calculateHaversine(userLat, userLng, t.lat, t.lng);
+        return { ...t, distanceKm: dist };
+      });
+      sortedTemples.sort((a, b) => a.distanceKm - b.distanceKm);
+      const nearestForRoute = sortedTemples.slice(0, 3);
+
+      ROUTES_DATA['nearby_dynamic'] = {
+        id: "nearby_dynamic",
+        name: "身邊中小宮廟巡禮",
+        badge: "📍 動態依位置生成",
+        iconColor: "#A62824",
+        iconBg: "#FFF2F0",
+        subtitle: nearestForRoute.map(t => t.name).join(" ➔ "),
+        desc: "系統依據您當前位置，即時串聯身邊最近的 3 座在地土地公、王爺與媽祖古廟，適合散步參拜。",
+        totalSteps: nearestForRoute.length,
+        checkpoints: nearestForRoute.map((t, idx) => ({
+          id: `dyn_${t.id}`,
+          code: String.fromCharCode(65 + idx), // A, B, C...
+          name: `${t.name} (${t.deity})`,
+          lat: t.lat,
+          lng: t.lng,
+          address: t.address,
+          computedDist: t.distanceKm,
+          completed: isCheckpointCompleted(`dyn_${t.id}`) || isCheckpointCompleted(t.id)
+        }))
+      };
+
+      // 2. 注入各主題路線並動態計算站點完成狀態與距離
+      Object.entries(BASE_THEMATIC_ROUTES).forEach(([key, baseRoute]) => {
+        const cps = baseRoute.checkpoints.map(cp => {
+          const dist = calculateHaversine(userLat, userLng, cp.lat, cp.lng);
+          return {
+            ...cp,
+            computedDist: dist,
+            completed: isCheckpointCompleted(cp.id)
+          };
+        });
+
+        ROUTES_DATA[key] = {
+          ...baseRoute,
+          subtitle: cps.map(c => c.name.split('(')[0].trim()).join(" ➔ "),
+          desc: `${baseRoute.name}，包含 ${cps.length} 座重要文化站點，實境打卡解鎖歷史印章。`,
+          totalSteps: cps.length,
+          checkpoints: cps
+        };
+      });
+
+      // 確保 activeRouteId 存在
+      if (!ROUTES_DATA[activeRouteId]) {
+        activeRouteId = 'nearby_dynamic';
+      }
     }
 
-    // 打開祈安點燈與文教公益獨立分頁
-    function openLightingPage() {
-      hideAllAppViews();
-      const vLighting = document.getElementById('pageLighting');
-      if (vLighting) vLighting.style.display = 'flex';
-      window.scrollTo(0, 0);
+    // 動態渲染參拜足跡列表頁（pageRouteList，完全數據驅動，絕不寫死）
+    function renderRouteListPage() {
+      const userLat = userCurrentCoords ? userCurrentCoords.lat : 24.1432;
+      const userLng = userCurrentCoords ? userCurrentCoords.lng : 120.6806;
+
+      // 重建動態路線資料
+      rebuildDynamicRoutes(userLat, userLng);
+      updateGlobalFootprintCounts();
+
+      // 1. 渲染頂部核心推薦 Hero 卡片
+      const heroContainer = document.getElementById('routeHeroContainer');
+      const heroRoute = ROUTES_DATA['nearby_dynamic'] || Object.values(ROUTES_DATA)[0];
+      if (heroContainer && heroRoute) {
+        const completedCount = heroRoute.checkpoints.filter(c => c.completed).length;
+        const firstCpDist = heroRoute.checkpoints[0] ? heroRoute.checkpoints[0].computedDist : 0;
+        const distBadge = firstCpDist < 0.1 ? "🟢 就在身邊" : `📍 距起點 ${firstCpDist < 1 ? Math.round(firstCpDist * 1000) + 'm' : firstCpDist.toFixed(1) + 'km'}`;
+
+        heroContainer.innerHTML = `
+          <div class="route-hero-card" onclick="openRouteDetailPage('${heroRoute.id}')" style="cursor:pointer;">
+            <span class="route-hero-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:2px; display:inline-block;"><path d="M12 2C9 7 4 11 4 16A8 8 0 0 0 20 16C20 11 15 7 12 2Z"/></svg>${heroRoute.badge}・${distBadge}
+            </span>
+            <div class="route-hero-title">${heroRoute.name}</div>
+            <div class="route-hero-desc">${heroRoute.subtitle}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+              <span style="font-size:0.75rem; color:#FFF; opacity:0.9; font-weight:bold;">
+                進度 ${completedCount}/${heroRoute.totalSteps} 站
+              </span>
+              <button class="route-hero-more-btn" onclick="event.stopPropagation(); openRouteDetailPage('${heroRoute.id}');">
+                <span>出發參拜</span>
+                <span>&gt;</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // 2. 渲染直列主題路線卡片清單
+      const listContainer = document.getElementById('routeCardsListContainer');
+      if (listContainer) {
+        listContainer.innerHTML = Object.values(ROUTES_DATA).map(route => {
+          const completedCount = route.checkpoints.filter(c => c.completed).length;
+          const isAllDone = completedCount === route.totalSteps && route.totalSteps > 0;
+          const firstCp = route.checkpoints[0];
+          const distKm = firstCp ? firstCp.computedDist : 0;
+          const distStr = distKm < 0.1 ? '🟢 身邊 50m 內' : (distKm < 1.0 ? `距 ${Math.round(distKm * 1000)}m` : `距 ${distKm.toFixed(1)}km`);
+
+          return `
+            <div class="route-list-item-card" onclick="openRouteDetailPage('${route.id}')" style="cursor:pointer;">
+              <div class="route-card-left">
+                <div class="route-card-icon-box" style="background:${route.iconBg || '#FAF4EC'}; color:${route.iconColor || '#A62824'};">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9 L12 4 L21 9"/>
+                    <path d="M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/>
+                    <line x1="9" y1="21" x2="9" y2="13"/>
+                    <line x1="15" y1="21" x2="15" y2="13"/>
+                  </svg>
+                </div>
+                <div style="flex:1; overflow:hidden;">
+                  <div class="route-card-title" style="display:flex; align-items:center; gap:6px;">
+                    <span>${route.name}</span>
+                    <span style="font-size:0.65rem; color:#8C5B32; font-weight:normal;">${distStr}</span>
+                  </div>
+                  <div class="route-card-sub" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${route.subtitle}</div>
+                </div>
+              </div>
+              <div class="route-card-right">
+                <span class="route-card-tag" style="${isAllDone ? 'background:#FFF0F6; color:#EB2F96; font-weight:bold;' : ''}">
+                  ${isAllDone ? '✨ 已圓滿' : `進度 ${completedCount}/${route.totalSteps}`}
+                </span>
+                <span style="color:#BBB; font-weight:bold;">&gt;</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
-    // 1. 打開首頁 (Page 1)
-    function openHomePage() {
-      hideAllAppViews();
-      const vHome = document.getElementById('lineByeHome');
-      if (vHome) vHome.style.display = 'flex';
-      window.scrollTo(0, 0);
-    }
-
-    // 2. 打開頁面二：參拜足跡總覽列表 (Page 2)
+    // 打開頁面二：參拜足跡總覽列表
     function openRouteListPage() {
       hideAllAppViews();
-      updateAllRouteSummaryTags();
+      renderRouteListPage();
       const vRouteList = document.getElementById('pageRouteList');
       if (vRouteList) vRouteList.style.display = 'flex';
       window.scrollTo(0, 0);
@@ -4320,10 +4410,17 @@
 
     // 3. 打開頁面三：特定路線打卡與進度詳情 (Page 3)
     function openRouteDetailPage(routeId) {
+      hideAllAppViews();
+      const userLat = userCurrentCoords ? userCurrentCoords.lat : 24.1432;
+      const userLng = userCurrentCoords ? userCurrentCoords.lng : 120.6806;
+      rebuildDynamicRoutes(userLat, userLng);
+
       if (routeId && ROUTES_DATA[routeId]) {
         activeRouteId = routeId;
+      } else if (!ROUTES_DATA[activeRouteId]) {
+        activeRouteId = 'nearby_dynamic';
       }
-      hideAllAppViews();
+
       renderRouteDetailView(activeRouteId);
       const vRouteDetail = document.getElementById('pageRouteDetail');
       if (vRouteDetail) vRouteDetail.style.display = 'flex';
@@ -4336,24 +4433,6 @@
       }, 150);
     }
 
-    // 既有線上解籤求籤流程入口
-    function openDivinationFlow() {
-      hideAllAppViews();
-      const zenApp = document.getElementById('zenApp');
-      if (zenApp) {
-        zenApp.style.display = 'block';
-        zenApp.style.opacity = '1';
-      }
-      window.scrollTo(0, 0);
-      if (typeof initFortuneCylinder === 'function') {
-        setTimeout(initFortuneCylinder, 60);
-      }
-    }
-
-    function returnToLineByeHome() {
-      openHomePage();
-    }
-
     // 關閉 LIFF 返回 LINE 聊天室
     function closeLiffToChat() {
       if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
@@ -4364,7 +4443,6 @@
       }
     }
 
-    // 更新列表頁各卡片的進度標籤
     function updateAllRouteSummaryTags() {
       for (const [rId, route] of Object.entries(ROUTES_DATA)) {
         const completedCount = route.checkpoints.filter(c => c.completed).length;
@@ -4597,34 +4675,49 @@
       const titleElem = document.getElementById('detailRouteTitle');
       if (titleElem) titleElem.innerText = route.name;
 
-      // 2. 收集進度指示
-      const completedCount = route.checkpoints.filter(c => c.completed).length;
+      // 2. 收集進度指示（完全依據本地持久化真實打卡足跡）
+      const completedCount = route.checkpoints.filter(c => isCheckpointCompleted(c.id) || c.completed).length;
       const countElem = document.getElementById('detailCollectedCount');
       if (countElem) countElem.innerText = completedCount;
       const badgeElem = document.getElementById('detailTargetBadge');
       if (badgeElem) badgeElem.innerText = `共 ${route.totalSteps} 個`;
 
-      // 3. 打卡站點清單
+      // 3. 打卡站點清單（動態依距離與打卡狀態渲染）
       const listContainer = document.getElementById('detailCheckpointsList');
       if (listContainer) {
         listContainer.innerHTML = route.checkpoints.map((cp, idx) => {
-          const isDone = cp.completed;
-          const distStr = cp.computedDist != null ? `${cp.computedDist.toFixed(1)} km` : `${cp.defaultDist} km`;
+          const isDone = isCheckpointCompleted(cp.id) || cp.completed;
+          let distStr = "";
+          let canCheckin = false;
+
+          if (cp.computedDist != null) {
+            if (cp.computedDist < 0.12) {
+              distStr = `${Math.round(cp.computedDist * 1000)}m (在範圍內)`;
+              canCheckin = true;
+            } else if (cp.computedDist < 1.0) {
+              distStr = `${Math.round(cp.computedDist * 1000)}m`;
+            } else {
+              distStr = `${cp.computedDist.toFixed(1)} km`;
+            }
+          } else {
+            distStr = `${cp.defaultDist || 0.1} km`;
+          }
+
           return `
             <div class="checkpoint-item" id="cpRow_${idx}">
               <div class="checkpoint-left">
                 <div class="checkpoint-circle ${isDone ? 'completed' : ''}" id="cpCircle_${idx}">
                   ${isDone ? '✓' : cp.code}
                 </div>
-                <div>
-                  <div class="checkpoint-name">${cp.name}</div>
+                <div style="flex:1; overflow:hidden;">
+                  <div class="checkpoint-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${cp.name}</div>
                   <div class="checkpoint-dist" id="cpDist_${idx}">
-                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#A62824; font-weight:bold;">已解鎖</span>' : '・待感應'}
+                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : (canCheckin ? '・<span style="color:#06C755; font-weight:bold;">🟢 可打卡</span>' : '・待靠近')}
                   </div>
                 </div>
               </div>
-              <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="triggerManualBeacon(${idx})">
-                ${isDone ? '已蓋印 ✓' : '📡 LINE Touch 打卡'}
+              <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="triggerManualBeacon(${idx})" style="${isDone ? 'background:#E8E3DD; color:#888;' : (canCheckin ? 'background:#06C755; color:#FFF; font-weight:bold;' : '')}">
+                ${isDone ? '已蓋印 ✓' : (canCheckin ? '🟢 立即打卡' : '📡 LINE Touch')}
               </button>
             </div>
           `;
@@ -4637,41 +4730,42 @@
       }
     }
 
-    // 手繪尋寶步道已廢除（保留空函數以維持向下相容）
+    // 手繪尋寶步道（維持向下相容）
     function updateSvgTrackVisual(route) {}
 
-    // 模擬或點擊站點觸發 LINE Touch 打卡
     function triggerManualBeacon(checkpointIdx) {
       const route = ROUTES_DATA[activeRouteId];
       if (!route) return;
       const cp = route.checkpoints[checkpointIdx];
       if (!cp) return;
 
-      if (cp.completed) {
-        alert(`【${cp.name}】已於先前完成數位足跡感應！`);
+      if (isCheckpointCompleted(cp.id)) {
+        alert(`【${cp.name}】已完成數位足跡打卡蓋印！`);
         return;
       }
 
+      // 儲存至本地永久化足跡庫
+      saveUserFootprint(cp.id);
       cp.completed = true;
-      renderRouteDetailView(activeRouteId);
-      updateAllRouteSummaryTags();
 
       // 震動回饋
       if (navigator.vibrate) navigator.vibrate([80, 50, 120]);
 
-      // 同步回傳後端 API 記錄打卡並自動推送 LINE 憑證
-      sendTouchCheckinToBackend(activeRouteId, checkpointIdx);
+      // 重新渲染當前路線詳情與列表
+      renderRouteDetailView(activeRouteId);
+      renderRouteListPage();
 
       // 恭賀提示
-      const completedCount = route.checkpoints.filter(c => c.completed).length;
-      if (completedCount === route.totalSteps) {
-        alert(`🎉 恭賀大圓滿！\n您已完成「${route.name}」全部 3 座宮廟行腳巡禮！\n神尊威靈加被，福壽康泰！`);
+      const completedCount = route.checkpoints.filter(c => isCheckpointCompleted(c.id)).length;
+      const totalStamps = getUserFootprints().length;
+
+      if (totalStamps >= 3) {
+        alert(`🎉 恭賀大圓滿！\n您已成功累計 ${totalStamps} 處宮廟參拜足跡！\n正式解鎖【開基媽祖過爐加持平安米】領取資格與【神兵數位護身御守】！\n可至宮廟服務處出示 LINE 畫面領取加持平安米！`);
       } else {
-        alert(`🎉 LINE Touch 感應成功！\n已為您解鎖【${cp.name}】數位足跡！\n目前已蒐集 ${completedCount}/${route.totalSteps} 個腳印。`);
+        alert(`🎉 LINE Touch 感應成功！\n已為您蓋印【${cp.name}】參拜足跡章！\n目前累計打卡 ${totalStamps}/3 處，再造訪 ${3 - totalStamps} 處即可獲得過爐平安米！`);
       }
     }
 
-    // 檢查是否有 LINE Touch 實體 NFC/URL 感應進入
     function checkLineTouchEntry() {
       const urlParams = new URLSearchParams(window.location.search);
       const isTouch = urlParams.get('touch') === '1' || urlParams.get('action') === 'touch';
@@ -6586,7 +6680,7 @@
     loadGoogleMapsSdk();
   
     // 初始化地理位置與周邊宮廟偵測
-    setTimeout(() => { triggerGeoLocate(false); }, 150);
+    setTimeout(() => { updateGlobalFootprintCounts(); triggerGeoLocate(false); }, 150);
 </script>
 </body>
 </html>
