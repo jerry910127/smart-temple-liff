@@ -2012,164 +2012,65 @@
     </section>
 
     <!-- 3.5 三百年巡禮實境尋寶・闖關挑戰卡 (Quest Card: LINE Touch 實境集章) -->
-    <section style="padding: 0 5% 10px 5%;">
-      <div style="background: linear-gradient(135deg, #FFFDF9 0%, #FAF4EC 100%); border: 1.5px solid #E8D5C1; border-radius: 14px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(140, 91, 50, 0.08); cursor: pointer;" onclick="openRouteDetailPage('wanchun')">
+        <!-- ==============================================
+         4.4 核心整合模組：周邊宮廟探索・即時參拜足跡
+         ============================================== -->
+    <section class="lb-nearby-section" style="padding: 0 5% 10px 5%;">
+      <div style="background: linear-gradient(135deg, #FFFDF9 0%, #FAF4EC 100%); border: 1.5px solid #E8D5C1; border-radius: 14px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(140, 91, 50, 0.08);">
+        
+        <!-- 頂部定位狀態與集章進度 -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <div style="display:flex; align-items:center; gap:6px;">
-            <span style="display:flex; align-items:center;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8C5B32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"/>
-                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="rgba(198,143,66,0.25)" stroke="#A62824"/>
+            <span style="display:flex; align-items:center; color:#A62824;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
               </svg>
             </span>
-            <strong style="font-size:0.92rem; color:#5C381E;">大墩三百年古蹟巡禮・實境尋寶</strong>
-          </div>
-          <span style="background:#A62824; color:#FFF; font-size:0.68rem; font-weight:800; padding:2px 8px; border-radius:12px; box-shadow:0 1px 4px rgba(166,40,36,0.25);">
-            集章中 1/3
-          </span>
-        </div>
-
-        <!-- 3 個站點蓋印微視圖 -->
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:8px;">
-          <!-- 站點 1：天后牌樓 -->
-          <div style="background:#FFF; border:1px solid #F3C5C2; border-radius:8px; padding:6px 4px; text-align:center;">
-            <div style="height:22px; display:flex; align-items:center; justify-content:center; color:#A62824; margin-bottom:2px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 8 L20 8"/>
-                <path d="M2 11 L22 11"/>
-                <line x1="7" y1="8" x2="7" y2="22"/>
-                <line x1="17" y1="8" x2="17" y2="22"/>
-                <line x1="10" y1="14" x2="14" y2="14"/>
-              </svg>
-            </div>
-            <div style="font-size:0.72rem; font-weight:bold; color:#A62824;">天后牌樓</div>
-            <div style="font-size:0.6rem; color:#A62824; font-weight:800;">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align:-1px; margin-right:1px;"><polyline points="20 6 9 17 4 12"/></svg>已蓋章
-            </div>
-          </div>
-          <!-- 站點 2：聖母大殿 -->
-          <div style="background:#FFF; border:1px dashed #E8D8C8; border-radius:8px; padding:6px 4px; text-align:center;">
-            <div style="height:22px; display:flex; align-items:center; justify-content:center; color:#8C5B32; margin-bottom:2px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- 媽祖九旒冕冠 / 聖殿法相 -->
-                <path d="M3 17 L5 7 L12 11 L19 7 L21 17 Z"/>
-                <circle cx="12" cy="5" r="1.5" fill="#C68F42"/>
-                <line x1="6" y1="20" x2="18" y2="20" stroke-width="2"/>
-              </svg>
-            </div>
-            <div style="font-size:0.72rem; font-weight:bold; color:#5C381E;">聖母大殿</div>
-            <div style="font-size:0.6rem; color:#8C5B32; font-weight:bold;">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:1px;"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49"/></svg>距 100m
-            </div>
-          </div>
-          <!-- 站點 3：天井古鐘 -->
-          <div style="background:#FFF; border:1px dashed #E8D8C8; border-radius:8px; padding:6px 4px; text-align:center;">
-            <div style="height:22px; display:flex; align-items:center; justify-content:center; color:#8C827A; margin-bottom:2px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- 百年天井古鐘銘刻 -->
-                <path d="M8 8 C8 4.5 9.8 3 12 3 C14.2 3 16 4.5 16 8 L18 16 L6 16 Z"/>
-                <path d="M5 16 L19 16 C19.5 16 20 16.5 19.8 17 L19 19 L5 19 L4.2 17 C4 16.5 4.5 16 5 16 Z"/>
-                <line x1="12" y1="19" x2="12" y2="21"/>
-              </svg>
-            </div>
-            <div style="font-size:0.72rem; font-weight:bold; color:#5C381E;">天井古鐘</div>
-            <div style="font-size:0.6rem; color:#8C827A;">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:1px;"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>待靠近
-            </div>
-          </div>
-        </div>
-
-        <!-- 獎勵誘因文案 -->
-        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.9); border:1px solid #EFE7DE; padding:6px 10px; border-radius:8px; font-size:0.74rem;">
-          <span style="color:#5C381E;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A62824" stroke-width="2" style="vertical-align:-2px; margin-right:3px; display:inline-block;"><path d="M12 2 L7 7 L17 7 Z" fill="#A62824"/><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M12 7v13M4 12h16"/></svg><strong>集滿 3 章解鎖：</strong>開基媽祖過爐平安米＋神兵虛寶
-          </span>
-          <span style="color:#A62824; font-weight:bold; font-size:0.78rem;">進入尋寶地圖 &gt;</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. 附近廟宇探索區 (Near Temples: Y 45% ~ 78%) -->
-    <section class="lb-temple-section">
-      <div class="lb-section-header">
-        <div class="lb-section-title">
-          <span style="display:flex; align-items:center; gap:5px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A62824" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 8 L21 8"/>
-              <path d="M1 5 C8 4 16 4 23 5"/>
-              <line x1="6" y1="8" x2="6" y2="20"/>
-              <line x1="18" y1="8" x2="18" y2="20"/>
-              <path d="M6 12 L18 12"/>
-            </svg>
-            台中中區文化香路
-          </span>
-          <span style="font-size:0.65rem; color:#A62824; background:#FDF2F0; border:1px solid #F3C5C2; padding:1px 6px; border-radius:10px; font-weight:700; margin-left:6px; display:flex; align-items:center; gap:3px;">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M16 8a6 6 0 0 1 0 8m-8 0a6 6 0 0 1 0-8"/></svg>LINE Touch 感應
-          </span>
-        </div>
-        <span class="lb-section-more" onclick="openRouteListPage()">探索更多 &gt;</span>
-      </div>
-
-      <!-- 宮廟卡片組（3張等寬卡片） -->
-      <div class="lb-temple-carousel">
-        <!-- 卡片 1：開基天后宮 (宮殿牌樓古剎) -->
-        <div class="lb-temple-card" onclick="openTempleModal('wanchun')">
-          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FFF7ED 0%, #F5EBE1 100%); display:flex; align-items:center; justify-content:center;">
-            <img src="assets/icons/廟宇.png" alt="開基天后廟" style="width: 48px; height: 48px; object-fit: contain;">
-            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#8C5B32; font-weight:bold;">本廟 0m</div>
-          </div>
-          <div class="lb-temple-info">
             <div>
-              <div class="lb-temple-name">開基天上聖母廟</div>
-              <span class="lb-temple-tag">開基三媽・古鐘</span>
+              <strong style="font-size:0.92rem; color:#5C381E;">周邊宮廟探索・即時足跡</strong>
+              <div id="nearbyLocationStatus" style="font-size:0.68rem; color:#8C5B32; display:flex; align-items:center; gap:5px; margin-top:1px;">
+                <span>📍 定位偵測中...</span>
+                <button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 重新整理</button>
+              </div>
             </div>
-            <div class="lb-temple-btn">看更多</div>
           </div>
+
+          <!-- 參拜足跡總覽徽章 -->
+          <span id="nearbyStampBadge" onclick="openRouteListPage()" style="background:#A62824; color:#FFF; font-size:0.68rem; font-weight:800; padding:3px 9px; border-radius:12px; box-shadow:0 1px 4px rgba(166,40,36,0.25); cursor:pointer;" title="查看參拜腳印">
+            👣 參拜足跡 1/3
+          </span>
         </div>
 
-        <!-- 卡片 2：第二市場 六角樓 (百年八卦六角地標) -->
-        <div class="lb-temple-card" onclick="openTempleModal('market2')">
-          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #FAF4EC 0%, #EFE5D8 100%);">
-            <svg width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#8C5B32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <!-- 第二市場六角鐘樓幾何外觀 -->
-              <polygon points="20,5 33,12 33,28 20,35 7,28 7,12" fill="rgba(140,91,50,0.08)"/>
-              <line x1="20" y1="5" x2="20" y2="35"/>
-              <line x1="7" y1="12" x2="33" y2="28"/>
-              <line x1="7" y1="28" x2="33" y2="12"/>
-              <circle cx="20" cy="20" r="3.5" fill="#FFF" stroke="#C68F42" stroke-width="1.5"/>
-            </svg>
-            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#8C5B32; font-weight:bold;">350 m</div>
-          </div>
-          <div class="lb-temple-info">
-            <div>
-              <div class="lb-temple-name">台中第二市場</div>
-              <span class="lb-temple-tag">六角樓・百年老店</span>
-            </div>
-            <div class="lb-temple-btn">看更多</div>
-          </div>
+        <!-- 手動地區切換列（提供無GPS或遠距信眾切換） -->
+        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.85); border:1px solid #EFE7DE; padding:4px 8px; border-radius:8px; margin-bottom:8px; font-size:0.72rem;">
+          <span style="color:#7A6F66; display:flex; align-items:center; gap:3px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            地區香路：
+          </span>
+          <select id="regionSelect" onchange="onRegionChange(this.value)" style="border:1px solid #D5C5B5; border-radius:6px; background:#FFF; color:#5C381E; font-size:0.72rem; padding:2px 6px; outline:none; font-weight:bold; cursor:pointer;">
+            <option value="taichung_central">台中中區・大墩舊城名廟</option>
+            <option value="taichung_dajia">台中大甲・海線媽祖信仰圈</option>
+            <option value="changhua_lukang">彰化鹿港・歷史古鎮名剎</option>
+            <option value="tainan_anping">台南安平・府城首廟文化圈</option>
+            <option value="taipei_manka">台北萬華・艋舺名剎古廟</option>
+          </select>
         </div>
 
-        <!-- 卡片 3：綠川・柳川水岸 (媽祖祈雨甘霖水紋香路) -->
-        <div class="lb-temple-card" onclick="openTempleModal('river')">
-          <div class="lb-temple-img-box" style="background: linear-gradient(135deg, #F8F5F0 0%, #EDE6DC 100%);">
-            <svg width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#5C381E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <!-- 大墩雙川碧波水浪紋 -->
-              <path d="M6 14 C12 10 16 18 22 14 C28 10 32 18 36 14"/>
-              <path d="M4 22 C10 18 14 26 20 22 C26 18 30 26 36 22"/>
-              <path d="M6 30 C12 26 16 34 22 30 C28 26 32 34 36 30"/>
-              <!-- 垂柳迎神枝條 -->
-              <path d="M12 6 Q20 8 16 18" stroke="#8C5B32" stroke-width="1.6"/>
-              <path d="M26 4 Q20 10 24 16" stroke="#8C5B32" stroke-width="1.6"/>
-            </svg>
-            <div style="position:absolute; bottom:4px; right:6px; font-size:0.6rem; color:#5C381E; font-weight:bold;">600 m</div>
-          </div>
-          <div class="lb-temple-info">
-            <div>
-              <div class="lb-temple-name">綠川柳川香路</div>
-              <span class="lb-temple-tag">迎神歷史廊道</span>
-            </div>
-            <div class="lb-temple-btn">看更多</div>
-          </div>
+        <!-- 動態周邊中小廟宇卡片網格 (由 JS 依據 GPS 距離即時由近至遠渲染 3 座) -->
+        <div id="nearbyTempleCardsList" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:8px;">
+          <!-- 預設由 JS renderNearbyTemples 動態注入 -->
+        </div>
+
+        <!-- 獎勵進度與直達參拜腳印入口 -->
+        <div onclick="openRouteListPage()" style="display:flex; justify-content:space-between; align-items:center; background:#FFF; border:1px solid #E8D8C8; padding:7px 10px; border-radius:8px; font-size:0.74rem; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+          <span style="color:#5C381E; display:flex; align-items:center; gap:4px;">
+            <span style="font-size:0.85rem;">🎁</span>
+            <span><strong>集滿 3 處足跡：</strong>解鎖過爐平安米＋開基御守</span>
+          </span>
+          <span style="color:#A62824; font-weight:bold; font-size:0.76rem; display:inline-flex; align-items:center; gap:2px;">
+            進入參拜腳印 ❯
+          </span>
         </div>
       </div>
     </section>
@@ -4845,6 +4746,383 @@
       return R * c;
     }
 
+    // ==============================================
+    // 全台中小廟宇與在地名剎資料庫 (Geo Database)
+    // ==============================================
+    const ALL_TEMPLES_DB = [
+      // 台中中區與大墩舊城
+      {
+        id: "wanchun",
+        region: "taichung_central",
+        name: "開基天后廟",
+        deity: "湄洲天上聖母",
+        type: "三百年古剎",
+        lat: 24.1432,
+        lng: 120.6806,
+        address: "台中市中區成功路212號",
+        tag: "咸豐古鐘・光緒御匾",
+        routeId: "wanchun",
+        checkpointId: "wc_1"
+      },
+      {
+        id: "fude_dadun",
+        region: "taichung_central",
+        name: "大墩福德祠",
+        deity: "福德正神",
+        type: "角頭土地公",
+        lat: 24.1418,
+        lng: 120.6821,
+        address: "台中市中區光復路",
+        tag: "護民守土・商街招財",
+        routeId: "oldtown",
+        checkpointId: "ot_1"
+      },
+      {
+        id: "market2",
+        region: "taichung_central",
+        name: "第二市場文化站",
+        deity: "常民文史",
+        type: "百年六角樓",
+        lat: 24.1425,
+        lng: 120.6789,
+        address: "台中市中區三民路二段87號",
+        tag: "文化奉茶・古蹟尋味",
+        routeId: "oldtown",
+        checkpointId: "ot_2"
+      },
+      {
+        id: "futian_gong",
+        region: "taichung_central",
+        name: "中區輔天宮",
+        deity: "廣澤尊王",
+        type: "地方角頭廟",
+        lat: 24.1445,
+        lng: 120.6830,
+        address: "台中市中區公園路",
+        tag: "驅瘟消災・尊王保民",
+        routeId: "oldtown",
+        checkpointId: "ot_3"
+      },
+      {
+        id: "river",
+        region: "taichung_central",
+        name: "綠川柳川香路",
+        deity: "嘉慶祈雨神蹟",
+        type: "歷史行腳步道",
+        lat: 24.1402,
+        lng: 120.6815,
+        address: "台中市中區綠川西街",
+        tag: "水神巡境・甘霖古道",
+        routeId: "rainroute",
+        checkpointId: "rr_2"
+      },
+
+      // 台中大甲海線
+      {
+        id: "dajia_zhenlan",
+        region: "taichung_dajia",
+        name: "大甲鎮瀾宮",
+        deity: "天上聖母",
+        type: "海線古剎",
+        lat: 24.3444,
+        lng: 120.6226,
+        address: "台中市大甲區順天路158號",
+        tag: "進香勝地・開基媽",
+        routeId: "sevenmazu",
+        checkpointId: "sm_1"
+      },
+      {
+        id: "dajia_fude",
+        region: "taichung_dajia",
+        name: "順天福德祠",
+        deity: "福德正神",
+        type: "角頭土地公",
+        lat: 24.3438,
+        lng: 120.6215,
+        address: "台中市大甲區順天路",
+        tag: "百年商街・守護財帛",
+        routeId: "wanchun",
+        checkpointId: "wc_2"
+      },
+
+      // 彰化鹿港古鎮
+      {
+        id: "lukang_tianhou",
+        region: "changhua_lukang",
+        name: "鹿港天后宮",
+        deity: "湄洲天上聖母",
+        type: "國定古蹟",
+        lat: 24.0592,
+        lng: 120.4312,
+        address: "彰化縣鹿港鎮中山路430號",
+        tag: "開基二媽・名揚四海",
+        routeId: "sevenmazu",
+        checkpointId: "sm_1"
+      },
+      {
+        id: "lukang_citygod",
+        region: "changhua_lukang",
+        name: "鹿港城隍廟",
+        deity: "城隍尊神",
+        type: "歷史名剎",
+        lat: 24.0560,
+        lng: 120.4348,
+        address: "彰化縣鹿港鎮中山路366號",
+        tag: "算盤醒世・護境安民",
+        routeId: "wanchun",
+        checkpointId: "wc_1"
+      },
+
+      // 台南府城文化圈
+      {
+        id: "tainan_grand_matsu",
+        region: "tainan_anping",
+        name: "府城大天后宮",
+        deity: "天上聖母",
+        type: "國定古蹟",
+        lat: 22.9972,
+        lng: 120.2012,
+        address: "台南市中西區永福路二段",
+        tag: "全台首廟・寧靖王府",
+        routeId: "sevenmazu",
+        checkpointId: "sm_1"
+      },
+      {
+        id: "tainan_fengshen",
+        region: "tainan_anping",
+        name: "府城風神廟",
+        deity: "風神尊神",
+        type: "古寺名廟",
+        lat: 22.9984,
+        lng: 120.1950,
+        address: "台南市中西區民權路三段",
+        tag: "全台唯一・風調雨順",
+        routeId: "rainroute",
+        checkpointId: "rr_1"
+      },
+
+      // 台北萬華艋舺
+      {
+        id: "taipei_longshan",
+        region: "taipei_manka",
+        name: "艋舺龍山寺",
+        deity: "觀音佛祖・聖母",
+        type: "國定古蹟",
+        lat: 25.0368,
+        lng: 121.4999,
+        address: "台北市萬華區廣州街211號",
+        tag: "香火鼎盛・祈安庇民",
+        routeId: "sevenmazu",
+        checkpointId: "sm_1"
+      },
+      {
+        id: "taipei_qingshan",
+        region: "taipei_manka",
+        name: "艋舺青山宮",
+        deity: "靈安尊王",
+        type: "直轄市定古蹟",
+        lat: 25.0381,
+        lng: 121.4988,
+        address: "台北市萬華區貴陽街二段",
+        tag: "青山王祭・夜巡保境",
+        routeId: "wanchun",
+        checkpointId: "wc_1"
+      }
+    ];
+
+    // 各區域基準座標（無 GPS 或手動切換時降級使用）
+    const REGION_CENTERS = {
+      taichung_central: { name: "台中中區", lat: 24.1432, lng: 120.6806 },
+      taichung_dajia: { name: "台中大甲", lat: 24.3444, lng: 120.6226 },
+      changhua_lukang: { name: "彰化鹿港", lat: 24.0592, lng: 120.4312 },
+      tainan_anping: { name: "台南府城", lat: 22.9972, lng: 120.2012 },
+      taipei_manka: { name: "台北萬華", lat: 25.0368, lng: 121.4999 }
+    };
+
+    let currentSelectedRegion = "taichung_central";
+    let isGpsActive = false;
+    let visitedStampsCount = 1; // 預設 1 個足跡起點
+
+    // 觸發地理定位（LBS 核心引擎）
+    function triggerGeoLocate(forceFresh = false) {
+      const statusElem = document.getElementById('nearbyLocationStatus');
+      if (statusElem) statusElem.innerHTML = '<span>📍 定位偵測中...</span>';
+
+      if (!navigator.geolocation) {
+        fallbackToRegion(currentSelectedRegion, "此瀏覽器不支援 GPS");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          isGpsActive = true;
+          userCurrentCoords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+          const accuracy = Math.round(pos.coords.accuracy || 20);
+          if (statusElem) {
+            statusElem.innerHTML = `<span>📍 已精準定位 (誤差 ±${accuracy}m)</span><button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 重新整理</button>`;
+          }
+
+          // 重新計算並渲染首頁最近中小廟宇
+          renderNearestTemplesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
+
+          // 同步更新參拜腳印頁面的所有站點即時距離
+          updateAllRouteDistancesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
+        },
+        (err) => {
+          isGpsActive = false;
+          let reason = "未獲定位授權";
+          if (err.code === err.TIMEOUT) reason = "定位逾時";
+          fallbackToRegion(currentSelectedRegion, reason);
+        },
+        { enableHighAccuracy: true, timeout: 7000, maximumAge: forceFresh ? 0 : 300000 }
+      );
+    }
+
+    // 降級處理：使用區域預設座標
+    function fallbackToRegion(regionKey, note) {
+      const statusElem = document.getElementById('nearbyLocationStatus');
+      const reg = REGION_CENTERS[regionKey] || REGION_CENTERS['taichung_central'];
+      userCurrentCoords = { lat: reg.lat, lng: reg.lng };
+      if (statusElem) {
+        statusElem.innerHTML = `<span>📍 預設區域：${reg.name} (${note})</span><button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 重試</button>`;
+      }
+      renderNearestTemplesFromCoords(reg.lat, reg.lng, regionKey);
+      updateAllRouteDistancesFromCoords(reg.lat, reg.lng);
+    }
+
+    // 切換地區下拉選單
+    function onRegionChange(regionKey) {
+      currentSelectedRegion = regionKey;
+      const reg = REGION_CENTERS[regionKey];
+      if (!isGpsActive && reg) {
+        fallbackToRegion(regionKey, "手動切換");
+      } else if (reg) {
+        // GPS 開啟時若切換特定區域，也優先顯示該區域之廟宇由近至遠排序
+        renderNearestTemplesFromCoords(userCurrentCoords ? userCurrentCoords.lat : reg.lat, userCurrentCoords ? userCurrentCoords.lng : reg.lng, regionKey);
+      }
+    }
+
+    // 依據座標動態渲染首頁 3 座最近的中小廟宇卡片
+    function renderNearestTemplesFromCoords(lat, lng, filterRegion = null) {
+      const container = document.getElementById('nearbyTempleCardsList');
+      if (!container) return;
+
+      let list = ALL_TEMPLES_DB.map(t => {
+        const dist = calculateHaversine(lat, lng, t.lat, t.lng);
+        return { ...t, distanceKm: dist };
+      });
+
+      if (filterRegion) {
+        // 優先顯示該區域
+        const inRegion = list.filter(t => t.region === filterRegion);
+        if (inRegion.length >= 3) {
+          list = inRegion;
+        }
+      }
+
+      // 由近至遠排序
+      list.sort((a, b) => a.distanceKm - b.distanceKm);
+      const top3 = list.slice(0, 3);
+
+      container.innerHTML = top3.map((t, idx) => {
+        let distLabel = "";
+        let distColor = "#8C5B32";
+        let isArrival = false;
+
+        if (t.distanceKm < 0.10) {
+          distLabel = `🟢 本地 ${Math.round(t.distanceKm * 1000)}m`;
+          distColor = "#06C755";
+          isArrival = true;
+        } else if (t.distanceKm < 1.0) {
+          distLabel = `距 ${Math.round(t.distanceKm * 1000)}m`;
+          distColor = "#A62824";
+        } else {
+          distLabel = `距 ${t.distanceKm.toFixed(1)}km`;
+        }
+
+        return `
+          <div class="lb-temple-card" onclick="onNearbyTempleClick('${t.id}', '${t.routeId}')" style="background:#FFF; border:1px solid #E8D8C8; border-radius:10px; padding:8px 4px 6px 4px; text-align:center; cursor:pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            <div style="width:32px; height:32px; margin:0 auto 3px auto; display:flex; align-items:center; justify-content:center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A62824" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8 L21 8"/>
+                <path d="M1 5 C8 4 16 4 23 5"/>
+                <line x1="6" y1="8" x2="6" y2="20"/>
+                <line x1="18" y1="8" x2="18" y2="20"/>
+                <path d="M6 12 L18 12"/>
+              </svg>
+            </div>
+            <div style="font-size:0.75rem; font-weight:bold; color:#5C381E; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${t.name}">${t.name}</div>
+            <div style="font-size:0.62rem; color:#7A6F66; transform:scale(0.92); white-space:nowrap;">${t.deity}</div>
+            <div style="font-size:0.65rem; color:${distColor}; font-weight:bold; margin-top:2px;">${distLabel}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 點擊周邊廟宇卡片：直達參拜腳印並高亮特定路線
+    function onNearbyTempleClick(templeId, routeId) {
+      if (TEMPLE_DATA && TEMPLE_DATA[templeId]) {
+        openTempleModal(templeId);
+      } else if (routeId) {
+        openRouteDetailPage(routeId);
+      } else {
+        openRouteListPage();
+      }
+    }
+
+    // 同步更新參拜腳印頁面中所有香路站點的即時距離
+    function updateAllRouteDistancesFromCoords(lat, lng) {
+      if (!lat || !lng) return;
+      Object.keys(ROUTES_DATA).forEach(routeId => {
+        const route = ROUTES_DATA[routeId];
+        if (!route || !route.checkpoints) return;
+        route.checkpoints.forEach((cp, idx) => {
+          const dist = calculateHaversine(lat, lng, cp.lat, cp.lng);
+          cp.computedDist = dist;
+          const distElem = document.getElementById(`cpDist_${idx}`);
+          if (distElem && activeRouteId === routeId) {
+            if (dist < 0.1) {
+              distElem.innerHTML = `📍 距離 ${Math.round(dist * 1000)}m・<span style="color:#06C755; font-weight:bold;">🟢 在參拜範圍內</span>`;
+            } else {
+              distElem.innerHTML = `📍 距離 ${dist < 1 ? Math.round(dist * 1000) + 'm' : dist.toFixed(1) + 'km'} ${cp.completed ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : '・待靠近'}`;
+            }
+          }
+        });
+      });
+    }
+
+    // 參拜打卡集章觸發
+    function checkInCheckpoint(cpId) {
+      let foundCp = null;
+      Object.values(ROUTES_DATA).forEach(r => {
+        r.checkpoints.forEach(cp => {
+          if (cp.id === cpId) {
+            cp.completed = true;
+            foundCp = cp;
+          }
+        });
+      });
+
+      visitedStampsCount = Math.min(3, visitedStampsCount + 1);
+      const badge = document.getElementById('nearbyStampBadge');
+      if (badge) badge.innerText = `👣 參拜足跡 ${visitedStampsCount}/3`;
+
+      if (visitedStampsCount >= 3) {
+        alert("🎉 恭喜達成三處宮廟參拜足跡！\n您已解鎖【開基媽祖過爐平安米】兌換憑證與【神兵數位護身御守】！\n可至宮廟服務處出示 LINE 畫面領取加持平安米！");
+      } else {
+        alert(`✅ 參拜打卡成功！\n已記錄【${foundCp ? foundCp.name : '宮廟足跡'}】！\n目前累計 ${visitedStampsCount}/3 處，再造訪 ${3 - visitedStampsCount} 處即可獲得過爐平安米！`);
+      }
+
+      if (typeof renderRouteDetailView === 'function') {
+        renderRouteDetailView(activeRouteId);
+      }
+    }
+
+
+
     function refreshGpsLocation() {
       if (!navigator.geolocation) return;
       navigator.geolocation.getCurrentPosition(
@@ -6434,6 +6712,9 @@
       }
     }
     loadGoogleMapsSdk();
-  </script>
+  
+    // 初始化地理位置與周邊宮廟偵測
+    setTimeout(() => { triggerGeoLocate(false); }, 150);
+</script>
 </body>
 </html>
