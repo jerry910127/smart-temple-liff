@@ -4840,7 +4840,181 @@
     // 全台中小廟宇與在地名剎資料庫 (Geo Database)
     // ==============================================
     const ALL_TEMPLES_DB = [
-      // 在地身邊中小廟宇與角頭土地公群（半徑 0~2.5km 內）
+      // ==========================================
+      // 1. 台北市與新北市生活圈（中小廟宇與在地古剎）
+      // ==========================================
+      {
+        id: "taipei_tianhou",
+        name: "台北天后宮",
+        deity: "天上聖母（西門町媽祖）",
+        type: "市區名剎",
+        lat: 25.0425,
+        lng: 121.5065,
+        address: "台北市萬華區成都路51號",
+        tag: "西門町守護神・弘法大師",
+        routeId: "wanchun",
+        checkpointId: "tp_1"
+      },
+      {
+        id: "taipei_longshan",
+        name: "艋舺龍山寺",
+        deity: "觀世音菩薩・天上聖母",
+        type: "國定古蹟",
+        lat: 25.0368,
+        lng: 121.4999,
+        address: "台北市萬華區廣州街211號",
+        tag: "三百年香火・月老靈驗",
+        routeId: "wanchun",
+        checkpointId: "tp_2"
+      },
+      {
+        id: "taipei_qingshan",
+        name: "艋舺青山宮",
+        deity: "靈安尊王（青山王）",
+        type: "直轄市定古蹟",
+        lat: 25.0381,
+        lng: 121.4988,
+        address: "台北市萬華區貴陽街二段218號",
+        tag: "青山王祭・夜巡除瘟",
+        routeId: "wanchun",
+        checkpointId: "tp_3"
+      },
+      {
+        id: "taipei_xiahai",
+        name: "台北霞海城隍廟",
+        deity: "城隍尊神・月下老人",
+        type: "大稻埕名廟",
+        lat: 25.0557,
+        lng: 121.5101,
+        address: "台北市大同區迪化街一段61號",
+        tag: "超人氣月老・大稻埕古街",
+        routeId: "oldtown",
+        checkpointId: "tp_4"
+      },
+      {
+        id: "taipei_cisheng",
+        name: "大稻埕慈聖宮",
+        deity: "天上聖母（大稻埕媽）",
+        type: "歷史名剎",
+        lat: 25.0601,
+        lng: 121.5126,
+        address: "台北市大同區保安街49巷17號",
+        tag: "廟前傳統小吃・百年榕樹",
+        routeId: "oldtown",
+        checkpointId: "tp_5"
+      },
+      {
+        id: "taipei_xingtian",
+        name: "台北行天宮",
+        deity: "關聖帝君（恩主公）",
+        type: "正氣名廟",
+        lat: 25.0598,
+        lng: 121.5337,
+        address: "台北市中山區民權東路二段109號",
+        tag: "收驚濟世・誠心敬奉",
+        routeId: "wanchun",
+        checkpointId: "tp_6"
+      },
+      {
+        id: "taipei_baoan",
+        name: "大龍峒保安宮",
+        deity: "保生大帝",
+        type: "國定古蹟",
+        lat: 25.0735,
+        lng: 121.5156,
+        address: "台北市大同區哈密街61號",
+        tag: "醫神保生・聯合國文化獎",
+        routeId: "wanchun",
+        checkpointId: "tp_7"
+      },
+      {
+        id: "taipei_songshan_ciyou",
+        name: "松山慈祐宮",
+        deity: "天上聖母（黑面媽祖）",
+        type: "錫口大廟",
+        lat: 25.0505,
+        lng: 121.5775,
+        address: "台北市松山區八德路四段761號",
+        tag: "饒河街夜市地標・護佑商街",
+        routeId: "oldtown",
+        checkpointId: "tp_8"
+      },
+      {
+        id: "taipei_songshan_fude",
+        name: "松山福德宮",
+        deity: "福德正神",
+        type: "街角土地公",
+        lat: 25.0508,
+        lng: 121.5760,
+        address: "台北市松山區饒河街",
+        tag: "保境招財・夜市守護",
+        routeId: "oldtown",
+        checkpointId: "tp_9"
+      },
+      {
+        id: "taipei_wenchang",
+        name: "台北文昌宮",
+        deity: "文昌梓潼帝君",
+        type: "金榜功名廟",
+        lat: 25.0585,
+        lng: 121.5218,
+        address: "台北市中山區民生西路45巷9弄",
+        tag: "雙連文昌・考生必拜",
+        routeId: "wanchun",
+        checkpointId: "tp_10"
+      },
+      {
+        id: "taipei_jingmei",
+        name: "景美集應廟",
+        deity: "保儀尊王（尪公）",
+        type: "市定古蹟",
+        lat: 24.9918,
+        lng: 121.5412,
+        address: "台北市文山區景美街37號",
+        tag: "景美古街・安溪高姓祖廟",
+        routeId: "oldtown",
+        checkpointId: "tp_11"
+      },
+      {
+        id: "taipei_shilin_cixian",
+        name: "士林慈諴宮",
+        deity: "天上聖母（士林媽祖）",
+        type: "市定古蹟",
+        lat: 25.0888,
+        lng: 121.5245,
+        address: "台北市士林區大南路84號",
+        tag: "士林夜市核心・古蹟戲台",
+        routeId: "wanchun",
+        checkpointId: "tp_12"
+      },
+      {
+        id: "newtaipei_cihui",
+        name: "板橋慈惠宮",
+        deity: "天上聖母（板橋媽祖）",
+        type: "新北名剎",
+        lat: 25.0085,
+        lng: 121.4580,
+        address: "新北市板橋區府中路81號",
+        tag: "府中商圈核心・郭董發跡廟",
+        routeId: "wanchun",
+        checkpointId: "ntp_1"
+      },
+      {
+        id: "newtaipei_hongludi",
+        name: "烘爐地南山福德宮",
+        deity: "福德正神（土地公）",
+        type: "求財名山大廟",
+        lat: 24.9620,
+        lng: 121.4985,
+        address: "新北市中和區興南路二段",
+        tag: "大土地公神像・24小時求財夜景",
+        routeId: "oldtown",
+        checkpointId: "ntp_2"
+      },
+
+      // ==========================================
+      // 2. 台中市生活圈（在地身邊中小廟宇與名剎）
+      // ==========================================
       {
         id: "wanchun",
         name: "開基天后廟",
@@ -4848,7 +5022,7 @@
         type: "三百年古剎",
         lat: 24.1432,
         lng: 120.6806,
-        address: "成功路212號",
+        address: "台中市中區成功路212號",
         tag: "咸豐古鐘・光緒御匾",
         routeId: "wanchun",
         checkpointId: "wc_1"
@@ -4860,7 +5034,7 @@
         type: "角頭土地公",
         lat: 24.1418,
         lng: 120.6821,
-        address: "光復路",
+        address: "台中市中區光復路",
         tag: "護民守土・商街招財",
         routeId: "oldtown",
         checkpointId: "ot_1"
@@ -4872,7 +5046,7 @@
         type: "百年六角樓",
         lat: 24.1425,
         lng: 120.6789,
-        address: "三民路二段87號",
+        address: "台中市中區三民路二段87號",
         tag: "文化奉茶・古蹟尋味",
         routeId: "oldtown",
         checkpointId: "ot_2"
@@ -4884,7 +5058,7 @@
         type: "地方角頭廟",
         lat: 24.1445,
         lng: 120.6830,
-        address: "公園路",
+        address: "台中市中區公園路",
         tag: "驅瘟消災・尊王保民",
         routeId: "oldtown",
         checkpointId: "ot_3"
@@ -4896,7 +5070,7 @@
         type: "河畔水神小廟",
         lat: 24.1402,
         lng: 120.6775,
-        address: "柳川西路",
+        address: "台中市中區柳川西路",
         tag: "水神庇護・歷史古道",
         routeId: "rainroute",
         checkpointId: "rr_2"
@@ -4908,7 +5082,7 @@
         type: "街角福德祠",
         lat: 24.1388,
         lng: 120.6840,
-        address: "綠川東街",
+        address: "台中市中區綠川東街",
         tag: "庇佑鄰里・行腳香路",
         routeId: "rainroute",
         checkpointId: "rr_3"
@@ -4920,17 +5094,113 @@
         type: "地方小廟",
         lat: 24.1375,
         lng: 120.6855,
-        address: "綠川西街",
+        address: "台中市中區綠川西街",
         tag: "商圈平安・保境安民",
         routeId: "oldtown",
         checkpointId: "ot_1"
+      },
+      {
+        id: "dajia_zhenlan",
+        name: "大甲鎮瀾宮",
+        deity: "天上聖母",
+        type: "海線大廟",
+        lat: 24.3444,
+        lng: 120.6226,
+        address: "台中市大甲區順天路158號",
+        tag: "世界三大宗教盛事",
+        routeId: "sevenmazu",
+        checkpointId: "sm_1"
+      },
+
+      // ==========================================
+      // 3. 彰化、台南與高雄生活圈
+      // ==========================================
+      {
+        id: "changhua_nanyao",
+        name: "彰化南瑤宮",
+        deity: "天上聖母（彰化媽）",
+        type: "進香起點",
+        lat: 24.0674,
+        lng: 120.5397,
+        address: "彰化縣彰化市南瑤路",
+        tag: "笨港進香・七媽會百年聯庄",
+        routeId: "sevenmazu",
+        checkpointId: "sm_3"
+      },
+      {
+        id: "lukang_tianhou",
+        name: "鹿港天后宮",
+        deity: "湄洲天上聖母",
+        type: "國定古蹟",
+        lat: 24.0592,
+        lng: 120.4312,
+        address: "彰化縣鹿港鎮中山路430號",
+        tag: "開基二媽・名揚四海",
+        routeId: "sevenmazu",
+        checkpointId: "sm_1"
+      },
+      {
+        id: "tainan_grand_matsu",
+        name: "府城大天后宮",
+        deity: "天上聖母",
+        type: "國定古蹟",
+        lat: 22.9972,
+        lng: 120.2012,
+        address: "台南市中西區永福路二段",
+        tag: "全台首廟・寧靖王府",
+        routeId: "sevenmazu",
+        checkpointId: "sm_1"
+      },
+      {
+        id: "tainan_fengshen",
+        name: "府城風神廟",
+        deity: "風神尊神",
+        type: "古寺名廟",
+        lat: 22.9984,
+        lng: 120.1950,
+        address: "台南市中西區民權路三段",
+        tag: "全台唯一主祀風神",
+        routeId: "rainroute",
+        checkpointId: "rr_1"
+      },
+      {
+        id: "kaohsiung_sanfeng",
+        name: "高雄三鳳宮",
+        deity: "中壇元帥（三太子）",
+        type: "南台灣太子名廟",
+        lat: 22.6355,
+        lng: 120.2975,
+        address: "高雄市三民區河北二路",
+        tag: "三太子開基名廟・燈海壯觀",
+        routeId: "wanchun",
+        checkpointId: "kh_1"
       }
     ];
 
     let isGpsActive = false;
-    let visitedStampsCount = 1; // 預設 1 個足跡起點
+    let visitedStampsCount = 1;
 
-    // 觸發地理定位（LBS 核心引擎：強制周邊近距鎖定）
+    // 根據經緯度即時識別縣市區名
+    function detectCityFromCoords(lat, lng) {
+      if (lat >= 24.95 && lat <= 25.35 && lng >= 121.35 && lng <= 121.75) {
+        return "台北 / 新北都會區";
+      } else if (lat >= 24.80 && lat < 24.95 && lng >= 121.10 && lng <= 121.40) {
+        return "桃園市區";
+      } else if (lat >= 24.60 && lat < 24.80 && lng >= 120.85 && lng <= 121.15) {
+        return "新竹地區";
+      } else if (lat >= 24.00 && lat <= 24.45 && lng >= 120.45 && lng <= 120.90) {
+        return "台中都會區";
+      } else if (lat >= 23.85 && lat < 24.15 && lng >= 120.30 && lng <= 120.65) {
+        return "彰化地區";
+      } else if (lat >= 22.85 && lat <= 23.35 && lng >= 120.05 && lng <= 120.50) {
+        return "台南古都區";
+      } else if (lat >= 22.45 && lat < 22.85 && lng >= 120.20 && lng <= 120.55) {
+        return "高雄港都區";
+      }
+      return "所在地點生活圈";
+    }
+
+    // 觸發地理定位（LBS 核心引擎：嚴格強制身邊周邊中小廟宇）
     function triggerGeoLocate(forceFresh = false) {
       const statusElem = document.getElementById('nearbyLocationStatus');
       if (statusElem) statusElem.innerHTML = '<span>📍 定位偵測中...</span>';
@@ -4948,43 +5218,51 @@
             lng: pos.coords.longitude
           };
           const accuracy = Math.round(pos.coords.accuracy || 15);
+          const cityName = detectCityFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
+
           if (statusElem) {
-            statusElem.innerHTML = `<span>📍 身邊宮廟已鎖定 (誤差 ±${accuracy}m)</span><button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 重新整理</button>`;
+            statusElem.innerHTML = `<span>📍 目前定位：${cityName} (身邊宮廟已鎖定 ±${accuracy}m)</span><button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 重新整理</button>`;
           }
 
-          // 強制僅計算並渲染周邊最近廟宇
+          // 強制僅計算並渲染周邊最近廟宇（嚴格排他，絕不呈現遙遠外縣市廟宇）
           renderNearestTemplesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
 
-          // 同步更新參拜腳印頁面的所有站點即時距離
+          // 同步更新參拜腳印頁面的所有站點即時距離與動態路線
+          rebuildDynamicRoutes(userCurrentCoords.lat, userCurrentCoords.lng);
           updateAllRouteDistancesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
         },
         (err) => {
           isGpsActive = false;
-          let reason = "未開定位，鎖定本地香路";
-          if (err.code === err.TIMEOUT) reason = "定位逾時，鎖定本地香路";
+          let reason = "未開定位，預設市區香路";
+          if (err.code === err.TIMEOUT) reason = "定位逾時，預設市區香路";
           fallbackToNearbyLocal(reason);
         },
         { enableHighAccuracy: true, timeout: 6000, maximumAge: forceFresh ? 0 : 300000 }
       );
     }
 
-    // 降級處理：強制鎖定在地身邊生活圈中小廟宇
+    // 降級處理：當信眾關閉 GPS 時，預設為熱門信仰中心
     function fallbackToNearbyLocal(note) {
       const statusElem = document.getElementById('nearbyLocationStatus');
-      userCurrentCoords = { lat: 24.1432, lng: 120.6806 }; // 本地核心座標
+      // 若已有紀錄則沿用，否則預設台中核心
+      if (!userCurrentCoords) {
+        userCurrentCoords = { lat: 24.1432, lng: 120.6806 };
+      }
+      const cityName = detectCityFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
       if (statusElem) {
-        statusElem.innerHTML = `<span>📍 本地周邊中小廟宇 (${note})</span><button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 開啟GPS</button>`;
+        statusElem.innerHTML = `<span>📍 ${cityName} (${note})</span><button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 開啟GPS</button>`;
       }
       renderNearestTemplesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
+      rebuildDynamicRoutes(userCurrentCoords.lat, userCurrentCoords.lng);
       updateAllRouteDistancesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
     }
 
-    // 依據座標強制由近至遠渲染「只有附近」的中小廟宇卡片（嚴格限制 2~3km 內）
+    // 依據座標強制由近至遠渲染「只有身邊附近」的中小廟宇（嚴格門檻：超出版距絕對禁止顯示）
     function renderNearestTemplesFromCoords(lat, lng) {
       const container = document.getElementById('nearbyTempleCardsList');
       if (!container) return;
 
-      // 1. 計算距離
+      // 1. 計算所有收錄廟宇與使用者的球面距離
       let list = ALL_TEMPLES_DB.map(t => {
         const dist = calculateHaversine(lat, lng, t.lat, t.lng);
         return { ...t, distanceKm: dist };
@@ -4993,41 +5271,65 @@
       // 2. 由近至遠嚴格排序
       list.sort((a, b) => a.distanceKm - b.distanceKm);
 
-      // 3. 強制只取身邊最近的 3 座中小廟宇，排除遙遠異地廟宇
-      const top3 = list.slice(0, 3);
+      // 3. 【強制身邊附近門檻】：設定 8.0 公里為周邊生活圈上限
+      // 超過 8.0 公里的遙遠廟宇（例如身在台北卻算到台中 120km），絕對不屬於「身邊周邊廟宇」！
+      const NEARBY_THRESHOLD_KM = 8.0;
+      const nearbyOnly = list.filter(t => t.distanceKm <= NEARBY_THRESHOLD_KM);
 
-      container.innerHTML = top3.map((t, idx) => {
-        let distLabel = "";
-        let distColor = "#8C5B32";
+      if (nearbyOnly.length > 0) {
+        // 取身邊最近的 3 座中小廟宇呈現
+        const top3 = nearbyOnly.slice(0, 3);
+        container.innerHTML = top3.map((t, idx) => {
+          let distLabel = "";
+          let distColor = "#8C5B32";
 
-        if (t.distanceKm < 0.10) {
-          distLabel = `🟢 本地 ${Math.round(t.distanceKm * 1000)}m (可打卡)`;
-          distColor = "#06C755";
-        } else if (t.distanceKm < 1.0) {
-          distLabel = `距身邊 ${Math.round(t.distanceKm * 1000)}m`;
-          distColor = "#A62824";
-        } else {
-          distLabel = `距身邊 ${t.distanceKm.toFixed(1)}km`;
-          distColor = "#8C5B32";
-        }
+          if (t.distanceKm < 0.10) {
+            distLabel = `🟢 本地 ${Math.round(t.distanceKm * 1000)}m (可打卡)`;
+            distColor = "#06C755";
+          } else if (t.distanceKm < 1.0) {
+            distLabel = `距身邊 ${Math.round(t.distanceKm * 1000)}m`;
+            distColor = "#A62824";
+          } else {
+            distLabel = `距身邊 ${t.distanceKm.toFixed(1)}km`;
+            distColor = "#8C5B32";
+          }
 
-        return `
-          <div class="lb-temple-card" onclick="onNearbyTempleClick('${t.id}', '${t.routeId}')" style="background:#FFF; border:1px solid #E8D8C8; border-radius:10px; padding:8px 4px 6px 4px; text-align:center; cursor:pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-            <div style="width:32px; height:32px; margin:0 auto 3px auto; display:flex; align-items:center; justify-content:center;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A62824" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 8 L21 8"/>
-                <path d="M1 5 C8 4 16 4 23 5"/>
-                <line x1="6" y1="8" x2="6" y2="20"/>
-                <line x1="18" y1="8" x2="18" y2="20"/>
-                <path d="M6 12 L18 12"/>
-              </svg>
+          return `
+            <div class="lb-temple-card" onclick="onNearbyTempleClick('${t.id}', '${t.routeId}')" style="background:#FFF; border:1px solid #E8D8C8; border-radius:10px; padding:8px 4px 6px 4px; text-align:center; cursor:pointer; box-shadow:0 1px 4px rgba(140,91,50,0.04); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+              <div style="width:32px; height:32px; margin:0 auto 3px auto; display:flex; align-items:center; justify-content:center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A62824" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 8 L21 8"/>
+                  <path d="M1 5 C8 4 16 4 23 5"/>
+                  <line x1="6" y1="8" x2="6" y2="20"/>
+                  <line x1="18" y1="8" x2="18" y2="20"/>
+                  <path d="M6 12 L18 12"/>
+                </svg>
+              </div>
+              <div style="font-size:0.75rem; font-weight:bold; color:#5C381E; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${t.name}">${t.name}</div>
+              <div style="font-size:0.62rem; color:#7A6F66; transform:scale(0.92); white-space:nowrap;">${t.deity}</div>
+              <div style="font-size:0.63rem; color:${distColor}; font-weight:bold; margin-top:2px; white-space:nowrap;">${distLabel}</div>
             </div>
-            <div style="font-size:0.75rem; font-weight:bold; color:#5C381E; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${t.name}">${t.name}</div>
-            <div style="font-size:0.62rem; color:#7A6F66; transform:scale(0.92); white-space:nowrap;">${t.deity}</div>
-            <div style="font-size:0.63rem; color:${distColor}; font-weight:bold; margin-top:2px; white-space:nowrap;">${distLabel}</div>
+          `;
+        }).join('');
+      } else {
+        // 若身處偏遠或未收錄地區（身邊 8km 內無合作廟宇），誠實呈現周邊狀態，絕不硬塞 120km 外的廟宇當作「周邊」
+        const cityName = detectCityFromCoords(lat, lng);
+        const closestTemple = list[0];
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; background:#FFF; border:1px dashed #E8D8C8; border-radius:10px; padding:12px 10px; text-align:center;">
+            <div style="font-size:0.8rem; font-weight:bold; color:#5C381E; margin-bottom:4px;">
+              📍 目前定位：${cityName}
+            </div>
+            <div style="font-size:0.72rem; color:#7A6F66; line-height:1.5;">
+              身邊方圓 8 公里內暫無收錄之中小宮廟。<br>
+              距離您最近的收錄名剎為：<strong style="color:#A62824;">${closestTemple ? closestTemple.name : '開基天后廟'}</strong>（距 ${closestTemple ? closestTemple.distanceKm.toFixed(1) : '0'} km）
+            </div>
+            <button onclick="openRouteListPage()" style="margin-top:8px; background:#A62824; color:#FFF; border:none; padding:5px 14px; border-radius:6px; font-size:0.72rem; font-weight:bold; cursor:pointer;">
+              瀏覽全台精選香路地圖 ›
+            </button>
           </div>
         `;
-      }).join('');
+      }
     }
     function onNearbyTempleClick(templeId, routeId) {
       if (TEMPLE_DATA && TEMPLE_DATA[templeId]) {
