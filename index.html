@@ -2074,34 +2074,33 @@
       100% { opacity: 0.88; filter: drop-shadow(0 0 16px rgba(255,255,255,0.9)) drop-shadow(0 0 24px rgba(255,215,100,0.6)); }
     }
 
-    /* 左列：前景大珠 (向下連續滾動，主要觸控焦點) */
+    /* 左列：前景大珠 (純手動下滑與手勢捻動) */
     .track-front {
       position: absolute;
       left: 16px;
-      top: 0;
+      top: -146px;
       width: 132px;
       display: flex;
       flex-direction: column;
       gap: 14px;
       z-index: 6;
-      animation: scrollDown 5s linear infinite;
+      transform: translateY(0px);
       will-change: transform;
     }
 
-    /* 右列：後景小珠 (向上回流，營造前後立體縱深) */
+    /* 右列：後景小珠 (配合左列手勢向上回流，營造前後立體縱深) */
     .track-rear {
       position: absolute;
       right: 16px;
-      top: 0;
+      top: -108px;
       width: 96px;
       display: flex;
       flex-direction: column;
       gap: 12px;
       z-index: 2;
-      transform: scale(0.85);
+      transform: scale(0.85) translateY(0px);
       opacity: 0.85;
       filter: blur(0.5px) brightness(0.92);
-      animation: scrollUp 5s linear infinite;
       will-change: transform;
     }
 
@@ -2114,9 +2113,11 @@
       justify-content: center;
       filter: drop-shadow(-8px 14px 22px rgba(40, 20, 10, 0.55));
       transition: filter 0.15s ease, transform 0.15s ease;
-      cursor: pointer;
+      cursor: grab;
+      touch-action: none;
     }
     .dual-bead-front:active {
+      cursor: grabbing;
       filter: drop-shadow(-8px 14px 24px rgba(40, 20, 10, 0.7)) drop-shadow(0 0 22px rgba(255, 215, 100, 0.8));
       transform: scale(0.96);
     }
@@ -2130,18 +2131,6 @@
       justify-content: center;
       filter: drop-shadow(-4px 8px 14px rgba(40, 20, 10, 0.35));
       pointer-events: none;
-    }
-
-    /* 前景向下無限無縫循環 */
-    @keyframes scrollDown {
-      0% { transform: translateY(-50%); }
-      100% { transform: translateY(0%); }
-    }
-
-    /* 後景向上無限無縫循環 */
-    @keyframes scrollUp {
-      0% { transform: translateY(0%); }
-      100% { transform: translateY(-50%); }
     }
 
     /* 點擊浮動提示 (Merit Floating Toast) */
@@ -4953,51 +4942,145 @@
       }
     }
 
-    // 綁定 3D 珠串點擊與滑動手勢
+    // ==============================================
+    // 正念冥想：雙列立體縱深手動捻珠引擎 (Manual Dual-Track Mala Engine)
+    // ==============================================
+    let currentFrontPos = 0;
+    const FRONT_PITCH = 146; // 前景大珠步長 (132px + 14px gap)
+    const REAR_PITCH = 108;  // 後景小珠步長 (96px + 12px gap)
+    const CYCLE_BEADS = 3;   // 循環週期珠數
+    const FRONT_CYCLE = FRONT_PITCH * CYCLE_BEADS; // 438px
+    const REAR_CYCLE = REAR_PITCH * CYCLE_BEADS;   // 324px
+
+    function applyTrackPositions(frontPos, animate) {
+      const trackFront = document.getElementById('trackFront');
+      const trackRear = document.getElementById('trackRear');
+      if (!trackFront || !trackRear) return;
+
+      const rearPos = -frontPos * (REAR_PITCH / FRONT_PITCH);
+
+      if (animate) {
+        const transitionStyle = 'transform 0.32s cubic-bezier(0.22, 1, 0.36, 1.12)';
+        trackFront.style.transition = transitionStyle;
+        trackRear.style.transition = transitionStyle;
+      } else {
+        trackFront.style.transition = 'none';
+        trackRear.style.transition = 'none';
+      }
+
+      // 規整化渲染坐標
+      const renderFrontY = frontPos % FRONT_CYCLE;
+      const renderRearY = rearPos % REAR_CYCLE;
+
+      trackFront.style.transform = `translateY(${renderFrontY}px)`;
+      trackRear.style.transform = `scale(0.85) translateY(${renderRearY}px)`;
+    }
+
+    // 綁定 3D 雙列手勢拖曳與捻珠互動
     function bindMalaGestureEvents() {
       if (malaListenersBound) return;
       const stage = document.getElementById('malaStage');
       if (!stage) return;
 
-      const frontBeads = stage.querySelectorAll('.dual-bead-front');
-      frontBeads.forEach((bead) => {
-        bead.addEventListener('click', (e) => {
-          e.stopPropagation();
+      let isDragging = false;
+      let dragStartY = 0;
+      let dragStartPos = 0;
+      let hasDragged = false;
+      let lastTapTime = 0;
+
+      // 1. 觸控手勢 (Touch)
+      const onTouchStart = (e) => {
+        if (!e.touches || e.touches.length === 0) return;
+        isDragging = true;
+        hasDragged = false;
+        dragStartY = e.touches[0].clientY;
+        dragStartPos = currentFrontPos;
+        applyTrackPositions(currentFrontPos, false);
+      };
+
+      const onTouchMove = (e) => {
+        if (!isDragging || !e.touches || e.touches.length === 0) return;
+        const deltaY = e.touches[0].clientY - dragStartY;
+        if (Math.abs(deltaY) > 5) {
+          hasDragged = true;
+        }
+        currentFrontPos = dragStartPos + deltaY;
+        applyTrackPositions(currentFrontPos, false);
+      };
+
+      const onTouchEnd = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const touchEvent = e.changedTouches && e.changedTouches.length > 0 ? e.changedTouches[0] : null;
+        const deltaY = touchEvent ? touchEvent.clientY - dragStartY : 0;
+
+        if (hasDragged && Math.abs(deltaY) > 20) {
+          // 手勢滑動：順著滑動方向吸附至最近一顆或下一顆
+          const steps = Math.round(deltaY / FRONT_PITCH);
+          const snapStep = steps !== 0 ? steps : (deltaY > 0 ? 1 : -1);
+          currentFrontPos = dragStartPos + snapStep * FRONT_PITCH;
+          applyTrackPositions(currentFrontPos, true);
+          handleMalaRoll(touchEvent);
+        } else {
+          // 輕觸 / 點擊：預設向前滾動 1 顆珠子
+          currentFrontPos = Math.round(dragStartPos / FRONT_PITCH) * FRONT_PITCH + FRONT_PITCH;
+          applyTrackPositions(currentFrontPos, true);
+          handleMalaRoll(touchEvent);
+        }
+      };
+
+      // 2. 滑鼠拖曳手勢 (Mouse for Desktop/DevTools)
+      const onMouseDown = (e) => {
+        isDragging = true;
+        hasDragged = false;
+        dragStartY = e.clientY;
+        dragStartPos = currentFrontPos;
+        applyTrackPositions(currentFrontPos, false);
+      };
+
+      const onMouseMove = (e) => {
+        if (!isDragging) return;
+        const deltaY = e.clientY - dragStartY;
+        if (Math.abs(deltaY) > 5) {
+          hasDragged = true;
+        }
+        currentFrontPos = dragStartPos + deltaY;
+        applyTrackPositions(currentFrontPos, false);
+      };
+
+      const onMouseUp = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        const deltaY = e.clientY - dragStartY;
+
+        if (hasDragged && Math.abs(deltaY) > 20) {
+          const steps = Math.round(deltaY / FRONT_PITCH);
+          const snapStep = steps !== 0 ? steps : (deltaY > 0 ? 1 : -1);
+          currentFrontPos = dragStartPos + snapStep * FRONT_PITCH;
+          applyTrackPositions(currentFrontPos, true);
           handleMalaRoll(e);
-        });
-        bead.addEventListener('touchstart', (e) => {
-          // 支援觸控即時回饋
-          if (e.touches && e.touches.length > 0) {
-            handleMalaRoll(e.touches[0]);
-          }
-        }, { passive: true });
-      });
-
-      // 支援在整個雙列舞台滑動或點擊皆可捻珠聚氣
-      let touchStartY = 0;
-      stage.addEventListener('touchstart', (e) => {
-        if (e.touches && e.touches.length > 0) {
-          touchStartY = e.touches[0].clientY;
+        } else {
+          currentFrontPos = Math.round(dragStartPos / FRONT_PITCH) * FRONT_PITCH + FRONT_PITCH;
+          applyTrackPositions(currentFrontPos, true);
+          handleMalaRoll(e);
         }
-      }, { passive: true });
+      };
 
-      stage.addEventListener('touchend', (e) => {
-        if (e.changedTouches && e.changedTouches.length > 0) {
-          const deltaY = e.changedTouches[0].clientY - touchStartY;
-          if (Math.abs(deltaY) > 16) {
-            handleMalaRoll(e.changedTouches[0]);
-          }
-        }
-      }, { passive: true });
+      stage.addEventListener('touchstart', onTouchStart, { passive: true });
+      stage.addEventListener('touchmove', onTouchMove, { passive: true });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
 
-      stage.addEventListener('click', (e) => {
-        handleMalaRoll(e);
-      });
+      stage.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
 
+      // 初始化珠串位置
+      applyTrackPositions(currentFrontPos, false);
       malaListenersBound = true;
     }
 
-    // 執行一次 3D 捻珠運轉與反饋
+    // 執行一次 3D 手動捻珠反饋
     function handleMalaRoll(e) {
       if (isMalaRolling) return;
       isMalaRolling = true;
@@ -5020,10 +5103,10 @@
       // 4. 激發功德升騰浮牌 (Floating Merit Toast)
       spawnMeritToast(e);
 
-      // 5. 快速冷卻防重複點擊抖動
+      // 5. 短暫冷卻防抖
       setTimeout(() => {
         isMalaRolling = false;
-      }, 160);
+      }, 140);
     }
 
     // 產生金色升騰功德文字
@@ -5050,8 +5133,8 @@
       } else {
         const randomOffsetX = (Math.random() - 0.5) * 40;
         const randomOffsetY = (Math.random() - 0.5) * 30;
-        toast.style.left = `calc(36% + ${randomOffsetX}px)`;
-        toast.style.top = `calc(46% + ${randomOffsetY}px)`;
+        toast.style.left = `calc(32% + ${randomOffsetX}px)`;
+        toast.style.top = `calc(44% + ${randomOffsetY}px)`;
       }
 
       stage.appendChild(toast);
