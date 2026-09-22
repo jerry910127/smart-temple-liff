@@ -2031,119 +2031,117 @@
       letter-spacing: 1px;
     }
 
-    /* 3D 斜角圓弧念珠軌道舞台 (連續輪播動效容器) */
-    .mala-3d-arc-stage {
+    /* =======================================================
+       正念冥想頁面：雙列垂直縱深交錯軌道 (Dual-Column Vertical Depth Loop)
+       左側前景大珠 (向下滑動) vs 右側後景小珠 (向上回流)
+       ======================================================= */
+    .mala-dual-stage {
       position: absolute;
-      top: 13%;
-      left: 0;
-      width: 100%;
-      height: 74%;
-      overflow: visible;
-      pointer-events: none;
+      top: 21%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 480px;
+      max-height: 56vh;
+      overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
-    }
-
-    /* 空間圓弧穿繩導引線 */
-    .cord-svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-      overflow: visible;
-    }
-
-    /* === 釋迦木雕佛珠連續 3D 圓弧動畫核心架構 === */
-    .bead-item {
-      position: absolute;
-      width: 130px;
-      height: 130px;
-      margin-left: -65px;
-      margin-top: -65px;
+      mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
       pointer-events: auto;
-      cursor: pointer;
+      touch-action: none;
+      cursor: grab;
+      z-index: 10;
+    }
+    .mala-dual-stage:active {
+      cursor: grabbing;
+    }
+
+    /* 手勢引導白色半透明光弧 (Gesture White Arc) */
+    .gesture-white-arc {
+      position: absolute;
+      top: 10%;
+      left: 4px;
+      width: 130px;
+      height: 80%;
+      pointer-events: none;
+      z-index: 8;
+      opacity: 0.65;
+      animation: pulseArcGlow 2.2s ease-in-out infinite alternate;
+    }
+    @keyframes pulseArcGlow {
+      0% { opacity: 0.45; filter: drop-shadow(0 0 6px rgba(255,255,255,0.4)); }
+      100% { opacity: 0.88; filter: drop-shadow(0 0 16px rgba(255,255,255,0.9)) drop-shadow(0 0 24px rgba(255,215,100,0.6)); }
+    }
+
+    /* 左列：前景大珠 (向下連續滾動，主要觸控焦點) */
+    .track-front {
+      position: absolute;
+      left: 16px;
+      top: 0;
+      width: 132px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 6;
+      animation: scrollDown 5s linear infinite;
+      will-change: transform;
+    }
+
+    /* 右列：後景小珠 (向上回流，營造前後立體縱深) */
+    .track-rear {
+      position: absolute;
+      right: 16px;
+      top: 0;
+      width: 96px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 2;
+      transform: scale(0.85);
+      opacity: 0.85;
+      filter: blur(0.5px) brightness(0.92);
+      animation: scrollUp 5s linear infinite;
+      will-change: transform;
+    }
+
+    .dual-bead-front {
+      width: 132px;
+      height: 132px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      /* 依循 3D 圓弧路徑的 60fps GPU 加速關鍵幀動畫 */
-      animation: rotateMalaArc 6s linear infinite;
-      will-change: transform, top, left, opacity;
-      transition: filter 0.15s ease;
-      touch-action: manipulation;
+      filter: drop-shadow(-8px 14px 22px rgba(40, 20, 10, 0.55));
+      transition: filter 0.15s ease, transform 0.15s ease;
+      cursor: pointer;
     }
-    .bead-item:active {
-      filter: brightness(1.2) drop-shadow(0 0 25px rgba(255, 215, 100, 0.85));
+    .dual-bead-front:active {
+      filter: drop-shadow(-8px 14px 24px rgba(40, 20, 10, 0.7)) drop-shadow(0 0 22px rgba(255, 215, 100, 0.8));
+      transform: scale(0.96);
     }
 
-    /* 6 顆佛珠交錯延遲時間，實現連續不間斷的等距立體滾動 (總長 6s / 6顆 = 每顆差 -1s) */
-    .bead-item:nth-child(2) { animation-delay: 0s; }
-    .bead-item:nth-child(3) { animation-delay: -1s; }
-    .bead-item:nth-child(4) { animation-delay: -2s; }
-    .bead-item:nth-child(5) { animation-delay: -3s; }
-    .bead-item:nth-child(6) { animation-delay: -4s; }
-    .bead-item:nth-child(7) { animation-delay: -5s; }
+    .dual-bead-rear {
+      width: 96px;
+      height: 96px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(-4px 8px 14px rgba(40, 20, 10, 0.35));
+      pointer-events: none;
+    }
 
-    /*
-      3D 斜角立體圓弧軌跡關鍵幀
-      - 0%   : 右上遠端 (遠景小珠，scale: 0.52, blur: 1.5px)
-      - 25%  : 中景逼近 (scale: 0.85)
-      - 50%  : 左側中央前景 (最大最亮焦點，scale: 1.25, z-index: 12, drop-shadow)
-      - 75%  : 右下方迴繞出景 (scale: 0.92)
-      - 90%  : 遠端收尾 (scale: 0.65, blur: 1px)
-      - 100% : 回到右上遠端 (無縫閉環)
-    */
-    @keyframes rotateMalaArc {
-      0% {
-        top: 24%;
-        left: 74%;
-        transform: scale(0.52) rotate(15deg);
-        opacity: 0.45;
-        z-index: 2;
-        filter: blur(1.5px);
-      }
-      25% {
-        top: 34%;
-        left: 58%;
-        transform: scale(0.85) rotate(0deg);
-        opacity: 0.85;
-        z-index: 5;
-        filter: blur(0px);
-      }
-      50% {
-        top: 48%;
-        left: 36%;
-        transform: scale(1.25) rotate(-15deg);
-        opacity: 1;
-        z-index: 12;
-        filter: drop-shadow(-8px 16px 26px rgba(40, 20, 10, 0.55)) drop-shadow(0 0 16px rgba(255, 215, 100, 0.35));
-      }
-      75% {
-        top: 66%;
-        left: 48%;
-        transform: scale(0.92) rotate(-30deg);
-        opacity: 0.85;
-        z-index: 6;
-        filter: blur(0px);
-      }
-      90% {
-        top: 75%;
-        left: 64%;
-        transform: scale(0.65) rotate(-40deg);
-        opacity: 0.55;
-        z-index: 3;
-        filter: blur(1px);
-      }
-      100% {
-        top: 24%;
-        left: 74%;
-        transform: scale(0.52) rotate(15deg);
-        opacity: 0.45;
-        z-index: 2;
-        filter: blur(1.5px);
-      }
+    /* 前景向下無限無縫循環 */
+    @keyframes scrollDown {
+      0% { transform: translateY(-50%); }
+      100% { transform: translateY(0%); }
+    }
+
+    /* 後景向上無限無縫循環 */
+    @keyframes scrollUp {
+      0% { transform: translateY(0%); }
+      100% { transform: translateY(-50%); }
     }
 
     /* 點擊浮動提示 (Merit Floating Toast) */
@@ -2610,33 +2608,46 @@
       </defs>
     </svg>
 
-    <!-- 3D 斜角圓弧念珠軌道舞台 (3D Oblique Arc Continuous Carousel Stage) -->
-    <div class="mala-3d-arc-stage" id="malaStage">
-      <!-- 穿珠朱紅金絲線軌跡 SVG (深紅編織繩與金絲穿引於珠串空間中) -->
-      <svg class="cord-svg" viewBox="0 0 375 520" preserveAspectRatio="none">
+    <!-- 雙列垂直縱深交錯軌道舞台 (Dual-Column Vertical Conveyor Loop Stage) -->
+    <div class="mala-dual-stage" id="malaStage">
+      <!-- 手勢引導白色半透明光弧 (White Gesture Arc) -->
+      <svg class="gesture-white-arc" viewBox="0 0 130 380">
         <defs>
-          <linearGradient id="shakyaCordGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#5B0E0B" stop-opacity="0.6"/>
-            <stop offset="40%" stop-color="#C68F42" stop-opacity="0.95"/>
-            <stop offset="70%" stop-color="#A62824" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#5B0E0B" stop-opacity="0.5"/>
+          <linearGradient id="whiteArcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.15"/>
+            <stop offset="35%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+            <stop offset="70%" stop-color="#FFF8E7" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#FFD043" stop-opacity="0.25"/>
           </linearGradient>
-          <filter id="cordShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="1" dy="3" stdDeviation="2.5" flood-color="#231C18" flood-opacity="0.35"/>
+          <filter id="whiteGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
           </filter>
         </defs>
-        <!-- 空間 3D 圓弧金絲穿繩引線 -->
-        <path d="M 285 130 Q 225 240 135 320 T 240 485" 
-              fill="none" stroke="url(#shakyaCordGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="8,4" filter="url(#cordShadow)"/>
+        <path d="M 105 30 C 25 110, 15 250, 90 350" fill="none" stroke="url(#whiteArcGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="10,6" filter="url(#whiteGlow)"/>
+        <!-- 下滑動態指示微光點 -->
+        <circle cx="90" cy="350" r="4.5" fill="#FFD043"/>
       </svg>
 
-      <!-- 6 顆釋迦木雕佛珠 (透過 SVG 模板渲染，等距循環無縫 3D 滾動) -->
-      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <!-- 右列：後景小佛珠群 (Rear Track - 向上回流，營造前後空間縱深) -->
+      <div class="track-rear" id="trackRear">
+        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
+      </div>
+
+      <!-- 左列：前景大佛珠群 (Front Track - 向下滾動，主要觸發與滑動焦點) -->
+      <div class="track-front" id="trackFront">
+        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      </div>
     </div>
 
     <!-- 底部主操作膠囊鈕 (CTA Button) -->
@@ -4948,8 +4959,8 @@
       const stage = document.getElementById('malaStage');
       if (!stage) return;
 
-      const beadItems = stage.querySelectorAll('.bead-item');
-      beadItems.forEach((bead) => {
+      const frontBeads = stage.querySelectorAll('.dual-bead-front');
+      frontBeads.forEach((bead) => {
         bead.addEventListener('click', (e) => {
           e.stopPropagation();
           handleMalaRoll(e);
@@ -4962,7 +4973,7 @@
         }, { passive: true });
       });
 
-      // 支援在整個舞台滑動或點擊皆可捻珠聚氣
+      // 支援在整個雙列舞台滑動或點擊皆可捻珠聚氣
       let touchStartY = 0;
       stage.addEventListener('touchstart', (e) => {
         if (e.touches && e.touches.length > 0) {
@@ -4973,7 +4984,7 @@
       stage.addEventListener('touchend', (e) => {
         if (e.changedTouches && e.changedTouches.length > 0) {
           const deltaY = e.changedTouches[0].clientY - touchStartY;
-          if (Math.abs(deltaY) > 20) {
+          if (Math.abs(deltaY) > 16) {
             handleMalaRoll(e.changedTouches[0]);
           }
         }
