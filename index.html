@@ -2032,28 +2032,26 @@
     }
 
     /* =======================================================
-       正念冥想頁面：雙列垂直縱深交錯軌道 (Dual-Column Vertical Depth Loop)
-       左側前景大珠 (向下滑動) vs 右側後景小珠 (向上回流)
+       正念冥想頁面：立體橢圓環形交疊串珠 (3D Vertical O-Ring / Loop)
+       左側前軌大珠 (向下滾動) vs 右側後軌小珠 (向上回流)
+       純手動手勢滑動換珠，無自動播放
        ======================================================= */
-    .mala-dual-stage {
+    .mala-3d-loop-stage {
       position: absolute;
-      top: 21%;
+      top: 19%;
       left: 50%;
       transform: translateX(-50%);
       width: 280px;
-      height: 480px;
-      max-height: 56vh;
-      overflow: hidden;
+      height: 520px;
+      max-height: 60vh;
+      perspective: 800px;
       user-select: none;
       -webkit-user-select: none;
-      mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
-      pointer-events: auto;
       touch-action: none;
       cursor: grab;
       z-index: 10;
     }
-    .mala-dual-stage:active {
+    .mala-3d-loop-stage:active {
       cursor: grabbing;
     }
 
@@ -2061,7 +2059,7 @@
     .gesture-white-arc {
       position: absolute;
       top: 10%;
-      left: 4px;
+      left: 6px;
       width: 130px;
       height: 80%;
       pointer-events: none;
@@ -2074,63 +2072,25 @@
       100% { opacity: 0.88; filter: drop-shadow(0 0 16px rgba(255,255,255,0.9)) drop-shadow(0 0 24px rgba(255,215,100,0.6)); }
     }
 
-    /* 左列：前景大珠 (純手動下滑與手勢捻動) */
-    .track-front {
+    /* 單顆 3D 空間環形佛珠 */
+    .ring-bead-item {
       position: absolute;
-      left: 16px;
-      top: -146px;
-      width: 132px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      z-index: 6;
-      transform: translateY(0px);
-      will-change: transform;
-    }
-
-    /* 右列：後景小珠 (配合左列手勢向上回流，營造前後立體縱深) */
-    .track-rear {
-      position: absolute;
-      right: 16px;
-      top: -108px;
-      width: 96px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 2;
-      transform: scale(0.85) translateY(0px);
-      opacity: 0.85;
-      filter: blur(0.5px) brightness(0.92);
-      will-change: transform;
-    }
-
-    .dual-bead-front {
-      width: 132px;
-      height: 132px;
-      flex-shrink: 0;
+      width: 125px;
+      height: 125px;
+      top: 50%;
+      left: 50%;
+      margin-top: -62.5px;
+      margin-left: -62.5px;
+      pointer-events: auto;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(-8px 14px 22px rgba(40, 20, 10, 0.55));
-      transition: filter 0.15s ease, transform 0.15s ease;
-      cursor: grab;
+      will-change: transform, opacity, filter, z-index;
       touch-action: none;
     }
-    .dual-bead-front:active {
-      cursor: grabbing;
-      filter: drop-shadow(-8px 14px 24px rgba(40, 20, 10, 0.7)) drop-shadow(0 0 22px rgba(255, 215, 100, 0.8));
-      transform: scale(0.96);
-    }
-
-    .dual-bead-rear {
-      width: 96px;
-      height: 96px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(-4px 8px 14px rgba(40, 20, 10, 0.35));
-      pointer-events: none;
+    .ring-bead-item:active {
+      filter: brightness(1.18) drop-shadow(0 0 22px rgba(255, 215, 100, 0.85)) !important;
     }
 
     /* 點擊浮動提示 (Merit Floating Toast) */
@@ -2597,8 +2557,8 @@
       </defs>
     </svg>
 
-    <!-- 雙列垂直縱深交錯軌道舞台 (Dual-Column Vertical Conveyor Loop Stage) -->
-    <div class="mala-dual-stage" id="malaStage">
+    <!-- 3D 空間立體垂直橢圓環念珠舞台 (3D Vertical O-Ring Loop Stage) -->
+    <div class="mala-3d-loop-stage" id="malaStage">
       <!-- 手勢引導白色半透明光弧 (White Gesture Arc) -->
       <svg class="gesture-white-arc" viewBox="0 0 130 380">
         <defs>
@@ -2618,25 +2578,17 @@
         <circle cx="90" cy="350" r="4.5" fill="#FFD043"/>
       </svg>
 
-      <!-- 右列：後景小佛珠群 (Rear Track - 向上回流，營造前後空間縱深) -->
-      <div class="track-rear" id="trackRear">
-        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-rear"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block;"><use href="#shakya-money-bead" /></svg></div>
-      </div>
-
-      <!-- 左列：前景大佛珠群 (Front Track - 向下滾動，主要觸發與滑動焦點) -->
-      <div class="track-front" id="trackFront">
-        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-        <div class="dual-bead-front" title="點擊或向下滑動聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
-      </div>
+      <!-- 10 顆 3D 空間立體環形串珠 (純手動手勢滑動，無自動播放) -->
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="ring-bead-item"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
     </div>
 
     <!-- 底部主操作膠囊鈕 (CTA Button) -->
@@ -4943,40 +4895,71 @@
     }
 
     // ==============================================
-    // 正念冥想：雙列立體縱深手動捻珠引擎 (Manual Dual-Track Mala Engine)
+    // 正念冥想：立體橢圓環形 3D 手動捻珠引擎 (3D Vertical O-Ring Manual Engine)
     // ==============================================
-    let currentFrontPos = 0;
-    const FRONT_PITCH = 146; // 前景大珠步長 (132px + 14px gap)
-    const REAR_PITCH = 108;  // 後景小珠步長 (96px + 12px gap)
-    const CYCLE_BEADS = 3;   // 循環週期珠數
-    const FRONT_CYCLE = FRONT_PITCH * CYCLE_BEADS; // 438px
-    const REAR_CYCLE = REAR_PITCH * CYCLE_BEADS;   // 324px
+    let malaOrbitProgress = 0.0;
+    const TOTAL_RING_BEADS = 10;
+    const BEAD_STEP_ANGLE = 1.0 / TOTAL_RING_BEADS; // 0.1 (36度)
 
-    function applyTrackPositions(frontPos, animate) {
-      const trackFront = document.getElementById('trackFront');
-      const trackRear = document.getElementById('trackRear');
-      if (!trackFront || !trackRear) return;
+    // 依據空間 3D 橢圓環參數化方程計算單顆佛珠位置與層級
+    function calc3DBeadPose(t) {
+      // 歸一化至 [0, 1)
+      t = ((t % 1) + 1) % 1;
 
-      const rearPos = -frontPos * (REAR_PITCH / FRONT_PITCH);
+      let x, y, z, scale, opacity, zIndex, filter;
 
-      if (animate) {
-        const transitionStyle = 'transform 0.32s cubic-bezier(0.22, 1, 0.36, 1.12)';
-        trackFront.style.transition = transitionStyle;
-        trackRear.style.transition = transitionStyle;
+      if (t <= 0.5) {
+        // 【左側前軌道 (近景)】由頂向下運轉 (t: 0 -> 0.5)
+        const frontNorm = t / 0.5; // 0 -> 1
+        const sinHalf = Math.sin(frontNorm * Math.PI); // 0 -> 1 -> 0
+        y = -190 + 380 * frontNorm; // -190px (頂) -> +190px (底)
+        x = -30 - 18 * sinHalf;     // -30px -> -48px -> -30px (左凸)
+        z = 40 + 45 * sinHalf;      // 40px -> 85px (大幅前凸)
+        scale = 1.05 + 0.22 * sinHalf; // 1.05 -> 1.27
+        opacity = 0.95 + 0.05 * sinHalf;
+        zIndex = Math.round(10 + 6 * sinHalf); // 10 -> 16 (覆蓋後排)
+        filter = `drop-shadow(-8px 14px 22px rgba(40, 20, 10, ${0.45 + 0.15 * sinHalf}))`;
       } else {
-        trackFront.style.transition = 'none';
-        trackRear.style.transition = 'none';
+        // 【右側後軌道 (遠景)】由底向上回流 (t: 0.5 -> 1.0)
+        const rearNorm = (t - 0.5) / 0.5; // 0 -> 1
+        const sinRear = Math.sin(rearNorm * Math.PI); // 0 -> 1 -> 0
+        y = 190 - 380 * rearNorm;   // +190px (底) -> -190px (頂)
+        x = 25 + 32 * sinRear;      // +25px -> +57px -> +25px (右弧)
+        z = -30 - 30 * sinRear;     // -30px -> -60px (下沉後景)
+        scale = 0.82 - 0.08 * sinRear; // 0.82 -> 0.74
+        opacity = 0.85 - 0.06 * sinRear;
+        zIndex = Math.round(2 - 1 * sinRear); // 1 -> 2 (被前排遮擋)
+        filter = 'drop-shadow(-3px 6px 12px rgba(40, 20, 10, 0.35)) blur(0.4px)';
       }
 
-      // 規整化渲染坐標
-      const renderFrontY = frontPos % FRONT_CYCLE;
-      const renderRearY = rearPos % REAR_CYCLE;
-
-      trackFront.style.transform = `translateY(${renderFrontY}px)`;
-      trackRear.style.transform = `scale(0.85) translateY(${renderRearY}px)`;
+      return { x, y, z, scale, opacity, zIndex, filter };
     }
 
-    // 綁定 3D 雙列手勢拖曳與捻珠互動
+    // 將 10 顆佛珠渲染到 3D 空間環形軌道上
+    function applyMalaOrbitPositions(progress, animate) {
+      const stage = document.getElementById('malaStage');
+      if (!stage) return;
+
+      const beadElems = stage.querySelectorAll('.ring-bead-item');
+      if (!beadElems || beadElems.length === 0) return;
+
+      const transitionStyle = animate 
+        ? 'transform 0.32s cubic-bezier(0.2, 1, 0.36, 1.15), opacity 0.32s ease, filter 0.32s ease'
+        : 'none';
+
+      beadElems.forEach((elem, index) => {
+        const beadT = progress + index * BEAD_STEP_ANGLE;
+        const pose = calc3DBeadPose(beadT);
+
+        elem.style.transition = transitionStyle;
+        elem.style.transform = `translate3d(${pose.x.toFixed(1)}px, ${pose.y.toFixed(1)}px, ${pose.z.toFixed(1)}px) scale(${pose.scale.toFixed(3)})`;
+        elem.style.opacity = pose.opacity.toFixed(2);
+        elem.style.zIndex = pose.zIndex;
+        elem.style.filter = pose.filter;
+      });
+    }
+
+    // 綁定 3D 空間環形手勢拖曳與捻珠互動
     function bindMalaGestureEvents() {
       if (malaListenersBound) return;
       const stage = document.getElementById('malaStage');
@@ -4984,9 +4967,9 @@
 
       let isDragging = false;
       let dragStartY = 0;
-      let dragStartPos = 0;
+      let dragStartProgress = 0;
       let hasDragged = false;
-      let lastTapTime = 0;
+      const DRAG_SENSITIVITY = 0.0016; // 每滑動約 62px 推進 1 顆珠
 
       // 1. 觸控手勢 (Touch)
       const onTouchStart = (e) => {
@@ -4994,8 +4977,8 @@
         isDragging = true;
         hasDragged = false;
         dragStartY = e.touches[0].clientY;
-        dragStartPos = currentFrontPos;
-        applyTrackPositions(currentFrontPos, false);
+        dragStartProgress = malaOrbitProgress;
+        applyMalaOrbitPositions(malaOrbitProgress, false);
       };
 
       const onTouchMove = (e) => {
@@ -5004,8 +4987,8 @@
         if (Math.abs(deltaY) > 5) {
           hasDragged = true;
         }
-        currentFrontPos = dragStartPos + deltaY;
-        applyTrackPositions(currentFrontPos, false);
+        malaOrbitProgress = dragStartProgress + deltaY * DRAG_SENSITIVITY;
+        applyMalaOrbitPositions(malaOrbitProgress, false);
       };
 
       const onTouchEnd = (e) => {
@@ -5015,17 +4998,16 @@
         const touchEvent = e.changedTouches && e.changedTouches.length > 0 ? e.changedTouches[0] : null;
         const deltaY = touchEvent ? touchEvent.clientY - dragStartY : 0;
 
-        if (hasDragged && Math.abs(deltaY) > 20) {
-          // 手勢滑動：順著滑動方向吸附至最近一顆或下一顆
-          const steps = Math.round(deltaY / FRONT_PITCH);
+        if (hasDragged && Math.abs(deltaY) > 18) {
+          const steps = Math.round(deltaY * DRAG_SENSITIVITY / BEAD_STEP_ANGLE);
           const snapStep = steps !== 0 ? steps : (deltaY > 0 ? 1 : -1);
-          currentFrontPos = dragStartPos + snapStep * FRONT_PITCH;
-          applyTrackPositions(currentFrontPos, true);
+          malaOrbitProgress = Math.round(dragStartProgress * 10) / 10 + snapStep * BEAD_STEP_ANGLE;
+          applyMalaOrbitPositions(malaOrbitProgress, true);
           handleMalaRoll(touchEvent);
         } else {
-          // 輕觸 / 點擊：預設向前滾動 1 顆珠子
-          currentFrontPos = Math.round(dragStartPos / FRONT_PITCH) * FRONT_PITCH + FRONT_PITCH;
-          applyTrackPositions(currentFrontPos, true);
+          // 輕觸 / 點擊：順滑向前推進 1 顆珠
+          malaOrbitProgress = Math.round(dragStartProgress * 10) / 10 + BEAD_STEP_ANGLE;
+          applyMalaOrbitPositions(malaOrbitProgress, true);
           handleMalaRoll(touchEvent);
         }
       };
@@ -5035,8 +5017,8 @@
         isDragging = true;
         hasDragged = false;
         dragStartY = e.clientY;
-        dragStartPos = currentFrontPos;
-        applyTrackPositions(currentFrontPos, false);
+        dragStartProgress = malaOrbitProgress;
+        applyMalaOrbitPositions(malaOrbitProgress, false);
       };
 
       const onMouseMove = (e) => {
@@ -5045,8 +5027,8 @@
         if (Math.abs(deltaY) > 5) {
           hasDragged = true;
         }
-        currentFrontPos = dragStartPos + deltaY;
-        applyTrackPositions(currentFrontPos, false);
+        malaOrbitProgress = dragStartProgress + deltaY * DRAG_SENSITIVITY;
+        applyMalaOrbitPositions(malaOrbitProgress, false);
       };
 
       const onMouseUp = (e) => {
@@ -5054,15 +5036,15 @@
         isDragging = false;
         const deltaY = e.clientY - dragStartY;
 
-        if (hasDragged && Math.abs(deltaY) > 20) {
-          const steps = Math.round(deltaY / FRONT_PITCH);
+        if (hasDragged && Math.abs(deltaY) > 18) {
+          const steps = Math.round(deltaY * DRAG_SENSITIVITY / BEAD_STEP_ANGLE);
           const snapStep = steps !== 0 ? steps : (deltaY > 0 ? 1 : -1);
-          currentFrontPos = dragStartPos + snapStep * FRONT_PITCH;
-          applyTrackPositions(currentFrontPos, true);
+          malaOrbitProgress = Math.round(dragStartProgress * 10) / 10 + snapStep * BEAD_STEP_ANGLE;
+          applyMalaOrbitPositions(malaOrbitProgress, true);
           handleMalaRoll(e);
         } else {
-          currentFrontPos = Math.round(dragStartPos / FRONT_PITCH) * FRONT_PITCH + FRONT_PITCH;
-          applyTrackPositions(currentFrontPos, true);
+          malaOrbitProgress = Math.round(dragStartProgress * 10) / 10 + BEAD_STEP_ANGLE;
+          applyMalaOrbitPositions(malaOrbitProgress, true);
           handleMalaRoll(e);
         }
       };
@@ -5075,8 +5057,8 @@
       window.addEventListener('mousemove', onMouseMove);
       window.addEventListener('mouseup', onMouseUp);
 
-      // 初始化珠串位置
-      applyTrackPositions(currentFrontPos, false);
+      // 初始化 10 顆珠串的 3D 空間姿態
+      applyMalaOrbitPositions(malaOrbitProgress, false);
       malaListenersBound = true;
     }
 
