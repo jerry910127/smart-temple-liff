@@ -1924,15 +1924,15 @@
     }
 
     /* =======================================================
-       正念冥想頁面專屬樣式 (Mindfulness & Meditation Page)
-       遵循歸一化座標與金絲檀木發光佛珠設計
+       正念冥想頁面：3D 斜角立體圓弧念珠軌道 (3D Oblique Arc Perspective)
+       遵循斜角圓弧近大遠小透視與純粹典雅木質圓珠設計
        ======================================================= */
     #pageMeditation {
       width: 100%;
       max-width: 480px;
       height: 100vh;
       height: 100dvh;
-      background: radial-gradient(circle at 50% 48%, #FFFDF9 0%, #FAF6EE 55%, #F5EFE4 100%);
+      background: radial-gradient(circle at 45% 45%, #FFFDF9 0%, #FAF5EC 50%, #F3ECE0 100%);
       display: none;
       flex-direction: column;
       align-items: center;
@@ -1944,279 +1944,189 @@
       user-select: none;
       -webkit-user-select: none;
       box-sizing: border-box;
+      perspective: 800px;
     }
 
-    /* 頂部宮廟朱金飾條 (Shine Top Curtain) [0, 0, 8, 1000] */
-    .med-top-curtain {
+    /* 頂部宮廟飾線條 (Top Curtain) */
+    .shrine-top-curtain {
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
+      width: 100%;
       height: 6px;
       background: linear-gradient(90deg, #A62824 0%, #C68F42 50%, #A62824 100%);
       box-shadow: 0 2px 8px rgba(198, 143, 66, 0.45);
       z-index: 30;
     }
 
-    /* 頂部系統與導航控制列 [18, 59, 172, 922] */
-    .med-top-nav {
+    /* 頂部快捷列 */
+    .med-3d-header {
       position: absolute;
-      top: 20px;
+      top: 22px;
       left: 0;
-      right: 0;
+      width: 100%;
+      padding: 0 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
-      z-index: 30;
-      width: 100%;
+      z-index: 25;
       box-sizing: border-box;
     }
-
-    /* 左上角「大殿首頁」鈕 (Home Button) [105, 59, 172, 206] */
-    .med-nav-btn-home {
+    .med-3d-home-btn {
       width: 44px;
       height: 44px;
       border-radius: 50%;
       background: #8C5B32;
       border: 1.5px solid #C68F42;
-      color: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 3px 10px rgba(140, 91, 50, 0.25);
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(140, 91, 50, 0.28);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #FFF;
       padding: 0;
+      transition: transform 0.15s;
     }
-    .med-nav-btn-home:active {
+    .med-3d-home-btn:active {
       transform: scale(0.92);
       background: #734520;
     }
-
-    /* 右上角「智慧廟祝」鈕 (Temple AI Button) [104, 781, 171, 922] */
-    .med-nav-btn-ai {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #A62824;
+    .med-3d-merit-badge {
+      background: rgba(166, 40, 36, 0.92);
       border: 1.5px solid #F2DAAB;
-      color: #FFFFFF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(166, 40, 36, 0.35);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 0;
-    }
-    .med-nav-btn-ai:active {
-      transform: scale(0.92);
-      background: #8E1F1C;
-    }
-
-    /* 中央誠心稟白提示語 (Instruction Title) [350, 40, 440, 960] */
-    .med-instruction-container {
-      position: absolute;
-      top: 24%;
-      left: 16px;
-      right: 16px;
-      text-align: center;
-      z-index: 15;
-      pointer-events: none;
-    }
-    .med-instruction-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(198, 143, 66, 0.12);
-      border: 1px solid rgba(198, 143, 66, 0.38);
-      color: #8C5B32;
-      font-size: 0.74rem;
-      font-weight: 700;
-      padding: 3px 14px;
+      padding: 5px 14px;
       border-radius: 20px;
-      margin-bottom: 12px;
-      letter-spacing: 1px;
-    }
-    .med-instruction-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #231C18;
-      letter-spacing: 1.5px;
-      line-height: 1.55;
-      margin: 0 0 6px 0;
-      font-family: 'Noto Serif TC', serif;
-    }
-    .med-instruction-subtitle {
+      color: #FFF9EE;
       font-size: 0.85rem;
-      color: #8C5B32;
-      letter-spacing: 1px;
-      min-height: 22px;
-      transition: all 0.4s ease;
-    }
-
-    /* 中央發光金絲檀木佛珠核心 (Mala Beads Core) [440, 345, 580, 655] */
-    .med-mala-wrapper {
-      position: absolute;
-      top: 52%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 220px;
-      height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* 泥金呼吸柔光 (Aura Glow) */
-    .med-aura-glow {
-      position: absolute;
-      width: 175px;
-      height: 175px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(198, 143, 66, 0.35) 0%, rgba(198, 143, 66, 0.12) 55%, transparent 75%);
-      box-shadow: 0 0 50px rgba(198, 143, 66, 0.45), 0 0 100px rgba(198, 143, 66, 0.22);
-      transition: transform 3.8s ease-in-out, opacity 3.8s ease-in-out, filter 3.8s ease-in-out;
-      pointer-events: none;
-      transform: scale(1);
-      opacity: 0.7;
-    }
-    .med-aura-glow.inhale {
-      transform: scale(1.36);
-      opacity: 1;
-      filter: drop-shadow(0 0 20px rgba(242, 218, 171, 0.9));
-    }
-    .med-aura-glow.hold {
-      transform: scale(1.36);
-      opacity: 0.9;
-    }
-    .med-aura-glow.exhale {
-      transform: scale(0.85);
-      opacity: 0.4;
-    }
-
-    /* 佛珠環 SVG 旋轉盤 */
-    .med-beads-rotor {
-      width: 180px;
-      height: 180px;
-      position: relative;
-      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .med-beads-rotor:active {
-      transform: scale(0.96);
-    }
-
-    /* 中央傳統木雕琉璃金佛珠核心 (120px) */
-    .med-center-buddha {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 124px;
-      height: 124px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 12;
-      pointer-events: none;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .med-center-buddha.tapped {
-      transform: translate(-50%, -50%) scale(1.06);
-    }
-
-    /* 佛珠下方微光計數浮牌 */
-    .med-buddha-count-pill {
-      position: absolute;
-      bottom: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 253, 249, 0.95);
-      border: 1.2px solid #E5D5C0;
-      box-shadow: 0 3px 10px rgba(140, 91, 50, 0.15);
-      border-radius: 20px;
-      padding: 2px 10px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-      z-index: 15;
-    }
-    .med-center-character {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #A62824;
-      line-height: 1;
-      font-family: 'Noto Serif TC', serif;
-      transition: transform 0.2s ease;
-    }
-    .med-center-count {
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: #8C5B32;
-      letter-spacing: 0.5px;
-    }
-
-    /* 底部操作區 (CTA Button) [814, 250, 894, 750] */
-    .med-bottom-cta-group {
-      position: absolute;
-      bottom: 58px;
-      left: 0;
-      right: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      z-index: 20;
-    }
-    .med-main-cta {
-      width: 210px;
-      height: 48px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, #A62824 0%, #8C1F1C 100%);
-      border: 1.5px solid #C68F42;
-      color: #FFFFFF;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(166, 40, 36, 0.35), 0 0 12px rgba(198, 143, 66, 0.28);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 0;
-    }
-    .med-main-cta:active {
-      transform: scale(0.95);
-      box-shadow: 0 2px 8px rgba(166, 40, 36, 0.2);
-    }
-    .med-sub-cta {
-      background: transparent;
-      border: none;
-      color: #8C5B32;
-      font-size: 0.76rem;
       font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 4px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      transition: opacity 0.15s;
+      box-shadow: 0 4px 12px rgba(166, 40, 36, 0.3);
     }
-    .med-sub-cta:active {
-      opacity: 0.7;
+
+    /* 上方敬心引導語 */
+    .med-3d-title-group {
+      position: absolute;
+      top: 15%;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .med-3d-main-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #231C18;
+      letter-spacing: 2px;
+      margin: 0 0 5px 0;
+    }
+    .med-3d-sub-title {
+      font-size: 0.84rem;
+      color: #8C5B32;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    /* 3D 斜角圓弧念珠軌道容器 */
+    .mala-3d-arc-stage {
+      position: absolute;
+      top: 13%;
+      left: 0;
+      width: 100%;
+      height: 74%;
+      overflow: visible;
+      pointer-events: auto;
+      touch-action: none;
+      cursor: grab;
+    }
+    .mala-3d-arc-stage:active {
+      cursor: grabbing;
+    }
+
+    /* 典雅天然木質念珠球體 (老山檀木天然木質球體光影與高光) */
+    .wood-bead {
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #DFAC7E 0%, #A56D40 35%, #734522 70%, #3B1F0E 95%);
+      box-shadow: -8px 12px 24px rgba(40, 25, 15, 0.45);
+      transition: transform 0.22s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.22s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+    }
+
+    /* 【核心前景】當前捻動大木珠 (主互動區) */
+    .wood-bead.active-focus {
+      pointer-events: auto;
+      cursor: grab;
+      box-shadow: -10px 16px 32px rgba(40, 25, 15, 0.52), inset -3px -3px 8px rgba(0,0,0,0.42), 0 0 25px rgba(198, 143, 66, 0.35);
+    }
+    .wood-bead.active-focus:active, .wood-bead.active-focus.rolling {
+      cursor: grabbing;
+      transform: scale(0.96) rotate(18deg) translate3d(6px, 18px, 0);
+      box-shadow: -6px 10px 20px rgba(40, 25, 15, 0.65);
+    }
+
+    /* 滑動功德浮動提示 (Merit Floating Toast) */
+    .merit-floating-toast {
+      position: absolute;
+      pointer-events: none;
+      color: #FFD043;
+      font-size: 1.05rem;
+      font-weight: 800;
+      font-family: 'Noto Serif TC', serif;
+      text-shadow: 0 2px 10px rgba(166, 40, 36, 0.85), 0 0 15px rgba(255, 208, 67, 0.7);
+      animation: floatUpAndFade 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+      z-index: 100;
+      white-space: nowrap;
+    }
+    @keyframes floatUpAndFade {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 15px, 0) scale(0.7);
+      }
+      20% {
+        opacity: 1;
+        transform: translate3d(-5px, -8px, 0) scale(1.18);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(-20px, -50px, 0) scale(0.95);
+      }
+    }
+
+    /* 底部主操作膠囊鈕 */
+    .med-3d-footer {
+      position: absolute;
+      bottom: 58px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 20;
+    }
+    .med-3d-cta-btn {
+      padding: 13px 44px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #A62824 0%, #8C1F1C 100%);
+      color: #FFF;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      border: 1.5px solid #C68F42;
+      box-shadow: 0 5px 20px rgba(166, 40, 36, 0.38), 0 0 12px rgba(198, 143, 66, 0.28);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .med-3d-cta-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 8px rgba(166, 40, 36, 0.2);
     }
 
     /* 底部安全區域橫條 (Home Indicator) [973, 310, 988, 672] */
@@ -2531,13 +2441,12 @@
        遵循歸一化座標切版與金絲檀木發光佛珠設計
        ============================================== -->
   <div id="pageMeditation">
-    <!-- 頂部宮廟朱金飾條 (Shine Top Curtain) [0, 0, 8, 1000] -->
-    <div class="med-top-curtain"></div>
+    <!-- 頂部宮廟飾線條 (Shine Top Curtain) -->
+    <div class="shrine-top-curtain"></div>
 
-    <!-- 頂部系統與導航控制列 [18, 59, 172, 922] -->
-    <div class="med-top-nav">
-      <!-- 左上角「大殿首頁」鈕 (Home Button) [105, 59, 172, 206] -->
-      <button class="med-nav-btn-home" onclick="openHomePage()" title="返回大殿首頁">
+    <!-- 頂部快捷列 (Header: Home & Merit Badge) -->
+    <header class="med-3d-header">
+      <button class="med-3d-home-btn" onclick="openHomePage()" title="返回大殿首頁">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9.5L12 3l9 6.5"/>
           <path d="M19 13v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6"/>
@@ -2545,230 +2454,59 @@
         </svg>
       </button>
 
-      <!-- 頁面頂部小標題 -->
-      <div style="font-size:0.85rem; font-weight:700; color:#8C5B32; letter-spacing:1px; display:flex; align-items:center; gap:4px;">
-        <span style="color:#A62824;">✦</span> 正念冥想・定心 <span>✦</span>
+      <div class="med-3d-merit-badge" title="今日累積捻珠功德">
+        <span>📿 今日功德：</span><span id="meritCount">108</span>
       </div>
+    </header>
 
-      <!-- 右上角「智慧廟祝」鈕 (Temple AI Button) [104, 781, 171, 922] -->
-      <button class="med-nav-btn-ai" onclick="openLbModal('profileModal')" title="智慧廟祝 / 信眾中心">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <!-- 籤筒與令旗象徵 -->
-          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-          <line x1="4" y1="22" x2="4" y2="15"/>
-        </svg>
-      </button>
+    <!-- 上方敬心引導語 -->
+    <div class="med-3d-title-group">
+      <h2 class="med-3d-main-title">靜心捻珠・誠心祈願</h2>
+      <p class="med-3d-sub-title">順著圓弧向下滑動，心念所求之事</p>
     </div>
 
-    <!-- 中央誠心稟白提示語 (Instruction Title) [350, 40, 440, 960] -->
-    <div class="med-instruction-container">
-      <div class="med-instruction-tag" id="meditationPhaseTag">
-        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#A62824; animation:pulseAura 1.5s infinite alternate;"></span>
-        <span id="meditationModeLabel">正念呼吸・定心安神</span>
-      </div>
-      <h2 class="med-instruction-title" id="meditationMainTitle">心誠則靈，信士！<br>請靜心默念所求之事。</h2>
-      <div class="med-instruction-subtitle" id="meditationSubTitle">放鬆雙肩・凝視金絲檀木・順應氣息吐納</div>
+    <!-- 3D 斜角圓弧念珠軌道舞台 (3D Oblique Arc Perspective Stage) -->
+    <div class="mala-3d-arc-stage" id="malaStage">
+      <!-- 穿珠朱紅線軌跡 SVG (深紅編織繩穿引於珠串空間中) -->
+      <svg width="100%" height="100%" viewBox="0 0 375 520" preserveAspectRatio="none" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; z-index:1;">
+        <defs>
+          <linearGradient id="cordGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#5B0E0B" stop-opacity="0.6"/>
+            <stop offset="40%" stop-color="#8C1F1C" stop-opacity="0.9"/>
+            <stop offset="70%" stop-color="#A62824" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#5B0E0B" stop-opacity="0.5"/>
+          </linearGradient>
+          <filter id="cordShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="1" dy="3" stdDeviation="2" flood-color="#231C18" flood-opacity="0.3"/>
+          </filter>
+        </defs>
+        <!-- 空間 3D 圓弧引線 -->
+        <path d="M 300 95 C 275 130, 240 180, 210 240 C 175 310, 140 370, 175 430 C 200 470, 245 490, 275 505" 
+              fill="none" stroke="url(#cordGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="7,4" filter="url(#cordShadow)"/>
+      </svg>
+
+      <!-- 【遠端 1】右上後方小珠 (遠景，深邃微縮) -->
+      <div class="wood-bead" id="bead1" style="position:absolute; top:18%; left:65%; width:70px; height:70px; opacity:0.75; filter:blur(0.4px); z-index:2;"></div>
+
+      <!-- 【中景 2】右上過渡珠 (中景過渡) -->
+      <div class="wood-bead" id="bead2" style="position:absolute; top:31%; left:51%; width:96px; height:96px; opacity:0.9; z-index:3;"></div>
+
+      <!-- 【核心前景 3】大拇指主要捻動木珠 (焦點珠 Focus Bead，近景巨大清脆) -->
+      <div class="wood-bead active-focus" id="activeBead" style="position:absolute; top:42%; left:22%; width:146px; height:146px; z-index:10;" title="按住並向下滑動捻珠"></div>
+
+      <!-- 【中景 4】左下過渡珠 (回環過渡) -->
+      <div class="wood-bead" id="bead4" style="position:absolute; top:63%; left:33%; width:114px; height:114px; opacity:0.92; z-index:4;"></div>
+
+      <!-- 【遠端 5】右下後方珠 (出景漸遠) -->
+      <div class="wood-bead" id="bead5" style="position:absolute; top:78%; left:53%; width:82px; height:82px; opacity:0.7; filter:blur(0.3px); z-index:2;"></div>
     </div>
 
-    <!-- 傳統木雕琉璃金佛珠 Symbol 定義 -->
-    <svg style="display: none;">
-      <defs>
-        <!-- 老山檀木雕刻漸層 -->
-        <radialGradient id="woodCarving" cx="42%" cy="38%" r="62%">
-          <stop offset="0%" stop-color="#A5734A" />
-          <stop offset="45%" stop-color="#7B4C28" />
-          <stop offset="85%" stop-color="#543016" />
-          <stop offset="100%" stop-color="#361D0C" />
-        </radialGradient>
+    <!-- 底部主操作膠囊鈕 -->
+    <footer class="med-3d-footer">
+      <button class="med-3d-cta-btn" onclick="openDivinationFlow()">功德圓滿・搖筒請示</button>
+    </footer>
 
-        <!-- 木質陰影/雕刻刀線深色漸層 -->
-        <linearGradient id="carveShadow" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#2D170A" stop-opacity="0.9" />
-          <stop offset="100%" stop-color="#543016" stop-opacity="0.2" />
-        </linearGradient>
-
-        <!-- 琉璃高光弧度漸層 -->
-        <linearGradient id="crystalReflection" x1="15%" y1="10%" x2="85%" y2="90%">
-          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.75" />
-          <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.15" />
-          <stop offset="75%" stop-color="#FFFFFF" stop-opacity="0" />
-          <stop offset="100%" stop-color="#FFF9EE" stop-opacity="0.3" />
-        </linearGradient>
-
-        <!-- 莊嚴傳統木雕佛珠 Symbol -->
-        <g id="traditional-wood-buddha">
-          <!-- 佛光環境底暈 -->
-          <circle cx="60" cy="60" r="56" fill="rgba(198, 143, 66, 0.22)" />
-
-          <!-- === 傳統木雕大佛主體 === -->
-          <g id="buddhaSculpture">
-            <!-- 莊嚴面龐輪廓 (微方帶圓，標準唐宋佛造像比例) -->
-            <path d="M 33 55 C 33 78, 44 88, 60 88 C 76 88, 87 78, 87 55 C 87 40, 77 34, 60 34 C 43 34, 33 40, 33 55 Z" fill="url(#woodCarving)" />
-
-            <!-- 垂肩大耳 (厚實圓融) -->
-            <path d="M 34 50 C 31 50, 27 56, 27 65 C 27 75, 31 79, 34 76 Z" fill="url(#woodCarving)" />
-            <path d="M 86 50 C 89 50, 93 56, 93 65 C 93 75, 89 79, 86 76 Z" fill="url(#woodCarving)" />
-            <path d="M 32 58 C 30 62, 30 70, 33 72" stroke="#361D0C" stroke-width="1.2" fill="none" />
-            <path d="M 88 58 C 90 62, 90 70, 87 72" stroke="#361D0C" stroke-width="1.2" fill="none" />
-
-            <!-- 傳統肉髻與高聳頂髻 -->
-            <ellipse cx="60" cy="27" rx="14" ry="9" fill="#422510" />
-            <ellipse cx="60" cy="22" rx="7" ry="5" fill="#361D0C" />
-            
-            <!-- 規整雕刻螺髮紋理 -->
-            <path d="M 34 43 C 40 33, 50 31, 60 31 C 70 31, 80 33, 86 43 C 78 40, 68 39, 60 39 C 52 39, 42 40, 34 43 Z" fill="#3D210D" />
-            <circle cx="50" cy="34" r="1.8" fill="#5A3317" />
-            <circle cx="60" cy="33" r="1.8" fill="#5A3317" />
-            <circle cx="70" cy="34" r="1.8" fill="#5A3317" />
-            <circle cx="44" cy="38" r="1.8" fill="#5A3317" />
-            <circle cx="54" cy="37" r="1.8" fill="#5A3317" />
-            <circle cx="66" cy="37" r="1.8" fill="#5A3317" />
-            <circle cx="76" cy="38" r="1.8" fill="#5A3317" />
-
-            <!-- 眉心白毫 (赤金鑲嵌點) -->
-            <circle cx="60" cy="52" r="2.2" fill="#C68F42" stroke="#683F1C" stroke-width="0.8" />
-
-            <!-- 慈悲雙眉 (如新月彎垂) -->
-            <path d="M 43 59 C 48 56, 54 57, 57 60" stroke="#361D0C" stroke-width="1.8" fill="none" stroke-linecap="round" />
-            <path d="M 77 59 C 72 56, 66 57, 63 60" stroke="#361D0C" stroke-width="1.8" fill="none" stroke-linecap="round" />
-
-            <!-- 慈眼垂視 (微閉俯瞰眾生) -->
-            <path d="M 44 64 C 48 66, 54 66, 56 63" stroke="#2D170A" stroke-width="1.6" fill="none" stroke-linecap="round" />
-            <path d="M 76 64 C 72 66, 66 66, 64 63" stroke="#2D170A" stroke-width="1.6" fill="none" stroke-linecap="round" />
-
-            <!-- 筆挺鼻樑與鼻翼 -->
-            <path d="M 60 56 L 60 70 L 57 72 M 60 70 L 63 72" stroke="#4A2912" stroke-width="1.4" fill="none" stroke-linejoin="round" />
-
-            <!-- 慈悲抿唇 (嘴角含笑端莊) -->
-            <path d="M 54 78 C 58 79, 62 79, 66 78" stroke="#361D0C" stroke-width="1.8" fill="none" stroke-linecap="round" />
-            <path d="M 57 81 C 59 82, 61 82, 63 81" stroke="#4A2912" stroke-width="1.2" fill="none" stroke-linecap="round" />
-            
-            <!-- 下頜豐滿雕刻線 -->
-            <path d="M 52 85 C 57 87, 63 87, 68 85" stroke="#4A2912" stroke-width="1" fill="none" opacity="0.6" />
-          </g>
-
-          <!-- === 外層琉璃水晶罩 === -->
-          <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(242, 218, 171, 0.45)" stroke-width="1.5" />
-          <circle cx="60" cy="60" r="54" fill="url(#crystalReflection)" />
-          <!-- 水晶球左上方通透高光弧 -->
-          <path d="M 33 28 A 42 42 0 0 1 84 20" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
-        </g>
-      </defs>
-    </svg>
-
-    <!-- 中央發光金絲檀木佛珠核心 (Mala Beads Core) [440, 345, 580, 655] -->
-    <div class="med-mala-wrapper" onclick="handleTapMalaBead()" title="點擊撥動佛珠定心">
-      <!-- 泥金呼吸柔光 (Aura Glow) -->
-      <div class="med-aura-glow" id="medAuraGlow"></div>
-
-      <!-- 佛珠環 SVG 旋轉體 -->
-      <div class="med-beads-rotor" id="medBeadsRotor">
-        <svg width="180" height="180" viewBox="0 0 180 180">
-          <defs>
-            <!-- 金絲檀木立體球形漸層 -->
-            <radialGradient id="sandalwoodBead" cx="35%" cy="35%" r="65%">
-              <stop offset="0%" stop-color="#F3DCAC"/>
-              <stop offset="25%" stop-color="#C68F42"/>
-              <stop offset="60%" stop-color="#733F19"/>
-              <stop offset="100%" stop-color="#34180A"/>
-            </radialGradient>
-            <!-- 佛頭母珠專用宮廟朱金漸層 -->
-            <radialGradient id="guruBeadGrad" cx="35%" cy="30%" r="70%">
-              <stop offset="0%" stop-color="#FFE0A3"/>
-              <stop offset="30%" stop-color="#C68F42"/>
-              <stop offset="70%" stop-color="#8C1F1C"/>
-              <stop offset="100%" stop-color="#480A08"/>
-            </radialGradient>
-            <!-- 泥金隔珠金片高光 -->
-            <linearGradient id="goldSpacerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#FFE8B5"/>
-              <stop offset="50%" stop-color="#C68F42"/>
-              <stop offset="100%" stop-color="#8C5B32"/>
-            </linearGradient>
-            <!-- 柔和陰影濾鏡 -->
-            <filter id="beadShadow" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#2A1408" flood-opacity="0.35"/>
-            </filter>
-          </defs>
-
-          <!-- 穿線母繩 (象徵金絲紅繩貫穿始終) -->
-          <circle cx="90" cy="90" r="62" fill="none" stroke="#A62824" stroke-width="2.5" stroke-dasharray="3 2" opacity="0.6"/>
-
-          <!-- 12 顆圓潤檀木念珠 (半徑 62px，每 30 度一顆) -->
-          <!-- 佛珠 1 (30deg) -->
-          <circle cx="121" cy="36.3" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 2 (60deg) -->
-          <circle cx="143.7" cy="59" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 3 (90deg, 東) -->
-          <circle cx="152" cy="90" r="9.5" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 4 (120deg) -->
-          <circle cx="143.7" cy="121" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 5 (150deg) -->
-          <circle cx="121" cy="143.7" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 6 (180deg, 南) -->
-          <circle cx="90" cy="152" r="9.5" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 7 (210deg) -->
-          <circle cx="59" cy="143.7" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 8 (240deg) -->
-          <circle cx="36.3" cy="121" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 9 (270deg, 西) -->
-          <circle cx="28" cy="90" r="9.5" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 10 (300deg) -->
-          <circle cx="36.3" cy="59" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-          <!-- 佛珠 11 (330deg) -->
-          <circle cx="59" cy="36.3" r="9" fill="url(#sandalwoodBead)" filter="url(#beadShadow)"/>
-
-          <!-- 頂部佛頭主珠 (Guru Bead, 0deg / 北，較大，帶佛塔頂與如意結) -->
-          <!-- 佛塔基座 -->
-          <path d="M85 22 L95 22 L92 14 L88 14 Z" fill="url(#goldSpacerGrad)"/>
-          <circle cx="90" cy="12" r="3" fill="#C68F42"/>
-          <!-- 主佛珠 -->
-          <circle cx="90" cy="28" r="12" fill="url(#guruBeadGrad)" filter="url(#beadShadow)"/>
-          <!-- 佛頭金色抱珠祥雲刻紋 -->
-          <path d="M86 28 C86 25, 94 25, 94 28" stroke="#FFE8B5" stroke-width="1.2" fill="none" opacity="0.8"/>
-
-          <!-- 如意中國結與垂墜紅錦流蘇 -->
-          <path d="M88 6 L92 6 L90 0 Z" fill="#A62824"/>
-        </svg>
-      </div>
-
-      <!-- 中央傳統木雕琉璃金佛珠主尊 (120px) -->
-      <div class="med-center-buddha" id="medCenterBuddha">
-        <svg viewBox="0 0 120 120" width="124" height="124" style="display:block; overflow:visible; filter: drop-shadow(0 6px 20px rgba(140, 91, 50, 0.4));">
-          <use href="#traditional-wood-buddha" />
-        </svg>
-
-        <!-- 佛珠下方微光計數浮牌 -->
-        <div class="med-buddha-count-pill" id="medCenterCountPill">
-          <span class="med-center-character" id="medCenterChar">靜</span>
-          <span style="opacity:0.4; font-size:0.6rem;">・</span>
-          <span class="med-center-count" id="medCenterCount">撥珠 0 次</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 底部主操作區 (CTA Button) [814, 250, 894, 750] -->
-    <div class="med-bottom-cta-group">
-      <!-- 主操作鈕 -->
-      <button class="med-main-cta" id="medMainCtaBtn" onclick="toggleMeditationBreathing()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="5 3 19 12 5 21 5 3"/>
-        </svg>
-        <span id="medMainCtaText">開始定心呼吸</span>
-      </button>
-
-      <!-- 次操作鈕：切換至搖筒請籤 或 撥珠模式 -->
-      <div style="display:flex; gap:16px;">
-        <button class="med-sub-cta" onclick="toggleMalaBeadsMode()">
-          <span id="medModeToggleText">🔄 切換手動撥珠</span>
-        </button>
-        <button class="med-sub-cta" onclick="openDivinationFlow()" style="color:#A62824;">
-          <span>搖筒請示靈籤 ›</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- 底部安全區域橫條 (Home Indicator) [973, 310, 988, 672] -->
+    <!-- 底部安全區域橫條 (Home Indicator) -->
     <div class="med-home-indicator"></div>
   </div>
 
@@ -5021,218 +4759,205 @@
     }
 
     // ==============================================
-    // 正念冥想與金絲檀木發光佛珠互動引擎 (Mindfulness & Mala Beads Engine)
+    // 正念冥想：3D 斜角立體圓弧念珠互動引擎 (3D Oblique Arc Mala Engine)
     // ==============================================
-    let malaTapCount = 0;
-    let malaRotationDeg = 0;
-    let isBreathingActive = false;
-    let breathingTimer = null;
-    let breathingPhaseIndex = 0; // 0: 吸氣, 1: 屏息, 2: 吐氣
-    let isMalaTappingMode = false;
+    let malaMeritCount = 108;
+    let isMalaRolling = false;
+    let malaSwipeStartY = 0;
+    let malaSwipeStartX = 0;
+    let isMalaTouching = false;
+    let malaListenersBound = false;
 
-    const BREATHING_PHASES = [
-      {
-        phase: 'inhale',
-        tag: '💨 慢速吸氣・納入祥光',
-        title: '心誠則靈，信士！<br>慢慢吸氣，感受祥光注入。',
-        sub: '【吸氣 4 秒】・胸腔舒展・凝聚定力',
-        char: '吸',
-        duration: 4000
-      },
-      {
-        phase: 'hold',
-        tag: '🧘 屏息斂神・沉澱萬念',
-        title: '心如止水，萬緣放下。<br>屏息定神，平息一切紛擾。',
-        sub: '【屏息 4 秒】・氣沉丹田・心性清明',
-        char: '定',
-        duration: 4000
-      },
-      {
-        phase: 'exhale',
-        tag: '🌬️ 緩緩吐氣・放下執著',
-        title: '隨緣自在，安泰吉祥。<br>將憂慮煩惱隨氣吐出。',
-        sub: '【吐氣 4 秒】・雙肩放鬆・安穩自在',
-        char: '吐',
-        duration: 4000
-      }
+    const AUSPICIOUS_MERIT_TEXTS = [
+      '✨ 功德 +1',
+      '🌿 心誠 +1',
+      '📿 清淨 +1',
+      '🌸 福慧 +1',
+      '🕯️ 定心 +1',
+      '🕊️ 吉祥 +1',
+      '🏮 安康 +1',
+      '☀️ 圓滿 +1'
     ];
 
-    const ZEN_CHARACTERS = ['靜', '定', '安', '慮', '得', '覺', '誠', '清', '圓', '滿'];
-
     function initMeditationPage() {
-      updateMeditationDisplay();
+      // 讀取功德存檔
+      try {
+        const savedMerit = localStorage.getItem('smart_temple_merit_count');
+        if (savedMerit !== null && !isNaN(parseInt(savedMerit, 10))) {
+          malaMeritCount = parseInt(savedMerit, 10);
+        } else {
+          malaMeritCount = 108;
+        }
+      } catch (e) {
+        malaMeritCount = 108;
+      }
+      updateMeritDisplay();
+      bindMalaGestureEvents();
     }
 
-    function updateMeditationDisplay() {
-      const countElem = document.getElementById('medCenterCount');
-      if (countElem) {
-        countElem.innerText = `撥珠 ${malaTapCount} 次`;
+    function updateMeritDisplay() {
+      const meritElem = document.getElementById('meritCount');
+      if (meritElem) {
+        meritElem.innerText = malaMeritCount;
       }
     }
 
-    // 啟動 / 暫停 正念呼吸循環
-    function toggleMeditationBreathing() {
-      if (isBreathingActive) {
-        stopMeditationBreathing();
-      } else {
-        startMeditationBreathing();
-      }
+    // 綁定 3D 珠串滑動與點擊手勢
+    function bindMalaGestureEvents() {
+      if (malaListenersBound) return;
+      const stage = document.getElementById('malaStage');
+      const activeBead = document.getElementById('activeBead');
+      if (!stage || !activeBead) return;
+
+      // 1. 觸控手勢 (Touch Events)
+      const onTouchStart = (e) => {
+        if (!e.touches || e.touches.length === 0) return;
+        isMalaTouching = true;
+        malaSwipeStartY = e.touches[0].clientY;
+        malaSwipeStartX = e.touches[0].clientX;
+      };
+
+      const onTouchMove = (e) => {
+        if (!isMalaTouching || !e.touches || e.touches.length === 0) return;
+        const deltaY = e.touches[0].clientY - malaSwipeStartY;
+        const deltaX = e.touches[0].clientX - malaSwipeStartX;
+        // 若順著圓弧向下滑動超過 24px，觸發捻珠
+        if (deltaY > 24) {
+          isMalaTouching = false;
+          handleMalaRoll();
+        }
+      };
+
+      const onTouchEnd = () => {
+        isMalaTouching = false;
+      };
+
+      // 2. 滑鼠手勢 (Mouse Events for Desktop/DevTools)
+      let isMouseDown = false;
+      const onMouseDown = (e) => {
+        isMouseDown = true;
+        malaSwipeStartY = e.clientY;
+        malaSwipeStartX = e.clientX;
+      };
+
+      const onMouseMove = (e) => {
+        if (!isMouseDown) return;
+        const deltaY = e.clientY - malaSwipeStartY;
+        if (deltaY > 25) {
+          isMouseDown = false;
+          handleMalaRoll();
+        }
+      };
+
+      const onMouseUp = () => {
+        isMouseDown = false;
+      };
+
+      // 監聽焦點大珠與整個舞台
+      activeBead.addEventListener('touchstart', onTouchStart, { passive: true });
+      stage.addEventListener('touchmove', onTouchMove, { passive: true });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+      activeBead.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+
+      // 點擊焦點珠亦可捻珠一次
+      activeBead.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handleMalaRoll();
+      });
+
+      malaListenersBound = true;
     }
 
-    function startMeditationBreathing() {
-      isBreathingActive = true;
-      const ctaBtn = document.getElementById('medMainCtaBtn');
-      const ctaText = document.getElementById('medMainCtaText');
-      if (ctaText) ctaText.innerText = '暫停定心呼吸';
-      if (ctaBtn) {
-        ctaBtn.style.background = 'linear-gradient(135deg, #733F19 0%, #52270E 100%)';
+    // 執行一次 3D 捻珠運轉與反饋
+    function handleMalaRoll() {
+      if (isMalaRolling) return;
+      isMalaRolling = true;
+
+      // 1. 累加功德計數並存檔
+      malaMeritCount++;
+      try {
+        localStorage.setItem('smart_temple_merit_count', malaMeritCount);
+      } catch (e) {}
+      updateMeritDisplay();
+
+      // 2. 珠串立體滾動動效 (焦點珠與周圍串珠連動)
+      const activeBead = document.getElementById('activeBead');
+      const bead1 = document.getElementById('bead1');
+      const bead2 = document.getElementById('bead2');
+      const bead4 = document.getElementById('bead4');
+      const bead5 = document.getElementById('bead5');
+
+      if (activeBead) {
+        activeBead.classList.add('rolling');
+      }
+      if (bead2) {
+        bead2.style.transform = 'translate3d(-4px, 12px, 0) scale(1.04)';
+      }
+      if (bead4) {
+        bead4.style.transform = 'translate3d(6px, 10px, 0) scale(0.97)';
+      }
+      if (bead1) {
+        bead1.style.transform = 'translate3d(-3px, 6px, 0)';
+      }
+      if (bead5) {
+        bead5.style.transform = 'translate3d(4px, 4px, 0)';
       }
 
-      runBreathingPhase();
-    }
-
-    function runBreathingPhase() {
-      if (!isBreathingActive) return;
-
-      const current = BREATHING_PHASES[breathingPhaseIndex];
-      const glowElem = document.getElementById('medAuraGlow');
-      const modeLabel = document.getElementById('meditationModeLabel');
-      const titleElem = document.getElementById('meditationMainTitle');
-      const subElem = document.getElementById('meditationSubTitle');
-      const charElem = document.getElementById('medCenterChar');
-
-      // 更新呼吸視覺與文字
-      if (glowElem) {
-        glowElem.className = `med-aura-glow ${current.phase}`;
-      }
-      if (modeLabel) modeLabel.innerText = current.tag;
-      if (titleElem) titleElem.innerHTML = current.title;
-      if (subElem) subElem.innerText = current.sub;
-      if (charElem) {
-        charElem.innerText = current.char;
-        charElem.style.transform = 'scale(1.15)';
-        setTimeout(() => { if (charElem) charElem.style.transform = 'scale(1)'; }, 300);
-      }
-
-      // 順帶轉動佛珠微小角度與輕柔敲擊聲
-      malaRotationDeg += 30;
-      const rotor = document.getElementById('medBeadsRotor');
-      if (rotor) rotor.style.transform = `rotate(${malaRotationDeg}deg)`;
-      playMalaBeadSound(true);
-
-      breathingTimer = setTimeout(() => {
-        if (!isBreathingActive) return;
-        breathingPhaseIndex = (breathingPhaseIndex + 1) % BREATHING_PHASES.length;
-        runBreathingPhase();
-      }, current.duration);
-    }
-
-    function stopMeditationBreathing() {
-      isBreathingActive = false;
-      if (breathingTimer) {
-        clearTimeout(breathingTimer);
-        breathingTimer = null;
-      }
-      const ctaBtn = document.getElementById('medMainCtaBtn');
-      const ctaText = document.getElementById('medMainCtaText');
-      if (ctaText) ctaText.innerText = '開始定心呼吸';
-      if (ctaBtn) {
-        ctaBtn.style.background = 'linear-gradient(135deg, #A62824 0%, #8C1F1C 100%)';
-      }
-      const glowElem = document.getElementById('medAuraGlow');
-      if (glowElem) glowElem.className = 'med-aura-glow';
-
-      const modeLabel = document.getElementById('meditationModeLabel');
-      const titleElem = document.getElementById('meditationMainTitle');
-      const subElem = document.getElementById('meditationSubTitle');
-      const charElem = document.getElementById('medCenterChar');
-      if (modeLabel) modeLabel.innerText = '正念呼吸・定心安神';
-      if (titleElem) titleElem.innerHTML = '心誠則靈，信士！<br>請靜心默念所求之事。';
-      if (subElem) subElem.innerText = '放鬆雙肩・凝視金絲檀木・順應氣息吐納';
-      if (charElem) charElem.innerText = '靜';
-    }
-
-    // 點擊撥動佛珠互動 (支援觸控 / 點擊)
-    function handleTapMalaBead() {
-      malaTapCount++;
-      malaRotationDeg += 30;
-
-      // 撥動佛珠旋轉動效
-      const rotor = document.getElementById('medBeadsRotor');
-      if (rotor) {
-        rotor.style.transform = `rotate(${malaRotationDeg}deg)`;
-      }
-
-      // 點擊觸發中央木雕琉璃佛珠微幅彈性縮放與神光激發
-      const buddhaElem = document.getElementById('medCenterBuddha');
-      if (buddhaElem) {
-        buddhaElem.classList.add('tapped');
-        setTimeout(() => { if (buddhaElem) buddhaElem.classList.remove('tapped'); }, 220);
-      }
-
-      // 播放清脆沉穩金絲檀木敲擊聲 (Web Audio)
+      // 3. 播放清脆沈穩老山檀木碰擊音 (Web Audio)
       playMalaBeadSound(false);
 
-      // 手機觸覺反饋
+      // 4. 手機觸感微震
       if (navigator.vibrate) {
         try { navigator.vibrate(25); } catch (e) {}
       }
 
-      // 金光光暈短暫激發亮起
-      const glowElem = document.getElementById('medAuraGlow');
-      if (glowElem && !isBreathingActive) {
-        glowElem.style.transform = 'scale(1.22)';
-        glowElem.style.opacity = '1';
-        setTimeout(() => {
-          if (!isBreathingActive && glowElem) {
-            glowElem.style.transform = 'scale(1)';
-            glowElem.style.opacity = '0.7';
-          }
-        }, 250);
-      }
+      // 5. 激發功德升騰浮牌 (Floating Merit Toast)
+      spawnMeritToast();
 
-      // 更新中央計數與禪字
-      const charElem = document.getElementById('medCenterChar');
-      const countElem = document.getElementById('medCenterCount');
-      if (charElem) {
-        const charIdx = (malaTapCount - 1) % ZEN_CHARACTERS.length;
-        charElem.innerText = ZEN_CHARACTERS[charIdx];
-        charElem.style.transform = 'scale(1.25)';
-        setTimeout(() => { if (charElem) charElem.style.transform = 'scale(1)'; }, 150);
-      }
-      if (countElem) {
-        const beadProgress = (malaTapCount % 108) === 0 && malaTapCount > 0 ? 108 : (malaTapCount % 108);
-        countElem.innerText = `第 ${beadProgress}/108 顆`;
-      }
-
-      // 若達到 108 遍圓滿時給予福德祝禱
-      if (malaTapCount % 108 === 0) {
-        const titleElem = document.getElementById('meditationMainTitle');
-        const subElem = document.getElementById('meditationSubTitle');
-        if (titleElem) titleElem.innerHTML = '🎉 撥珠圓滿・功德回向！<br>百八煩惱俱消，身心泰然。';
-        if (subElem) subElem.innerText = '功德圓滿・神明垂慈・諸事順心';
-      }
+      // 6. 恢復珠子原始姿態
+      setTimeout(() => {
+        if (activeBead) activeBead.classList.remove('rolling');
+        if (bead2) bead2.style.transform = '';
+        if (bead4) bead4.style.transform = '';
+        if (bead1) bead1.style.transform = '';
+        if (bead5) bead5.style.transform = '';
+        isMalaRolling = false;
+      }, 240);
     }
 
-    // 切換「手動撥珠模式」與「呼吸引導模式」
-    function toggleMalaBeadsMode() {
-      isMalaTappingMode = !isMalaTappingMode;
-      const toggleText = document.getElementById('medModeToggleText');
-      const titleElem = document.getElementById('meditationMainTitle');
-      const subElem = document.getElementById('meditationSubTitle');
-      const modeLabel = document.getElementById('meditationModeLabel');
+    // 產生金色升騰功德文字
+    function spawnMeritToast() {
+      const stage = document.getElementById('malaStage');
+      if (!stage) return;
 
-      if (isMalaTappingMode) {
-        stopMeditationBreathing();
-        if (toggleText) toggleText.innerText = '🔄 切換呼吸冥想';
-        if (modeLabel) modeLabel.innerText = '手動撥珠・默念消業';
-        if (titleElem) titleElem.innerHTML = '一念清淨，一珠圓滿。<br>請輕觸佛珠，順時針撥動。';
-        if (subElem) subElem.innerText = '每撥一珠・默念聖號・累積定慧福田';
-      } else {
-        if (toggleText) toggleText.innerText = '🔄 切換手動撥珠';
-        stopMeditationBreathing();
-      }
+      const toast = document.createElement('div');
+      toast.className = 'merit-floating-toast';
+      
+      // 隨機挑選吉祥文字
+      const randomText = AUSPICIOUS_MERIT_TEXTS[Math.floor(Math.random() * AUSPICIOUS_MERIT_TEXTS.length)];
+      toast.innerText = randomText;
+
+      // 位於焦點珠周圍（隨機微幅偏移，更顯靈動）
+      const randomOffsetX = (Math.random() - 0.5) * 40;
+      const randomOffsetY = (Math.random() - 0.5) * 30;
+      toast.style.left = `calc(32% + ${randomOffsetX}px)`;
+      toast.style.top = `calc(40% + ${randomOffsetY}px)`;
+
+      stage.appendChild(toast);
+
+      // 動畫結束後自動移除 DOM
+      setTimeout(() => {
+        if (toast && toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      }, 920);
     }
+
+    // 保持相容性空函式 (避免未清理呼叫報錯)
+    function stopMeditationBreathing() {}
 
     // 溫潤金絲檀木敲擊聲 (Web Audio API 原創物理聲學合成)
     function playMalaBeadSound(isSoft) {
@@ -5254,7 +4979,7 @@
         const baseFreq = isSoft ? 260 : 340;
         osc1.frequency.setValueAtTime(baseFreq, now);
         osc1.frequency.exponentialRampToValueAtTime(120, now + 0.08);
-        gain1.gain.setValueAtTime(isSoft ? 0.15 : 0.3, now);
+        gain1.gain.setValueAtTime(isSoft ? 0.15 : 0.32, now);
         gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
         osc1.connect(gain1);
         gain1.connect(window.malaAudioCtx.destination);
