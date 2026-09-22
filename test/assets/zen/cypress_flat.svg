@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 260" width="160" height="260">
+  <defs>
+    <!-- 平面內斂深赭檜木 -->
+    <linearGradient id="flatWood" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b88354"/>
+      <stop offset="50%" stop-color="#935f32"/>
+      <stop offset="100%" stop-color="#6f4019"/>
+    </linearGradient>
+    <radialGradient id="innerShade" cx="50%" cy="50%" r="50%">
+      <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.28"/>
+    </radialGradient>
+    <filter id="softShadow2" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="8" stdDeviation="6" flood-color="#2a1608" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- 平切半月身 -->
+  <path d="M 80 15 
+           C 135 45, 145 150, 105 235 
+           C 95 250, 80 252, 75 238 
+           C 50 170, 48 85, 80 15 Z" 
+        fill="url(#flatWood)" 
+        filter="url(#softShadow2)"/>
+
+  <!-- 剖面內斂邊緣陰影 (表現平整切面) -->
+  <path d="M 80 15 
+           C 135 45, 145 150, 105 235 
+           C 95 250, 80 252, 75 238 
+           C 50 170, 48 85, 80 15 Z" 
+        fill="url(#innerShade)"/>
+
+  <!-- 禪意剖面同心木紋 -->
+  <path d="M 68 60 C 95 85, 115 130, 92 205" stroke="#48240a" stroke-width="1.8" stroke-opacity="0.35" fill="none"/>
+  <path d="M 65 95 C 88 115, 102 150, 86 215" stroke="#48240a" stroke-width="1.5" stroke-opacity="0.3" fill="none"/>
+  <path d="M 72 40 C 105 70, 122 120, 98 190" stroke="#48240a" stroke-width="1.5" stroke-opacity="0.25" fill="none"/>
+  
+  <!-- 微細木眼心 -->
+  <ellipse cx="88" cy="140" rx="3" ry="5" fill="#48240a" fill-opacity="0.4"/>
+</svg>
