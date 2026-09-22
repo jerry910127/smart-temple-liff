@@ -4884,7 +4884,7 @@
     const TOTAL_RING_BEADS = 10;
     const BEAD_STEP_ANGLE = 1.0 / TOTAL_RING_BEADS; // 0.1 (36度)
 
-    // 依據空間 3D 橢圓環參數化方程計算單顆佛珠位置與層級
+    // 依據空間 3D 橢圓環參數化方程計算單顆佛珠位置與層級 (完全實體不透明、無景深模糊)
     function calc3DBeadPose(t) {
       // 歸一化至 [0, 1)
       t = ((t % 1) + 1) % 1;
@@ -4899,8 +4899,8 @@
         x = -32 - 16 * sinHalf;     // -32px -> -48px -> -32px (左凸)
         z = 35 + 45 * sinHalf;      // 35px -> 80px (立體前景)
         scale = 1.02 + 0.20 * sinHalf; // 1.02 -> 1.22
-        opacity = 0.95 + 0.05 * sinHalf;
-        zIndex = Math.round(10 + 6 * sinHalf); // 10 -> 16 (覆蓋後排)
+        opacity = 1.0;              // 完全實體不透光
+        zIndex = Math.round(10 + 6 * sinHalf); // 10 -> 16 (實體覆蓋後排)
         filter = `drop-shadow(-6px 12px 18px rgba(40, 20, 10, ${0.45 + 0.15 * sinHalf}))`;
       } else {
         // 【右側後軌道 (遠景)】由底向上回流 (t: 0.5 -> 1.0)
@@ -4910,9 +4910,9 @@
         x = 24 + 28 * sinRear;      // +24px -> +52px -> +24px (右弧)
         z = -25 - 25 * sinRear;     // -25px -> -50px (下沉後景)
         scale = 0.82 - 0.08 * sinRear; // 0.82 -> 0.74
-        opacity = 0.85 - 0.06 * sinRear;
-        zIndex = Math.round(2 - 1 * sinRear); // 1 -> 2 (被前排遮擋)
-        filter = 'drop-shadow(-3px 5px 10px rgba(40, 20, 10, 0.3)) blur(0.35px)';
+        opacity = 1.0;              // 完全實體清晰
+        zIndex = Math.round(2 - 1 * sinRear); // 1 -> 2 (被前排實體遮擋)
+        filter = 'drop-shadow(-4px 6px 12px rgba(40, 20, 10, 0.42))';
       }
 
       return { x, y, z, scale, opacity, zIndex, filter };
