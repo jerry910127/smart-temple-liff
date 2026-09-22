@@ -2031,7 +2031,7 @@
       letter-spacing: 1px;
     }
 
-    /* 3D 斜角圓弧念珠軌道容器 */
+    /* 3D 斜角圓弧念珠軌道舞台 (連續輪播動效容器) */
     .mala-3d-arc-stage {
       position: absolute;
       top: 13%;
@@ -2039,64 +2039,138 @@
       width: 100%;
       height: 74%;
       overflow: visible;
-      pointer-events: auto;
-      touch-action: none;
-      cursor: grab;
-    }
-    .mala-3d-arc-stage:active {
-      cursor: grabbing;
-    }
-
-    /* 典雅 3D 釋迦木雕佛珠容器 (立體木質球體光影與鱗目浮雕) */
-    .wood-bead {
-      border-radius: 50%;
-      transition: transform 0.24s cubic-bezier(0.25, 1, 0.5, 1), filter 0.24s ease;
+      pointer-events: none;
       user-select: none;
       -webkit-user-select: none;
+    }
+
+    /* 空間圓弧穿繩導引線 */
+    .cord-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
       pointer-events: none;
+      overflow: visible;
+    }
+
+    /* === 釋迦木雕佛珠連續 3D 圓弧動畫核心架構 === */
+    .bead-item {
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      margin-left: -65px;
+      margin-top: -65px;
+      pointer-events: auto;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(-6px 12px 20px rgba(40, 25, 15, 0.45));
+      /* 依循 3D 圓弧路徑的 60fps GPU 加速關鍵幀動畫 */
+      animation: rotateMalaArc 6s linear infinite;
+      will-change: transform, top, left, opacity;
+      transition: filter 0.15s ease;
+      touch-action: manipulation;
+    }
+    .bead-item:active {
+      filter: brightness(1.2) drop-shadow(0 0 25px rgba(255, 215, 100, 0.85));
     }
 
-    /* 【核心前景】當前捻動「大釋迦Money珠」(主互動區) */
-    .wood-bead.active-focus {
-      pointer-events: auto;
-      cursor: grab;
-      filter: drop-shadow(-10px 18px 30px rgba(35, 20, 10, 0.55)) drop-shadow(0 0 16px rgba(255, 215, 100, 0.38));
-    }
-    .wood-bead.active-focus:active, .wood-bead.active-focus.rolling {
-      cursor: grabbing;
-      transform: scale(0.95) rotate(20deg) translate3d(8px, 20px, 0);
-      filter: drop-shadow(-6px 10px 18px rgba(35, 20, 10, 0.7)) drop-shadow(0 0 25px rgba(255, 215, 100, 0.6));
+    /* 6 顆佛珠交錯延遲時間，實現連續不間斷的等距立體滾動 (總長 6s / 6顆 = 每顆差 -1s) */
+    .bead-item:nth-child(2) { animation-delay: 0s; }
+    .bead-item:nth-child(3) { animation-delay: -1s; }
+    .bead-item:nth-child(4) { animation-delay: -2s; }
+    .bead-item:nth-child(5) { animation-delay: -3s; }
+    .bead-item:nth-child(6) { animation-delay: -4s; }
+    .bead-item:nth-child(7) { animation-delay: -5s; }
+
+    /*
+      3D 斜角立體圓弧軌跡關鍵幀
+      - 0%   : 右上遠端 (遠景小珠，scale: 0.52, blur: 1.5px)
+      - 25%  : 中景逼近 (scale: 0.85)
+      - 50%  : 左側中央前景 (最大最亮焦點，scale: 1.25, z-index: 12, drop-shadow)
+      - 75%  : 右下方迴繞出景 (scale: 0.92)
+      - 90%  : 遠端收尾 (scale: 0.65, blur: 1px)
+      - 100% : 回到右上遠端 (無縫閉環)
+    */
+    @keyframes rotateMalaArc {
+      0% {
+        top: 24%;
+        left: 74%;
+        transform: scale(0.52) rotate(15deg);
+        opacity: 0.45;
+        z-index: 2;
+        filter: blur(1.5px);
+      }
+      25% {
+        top: 34%;
+        left: 58%;
+        transform: scale(0.85) rotate(0deg);
+        opacity: 0.85;
+        z-index: 5;
+        filter: blur(0px);
+      }
+      50% {
+        top: 48%;
+        left: 36%;
+        transform: scale(1.25) rotate(-15deg);
+        opacity: 1;
+        z-index: 12;
+        filter: drop-shadow(-8px 16px 26px rgba(40, 20, 10, 0.55)) drop-shadow(0 0 16px rgba(255, 215, 100, 0.35));
+      }
+      75% {
+        top: 66%;
+        left: 48%;
+        transform: scale(0.92) rotate(-30deg);
+        opacity: 0.85;
+        z-index: 6;
+        filter: blur(0px);
+      }
+      90% {
+        top: 75%;
+        left: 64%;
+        transform: scale(0.65) rotate(-40deg);
+        opacity: 0.55;
+        z-index: 3;
+        filter: blur(1px);
+      }
+      100% {
+        top: 24%;
+        left: 74%;
+        transform: scale(0.52) rotate(15deg);
+        opacity: 0.45;
+        z-index: 2;
+        filter: blur(1.5px);
+      }
     }
 
-    /* 滑動功德浮動提示 (Merit Floating Toast) */
+    /* 點擊浮動提示 (Merit Floating Toast) */
     .merit-floating-toast {
       position: absolute;
       pointer-events: none;
       color: #FFD043;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 800;
       font-family: 'Noto Serif TC', serif;
-      text-shadow: 0 2px 10px rgba(166, 40, 36, 0.85), 0 0 15px rgba(255, 208, 67, 0.7);
-      animation: floatUpAndFade 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+      text-shadow: 0 2px 10px rgba(166, 40, 36, 0.85), 0 0 15px rgba(255, 208, 67, 0.75);
+      animation: floatUpAndFade 1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
       z-index: 100;
       white-space: nowrap;
     }
     @keyframes floatUpAndFade {
       0% {
         opacity: 0;
-        transform: translate3d(0, 15px, 0) scale(0.7);
+        transform: translate3d(0, 10px, 0) scale(0.75);
       }
-      20% {
+      25% {
         opacity: 1;
-        transform: translate3d(-5px, -8px, 0) scale(1.18);
+        transform: translate3d(-5px, -12px, 0) scale(1.15);
       }
       100% {
         opacity: 0;
-        transform: translate3d(-20px, -50px, 0) scale(0.95);
+        transform: translate3d(-18px, -45px, 0) scale(0.95);
       }
     }
 
@@ -2536,10 +2610,10 @@
       </defs>
     </svg>
 
-    <!-- 3D 斜角圓弧念珠軌道舞台 (3D Oblique Arc Perspective Stage) -->
+    <!-- 3D 斜角圓弧念珠軌道舞台 (3D Oblique Arc Continuous Carousel Stage) -->
     <div class="mala-3d-arc-stage" id="malaStage">
       <!-- 穿珠朱紅金絲線軌跡 SVG (深紅編織繩與金絲穿引於珠串空間中) -->
-      <svg width="100%" height="100%" viewBox="0 0 375 520" preserveAspectRatio="none" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; z-index:1;">
+      <svg class="cord-svg" viewBox="0 0 375 520" preserveAspectRatio="none">
         <defs>
           <linearGradient id="shakyaCordGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#5B0E0B" stop-opacity="0.6"/>
@@ -2552,44 +2626,17 @@
           </filter>
         </defs>
         <!-- 空間 3D 圓弧金絲穿繩引線 -->
-        <path d="M 295 90 C 270 128, 235 180, 205 240 C 170 310, 135 370, 170 432 C 198 472, 245 492, 275 508" 
-              fill="none" stroke="url(#shakyaCordGrad)" stroke-width="4.8" stroke-linecap="round" stroke-dasharray="8,4" filter="url(#cordShadow)"/>
+        <path d="M 285 130 Q 225 240 135 320 T 240 485" 
+              fill="none" stroke="url(#shakyaCordGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="8,4" filter="url(#cordShadow)"/>
       </svg>
 
-      <!-- 【遠端 1】右上後方釋迦果珠 (遠景，深邃微縮) -->
-      <div class="wood-bead" id="bead1" style="position:absolute; top:17%; left:65%; width:75px; height:75px; opacity:0.75; filter:blur(0.4px); z-index:2;">
-        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
-          <use href="#shakya-money-bead" />
-        </svg>
-      </div>
-
-      <!-- 【中景 2】右上斜向逼近釋迦珠 (中景過渡) -->
-      <div class="wood-bead" id="bead2" style="position:absolute; top:30%; left:50%; width:100px; height:100px; opacity:0.9; z-index:3;">
-        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
-          <use href="#shakya-money-bead" />
-        </svg>
-      </div>
-
-      <!-- 【核心前景 3】當前捻動「大釋迦Money珠」(焦點珠 Focus Bead，近景巨大立體) -->
-      <div class="wood-bead active-focus" id="activeBead" style="position:absolute; top:40%; left:20%; width:150px; height:150px; z-index:10;" title="按住並向下滑動捻珠求財開運">
-        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
-          <use href="#shakya-money-bead" />
-        </svg>
-      </div>
-
-      <!-- 【出景中景 4】左下過渡釋迦珠 (回環過渡) -->
-      <div class="wood-bead" id="bead4" style="position:absolute; top:62%; left:32%; width:120px; height:120px; opacity:0.92; z-index:4;">
-        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
-          <use href="#shakya-money-bead" />
-        </svg>
-      </div>
-
-      <!-- 【出景遠端 5】右下遠景出軌珠 (出景漸遠) -->
-      <div class="wood-bead" id="bead5" style="position:absolute; top:77%; left:53%; width:85px; height:85px; opacity:0.7; filter:blur(0.3px); z-index:2;">
-        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
-          <use href="#shakya-money-bead" />
-        </svg>
-      </div>
+      <!-- 6 顆釋迦木雕佛珠 (透過 SVG 模板渲染，等距循環無縫 3D 滾動) -->
+      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
+      <div class="bead-item" title="點擊釋迦佛珠聚氣開運"><svg width="100%" height="100%" viewBox="0 0 120 120" style="display:block; pointer-events:none;"><use href="#shakya-money-bead" /></svg></div>
     </div>
 
     <!-- 底部主操作膠囊鈕 (CTA Button) -->
@@ -4895,77 +4942,52 @@
       }
     }
 
-    // 綁定 3D 珠串滑動與點擊手勢
+    // 綁定 3D 珠串點擊與滑動手勢
     function bindMalaGestureEvents() {
       if (malaListenersBound) return;
       const stage = document.getElementById('malaStage');
-      const activeBead = document.getElementById('activeBead');
-      if (!stage || !activeBead) return;
+      if (!stage) return;
 
-      // 1. 觸控手勢 (Touch Events)
-      const onTouchStart = (e) => {
-        if (!e.touches || e.touches.length === 0) return;
-        isMalaTouching = true;
-        malaSwipeStartY = e.touches[0].clientY;
-        malaSwipeStartX = e.touches[0].clientX;
-      };
+      const beadItems = stage.querySelectorAll('.bead-item');
+      beadItems.forEach((bead) => {
+        bead.addEventListener('click', (e) => {
+          e.stopPropagation();
+          handleMalaRoll(e);
+        });
+        bead.addEventListener('touchstart', (e) => {
+          // 支援觸控即時回饋
+          if (e.touches && e.touches.length > 0) {
+            handleMalaRoll(e.touches[0]);
+          }
+        }, { passive: true });
+      });
 
-      const onTouchMove = (e) => {
-        if (!isMalaTouching || !e.touches || e.touches.length === 0) return;
-        const deltaY = e.touches[0].clientY - malaSwipeStartY;
-        const deltaX = e.touches[0].clientX - malaSwipeStartX;
-        // 若順著圓弧向下滑動超過 24px，觸發捻珠
-        if (deltaY > 24) {
-          isMalaTouching = false;
-          handleMalaRoll();
+      // 支援在整個舞台滑動或點擊皆可捻珠聚氣
+      let touchStartY = 0;
+      stage.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length > 0) {
+          touchStartY = e.touches[0].clientY;
         }
-      };
+      }, { passive: true });
 
-      const onTouchEnd = () => {
-        isMalaTouching = false;
-      };
-
-      // 2. 滑鼠手勢 (Mouse Events for Desktop/DevTools)
-      let isMouseDown = false;
-      const onMouseDown = (e) => {
-        isMouseDown = true;
-        malaSwipeStartY = e.clientY;
-        malaSwipeStartX = e.clientX;
-      };
-
-      const onMouseMove = (e) => {
-        if (!isMouseDown) return;
-        const deltaY = e.clientY - malaSwipeStartY;
-        if (deltaY > 25) {
-          isMouseDown = false;
-          handleMalaRoll();
+      stage.addEventListener('touchend', (e) => {
+        if (e.changedTouches && e.changedTouches.length > 0) {
+          const deltaY = e.changedTouches[0].clientY - touchStartY;
+          if (Math.abs(deltaY) > 20) {
+            handleMalaRoll(e.changedTouches[0]);
+          }
         }
-      };
+      }, { passive: true });
 
-      const onMouseUp = () => {
-        isMouseDown = false;
-      };
-
-      // 監聽焦點大珠與整個舞台
-      activeBead.addEventListener('touchstart', onTouchStart, { passive: true });
-      stage.addEventListener('touchmove', onTouchMove, { passive: true });
-      window.addEventListener('touchend', onTouchEnd, { passive: true });
-
-      activeBead.addEventListener('mousedown', onMouseDown);
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
-
-      // 點擊焦點珠亦可捻珠一次
-      activeBead.addEventListener('click', (e) => {
-        e.stopPropagation();
-        handleMalaRoll();
+      stage.addEventListener('click', (e) => {
+        handleMalaRoll(e);
       });
 
       malaListenersBound = true;
     }
 
     // 執行一次 3D 捻珠運轉與反饋
-    function handleMalaRoll() {
+    function handleMalaRoll(e) {
       if (isMalaRolling) return;
       isMalaRolling = true;
 
@@ -4973,71 +4995,53 @@
       malaMeritCount++;
       try {
         localStorage.setItem('smart_temple_merit_count', malaMeritCount);
-      } catch (e) {}
+      } catch (err) {}
       updateMeritDisplay();
 
-      // 2. 珠串立體滾動動效 (焦點珠與周圍串珠連動)
-      const activeBead = document.getElementById('activeBead');
-      const bead1 = document.getElementById('bead1');
-      const bead2 = document.getElementById('bead2');
-      const bead4 = document.getElementById('bead4');
-      const bead5 = document.getElementById('bead5');
-
-      if (activeBead) {
-        activeBead.classList.add('rolling');
-      }
-      if (bead2) {
-        bead2.style.transform = 'translate3d(-4px, 12px, 0) scale(1.04)';
-      }
-      if (bead4) {
-        bead4.style.transform = 'translate3d(6px, 10px, 0) scale(0.97)';
-      }
-      if (bead1) {
-        bead1.style.transform = 'translate3d(-3px, 6px, 0)';
-      }
-      if (bead5) {
-        bead5.style.transform = 'translate3d(4px, 4px, 0)';
-      }
-
-      // 3. 播放清脆沈穩老山檀木碰擊音 (Web Audio)
+      // 2. 播放清脆沈穩老山檀木碰擊音 (Web Audio)
       playMalaBeadSound(false);
 
-      // 4. 手機觸感微震
+      // 3. 手機觸感微震 (Taptic Engine)
       if (navigator.vibrate) {
-        try { navigator.vibrate(25); } catch (e) {}
+        try { navigator.vibrate(18); } catch (err) {}
       }
 
-      // 5. 激發功德升騰浮牌 (Floating Merit Toast)
-      spawnMeritToast();
+      // 4. 激發功德升騰浮牌 (Floating Merit Toast)
+      spawnMeritToast(e);
 
-      // 6. 恢復珠子原始姿態
+      // 5. 快速冷卻防重複點擊抖動
       setTimeout(() => {
-        if (activeBead) activeBead.classList.remove('rolling');
-        if (bead2) bead2.style.transform = '';
-        if (bead4) bead4.style.transform = '';
-        if (bead1) bead1.style.transform = '';
-        if (bead5) bead5.style.transform = '';
         isMalaRolling = false;
-      }, 240);
+      }, 160);
     }
 
     // 產生金色升騰功德文字
-    function spawnMeritToast() {
+    function spawnMeritToast(e) {
       const stage = document.getElementById('malaStage');
       if (!stage) return;
 
       const toast = document.createElement('div');
       toast.className = 'merit-floating-toast';
       
-      // 隨機挑選吉祥文字
+      // 隨機挑選開運吉祥文字
       const randomText = AUSPICIOUS_MERIT_TEXTS[Math.floor(Math.random() * AUSPICIOUS_MERIT_TEXTS.length)];
       toast.innerText = randomText;
 
-      // 位於焦點珠周圍（隨機微幅偏移，更顯靈動）
-      const randomOffsetX = (Math.random() - 0.5) * 40;
-      const randomOffsetY = (Math.random() - 0.5) * 30;
-      toast.style.left = `calc(32% + ${randomOffsetX}px)`;
-      toast.style.top = `calc(40% + ${randomOffsetY}px)`;
+      // 計算彈出座標 (若有傳入點擊事件則跟隨點擊處，否則落在前景焦點大珠位置)
+      if (e && (e.clientX || e.pageX)) {
+        const clientX = e.clientX || e.pageX;
+        const clientY = e.clientY || e.pageY;
+        const rect = stage.getBoundingClientRect();
+        const posX = clientX - rect.left - 40;
+        const posY = clientY - rect.top - 20;
+        toast.style.left = `${posX}px`;
+        toast.style.top = `${posY}px`;
+      } else {
+        const randomOffsetX = (Math.random() - 0.5) * 40;
+        const randomOffsetY = (Math.random() - 0.5) * 30;
+        toast.style.left = `calc(36% + ${randomOffsetX}px)`;
+        toast.style.top = `calc(46% + ${randomOffsetY}px)`;
+      }
 
       stage.appendChild(toast);
 
@@ -5046,7 +5050,7 @@
         if (toast && toast.parentNode) {
           toast.parentNode.removeChild(toast);
         }
-      }, 920);
+      }, 980);
     }
 
     // 保持相容性空函式 (避免未清理呼叫報錯)
