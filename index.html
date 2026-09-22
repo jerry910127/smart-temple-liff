@@ -2055,21 +2055,16 @@
       cursor: grabbing;
     }
 
-    /* 手勢引導白色半透明光弧 (Gesture White Arc) */
+    /* 手勢引導微軌道 (Subtle Gesture Guide Track - 置於佛珠底層，不遮擋珠體) */
     .gesture-white-arc {
       position: absolute;
-      top: 10%;
-      left: 6px;
-      width: 130px;
-      height: 80%;
+      top: 12%;
+      left: 2px;
+      width: 120px;
+      height: 76%;
       pointer-events: none;
-      z-index: 8;
-      opacity: 0.65;
-      animation: pulseArcGlow 2.2s ease-in-out infinite alternate;
-    }
-    @keyframes pulseArcGlow {
-      0% { opacity: 0.45; filter: drop-shadow(0 0 6px rgba(255,255,255,0.4)); }
-      100% { opacity: 0.88; filter: drop-shadow(0 0 16px rgba(255,255,255,0.9)) drop-shadow(0 0 24px rgba(255,215,100,0.6)); }
+      z-index: 1;
+      opacity: 0.55;
     }
 
     /* 單顆 3D 空間環形天然木頭佛珠 (精緻尺寸與溫潤原木光澤) */
@@ -2488,77 +2483,76 @@
       <p class="med-3d-sub-title">順著弧線向下滑動，心念事業、財帛與所求</p>
     </div>
 
-    <!-- 溫潤天然老山檀木佛珠 Symbol 定義 (天然同心木紋、球體立體光影與琥珀木質高光) -->
+    <!-- 溫潤天然實體老山檀木佛珠 Symbol 定義 (100% 實體不透光原木、深厚年輪木紋、沈穩立體光影) -->
     <svg style="display: none;">
       <defs>
-        <!-- 老山檀木立體球形漸層 (Sandalwood Sphere Gradient) -->
-        <radialGradient id="pureWoodGrad" cx="30%" cy="26%" r="72%">
-          <stop offset="0%" stop-color="#F5DEBD" />
-          <stop offset="20%" stop-color="#CA9458" />
-          <stop offset="52%" stop-color="#864C20" />
-          <stop offset="82%" stop-color="#4E240D" />
-          <stop offset="100%" stop-color="#261005" />
+        <!-- 實體老山檀木球體漸層 (Solid Sandalwood 3D Sphere - 100% 實心不透) -->
+        <radialGradient id="solidWoodGrad" cx="34%" cy="28%" r="68%">
+          <stop offset="0%" stop-color="#C58547" />
+          <stop offset="18%" stop-color="#A25F29" />
+          <stop offset="42%" stop-color="#7A3F16" />
+          <stop offset="72%" stop-color="#4E220A" />
+          <stop offset="90%" stop-color="#2D1104" />
+          <stop offset="100%" stop-color="#180702" />
         </radialGradient>
 
-        <!-- 木質細密同心年輪與纖維漸層 (Wood Grain Texture) -->
-        <linearGradient id="woodGrainLine" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#4E240D" stop-opacity="0.3"/>
-          <stop offset="50%" stop-color="#261005" stop-opacity="0.6"/>
-          <stop offset="100%" stop-color="#4E240D" stop-opacity="0.25"/>
+        <!-- 天然木質同心年輪深色墨線 (Deep Wood Grain Fiber) -->
+        <linearGradient id="solidWoodFiber" x1="0%" y1="0%" x2="100%" y2="80%">
+          <stop offset="0%" stop-color="#341305" stop-opacity="0.85" />
+          <stop offset="50%" stop-color="#1A0701" stop-opacity="0.95" />
+          <stop offset="100%" stop-color="#3A1606" stop-opacity="0.8" />
         </linearGradient>
 
-        <!-- 老山檀木佛珠本體封裝 (Pure Sandalwood Wooden Bead) -->
+        <!-- 實木溫潤霧面微光 (Natural Wood Satin Sheen - 實體木材溫潤光澤) -->
+        <radialGradient id="woodSatinSheen" cx="36%" cy="26%" r="45%">
+          <stop offset="0%" stop-color="#E5A866" stop-opacity="0.5" />
+          <stop offset="50%" stop-color="#C58547" stop-opacity="0.12" />
+          <stop offset="100%" stop-color="#7A3F16" stop-opacity="0" />
+        </radialGradient>
+
+        <!-- 實體老山檀木佛珠本體封裝 (Solid Hardwood Bead) -->
         <g id="sandalwood-wood-bead">
-          <!-- 珠體外圍木質微金暈 -->
-          <circle cx="60" cy="60" r="54" fill="rgba(198, 143, 66, 0.16)" />
-          
-          <!-- 檀木球體基底 -->
-          <circle cx="60" cy="60" r="48" fill="url(#pureWoodGrad)" />
+          <!-- 1. 100% 實體不透光基底球體 (直徑 112px，填滿視圖，零半透明光暈) -->
+          <circle cx="60" cy="60" r="56" fill="#180702" />
+          <circle cx="60" cy="60" r="56" fill="url(#solidWoodGrad)" />
 
-          <!-- === 天然老山檀木流動木紋與年輪肌理 === -->
-          <!-- 頂部微弧木紋 -->
-          <path d="M 28 36 C 42 28, 78 28, 92 36" fill="none" stroke="url(#woodGrainLine)" stroke-width="1.6" stroke-linecap="round" opacity="0.45" />
-          <path d="M 22 46 C 40 37, 80 37, 98 46" fill="none" stroke="url(#woodGrainLine)" stroke-width="1.8" stroke-linecap="round" opacity="0.4" />
-          
-          <!-- 中部天然木紋導管紋理 -->
-          <path d="M 18 58 C 38 48, 82 48, 102 58" fill="none" stroke="url(#woodGrainLine)" stroke-width="2" stroke-linecap="round" opacity="0.5" />
-          <path d="M 17 68 C 38 60, 82 60, 103 68" fill="none" stroke="url(#woodGrainLine)" stroke-width="1.8" stroke-linecap="round" opacity="0.4" />
-          
-          <!-- 下腹部沉穩木紋 -->
-          <path d="M 22 80 C 40 73, 80 73, 98 80" fill="none" stroke="url(#woodGrainLine)" stroke-width="1.6" stroke-linecap="round" opacity="0.35" />
-          <path d="M 30 90 C 44 86, 76 86, 90 90" fill="none" stroke="url(#woodGrainLine)" stroke-width="1.4" stroke-linecap="round" opacity="0.3" />
+          <!-- 2. 天然原木同心年輪與導管木紋 (縝密流暢的實木肌理) -->
+          <path d="M 12 42 C 32 30, 88 30, 108 42" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.2" stroke-linecap="round" />
+          <path d="M 8 52 C 30 38, 90 38, 112 52" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 6 62 C 30 48, 90 48, 114 62" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.6" stroke-linecap="round" />
+          <path d="M 8 72 C 30 60, 90 60, 112 72" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 14 82 C 34 72, 86 72, 106 82" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.0" stroke-linecap="round" />
+          <path d="M 22 92 C 40 84, 80 84, 98 92" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.8" stroke-linecap="round" />
 
-          <!-- 側邊天然原木木眼微暈 (Natural Wood Burl) -->
-          <ellipse cx="72" cy="54" rx="6" ry="3.5" fill="none" stroke="#261005" stroke-width="1.2" opacity="0.35" transform="rotate(-15 72 54)" />
-          <circle cx="72" cy="54" r="1.5" fill="#261005" opacity="0.4" />
+          <!-- 3. 天然原木微雕木結與木眼紋理 (Wood Grain Burl) -->
+          <ellipse cx="76" cy="56" rx="7" ry="4" fill="none" stroke="#1A0701" stroke-width="1.6" transform="rotate(-18 76 56)" />
+          <circle cx="76" cy="56" r="2.2" fill="#140501" />
 
-          <!-- 琥珀漆面拋光立體高光弧 (左上方清透弧光) -->
-          <path d="M 34 26 Q 50 16 76 22" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" opacity="0.65" />
-          <circle cx="42" cy="29" r="2.2" fill="#FFFFFF" opacity="0.85" />
-          <circle cx="58" cy="42" r="1.8" fill="#FFFFFF" opacity="0.5" />
+          <!-- 4. 穿繩微凹孔陰影 (Bead Thread Hole Indent at top & bottom) -->
+          <ellipse cx="60" cy="7" rx="6" ry="2.5" fill="#100401" />
+          <ellipse cx="60" cy="113" rx="6" ry="2.5" fill="#0C0300" />
+
+          <!-- 5. 原木打磨包漿溫潤緞光 (Satin Wood Luster) -->
+          <circle cx="60" cy="60" r="56" fill="url(#woodSatinSheen)" />
+          <ellipse cx="44" cy="34" rx="14" ry="9" fill="#E8B278" opacity="0.32" transform="rotate(-25 44 34)" />
         </g>
       </defs>
     </svg>
 
     <!-- 3D 空間立體垂直橢圓環念珠舞台 (3D Vertical O-Ring Loop Stage) -->
     <div class="mala-3d-loop-stage" id="malaStage">
-      <!-- 手勢引導白色半透明光弧 (White Gesture Arc) -->
-      <svg class="gesture-white-arc" viewBox="0 0 130 380">
+      <!-- 手勢引導微軌道 (Subtle Gesture Guide Track - 底層微導引) -->
+      <svg class="gesture-white-arc" viewBox="0 0 120 360">
         <defs>
-          <linearGradient id="whiteArcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.15"/>
-            <stop offset="35%" stop-color="#FFFFFF" stop-opacity="0.9"/>
-            <stop offset="70%" stop-color="#FFF8E7" stop-opacity="0.95"/>
-            <stop offset="100%" stop-color="#FFD043" stop-opacity="0.25"/>
+          <linearGradient id="guideArcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#C68F42" stop-opacity="0.1"/>
+            <stop offset="40%" stop-color="#C68F42" stop-opacity="0.6"/>
+            <stop offset="80%" stop-color="#E8B278" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#C68F42" stop-opacity="0.2"/>
           </linearGradient>
-          <filter id="whiteGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
         </defs>
-        <path d="M 105 30 C 25 110, 15 250, 90 350" fill="none" stroke="url(#whiteArcGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="10,6" filter="url(#whiteGlow)"/>
-        <!-- 下滑動態指示微光點 -->
-        <circle cx="90" cy="350" r="4.5" fill="#FFD043"/>
+        <path d="M 95 20 C 18 100, 10 240, 80 340" fill="none" stroke="url(#guideArcGrad)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6,6"/>
+        <circle cx="80" cy="340" r="4" fill="#C68F42"/>
       </svg>
 
       <!-- 10 顆 3D 空間立體環形天然木頭佛珠 (純手動手勢滑動，無自動播放) -->
