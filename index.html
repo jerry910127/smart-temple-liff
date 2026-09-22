@@ -2479,7 +2479,7 @@
 
     <!-- 上方敬心引導語 (Guidance Header) -->
     <div class="med-3d-title-group">
-      <h2 class="med-3d-main-title">靜心捻珠・釋迦Money</h2>
+      <h2 class="med-3d-main-title">靜心捻珠</h2>
       <p class="med-3d-sub-title">順著弧線向下滑動，心念事業、財帛與所求</p>
     </div>
 
@@ -4893,9 +4893,9 @@
         x = -32 - 16 * sinHalf;     // -32px -> -48px -> -32px (左凸)
         z = 35 + 45 * sinHalf;      // 35px -> 80px (立體前景)
         scale = 1.02 + 0.20 * sinHalf; // 1.02 -> 1.22
-        opacity = 1.0;              // 完全實體不透光
+        opacity = 0.82 + 0.08 * sinHalf; // 0.82 -> 0.90 (輕盈透光)
         zIndex = Math.round(10 + 6 * sinHalf); // 10 -> 16 (實體覆蓋後排)
-        filter = `drop-shadow(-6px 12px 18px rgba(40, 20, 10, ${0.45 + 0.15 * sinHalf}))`;
+        filter = `drop-shadow(-4px 8px 14px rgba(40, 20, 10, ${0.30 + 0.10 * sinHalf}))`;
       } else {
         // 【右側後軌道 (遠景)】由底向上回流 (t: 0.5 -> 1.0)
         const rearNorm = (t - 0.5) / 0.5; // 0 -> 1
@@ -4904,9 +4904,9 @@
         x = 24 + 28 * sinRear;      // +24px -> +52px -> +24px (右弧)
         z = -25 - 25 * sinRear;     // -25px -> -50px (下沉後景)
         scale = 0.82 - 0.08 * sinRear; // 0.82 -> 0.74
-        opacity = 1.0;              // 完全實體清晰
+        opacity = 0.58 - 0.15 * sinRear; // 0.58 -> 0.43 (遠景更清透)
         zIndex = Math.round(2 - 1 * sinRear); // 1 -> 2 (被前排實體遮擋)
-        filter = 'drop-shadow(-4px 6px 12px rgba(40, 20, 10, 0.42))';
+        filter = 'drop-shadow(-2px 4px 8px rgba(40, 20, 10, 0.22))';
       }
 
       return { x, y, z, scale, opacity, zIndex, filter };
