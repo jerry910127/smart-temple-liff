@@ -2047,27 +2047,29 @@
       cursor: grabbing;
     }
 
-    /* 典雅天然木質念珠球體 (老山檀木天然木質球體光影與高光) */
+    /* 典雅 3D 釋迦木雕佛珠容器 (立體木質球體光影與鱗目浮雕) */
     .wood-bead {
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #DFAC7E 0%, #A56D40 35%, #734522 70%, #3B1F0E 95%);
-      box-shadow: -8px 12px 24px rgba(40, 25, 15, 0.45);
-      transition: transform 0.22s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.22s ease;
+      transition: transform 0.24s cubic-bezier(0.25, 1, 0.5, 1), filter 0.24s ease;
       user-select: none;
       -webkit-user-select: none;
       pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(-6px 12px 20px rgba(40, 25, 15, 0.45));
     }
 
-    /* 【核心前景】當前捻動大木珠 (主互動區) */
+    /* 【核心前景】當前捻動「大釋迦Money珠」(主互動區) */
     .wood-bead.active-focus {
       pointer-events: auto;
       cursor: grab;
-      box-shadow: -10px 16px 32px rgba(40, 25, 15, 0.52), inset -3px -3px 8px rgba(0,0,0,0.42), 0 0 25px rgba(198, 143, 66, 0.35);
+      filter: drop-shadow(-10px 18px 30px rgba(35, 20, 10, 0.55)) drop-shadow(0 0 16px rgba(255, 215, 100, 0.38));
     }
     .wood-bead.active-focus:active, .wood-bead.active-focus.rolling {
       cursor: grabbing;
-      transform: scale(0.96) rotate(18deg) translate3d(6px, 18px, 0);
-      box-shadow: -6px 10px 20px rgba(40, 25, 15, 0.65);
+      transform: scale(0.95) rotate(20deg) translate3d(8px, 20px, 0);
+      filter: drop-shadow(-6px 10px 18px rgba(35, 20, 10, 0.7)) drop-shadow(0 0 25px rgba(255, 215, 100, 0.6));
     }
 
     /* 滑動功德浮動提示 (Merit Floating Toast) */
@@ -2444,7 +2446,7 @@
     <!-- 頂部宮廟飾線條 (Shine Top Curtain) -->
     <div class="shrine-top-curtain"></div>
 
-    <!-- 頂部快捷列 (Header: Home & Merit Badge) -->
+    <!-- 頂部快捷列 (Header: Home & Status Badge) -->
     <header class="med-3d-header">
       <button class="med-3d-home-btn" onclick="openHomePage()" title="返回大殿首頁">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2454,56 +2456,145 @@
         </svg>
       </button>
 
-      <div class="med-3d-merit-badge" title="今日累積捻珠功德">
-        <span>📿 今日功德：</span><span id="meritCount">108</span>
+      <div class="med-3d-merit-badge" title="今日累積功德與財氣">
+        <span>📿 功德圓滿・財氣+</span><span id="meritCount">108</span>
       </div>
     </header>
 
-    <!-- 上方敬心引導語 -->
+    <!-- 上方敬心引導語 (Guidance Header) -->
     <div class="med-3d-title-group">
-      <h2 class="med-3d-main-title">靜心捻珠・誠心祈願</h2>
-      <p class="med-3d-sub-title">順著圓弧向下滑動，心念所求之事</p>
+      <h2 class="med-3d-main-title">靜心捻珠・釋迦Money</h2>
+      <p class="med-3d-sub-title">順著弧線向下滑動，心念事業、財帛與所求</p>
     </div>
+
+    <!-- 釋迦Money 木雕佛珠 Symbol 定義 (純向量、精緻立體鱗目) -->
+    <svg style="display: none;">
+      <defs>
+        <!-- 老檀木圓形球體光影漸層 -->
+        <radialGradient id="shakyaWoodGrad" cx="35%" cy="30%" r="68%">
+          <stop offset="0%" stop-color="#E2B286"/>
+          <stop offset="30%" stop-color="#A56D40"/>
+          <stop offset="70%" stop-color="#693F1F"/>
+          <stop offset="100%" stop-color="#361B0B"/>
+        </radialGradient>
+
+        <!-- 釋迦凸起鱗目單元漸層 (立體木雕小鼓包) -->
+        <radialGradient id="shakyaBumpGrad" cx="34%" cy="28%" r="68%">
+          <stop offset="0%" stop-color="#F2CCA4"/>
+          <stop offset="35%" stop-color="#B87B49"/>
+          <stop offset="75%" stop-color="#6E3D1A"/>
+          <stop offset="100%" stop-color="#2D1507"/>
+        </radialGradient>
+
+        <!-- 鱗目底層雕刻陰影 -->
+        <filter id="bumpBevelShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="-1" dy="2" stdDeviation="1.5" flood-color="#1F0E05" flood-opacity="0.6"/>
+        </filter>
+
+        <!-- 釋迦果形木雕佛珠整體封裝 (Shakya Money 3D Bead) -->
+        <g id="shakya-money-bead">
+          <!-- 珠體外圍木質柔和光暈 -->
+          <circle cx="60" cy="60" r="56" fill="rgba(198, 143, 66, 0.22)"/>
+          
+          <!-- 釋迦主球底胚 (深檀木色底) -->
+          <circle cx="60" cy="60" r="50" fill="url(#shakyaWoodGrad)"/>
+
+          <!-- === 釋迦立體鱗目群 (多層立體圓潤凸苞，呈現經典釋迦果紋理) === -->
+          <!-- 頂部與外圍鱗目 -->
+          <ellipse cx="60" cy="18" rx="8.5" ry="6.5" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="43" cy="23" rx="9" ry="7" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="77" cy="23" rx="9" ry="7" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          
+          <!-- 第二圈鱗目 -->
+          <ellipse cx="28" cy="34" rx="9.5" ry="7.5" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="48" cy="33" rx="10" ry="8" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="72" cy="33" rx="10" ry="8" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="92" cy="34" rx="9.5" ry="7.5" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+
+          <!-- 中央正前方最飽滿鱗目 (受光最強處) -->
+          <circle cx="36" cy="49" r="9.8" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <circle cx="60" cy="48" r="11" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <circle cx="84" cy="49" r="9.8" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+
+          <!-- 中下腹鱗目 -->
+          <circle cx="24" cy="60" r="9" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <circle cx="45" cy="66" r="10.2" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <circle cx="75" cy="66" r="10.2" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <circle cx="96" cy="60" r="9" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+
+          <!-- 下方收尾部鱗目 -->
+          <ellipse cx="34" cy="80" rx="9" ry="7" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="60" cy="82" rx="10.5" ry="7.5" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="86" cy="80" rx="9" ry="7" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+          <ellipse cx="60" cy="95" rx="8" ry="6" fill="url(#shakyaBumpGrad)" filter="url(#bumpBevelShadow)"/>
+
+          <!-- 溫潤原木漆面高光光弧 (左上方柔美斜角反光) -->
+          <path d="M 34 26 Q 50 16 74 22" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" opacity="0.55"/>
+          <circle cx="42" cy="30" r="1.8" fill="#FFF" opacity="0.75"/>
+          <circle cx="58" cy="44" r="2.2" fill="#FFF" opacity="0.6"/>
+        </g>
+      </defs>
+    </svg>
 
     <!-- 3D 斜角圓弧念珠軌道舞台 (3D Oblique Arc Perspective Stage) -->
     <div class="mala-3d-arc-stage" id="malaStage">
-      <!-- 穿珠朱紅線軌跡 SVG (深紅編織繩穿引於珠串空間中) -->
+      <!-- 穿珠朱紅金絲線軌跡 SVG (深紅編織繩與金絲穿引於珠串空間中) -->
       <svg width="100%" height="100%" viewBox="0 0 375 520" preserveAspectRatio="none" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; z-index:1;">
         <defs>
-          <linearGradient id="cordGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="shakyaCordGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#5B0E0B" stop-opacity="0.6"/>
-            <stop offset="40%" stop-color="#8C1F1C" stop-opacity="0.9"/>
+            <stop offset="40%" stop-color="#C68F42" stop-opacity="0.95"/>
             <stop offset="70%" stop-color="#A62824" stop-opacity="0.9"/>
             <stop offset="100%" stop-color="#5B0E0B" stop-opacity="0.5"/>
           </linearGradient>
           <filter id="cordShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="1" dy="3" stdDeviation="2" flood-color="#231C18" flood-opacity="0.3"/>
+            <feDropShadow dx="1" dy="3" stdDeviation="2.5" flood-color="#231C18" flood-opacity="0.35"/>
           </filter>
         </defs>
-        <!-- 空間 3D 圓弧引線 -->
-        <path d="M 300 95 C 275 130, 240 180, 210 240 C 175 310, 140 370, 175 430 C 200 470, 245 490, 275 505" 
-              fill="none" stroke="url(#cordGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="7,4" filter="url(#cordShadow)"/>
+        <!-- 空間 3D 圓弧金絲穿繩引線 -->
+        <path d="M 295 90 C 270 128, 235 180, 205 240 C 170 310, 135 370, 170 432 C 198 472, 245 492, 275 508" 
+              fill="none" stroke="url(#shakyaCordGrad)" stroke-width="4.8" stroke-linecap="round" stroke-dasharray="8,4" filter="url(#cordShadow)"/>
       </svg>
 
-      <!-- 【遠端 1】右上後方小珠 (遠景，深邃微縮) -->
-      <div class="wood-bead" id="bead1" style="position:absolute; top:18%; left:65%; width:70px; height:70px; opacity:0.75; filter:blur(0.4px); z-index:2;"></div>
+      <!-- 【遠端 1】右上後方釋迦果珠 (遠景，深邃微縮) -->
+      <div class="wood-bead" id="bead1" style="position:absolute; top:17%; left:65%; width:75px; height:75px; opacity:0.75; filter:blur(0.4px); z-index:2;">
+        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
+          <use href="#shakya-money-bead" />
+        </svg>
+      </div>
 
-      <!-- 【中景 2】右上過渡珠 (中景過渡) -->
-      <div class="wood-bead" id="bead2" style="position:absolute; top:31%; left:51%; width:96px; height:96px; opacity:0.9; z-index:3;"></div>
+      <!-- 【中景 2】右上斜向逼近釋迦珠 (中景過渡) -->
+      <div class="wood-bead" id="bead2" style="position:absolute; top:30%; left:50%; width:100px; height:100px; opacity:0.9; z-index:3;">
+        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
+          <use href="#shakya-money-bead" />
+        </svg>
+      </div>
 
-      <!-- 【核心前景 3】大拇指主要捻動木珠 (焦點珠 Focus Bead，近景巨大清脆) -->
-      <div class="wood-bead active-focus" id="activeBead" style="position:absolute; top:42%; left:22%; width:146px; height:146px; z-index:10;" title="按住並向下滑動捻珠"></div>
+      <!-- 【核心前景 3】當前捻動「大釋迦Money珠」(焦點珠 Focus Bead，近景巨大立體) -->
+      <div class="wood-bead active-focus" id="activeBead" style="position:absolute; top:40%; left:20%; width:150px; height:150px; z-index:10;" title="按住並向下滑動捻珠求財開運">
+        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
+          <use href="#shakya-money-bead" />
+        </svg>
+      </div>
 
-      <!-- 【中景 4】左下過渡珠 (回環過渡) -->
-      <div class="wood-bead" id="bead4" style="position:absolute; top:63%; left:33%; width:114px; height:114px; opacity:0.92; z-index:4;"></div>
+      <!-- 【出景中景 4】左下過渡釋迦珠 (回環過渡) -->
+      <div class="wood-bead" id="bead4" style="position:absolute; top:62%; left:32%; width:120px; height:120px; opacity:0.92; z-index:4;">
+        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
+          <use href="#shakya-money-bead" />
+        </svg>
+      </div>
 
-      <!-- 【遠端 5】右下後方珠 (出景漸遠) -->
-      <div class="wood-bead" id="bead5" style="position:absolute; top:78%; left:53%; width:82px; height:82px; opacity:0.7; filter:blur(0.3px); z-index:2;"></div>
+      <!-- 【出景遠端 5】右下遠景出軌珠 (出景漸遠) -->
+      <div class="wood-bead" id="bead5" style="position:absolute; top:77%; left:53%; width:85px; height:85px; opacity:0.7; filter:blur(0.3px); z-index:2;">
+        <svg viewBox="0 0 120 120" style="width:100%; height:100%; display:block; pointer-events:none;">
+          <use href="#shakya-money-bead" />
+        </svg>
+      </div>
     </div>
 
-    <!-- 底部主操作膠囊鈕 -->
+    <!-- 底部主操作膠囊鈕 (CTA Button) -->
     <footer class="med-3d-footer">
-      <button class="med-3d-cta-btn" onclick="openDivinationFlow()">功德圓滿・搖筒請示</button>
+      <button class="med-3d-cta-btn" onclick="openDivinationFlow()">所求遂意・搖筒請示</button>
     </footer>
 
     <!-- 底部安全區域橫條 (Home Indicator) -->
@@ -4769,14 +4860,16 @@
     let malaListenersBound = false;
 
     const AUSPICIOUS_MERIT_TEXTS = [
-      '✨ 功德 +1',
-      '🌿 心誠 +1',
-      '📿 清淨 +1',
-      '🌸 福慧 +1',
-      '🕯️ 定心 +1',
-      '🕊️ 吉祥 +1',
-      '🏮 安康 +1',
-      '☀️ 圓滿 +1'
+      '💰 Money +1',
+      '✨ 功德圓滿',
+      '🌿 財氣亨通',
+      '📿 釋迦護佑',
+      '🌸 業障消除',
+      '☀️ 財源廣進',
+      '🏮 貴人相助',
+      '💎 利市大吉',
+      '🕊️ 心隨意轉',
+      '🌾 諸事遂意'
     ];
 
     function initMeditationPage() {
