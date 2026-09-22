@@ -2483,58 +2483,62 @@
       <p class="med-3d-sub-title">順著弧線向下滑動，心念事業、財帛與所求</p>
     </div>
 
-    <!-- 溫潤天然實體標準檀香木佛珠 Symbol 定義 (雙色調和 Hex #D6A574 與 #A86D32) -->
+    <!-- 溫潤天然原木佛珠 Symbol 定義 (依據參考圖：天然崖柏/檜木蜜金色階與細密年輪水波紋) -->
     <svg style="display: none;">
       <defs>
-        <!-- 標準檀香木 3D 球體立體漸層 (#D6A574 亮面過渡至 #A86D32 醇厚基色) -->
-        <radialGradient id="solidWoodGrad" cx="34%" cy="28%" r="68%">
-          <stop offset="0%" stop-color="#F2DCBE" />
-          <stop offset="20%" stop-color="#D6A574" />
-          <stop offset="50%" stop-color="#A86D32" />
-          <stop offset="76%" stop-color="#78471A" />
-          <stop offset="92%" stop-color="#4F2B0E" />
-          <stop offset="100%" stop-color="#2E1606" />
+        <!-- 天然原木立體球形漸層 (崖柏/檜木暖金焦糖色階) -->
+        <radialGradient id="solidWoodGrad" cx="35%" cy="28%" r="68%">
+          <stop offset="0%" stop-color="#FCEFD8" />
+          <stop offset="15%" stop-color="#EBBF8A" />
+          <stop offset="38%" stop-color="#D5975A" />
+          <stop offset="65%" stop-color="#B67135" />
+          <stop offset="86%" stop-color="#804418" />
+          <stop offset="100%" stop-color="#4B2308" />
         </radialGradient>
 
-        <!-- 天然檀木同心年輪深色紋理 (Sandalwood Wood Grain Fiber) -->
-        <linearGradient id="solidWoodFiber" x1="0%" y1="0%" x2="100%" y2="80%">
-          <stop offset="0%" stop-color="#5E3312" stop-opacity="0.85" />
-          <stop offset="50%" stop-color="#3B1E08" stop-opacity="0.95" />
-          <stop offset="100%" stop-color="#5E3312" stop-opacity="0.8" />
+        <!-- 天然細密水波年輪紋理 (Fine Annular Wood Grain) -->
+        <linearGradient id="solidWoodFiber" x1="0%" y1="0%" x2="100%" y2="85%">
+          <stop offset="0%" stop-color="#884C1E" stop-opacity="0.75" />
+          <stop offset="50%" stop-color="#5E2F0D" stop-opacity="0.92" />
+          <stop offset="100%" stop-color="#884C1E" stop-opacity="0.75" />
         </linearGradient>
 
-        <!-- 檀香原木溫潤緞面光澤 (Sandalwood Satin Sheen) -->
-        <radialGradient id="woodSatinSheen" cx="36%" cy="26%" r="45%">
-          <stop offset="0%" stop-color="#FFF2E2" stop-opacity="0.5" />
-          <stop offset="50%" stop-color="#D6A574" stop-opacity="0.18" />
-          <stop offset="100%" stop-color="#A86D32" stop-opacity="0" />
+        <!-- 原木砂磨啞光溫潤光澤 (Matte Satin Wood Luster) -->
+        <radialGradient id="woodSatinSheen" cx="36%" cy="25%" r="46%">
+          <stop offset="0%" stop-color="#FFF8EE" stop-opacity="0.45" />
+          <stop offset="45%" stop-color="#EBBF8A" stop-opacity="0.15" />
+          <stop offset="100%" stop-color="#B67135" stop-opacity="0" />
         </radialGradient>
 
-        <!-- 標準檀香木佛珠本體封裝 (Solid Sandalwood Bead #D6A574 / #A86D32) -->
+        <!-- 原木佛珠本體封裝 (Natural Cedar/Cypress Bead) -->
         <g id="sandalwood-wood-bead">
-          <!-- 1. 100% 實體不透光基底球體 (直徑 112px，實木無透光) -->
-          <circle cx="60" cy="60" r="56" fill="#2E1606" />
+          <!-- 1. 實心不透光基底球體 (直徑 112px) -->
+          <circle cx="60" cy="60" r="56" fill="#4B2308" />
           <circle cx="60" cy="60" r="56" fill="url(#solidWoodGrad)" />
 
-          <!-- 2. 天然原木同心年輪與導管木紋 (縝密流暢的檀木肌理) -->
-          <path d="M 12 42 C 32 30, 88 30, 108 42" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.2" stroke-linecap="round" />
-          <path d="M 8 52 C 30 38, 90 38, 112 52" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.4" stroke-linecap="round" />
-          <path d="M 6 62 C 30 48, 90 48, 114 62" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.6" stroke-linecap="round" />
-          <path d="M 8 72 C 30 60, 90 60, 112 72" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.4" stroke-linecap="round" />
-          <path d="M 14 82 C 34 72, 86 72, 106 82" fill="none" stroke="url(#solidWoodFiber)" stroke-width="2.0" stroke-linecap="round" />
-          <path d="M 22 92 C 40 84, 80 84, 98 92" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.8" stroke-linecap="round" />
+          <!-- 2. 細密自然水波年輪條紋 (依循參考圖片之平行均勻弧線) -->
+          <path d="M 38 18 C 48 14, 72 14, 82 18" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.1" stroke-linecap="round" />
+          <path d="M 27 26 C 44 19, 76 19, 93 26" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.3" stroke-linecap="round" />
+          <path d="M 18 35 C 40 26, 80 26, 102 35" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.5" stroke-linecap="round" />
+          <path d="M 11 45 C 38 34, 82 34, 109 45" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.7" stroke-linecap="round" />
+          <path d="M 7 56 C 36 44, 84 44, 113 56" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.9" stroke-linecap="round" />
+          <path d="M 6 67 C 34 55, 86 55, 114 67" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.9" stroke-linecap="round" />
+          <path d="M 9 78 C 34 67, 86 67, 111 78" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.8" stroke-linecap="round" />
+          <path d="M 15 88 C 36 79, 84 79, 105 88" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.6" stroke-linecap="round" />
+          <path d="M 24 97 C 42 90, 78 90, 96 97" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.3" stroke-linecap="round" />
+          <path d="M 36 104 C 48 100, 72 100, 84 104" fill="none" stroke="url(#solidWoodFiber)" stroke-width="1.1" stroke-linecap="round" />
 
-          <!-- 3. 天然檀木木結與木眼紋理 (Sandalwood Burl) -->
-          <ellipse cx="76" cy="56" rx="7" ry="4" fill="none" stroke="#3B1E08" stroke-width="1.6" transform="rotate(-18 76 56)" />
-          <circle cx="76" cy="56" r="2.2" fill="#281204" />
+          <!-- 3. 天然年輪同心旋紋 (Concentric Wood Rings/Eye) -->
+          <ellipse cx="72" cy="50" rx="9" ry="5.5" fill="none" stroke="#5E2F0D" stroke-width="1.2" transform="rotate(-15 72 50)" opacity="0.8" />
+          <circle cx="72" cy="50" r="2.2" fill="#4B2308" opacity="0.85" />
 
-          <!-- 4. 穿繩微凹孔陰影 (Bead Thread Hole Indent) -->
-          <ellipse cx="60" cy="7" rx="6" ry="2.5" fill="#240F03" />
-          <ellipse cx="60" cy="113" rx="6" ry="2.5" fill="#1B0A02" />
+          <!-- 4. 穿繩微凹孔陰影 -->
+          <ellipse cx="60" cy="6" rx="6" ry="2.2" fill="#3D1A04" />
+          <ellipse cx="60" cy="114" rx="6" ry="2.2" fill="#2E1202" />
 
-          <!-- 5. 檀木打磨包漿溫潤緞光 (Satin Wood Luster) -->
+          <!-- 5. 原木砂磨溫潤緞光 (Matte Satin Sheen) -->
           <circle cx="60" cy="60" r="56" fill="url(#woodSatinSheen)" />
-          <ellipse cx="44" cy="34" rx="14" ry="9" fill="#FCEBD8" opacity="0.32" transform="rotate(-25 44 34)" />
+          <ellipse cx="45" cy="32" rx="15" ry="8.5" fill="#FFF2E2" opacity="0.28" transform="rotate(-20 45 32)" />
         </g>
       </defs>
     </svg>
