@@ -4048,8 +4048,8 @@
       if (urlParams.get('liffId')) return urlParams.get('liffId');
       if (href.includes('2011672734-RX4TBGQf')) return MINI_APP_IDS.published;
       if (href.includes('2011672733-59eN6KAB')) return MINI_APP_IDS.review;
-      if (href.includes('2011668576-3Qay1nBv')) return MINI_APP_IDS.legacy;
-      return MINI_APP_IDS.dev;
+      if (href.includes('2011672732-8VId10cb')) return MINI_APP_IDS.dev;
+      return MINI_APP_IDS.legacy;
     }
 
     const MY_LIFF_ID = resolveCurrentLiffId();
@@ -6900,14 +6900,24 @@
       document.getElementById('omikujiOverlay').classList.add('visible');
     }
 
-    // 回傳至 LINE 聊天室進行 AI 解籤（無縫支援手機與電腦版）
+    // 回傳至 LINE 聊天室進行 AI 解籤（三重容錯備援：LIFF 原生 -> 後端推播 -> LINE URL Scheme 終極保底）
     async function handleSendToLine() {
       const sendBtn = document.getElementById('sendToLineBtn');
       const originalHtml = sendBtn.innerHTML;
       const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`;
 
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = "<span>⏳ 正在傳送至 LINE 聊天室...</span>";
+
+      // 終極保底手段：利用 LINE 官方原生 URL Scheme 直接喚醒官方帳號聊天室並帶入籤詩
+      const executeUrlSchemeFallback = () => {
+        sendBtn.innerHTML = "<span>💬 正在跳轉至老廟祝聊天室...</span>";
+        const oaUrl = `https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`;
+        window.location.href = oaUrl;
+      };
+
       if (liff.isInClient()) {
-        // 1. 手機 LINE App 內部開啟：原生 sendMessages 閉環
+        // 1. 手機 LINE App 內部開啟：優先嘗試原生 sendMessages 閉環
         try {
           await liff.sendMessages([
             {
@@ -6916,12 +6926,17 @@
             }
           ]);
           liff.closeWindow();
+          return;
         } catch (err) {
-          console.warn("liff.sendMessages 權限受限 (缺少 chat_message.write)，無縫改用後端推播:", err);
-          try {
-            sendBtn.disabled = true;
-            sendBtn.innerHTML = "<span>⏳ 正在傳送至 LINE 聊天室...</span>";
-            const profile = await liff.getProfile();
+          console.warn("liff.sendMessages 權限受限或不在對話環境，無縫啟動伺服器推播:", err);
+        }
+
+        // 2. 備援手段：若有 profile.userId，呼叫後端 push_fortune (帶 4 秒逾時保護避免 Render 冷啟動卡住)
+        try {
+          const profile = await liff.getProfile().catch(() => null);
+          if (profile && profile.userId) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
 
             const resp = await fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
               method: "POST",
@@ -6929,29 +6944,28 @@
               body: JSON.stringify({
                 user_id: profile.userId,
                 text: msgText
-              })
+              }),
+              signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             if (resp.ok) {
-              alert("🎉 靈籤已成功傳送至您的 LINE 聊天室！\n老廟祝阿伯正在線上解籤，請回到聊天室查看！");
+              alert("🎉 靈籤已成功傳送至您的 LINE 聊天室！\n老廟祝正在線上解籤，請回到聊天室查看！");
               liff.closeWindow();
-            } else {
-              throw new Error("推播失敗");
+              return;
             }
-          } catch (fallbackErr) {
-            alert("回傳聊天室失敗：" + err.message + "\n請確認 LINE Developers LIFF 設定已勾選 chat_message.write 權限。");
-          } finally {
-            sendBtn.disabled = false;
           }
+        } catch (fallbackErr) {
+          console.warn("後端推播逾時或受限，啟用第三重 LINE URL Scheme 終極保底:", fallbackErr);
         }
+
+        // 3. 終極保底：100% 保證能把籤詩帶入聊天室
+        executeUrlSchemeFallback();
       } else {
         // 2. 電腦瀏覽器 / 外開 Chrome / Edge
         if (liff.isLoggedIn()) {
           try {
-            sendBtn.disabled = true;
-            sendBtn.innerHTML = "<span>⏳ 正在傳送至 LINE 聊天室...</span>";
             const profile = await liff.getProfile();
-
             const resp = await fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -6964,21 +6978,19 @@
             if (resp.ok) {
               sendBtn.innerHTML = "<span>✅ 已成功送達 LINE 聊天室！</span>";
               alert("🎉 恭喜！靈籤已成功傳送至您的 LINE 聊天室！\n線上智能客服正在為您客觀解籤，請打開手機或電腦版 LINE 查看！");
-            } else {
-              throw new Error("伺服器回應異常");
+              return;
             }
           } catch (err) {
             console.warn("後端推播異常，改用 LINE URL Scheme 喚醒:", err);
-            window.open(`https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`, '_blank');
-          } finally {
-            sendBtn.disabled = false;
           }
         } else {
-          // 未登入則引導登入
-          if (confirm("電腦瀏覽器需先登入您的 LINE（可直接手機掃描 QR Code），即可直接把籤詩送到您的聊天室並獲得 AI 解籤！\n\n是否立即登入？")) {
+          // 未登入提示
+          if (confirm("電腦瀏覽器建議登入 LINE 以自動同步至聊天室，是否登入？\n（點「取消」將直接為您開啟 LINE 官方帳號對話）")) {
             liff.login();
+            return;
           }
         }
+        executeUrlSchemeFallback();
       }
     }
 
