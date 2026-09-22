@@ -2113,25 +2113,45 @@
       transform: scale(0.96);
     }
 
-    /* 佛珠中心禪心圓徽 / 計數狀態 */
-    .med-center-badge {
+    /* 中央傳統木雕琉璃金佛珠核心 (120px) */
+    .med-center-buddha {
       position: absolute;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: #FFFDF9;
-      border: 1.5px solid #E5D5C0;
-      box-shadow: 0 4px 14px rgba(140, 91, 50, 0.15), inset 0 2px 6px rgba(255, 255, 255, 0.9);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 124px;
+      height: 124px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      z-index: 5;
+      z-index: 12;
       pointer-events: none;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .med-center-buddha.tapped {
+      transform: translate(-50%, -50%) scale(1.06);
+    }
+
+    /* 佛珠下方微光計數浮牌 */
+    .med-buddha-count-pill {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 253, 249, 0.95);
+      border: 1.2px solid #E5D5C0;
+      box-shadow: 0 3px 10px rgba(140, 91, 50, 0.15);
+      border-radius: 20px;
+      padding: 2px 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      z-index: 15;
     }
     .med-center-character {
-      font-size: 1.35rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: #A62824;
       line-height: 1;
@@ -2139,10 +2159,9 @@
       transition: transform 0.2s ease;
     }
     .med-center-count {
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       font-weight: 800;
       color: #8C5B32;
-      margin-top: 3px;
       letter-spacing: 0.5px;
     }
 
@@ -2551,6 +2570,92 @@
       <div class="med-instruction-subtitle" id="meditationSubTitle">放鬆雙肩・凝視金絲檀木・順應氣息吐納</div>
     </div>
 
+    <!-- 傳統木雕琉璃金佛珠 Symbol 定義 -->
+    <svg style="display: none;">
+      <defs>
+        <!-- 老山檀木雕刻漸層 -->
+        <radialGradient id="woodCarving" cx="42%" cy="38%" r="62%">
+          <stop offset="0%" stop-color="#A5734A" />
+          <stop offset="45%" stop-color="#7B4C28" />
+          <stop offset="85%" stop-color="#543016" />
+          <stop offset="100%" stop-color="#361D0C" />
+        </radialGradient>
+
+        <!-- 木質陰影/雕刻刀線深色漸層 -->
+        <linearGradient id="carveShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#2D170A" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="#543016" stop-opacity="0.2" />
+        </linearGradient>
+
+        <!-- 琉璃高光弧度漸層 -->
+        <linearGradient id="crystalReflection" x1="15%" y1="10%" x2="85%" y2="90%">
+          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.75" />
+          <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.15" />
+          <stop offset="75%" stop-color="#FFFFFF" stop-opacity="0" />
+          <stop offset="100%" stop-color="#FFF9EE" stop-opacity="0.3" />
+        </linearGradient>
+
+        <!-- 莊嚴傳統木雕佛珠 Symbol -->
+        <g id="traditional-wood-buddha">
+          <!-- 佛光環境底暈 -->
+          <circle cx="60" cy="60" r="56" fill="rgba(198, 143, 66, 0.22)" />
+
+          <!-- === 傳統木雕大佛主體 === -->
+          <g id="buddhaSculpture">
+            <!-- 莊嚴面龐輪廓 (微方帶圓，標準唐宋佛造像比例) -->
+            <path d="M 33 55 C 33 78, 44 88, 60 88 C 76 88, 87 78, 87 55 C 87 40, 77 34, 60 34 C 43 34, 33 40, 33 55 Z" fill="url(#woodCarving)" />
+
+            <!-- 垂肩大耳 (厚實圓融) -->
+            <path d="M 34 50 C 31 50, 27 56, 27 65 C 27 75, 31 79, 34 76 Z" fill="url(#woodCarving)" />
+            <path d="M 86 50 C 89 50, 93 56, 93 65 C 93 75, 89 79, 86 76 Z" fill="url(#woodCarving)" />
+            <path d="M 32 58 C 30 62, 30 70, 33 72" stroke="#361D0C" stroke-width="1.2" fill="none" />
+            <path d="M 88 58 C 90 62, 90 70, 87 72" stroke="#361D0C" stroke-width="1.2" fill="none" />
+
+            <!-- 傳統肉髻與高聳頂髻 -->
+            <ellipse cx="60" cy="27" rx="14" ry="9" fill="#422510" />
+            <ellipse cx="60" cy="22" rx="7" ry="5" fill="#361D0C" />
+            
+            <!-- 規整雕刻螺髮紋理 -->
+            <path d="M 34 43 C 40 33, 50 31, 60 31 C 70 31, 80 33, 86 43 C 78 40, 68 39, 60 39 C 52 39, 42 40, 34 43 Z" fill="#3D210D" />
+            <circle cx="50" cy="34" r="1.8" fill="#5A3317" />
+            <circle cx="60" cy="33" r="1.8" fill="#5A3317" />
+            <circle cx="70" cy="34" r="1.8" fill="#5A3317" />
+            <circle cx="44" cy="38" r="1.8" fill="#5A3317" />
+            <circle cx="54" cy="37" r="1.8" fill="#5A3317" />
+            <circle cx="66" cy="37" r="1.8" fill="#5A3317" />
+            <circle cx="76" cy="38" r="1.8" fill="#5A3317" />
+
+            <!-- 眉心白毫 (赤金鑲嵌點) -->
+            <circle cx="60" cy="52" r="2.2" fill="#C68F42" stroke="#683F1C" stroke-width="0.8" />
+
+            <!-- 慈悲雙眉 (如新月彎垂) -->
+            <path d="M 43 59 C 48 56, 54 57, 57 60" stroke="#361D0C" stroke-width="1.8" fill="none" stroke-linecap="round" />
+            <path d="M 77 59 C 72 56, 66 57, 63 60" stroke="#361D0C" stroke-width="1.8" fill="none" stroke-linecap="round" />
+
+            <!-- 慈眼垂視 (微閉俯瞰眾生) -->
+            <path d="M 44 64 C 48 66, 54 66, 56 63" stroke="#2D170A" stroke-width="1.6" fill="none" stroke-linecap="round" />
+            <path d="M 76 64 C 72 66, 66 66, 64 63" stroke="#2D170A" stroke-width="1.6" fill="none" stroke-linecap="round" />
+
+            <!-- 筆挺鼻樑與鼻翼 -->
+            <path d="M 60 56 L 60 70 L 57 72 M 60 70 L 63 72" stroke="#4A2912" stroke-width="1.4" fill="none" stroke-linejoin="round" />
+
+            <!-- 慈悲抿唇 (嘴角含笑端莊) -->
+            <path d="M 54 78 C 58 79, 62 79, 66 78" stroke="#361D0C" stroke-width="1.8" fill="none" stroke-linecap="round" />
+            <path d="M 57 81 C 59 82, 61 82, 63 81" stroke="#4A2912" stroke-width="1.2" fill="none" stroke-linecap="round" />
+            
+            <!-- 下頜豐滿雕刻線 -->
+            <path d="M 52 85 C 57 87, 63 87, 68 85" stroke="#4A2912" stroke-width="1" fill="none" opacity="0.6" />
+          </g>
+
+          <!-- === 外層琉璃水晶罩 === -->
+          <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(242, 218, 171, 0.45)" stroke-width="1.5" />
+          <circle cx="60" cy="60" r="54" fill="url(#crystalReflection)" />
+          <!-- 水晶球左上方通透高光弧 -->
+          <path d="M 33 28 A 42 42 0 0 1 84 20" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
+        </g>
+      </defs>
+    </svg>
+
     <!-- 中央發光金絲檀木佛珠核心 (Mala Beads Core) [440, 345, 580, 655] -->
     <div class="med-mala-wrapper" onclick="handleTapMalaBead()" title="點擊撥動佛珠定心">
       <!-- 泥金呼吸柔光 (Aura Glow) -->
@@ -2627,10 +2732,18 @@
         </svg>
       </div>
 
-      <!-- 中央禪心圓徽 / 計數狀態 -->
-      <div class="med-center-badge">
-        <div class="med-center-character" id="medCenterChar">靜</div>
-        <div class="med-center-count" id="medCenterCount">撥珠 0 次</div>
+      <!-- 中央傳統木雕琉璃金佛珠主尊 (120px) -->
+      <div class="med-center-buddha" id="medCenterBuddha">
+        <svg viewBox="0 0 120 120" width="124" height="124" style="display:block; overflow:visible; filter: drop-shadow(0 6px 20px rgba(140, 91, 50, 0.4));">
+          <use href="#traditional-wood-buddha" />
+        </svg>
+
+        <!-- 佛珠下方微光計數浮牌 -->
+        <div class="med-buddha-count-pill" id="medCenterCountPill">
+          <span class="med-center-character" id="medCenterChar">靜</span>
+          <span style="opacity:0.4; font-size:0.6rem;">・</span>
+          <span class="med-center-count" id="medCenterCount">撥珠 0 次</span>
+        </div>
       </div>
     </div>
 
@@ -5048,6 +5161,13 @@
       const rotor = document.getElementById('medBeadsRotor');
       if (rotor) {
         rotor.style.transform = `rotate(${malaRotationDeg}deg)`;
+      }
+
+      // 點擊觸發中央木雕琉璃佛珠微幅彈性縮放與神光激發
+      const buddhaElem = document.getElementById('medCenterBuddha');
+      if (buddhaElem) {
+        buddhaElem.classList.add('tapped');
+        setTimeout(() => { if (buddhaElem) buddhaElem.classList.remove('tapped'); }, 220);
       }
 
       // 播放清脆沉穩金絲檀木敲擊聲 (Web Audio)
