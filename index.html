@@ -7618,6 +7618,7 @@
     // 重置回到第一幕搖籤
     function handleResetToShake() {
       consecutiveSheng = 0;
+      hasSentCurrentFortune = false; // 重置發送鎖
       document.getElementById('sceneToss').classList.remove('active');
       document.getElementById('omikujiOverlay').classList.remove('visible');
       document.getElementById('sceneShake').classList.add('active');
@@ -7633,8 +7634,9 @@
     }
 
     let userFriendshipStatus = null; // null: 未知, true: 已加好友, false: 未加好友
+    let hasSentCurrentFortune = false; // 防重複發送鎖
 
-    // 開啟和風籤詩卡片，並在背景自動預先準備 LINE 籤詩推播與好友判定
+    // 開啟和風籤詩卡片
     async function handleOpenOmikuji() {
       document.getElementById('omikujiTitle').innerText = currentLot.name;
       document.getElementById('omikujiRank').innerText = currentLot.rank;
@@ -7642,16 +7644,22 @@
       document.getElementById('omikujiDesc').innerText = currentLot.desc;
       document.getElementById('omikujiOverlay').classList.add('visible');
 
-      // 背景即時預先推播與好友關係判定
-      prepareFortuneAndFriendship();
+      // 背景即時檢測好友關係以更新按鈕文字，絕不在此處預先推播！
+      checkFriendshipForOmikuji();
     }
 
-    // 背景預先檢測好友與暫存籤詩，實現零延遲體驗
-    async function prepareFortuneAndFriendship() {
+    // 僅在背景偵測好友狀態以呈現最適按鈕提示，不發送推播
+    async function checkFriendshipForOmikuji() {
       const sendBtn = document.getElementById('sendToLineBtn');
-      if (!currentLot) return;
+      if (!sendBtn) return;
 
-      const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`;
+      // 如果這支籤已經送出過，按鈕顯示返回聊天室
+      if (hasSentCurrentFortune) {
+        sendBtn.innerHTML = "<span>💬 打開 LINE 聊天室查看解籤</span>";
+        return;
+      }
+
+      sendBtn.innerHTML = "<span>💬 送回 LINE 聊天室（AI即時解籤）</span>";
 
       try {
         if (typeof liff !== 'undefined' && liff.isLoggedIn()) {
@@ -7666,42 +7674,33 @@
           }
         }
 
-        // 若有 userId，先送至後端暫存並嘗試預推
-        if (window.currentLineUserId) {
-          fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              user_id: window.currentLineUserId,
-              text: msgText
-            })
-          }).then(res => res.json()).then(data => {
-            if (data && data.delivered) {
-              userFriendshipStatus = true;
-              if (sendBtn) sendBtn.innerHTML = "<span>💬 打開 LINE 聊天室查看老廟祝解籤</span>";
-            }
-          }).catch(e => console.warn("預備推播籤詩略過:", e));
-        }
-
-        // 依據好友關係更新按鈕視覺提示
-        if (sendBtn) {
-          if (userFriendshipStatus === true) {
-            sendBtn.innerHTML = "<span>💬 打開 LINE 聊天室查看老廟祝解籤</span>";
-          } else if (userFriendshipStatus === false) {
-            sendBtn.innerHTML = "<span>➕ 加入好友並自動領取解籤</span>";
-          } else {
-            sendBtn.innerHTML = "<span>💬 回傳 LINE 聊天室（老廟祝解籤）</span>";
-          }
+        if (userFriendshipStatus === true) {
+          sendBtn.innerHTML = "<span>💬 送回 LINE 聊天室（AI即時解籤）</span>";
+        } else if (userFriendshipStatus === false) {
+          sendBtn.innerHTML = "<span>➕ 加入好友並領取 AI 解籤</span>";
         }
       } catch (err) {
-        console.warn("prepareFortuneAndFriendship 異常:", err);
+        console.warn("checkFriendshipForOmikuji 異常:", err);
       }
     }
 
-    // 回傳至 LINE 聊天室進行 AI 解籤（自動加好友 + 已是好友直接開啟聊天室）
+    // 回傳至 LINE 聊天室進行 AI 解籤（保證單次發送 + 已加好友直接關閉回到聊天室）
     async function handleSendToLine() {
       const sendBtn = document.getElementById('sendToLineBtn');
       const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`;
+
+      // 若剛剛已經送出過，直接關閉或返回聊天室，絕不重複發送
+      if (hasSentCurrentFortune) {
+        sendBtn.innerHTML = "<span>💬 正在為您打開聊天室...</span>";
+        setTimeout(() => {
+          if (typeof liff !== 'undefined' && liff.isInClient()) {
+            liff.closeWindow();
+          } else {
+            window.location.href = "https://line.me/R/ti/p/@326watsb";
+          }
+        }, 200);
+        return;
+      }
 
       sendBtn.disabled = true;
       sendBtn.innerHTML = "<span>⏳ 正在連線智慧宮廟服務處...</span>";
@@ -7724,7 +7723,7 @@
           }
         }
 
-        // 向後端確認籤詩暫存與推播 (4 秒逾時保護)
+        // 向後端發送籤詩暫存與單次推播請求 (4 秒逾時保護)
         if (userId) {
           try {
             const controller = new AbortController();
@@ -7742,6 +7741,7 @@
             if (resp.ok) {
               const resData = await resp.json();
               if (resData.delivered) isFriend = true;
+              hasSentCurrentFortune = true; // 標記已成功發送，嚴防重複呼叫
             }
           } catch (e) {
             console.warn("後端推播逾時或異常:", e);
@@ -7749,7 +7749,7 @@
         }
 
         if (isFriend === true) {
-          // 情境一：已是好友 -> 籤詩與 AI 解籤已由後端自動送達聊天室，直接關閉網頁回到聊天室
+          // 情境一：已是好友 -> 籤詩已單次送達，直接關閉網頁回到聊天室
           sendBtn.innerHTML = "<span>💬 籤詩已送達！正在開啟聊天室...</span>";
           setTimeout(() => {
             if (typeof liff !== 'undefined' && liff.isInClient()) {
@@ -7760,6 +7760,7 @@
           }, 350);
         } else {
           // 情境二：尚未加好友 -> 引導加入好友；加好友瞬間 Webhook 透過 FollowEvent 自動補發靈籤與 AI 解籤！
+          hasSentCurrentFortune = true;
           sendBtn.innerHTML = "<span>👉 請點選「加入好友」，將自動為您解籤...</span>";
           setTimeout(() => {
             window.location.href = "https://line.me/R/ti/p/@326watsb";
@@ -7772,6 +7773,10 @@
         } else {
           window.location.href = "https://line.me/R/ti/p/@326watsb";
         }
+      } finally {
+        setTimeout(() => {
+          sendBtn.disabled = false;
+        }, 1500);
       }
     }
 

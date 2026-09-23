@@ -322,6 +322,8 @@ def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
 
 # 暫存信徒抽籤結果（用於尚未加好友時，加好友瞬間立即自動補推籤詩與解籤）
 PENDING_FORTUNES = {}
+# 防重複推播快取（防止同用戶在短時間內重複收到相同籤詩）
+LAST_PUSHED_FORTUNES = {}
 
 
 def handle_follow_event(user_id: str):
@@ -335,6 +337,12 @@ def handle_follow_event(user_id: str):
         pending = PENDING_FORTUNES.pop(user_id, None)
         if pending and (time.time() - pending.get("timestamp", 0) < 3600):
             fortune_text = pending.get("text", "")
+            # 若 45 秒內已發過完全相同的籤詩，避免重複推送
+            last_push = LAST_PUSHED_FORTUNES.get(user_id)
+            if last_push and (time.time() - last_push.get("timestamp", 0) < 45) and (last_push.get("text") == fortune_text):
+                log_event(f"信徒 [{user_id}] 剛已推播過該籤詩，略過加好友重複推播")
+                return
+
             welcome_text = (
                 "🎉 感謝信士加入【智慧宮廟】！\n\n"
                 "已自動為您送達剛剛在線上求籤專區所獲賜的神明靈籤："
@@ -350,6 +358,7 @@ def handle_follow_event(user_id: str):
                     )
                 )
                 log_event(f"已成功於加好友瞬間補推靈籤給信徒 [{user_id}]！")
+                LAST_PUSHED_FORTUNES[user_id] = {"text": fortune_text, "timestamp": time.time()}
                 process_and_push_ai_interpretation(fortune_text, user_id)
             except Exception as e:
                 log_event(f"加好友補推靈籤失敗: {e}")
@@ -410,6 +419,17 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
     log_event(f"收到抽籤回傳請求: 信徒 [{user_id}]")
     PENDING_FORTUNES[user_id] = {"text": text, "timestamp": time.time()}
 
+    # 防重複發送機制（45 秒內同用戶相同內容不重複推播）
+    last_push = LAST_PUSHED_FORTUNES.get(user_id)
+    if last_push and (time.time() - last_push.get("timestamp", 0) < 45) and (last_push.get("text") == text):
+        log_event(f"信徒 [{user_id}] 45 秒內重複請求推播相同籤詩，已阻擋重複發送！")
+        return {
+            "status": "success",
+            "delivered": True,
+            "duplicate_blocked": True,
+            "message": "籤詩已送達，請勿重複發送"
+        }
+
     is_delivered = False
     with ApiClient(configuration) as api_client:
         messaging_api = MessagingApi(api_client)
@@ -422,6 +442,7 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
             )
             log_event(f"已成功將籤詩推播至信徒 [{user_id}] 聊天室！")
             is_delivered = True
+            LAST_PUSHED_FORTUNES[user_id] = {"text": text, "timestamp": time.time()}
             background_tasks.add_task(process_and_push_ai_interpretation, text, user_id)
         except Exception as e:
             log_event(f"推播籤詩失敗 (可能尚未加好友): {e}")
