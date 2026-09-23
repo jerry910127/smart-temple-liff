@@ -77,15 +77,17 @@ TEMPLE_SERVICE_PROMPT = """你是「智慧宮廟線上服務處」的官方智�
    - 當信士表達想求籤、抽籤或請示神意時：客觀說明傳統求籤儀軌（靜心默念姓名生辰、一事一問、抽得籤枝需擲三聖筊確認），並提供官方線上求籤專區連結（ https://liff.line.me/2011668576-3Qay1nBv ）。
 4. 【籤詩客觀解析】：
    - 當信士傳送求得之籤詩時：秉持客觀中立之原則，先梳理籤詩字面典故與卦象意涵，再針對信士所求之事項（事業、感情、健康、學業等）給予中肯、理性的行事建議，勉勵「心誠行善，吉星自臨；審慎沉著，逢凶化吉」。
-5. 【回覆長度】：
-   - 簡明扼要，條理清晰（日常對話約 2～3 句，解籤約 150～250 字）。繁體中文。"""
+5. 【回覆長度與完整性】：
+   - 簡明扼要，條理清晰（日常對話約 2～3 句，解籤約 150～250 字）。繁體中文。
+   - 每次回覆語意必須完整，結尾務必劃上適當標點符號或完整句號，切勿在字句中間未完即止。"""
 
 
 def call_nvidia_ai(user_message: str) -> str:
     """調用 NVIDIA NIM 模型，化身宮廟線上客服客觀回覆"""
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
-    max_tok = 512 if "muse" in NVIDIA_MODEL else (280 if is_fortune else 120)
-    timeout_sec = 12.0 if "muse" in NVIDIA_MODEL else 5.5
+    # 繁體中文 1 個字約消耗 2~3 tokens，設定充足長度避免話說到一半被截斷
+    max_tok = 850 if is_fortune else 600
+    timeout_sec = 15.0
 
     try:
         response = nvidia_client.chat.completions.create(
@@ -122,8 +124,26 @@ def get_casual_fallback(user_text: str) -> str:
         return "在的，信士。線上服務專員隨時在線，若您有參拜、祈福或籤詩解惑等需求，請隨時提出。"
     elif any(k in t for k in ["你可以回復我嗎", "你可以回復我媽", "回復我", "說話", "講話", "理我"]):
         return "信士您好，客服系統正常運作中。請問有什麼需要為您查詢或服務的事項嗎？"
-    elif any(k in t for k in ["你是誰", "什麼ai", "你到底是什麼", "模型"]):
-        return "信士您好，我是「智慧宮廟線上服務處」的數位廟務助理。專門為信士提供線上祈願求籤、傳統參拜禮節說明與靈籤文化解析服務。"
+    elif any(k in t for k in ["你是誰", "什麼ai", "你到底是什麼", "模型", "智慧廟祝", "廟祝"]):
+        return (
+            "信士您好！我是「智慧宮廟線上服務處」的數位廟務助理與智慧廟祝。\n\n"
+            "專門為信士提供以下服務：\n"
+            "1. 📿【線上求籤】：搖筒求取六十甲子靈籤與客觀解籤\n"
+            "2. 🧘【正念冥想】：3D 斜角立體捻珠與功德祈願\n"
+            "3. 🏮【祈安點燈】：文昌光明與元辰祈安說明\n"
+            "4. 🌾【白米收驚與生肖歲煞】：心神不寧或流年制化諮詢\n\n"
+            "請問今日有什麼想向神明請示或諮詢的事項嗎？"
+        )
+    elif any(k in t for k in ["參拜指南", "拜拜指南", "如何拜拜", "拜拜順序", "持香", "拜拜小撇步", "參拜小撇步"]):
+        return (
+            "🏮【宮廟參拜傳統儀軌與小撇步】：\n\n"
+            "1. 【進出宮門】：面對廟門，遵循「龍門進（右入）、虎門出（左出）」，切勿由中央神明道進出。\n"
+            "2. 【淨身心意】：洗淨雙手、脫帽，誠心稟告信士姓名、農曆生辰與現居地址。\n"
+            "3. 【持香敬神】：持香平胸，雙手齊眉，敬稟所求之事宜「一事一問、具體明瞭」。\n"
+            "4. 【天公優先】：遵循玉皇上帝天公爐先敬拜，再入內殿參拜主神、後殿配祀神明。\n"
+            "5. 【求籤確認】：抽籤後務必連續擲得「三聖筊」確認神意，再行解籤。\n\n"
+            "若欲線上請示，請隨時點選下方選單「線上靈籤」或「正念冥想」！"
+        )
     elif any(k in t for k in ["累", "煩", "辛苦", "壓力", "好累", "好煩"]):
         return "人生如潮，起伏有時。信士若感身心疲累，不妨暫歇腳步、深呼吸定心。神明庇佑常在，願您順應天時，心靜則神安。"
     elif any(k in t for k in ["求籤", "抽籤", "我要抽籤", "我要求籤", "線上求籤", "擲筊"]):
@@ -211,7 +231,7 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
 
 def call_nvidia_vision(image_b64: str) -> str:
     """調用 NVIDIA NIM 視覺模型辨識照片（智慧宮廟客服文化導覽與客觀解說）"""
-    timeout_sec = 15.0 if "muse" in NVIDIA_MODEL else 8.0
+    timeout_sec = 16.0
     try:
         response = nvidia_client.chat.completions.create(
             model=NVIDIA_MODEL,
@@ -220,7 +240,7 @@ def call_nvidia_vision(image_b64: str) -> str:
                     "role": "system",
                     "content": (
                         "你是智慧宮廟線上服務處的官方智能客服人員。信士傳送了一張照片（可能包含籤詩、神明聖像、平安符、香火袋或廟宇建築）。"
-                        "請以客觀、禮貌、專業且莊重的客服語氣，用繁體中文為信士說明照片中的宗教文物象徵意義、文化由來與正向安定的提醒，篇幅適中、條理清晰。"
+                        "請以客觀、禮貌、專業且莊重的客服語氣，用繁體中文為信士說明照片中的宗教文物象徵意義、文化由來與正向安定的提醒，篇幅適中、條理清晰，結尾語意完整。"
                     )
                 },
                 {
@@ -232,7 +252,7 @@ def call_nvidia_vision(image_b64: str) -> str:
                 }
             ],
             temperature=0.7,
-            max_tokens=512 if "muse" in NVIDIA_MODEL else 300,
+            max_tokens=750,
             timeout=timeout_sec
         )
         msg = response.choices[0].message
