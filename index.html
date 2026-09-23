@@ -7632,106 +7632,138 @@
       restorePoeToRest();
     }
 
-    // 開啟和風籤詩卡片
-    function handleOpenOmikuji() {
+    let userFriendshipStatus = null; // null: 未知, true: 已加好友, false: 未加好友
+
+    // 開啟和風籤詩卡片，並在背景自動預先準備 LINE 籤詩推播與好友判定
+    async function handleOpenOmikuji() {
       document.getElementById('omikujiTitle').innerText = currentLot.name;
       document.getElementById('omikujiRank').innerText = currentLot.rank;
       document.getElementById('omikujiPoem').innerHTML = currentLot.poem.replace(/\n/g, '<br>');
       document.getElementById('omikujiDesc').innerText = currentLot.desc;
       document.getElementById('omikujiOverlay').classList.add('visible');
+
+      // 背景即時預先推播與好友關係判定
+      prepareFortuneAndFriendship();
     }
 
-    // 回傳至 LINE 聊天室進行 AI 解籤（三重容錯備援：LIFF 原生 -> 後端推播 -> LINE URL Scheme 終極保底）
+    // 背景預先檢測好友與暫存籤詩，實現零延遲體驗
+    async function prepareFortuneAndFriendship() {
+      const sendBtn = document.getElementById('sendToLineBtn');
+      if (!currentLot) return;
+
+      const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`;
+
+      try {
+        if (typeof liff !== 'undefined' && liff.isLoggedIn()) {
+          if (!window.currentLineUserId) {
+            const profile = await liff.getProfile().catch(() => null);
+            if (profile) window.currentLineUserId = profile.userId;
+          }
+
+          if (liff.getFriendship) {
+            const friendship = await liff.getFriendship().catch(() => ({ friendFlag: false }));
+            userFriendshipStatus = !!(friendship && friendship.friendFlag);
+          }
+        }
+
+        // 若有 userId，先送至後端暫存並嘗試預推
+        if (window.currentLineUserId) {
+          fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user_id: window.currentLineUserId,
+              text: msgText
+            })
+          }).then(res => res.json()).then(data => {
+            if (data && data.delivered) {
+              userFriendshipStatus = true;
+              if (sendBtn) sendBtn.innerHTML = "<span>💬 打開 LINE 聊天室查看老廟祝解籤</span>";
+            }
+          }).catch(e => console.warn("預備推播籤詩略過:", e));
+        }
+
+        // 依據好友關係更新按鈕視覺提示
+        if (sendBtn) {
+          if (userFriendshipStatus === true) {
+            sendBtn.innerHTML = "<span>💬 打開 LINE 聊天室查看老廟祝解籤</span>";
+          } else if (userFriendshipStatus === false) {
+            sendBtn.innerHTML = "<span>➕ 加入好友並自動領取解籤</span>";
+          } else {
+            sendBtn.innerHTML = "<span>💬 回傳 LINE 聊天室（老廟祝解籤）</span>";
+          }
+        }
+      } catch (err) {
+        console.warn("prepareFortuneAndFriendship 異常:", err);
+      }
+    }
+
+    // 回傳至 LINE 聊天室進行 AI 解籤（自動加好友 + 已是好友直接開啟聊天室）
     async function handleSendToLine() {
       const sendBtn = document.getElementById('sendToLineBtn');
-      const originalHtml = sendBtn.innerHTML;
       const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`;
 
       sendBtn.disabled = true;
-      sendBtn.innerHTML = "<span>⏳ 正在傳送至 LINE 聊天室...</span>";
+      sendBtn.innerHTML = "<span>⏳ 正在連線智慧宮廟服務處...</span>";
 
-      // 終極保底手段：利用 LINE 官方原生 URL Scheme 直接喚醒官方帳號聊天室並帶入籤詩
-      const executeUrlSchemeFallback = () => {
-        sendBtn.innerHTML = "<span>💬 正在跳轉至老廟祝聊天室...</span>";
-        const oaUrl = `https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`;
-        window.location.href = oaUrl;
-      };
+      try {
+        let userId = window.currentLineUserId || null;
+        let isFriend = userFriendshipStatus;
 
-      if (liff.isInClient()) {
-        // 1. 手機 LINE App 內部開啟：優先嘗試原生 sendMessages 閉環
-        try {
-          await liff.sendMessages([
-            {
-              type: "text",
-              text: msgText
+        if (typeof liff !== 'undefined' && liff.isLoggedIn()) {
+          if (!userId) {
+            const profile = await liff.getProfile().catch(() => null);
+            if (profile) {
+              userId = profile.userId;
+              window.currentLineUserId = userId;
             }
-          ]);
-          liff.closeWindow();
-          return;
-        } catch (err) {
-          console.warn("liff.sendMessages 權限受限或不在對話環境，無縫啟動伺服器推播:", err);
+          }
+          if (isFriend === null && liff.getFriendship) {
+            const friendship = await liff.getFriendship().catch(() => ({ friendFlag: false }));
+            isFriend = !!(friendship && friendship.friendFlag);
+          }
         }
 
-        // 2. 備援手段：若有 profile.userId，呼叫後端 push_fortune (帶 4 秒逾時保護避免 Render 冷啟動卡住)
-        try {
-          const profile = await liff.getProfile().catch(() => null);
-          if (profile && profile.userId) {
+        // 向後端確認籤詩暫存與推播 (4 秒逾時保護)
+        if (userId) {
+          try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 4000);
-
             const resp = await fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                user_id: profile.userId,
+                user_id: userId,
                 text: msgText
               }),
               signal: controller.signal
             });
             clearTimeout(timeoutId);
-
             if (resp.ok) {
-              alert("🎉 靈籤已成功傳送至您的 LINE 聊天室！\n老廟祝正在線上解籤，請回到聊天室查看！");
-              liff.closeWindow();
-              return;
+              const resData = await resp.json();
+              if (resData.delivered) isFriend = true;
             }
+          } catch (e) {
+            console.warn("後端推播逾時或異常:", e);
           }
-        } catch (fallbackErr) {
-          console.warn("後端推播逾時或受限，啟用第三重 LINE URL Scheme 終極保底:", fallbackErr);
         }
 
-        // 3. 終極保底：100% 保證能把籤詩帶入聊天室
-        executeUrlSchemeFallback();
-      } else {
-        // 2. 電腦瀏覽器 / 外開 Chrome / Edge
-        if (liff.isLoggedIn()) {
-          try {
-            const profile = await liff.getProfile();
-            const resp = await fetch("https://smart-temple-liff.onrender.com/api/push_fortune", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                user_id: profile.userId,
-                text: msgText
-              })
-            });
-
-            if (resp.ok) {
-              sendBtn.innerHTML = "<span>✅ 已成功送達 LINE 聊天室！</span>";
-              alert("🎉 恭喜！靈籤已成功傳送至您的 LINE 聊天室！\n線上智能客服正在為您客觀解籤，請打開手機或電腦版 LINE 查看！");
-              return;
-            }
-          } catch (err) {
-            console.warn("後端推播異常，改用 LINE URL Scheme 喚醒:", err);
-          }
+        if (isFriend === true) {
+          // 情境一：已是好友 -> 籤詩與 AI 解籤已自動送達，直接為信徒開啟 1 對 1 聊天室
+          sendBtn.innerHTML = "<span>💬 籤詩已送達！正在開啟聊天室...</span>";
+          setTimeout(() => {
+            window.location.href = "https://line.me/R/oaMessage/@326watsb/";
+          }, 350);
         } else {
-          // 未登入提示
-          if (confirm("電腦瀏覽器建議登入 LINE 以自動同步至聊天室，是否登入？\n（點「取消」將直接為您開啟 LINE 官方帳號對話）")) {
-            liff.login();
-            return;
-          }
+          // 情境二：尚未加好友 -> 引導加入好友；加好友瞬間 Webhook 透過 FollowEvent 自動補發靈籤與 AI 解籤！
+          sendBtn.innerHTML = "<span>👉 請點選「加入好友」，將自動為您解籤...</span>";
+          setTimeout(() => {
+            window.location.href = `https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`;
+          }, 450);
         }
-        executeUrlSchemeFallback();
+      } catch (err) {
+        console.error("handleSendToLine 失敗，啟用終極保底:", err);
+        window.location.href = `https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`;
       }
     }
 

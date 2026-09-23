@@ -21,7 +21,7 @@ from linebot.v3.messaging import (
     TextMessage,
     ShowLoadingAnimationRequest
 )
-from linebot.v3.webhooks import MessageEvent, TextMessageContent, ImageMessageContent
+from linebot.v3.webhooks import MessageEvent, TextMessageContent, ImageMessageContent, FollowEvent
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -320,10 +320,65 @@ def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
                 log_event(f"照片 push 亦失敗: {push_err}")
 
 
+# 暫存信徒抽籤結果（用於尚未加好友時，加好友瞬間立即自動補推籤詩與解籤）
+PENDING_FORTUNES = {}
+
+
+def handle_follow_event(user_id: str):
+    """信徒加入好友時的專屬迎賓與抽籤補推流程"""
+    log_event(f"信徒 [{user_id}] 成功加入【智慧宮廟】為好友！")
+
+    with ApiClient(configuration) as api_client:
+        messaging_api = MessagingApi(api_client)
+
+        # 檢查該用戶是否有 1 小時內剛抽得之靈籤
+        pending = PENDING_FORTUNES.pop(user_id, None)
+        if pending and (time.time() - pending.get("timestamp", 0) < 3600):
+            fortune_text = pending.get("text", "")
+            welcome_text = (
+                "🎉 感謝信士加入【智慧宮廟】！\n\n"
+                "已自動為您送達剛剛在線上求籤專區所獲賜的神明靈籤："
+            )
+            try:
+                messaging_api.push_message(
+                    PushMessageRequest(
+                        to=user_id,
+                        messages=[
+                            TextMessage(text=welcome_text),
+                            TextMessage(text=fortune_text)
+                        ]
+                    )
+                )
+                log_event(f"已成功於加好友瞬間補推靈籤給信徒 [{user_id}]！")
+                process_and_push_ai_interpretation(fortune_text, user_id)
+            except Exception as e:
+                log_event(f"加好友補推靈籤失敗: {e}")
+        else:
+            welcome_msg = (
+                "🏮 信士吉祥！歡迎光臨「靈籤入微 - 智慧宮廟文化生活圈」官方服務處。\n\n"
+                "點擊下方圖文選單，隨時體驗：\n"
+                "1. 📿【線上靈籤】：誠心搖筒請示六十甲子靈籤與 AI 客觀解籤\n"
+                "2. 🧘【正念冥想】：3D 斜角立體捻珠與累積今日功德\n"
+                "3. ⛩️【參拜腳印】：四大名廟巡禮路線與實體感應打卡\n"
+                "4. 💡【祈安點燈】：文昌光明與元辰祈安文教公益\n"
+                "5. 📜【參拜指南】：隨時查詢進廟順序與持香撇步\n\n"
+                "願神明威靈護佑，祈願所求皆得圓滿、平安吉祥！"
+            )
+            try:
+                messaging_api.push_message(
+                    PushMessageRequest(
+                        to=user_id,
+                        messages=[TextMessage(text=welcome_msg)]
+                    )
+                )
+            except Exception as e:
+                log_event(f"推送迎賓詞失敗: {e}")
+
+
 def process_and_push_ai_interpretation(fortune_text: str, user_id: str):
-    """為電腦版/外部網頁抽籤的信徒，非同步生成官方宮廟客觀解籤並推播至 LINE"""
+    """為抽籤的信徒，非同步生成官方宮廟客觀解籤並推播至 LINE 聊天室"""
     time.sleep(1.2)  # 稍微錯開，讓籤詩先抵達聊天室
-    log_event(f"正在為電腦版信徒 [{user_id}] 生成官方宮廟客觀解籤...")
+    log_event(f"正在為信徒 [{user_id}] 生成官方宮廟客觀解籤...")
     reply_content = call_nvidia_ai(fortune_text)
     with ApiClient(configuration) as api_client:
         messaging_api = MessagingApi(api_client)
@@ -334,14 +389,14 @@ def process_and_push_ai_interpretation(fortune_text: str, user_id: str):
                     messages=[TextMessage(text=reply_content)]
                 )
             )
-            log_event(f"已成功推送 AI 解籤給電腦版信徒 [{user_id}]！")
+            log_event(f"已成功推送 AI 解籤給信徒 [{user_id}]！")
         except Exception as e:
             log_event(f"推送 AI 解籤失敗: {e}")
 
 
 @app.post("/api/push_fortune")
 async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
-    """供電腦版/外開瀏覽器 LIFF 一鍵將抽籤結果送回用戶 LINE 聊天室"""
+    """供電腦版/外開瀏覽器/手機 LIFF 一鍵將抽籤結果送回用戶 LINE 聊天室"""
     try:
         data = await request.json()
     except Exception:
@@ -352,8 +407,10 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
     if not user_id or not text:
         raise HTTPException(status_code=400, detail="Missing user_id or text")
 
-    log_event(f"收到來自電腦版網頁的抽籤回傳請求: 信徒 [{user_id}]")
+    log_event(f"收到抽籤回傳請求: 信徒 [{user_id}]")
+    PENDING_FORTUNES[user_id] = {"text": text, "timestamp": time.time()}
 
+    is_delivered = False
     with ApiClient(configuration) as api_client:
         messaging_api = MessagingApi(api_client)
         try:
@@ -363,14 +420,17 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
                     messages=[TextMessage(text=text)]
                 )
             )
-            log_event(f"已成功將電腦版籤詩推播至信徒 [{user_id}] 聊天室！")
+            log_event(f"已成功將籤詩推播至信徒 [{user_id}] 聊天室！")
+            is_delivered = True
+            background_tasks.add_task(process_and_push_ai_interpretation, text, user_id)
         except Exception as e:
-            log_event(f"推播籤詩失敗: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            log_event(f"推播籤詩失敗 (可能尚未加好友): {e}")
 
-    # 排程 AI 官方客觀解籤推播
-    background_tasks.add_task(process_and_push_ai_interpretation, text, user_id)
-    return {"status": "success", "message": "已成功將籤詩送達您的 LINE 聊天室"}
+    return {
+        "status": "success",
+        "delivered": is_delivered,
+        "message": "已成功將籤詩送達您的 LINE 聊天室" if is_delivered else "籤詩已暫存，加好友後將自動送達"
+    }
 
 
 @app.post("/api/interpret_fortune")
@@ -499,6 +559,11 @@ async def webhook(request: Request, background_tasks: BackgroundTasks, x_line_si
             elif isinstance(event.message, ImageMessageContent):
                 message_id = event.message.id
                 background_tasks.add_task(process_and_reply_image, message_id, reply_token, user_id)
+        elif isinstance(event, FollowEvent):
+            user_id = getattr(event.source, "user_id", None)
+            if user_id:
+                log_event(f"收到 FollowEvent: 信徒 [{user_id}] 加入/加回好友")
+                background_tasks.add_task(handle_follow_event, user_id)
 
     return JSONResponse(content={"status": "success"})
 
