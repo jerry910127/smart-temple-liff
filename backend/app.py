@@ -58,8 +58,8 @@ parser = WebhookParser(LINE_CHANNEL_SECRET)
 nvidia_client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=NVIDIA_API_KEY,
-    max_retries=0,
-    timeout=10.0
+    max_retries=1,
+    timeout=25.0
 )
 
 # 智慧宮廟線上服務處 客服專員 System Prompt
@@ -71,97 +71,109 @@ TEMPLE_SERVICE_PROMPT = """你是「智慧宮廟線上服務處」的官方智�
    - 語氣客觀平穩、具備專業客服素養，展現傳統宮廟文化的莊嚴與關懷。
    - 嚴格遵守中立客觀，絕不使用輕佻、誇大、主觀或戲謔之語彙。
 2. 【日常諮詢與問候】：
-   - 信士打招呼時：禮貌致意，簡明說明線上服務處功能（例如：「信士您好，歡迎光臨智慧宮廟線上服務處。請問今日有什麼能為您引導或服務的地方嗎？」）。
-   - 信士傾訴煩惱或疲累時：給予客觀、沉穩、正向的心靈關懷，提醒信士靜心修養，順應天時。
+   - 信士打招呼時：禮貌致意，簡明說明線上服務處功能。
+   - 信士傾訴煩惱、挫折或疲累時：給予客觀、沉穩、溫和的正向心靈關懷，提醒信士靜心修養，順應天時。
 3. 【求籤與問事引導】：
    - 當信士表達想求籤、抽籤或請示神意時：客觀說明傳統求籤儀軌（靜心默念姓名生辰、一事一問、抽得籤枝需擲三聖筊確認），並提供官方線上求籤專區連結（ https://liff.line.me/2011668576-3Qay1nBv ）。
 4. 【籤詩客觀解析】：
-   - 當信士傳送求得之籤詩時：秉持客觀中立之原則，先梳理籤詩字面典故與卦象意涵，再針對信士所求之事項（事業、感情、健康、學業等）給予中肯、理性的行事建議，勉勵「心誠行善，吉星自臨；審慎沉著，逢凶化吉」。
+   - 當信士傳送求得之籤詩時：秉持客觀中立之原則，先梳理籤詩字面典故與卦象意涵，再針對信士所求之事項給予中肯、理性的行事建議。
 5. 【回覆長度與完整性】：
    - 簡明扼要，條理清晰（日常對話約 2～3 句，解籤約 150～250 字）。繁體中文。
    - 每次回覆語意必須完整，結尾務必劃上適當標點符號或完整句號，切勿在字句中間未完即止。"""
 
 
 def call_nvidia_ai(user_message: str) -> str:
-    """調用 NVIDIA NIM 模型，化身宮廟線上客服客觀回覆"""
+    """調用 NVIDIA NIM 模型，具備主模型與備用極速模型雙重保險"""
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
-    # 繁體中文 1 個字約消耗 2~3 tokens，設定充足長度避免話說到一半被截斷
     max_tok = 850 if is_fortune else 600
-    timeout_sec = 15.0
 
-    try:
-        response = nvidia_client.chat.completions.create(
-            model=NVIDIA_MODEL,
-            messages=[
-                {"role": "system", "content": TEMPLE_SERVICE_PROMPT},
-                {"role": "user", "content": user_message}
-            ],
-            temperature=0.7,
-            max_tokens=max_tok,
-            timeout=timeout_sec
-        )
-        msg = response.choices[0].message
-        content = msg.content or getattr(msg, "reasoning_content", "")
-        if content and content.strip():
-            return content.strip()
-    except Exception as e:
-        log_event(f"NVIDIA API 呼叫略過或超時 ({e})，啟動廟方標準客服保底")
+    # 1. 優先嘗試主模型 (Llama 3.2 11B)
+    for model_name in [NVIDIA_MODEL, "deepseek-ai/deepseek-v4.1-flash"]:
+        try:
+            response = nvidia_client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {"role": "system", "content": TEMPLE_SERVICE_PROMPT},
+                    {"role": "user", "content": user_message}
+                ],
+                temperature=0.7,
+                max_tokens=max_tok,
+                timeout=12.0
+            )
+            msg = response.choices[0].message
+            content = msg.content or getattr(msg, "reasoning_content", "")
+            if content and content.strip():
+                return content.strip()
+        except Exception as e:
+            log_event(f"NVIDIA 模型 [{model_name}] 異常或超時 ({e})，嘗試切換或保底")
 
     return get_casual_fallback(user_message)
 
 
-def get_casual_fallback(user_text: str) -> str:
-    """智慧宮廟線上服務處標準客服回覆庫（客觀、莊重、專業禮貌）"""
+def identify_quick_intent(user_text: str) -> str:
+    """高頻專用意圖精準秒回引擎 (0.01 秒無延遲，不受第三方 AI 佇列或超時影響)"""
     t = user_text.strip().lower()
 
-    if any(k in t for k in ["哈囉", "嗨", "hi", "hello", "早安", "晚安", "午安", "你好"]):
-        return random.choice([
-            "信士您好，歡迎光臨智慧宮廟線上服務處。請問今日有什麼能為您引導或服務的地方嗎？",
-            "信士吉祥。線上服務處隨時為您提供參拜儀軌諮詢、線上求籤與廟務指引。",
-            "您好！智慧宮廟線上服務系統已就緒，祝您身心康泰、諸事順遂。"
-        ])
-    elif any(k in t for k in ["在嗎", "在不在", "欸", "在"]):
-        return "在的，信士。線上服務專員隨時在線，若您有參拜、祈福或籤詩解惑等需求，請隨時提出。"
-    elif any(k in t for k in ["你可以回復我嗎", "你可以回復我媽", "回復我", "說話", "講話", "理我"]):
-        return "信士您好，客服系統正常運作中。請問有什麼需要為您查詢或服務的事項嗎？"
-    elif any(k in t for k in ["你是誰", "什麼ai", "你到底是什麼", "模型", "智慧廟祝", "廟祝"]):
-        return (
-            "信士您好！我是「智慧宮廟線上服務處」的數位廟務助理與智慧廟祝。\n\n"
-            "專門為信士提供以下服務：\n"
-            "1. 📿【線上求籤】：搖筒求取六十甲子靈籤與客觀解籤\n"
-            "2. 🧘【正念冥想】：3D 斜角立體捻珠與功德祈願\n"
-            "3. 🏮【祈安點燈】：文昌光明與元辰祈安說明\n"
-            "4. 🌾【白米收驚與生肖歲煞】：心神不寧或流年制化諮詢\n\n"
-            "請問今日有什麼想向神明請示或諮詢的事項嗎？"
-        )
-    elif any(k in t for k in ["參拜指南", "拜拜指南", "如何拜拜", "拜拜順序", "持香", "拜拜小撇步", "參拜小撇步"]):
+    # 1. 參拜指南 / 拜拜順序與撇步 (對應圖文選單右下角)
+    if any(k in t for k in ["參拜指南", "拜拜指南", "如何拜拜", "拜拜順序", "持香", "拜拜小撇步", "參拜小撇步", "參拜儀軌", "拜拜禮儀", "進廟順序"]):
         return (
             "🏮【宮廟參拜傳統儀軌與小撇步】：\n\n"
-            "1. 【進出宮門】：面對廟門，遵循「龍門進（右入）、虎門出（左出）」，切勿由中央神明道進出。\n"
-            "2. 【淨身心意】：洗淨雙手、脫帽，誠心稟告信士姓名、農曆生辰與現居地址。\n"
-            "3. 【持香敬神】：持香平胸，雙手齊眉，敬稟所求之事宜「一事一問、具體明瞭」。\n"
-            "4. 【天公優先】：遵循玉皇上帝天公爐先敬拜，再入內殿參拜主神、後殿配祀神明。\n"
-            "5. 【求籤確認】：抽籤後務必連續擲得「三聖筊」確認神意，再行解籤。\n\n"
-            "若欲線上請示，請隨時點選下方選單「線上靈籤」或「正念冥想」！"
+            "1. 🚪【進出宮門】：面對廟門，遵循「龍門進（右入）、虎門出（左出）」，象徵入吉出凶，切勿踐踏門檻或由中央神明道進出。\n\n"
+            "2. 💧【淨身心意】：洗淨雙手、肅穆脫帽。誠心向神明稟告：「信士（信女）姓名、農曆生辰、現居地址」。\n\n"
+            "3. 🕯️【持香敬神】：持香平胸，雙手齊眉微曲。敬稟所求之事宜「一事一問、具體清晰」。\n\n"
+            "4. 👑【天公優先】：遵循玉皇上帝天公爐先敬拜，再入正殿參拜主神、後殿配祀神明。\n\n"
+            "5. 📿【求籤確認】：抽得籤枝後，務必連續擲得「三聖筊」確認神意，再取籤詩解讀。\n\n"
+            "👉 若欲線上請示，請隨時點選下方選單「線上靈籤」或「正念冥想」！"
         )
-    elif any(k in t for k in ["累", "煩", "辛苦", "壓力", "好累", "好煩"]):
-        return "人生如潮，起伏有時。信士若感身心疲累，不妨暫歇腳步、深呼吸定心。神明庇佑常在，願您順應天時，心靜則神安。"
-    elif any(k in t for k in ["求籤", "抽籤", "我要抽籤", "我要求籤", "線上求籤", "擲筊"]):
+
+    # 2. 智慧廟祝 / 官方助理介紹 (對應圖文選單中下角)
+    if any(k in t for k in ["智慧廟祝", "廟祝", "你是誰", "你的功能", "你會做什麼", "信眾中心", "助理"]):
+        return (
+            "信士您好！我是「智慧宮廟線上服務處」的數位執事與智慧廟祝。\n\n"
+            "本線上服務處隨時為信士提供四大文化服務：\n"
+            "1. 📿【線上靈籤】：搖筒請示六十甲子靈籤與 AI 客觀解籤\n"
+            "2. 🧘【正念冥想】：3D 斜角立體捻珠沉澱心靈、積聚功德\n"
+            "3. 🏮【祈安點燈】：文昌光明、元辰祿位祈福與公益認捐\n"
+            "4. 🌾【白米收驚與生肖歲煞】：心神不寧安魂或流年太歲制化諮詢\n\n"
+            "請問今日有什麼事項需要為您向神明指引或查詢嗎？"
+        )
+
+    # 3. 意圖偵測：求籤 / 抽籤 / 擲筊 (且非已抽到之籤詩)
+    fortune_intent = any(k in t for k in ["求籤", "抽籤", "擲筊", "聖筊", "想抽", "想求", "抽個籤", "問事", "請示神明", "抽籤網站"])
+    has_drawn_poem = any(k in t for k in ["詩曰", "【靈籤", "第", "首", "大吉", "上吉", "中吉", "中平"])
+    if fortune_intent and not has_drawn_poem:
         return (
             "信士您好，若欲向神明祈願請示靈籤，請移步至智慧宮廟線上求籤專區：\n"
             "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
             "【求籤指引】：心念姓名、農曆生辰與明確問事內容，搖動籤筒後需連續擲得「三個聖杯」方為應允正籤。求得籤詩後可回傳聊天室為您客觀解析。"
         )
-    elif any(k in t for k in ["靈籤", "籤", "聖杯", "解籤", "首"]):
+
+    # 4. 情緒宣洩 / 粗話 / 負面低潮心靈安撫
+    if any(k in t for k in ["幹", "靠", "操", "三小", "白痴", "爛", "煩", "累", "痛", "哭", "難過", "生氣", "氣死", "好衰", "倒楣", "壓力"]):
         return (
-            "信士所獲籤詩已收到。籤意乃神明提點之智慧，凡事心誠行善、謹慎行事，順應天時人和，自然逢凶化吉、福澤迎祥。"
+            "信士請寬心消氣。人生旅途如潮水起伏，難免遇逢波折、委屈與鬱悶，神明慈悲，知曉信士心中不易。\n\n"
+            "不妨先做幾次深呼吸、放鬆雙肩。若心中有未解的結或困惑，隨時可點選下方「正念冥想」靜心捻珠，或於「線上靈籤」虔誠請示神意提點。\n\n"
+            "心平則氣和，定能化險為夷、撥雲見日。願神明垂慈庇佑您安康自在！"
         )
-    else:
+
+    # 5. 日常招呼與基本確認
+    if any(k in t for k in ["哈囉", "嗨", "hi", "hello", "早安", "晚安", "午安", "你好", "在嗎", "在不在", "欸", "有人嗎", "在", "你可以回復我嗎", "你可以回復我媽", "回復我", "說話", "講話", "理我"]):
         return random.choice([
-            "信士您好，訊息已收到。請問需要為您提供參拜儀軌、線上求籤或點燈祈福的說明嗎？",
-            "信士吉祥，智慧宮廟竭誠為您服務，願神明庇佑闔家平安。",
-            "收到您的訊息。若有各項廟務或求籤疑問，請隨時向線上服務處提出。"
+            "信士您好，歡迎光臨智慧宮廟線上服務處。請問今日有什麼能為您引導或服務的地方嗎？",
+            "信士吉祥。線上服務處隨時為您提供參拜儀軌諮詢、線上求籤與各項廟務指引。",
+            "您好！智慧宮廟客服系統正常運作中，願神明保佑您身心康泰、諸事順遂。"
         ])
+
+    return None
+
+
+def get_casual_fallback(user_text: str) -> str:
+    """保底客服庫"""
+    return random.choice([
+        "信士您好，訊息已收到。請問需要為您提供參拜儀軌、線上求籤或點燈祈福的說明嗎？",
+        "信士吉祥，智慧宮廟竭誠為您服務，願神明庇佑闔家平安。",
+        "收到您的訊息。若有各項廟務或求籤疑問，請隨時向線上服務處提出。"
+    ])
 
 
 def process_and_reply(user_text: str, reply_token: str, user_id: str):
@@ -177,26 +189,15 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
                 messaging_api.show_loading_animation(
                     ShowLoadingAnimationRequest(chat_id=user_id, loading_seconds=5)
                 )
-        except Exception as e:
+        except Exception:
             pass
 
-        # 極短詞快速秒回（0.01 秒無延遲）
-        t = user_text.strip().lower()
-        instant_casual_words = ["哈囉", "嗨", "hi", "hello", "在嗎", "欸", "你好", "早安", "晚安", "午安", "你可以回復我嗎", "你可以回復我媽", "講話", "說話"]
-
-        # 意圖偵測：只要信徒提到想求籤/抽籤/擲筊（且非已抽到籤詩），0.01 秒發送專屬 LIFF 連結
-        fortune_intent = any(k in t for k in ["求籤", "抽籤", "擲筊", "聖筊", "想抽", "想求", "抽個籤", "問事"])
-        has_drawn_poem = any(k in t for k in ["詩曰", "【靈籤", "第", "首", "大吉", "上吉", "中吉", "中平"])
-
-        if fortune_intent and not has_drawn_poem:
-            reply_content = (
-                "信士您好，若欲向神明祈願請示靈籤，請移步至智慧宮廟線上求籤專區：\n"
-                "👉 https://liff.line.me/2011668576-3Qay1nBv\n\n"
-                "【求籤指引】：心念姓名、農曆生辰與明確問事內容，搖動籤筒後需連續擲得「三個聖杯」方為應允正籤。求得籤詩後可回傳聊天室為您客觀解析。"
-            )
-        elif t in instant_casual_words:
-            reply_content = get_casual_fallback(t)
+        # 1. 優先透過高頻意圖秒回引擎 (0.01 秒即時回覆，絕不超時)
+        quick_reply = identify_quick_intent(user_text)
+        if quick_reply:
+            reply_content = quick_reply
         else:
+            # 2. 特殊或自由問答，調用 NVIDIA AI 進行客觀深度解答
             reply_content = call_nvidia_ai(user_text)
 
         elapsed = time.time() - t_start
