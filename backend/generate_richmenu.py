@@ -45,7 +45,7 @@ def create_rich_menu():
     draw.rectangle([0, 0, WIDTH, 16], fill=(166, 40, 36, 255))
     draw.rectangle([0, 16, WIDTH, 24], fill=(212, 160, 74, 255))
 
-    # 六宮格卡片設定
+    # 六宮格卡片設定 (精準對齊 LIFF 五大功能與大殿首頁)
     cards_config = [
         {
             "col": 0, "row": 0,
@@ -61,7 +61,7 @@ def create_rich_menu():
             "col": 1, "row": 0,
             "badge": "【 定心安神 】",
             "title": "正念冥想",
-            "subtitle": "3D立體捻珠・累積功德",
+            "subtitle": "3D空間念珠・撥珠積福",
             "cta": "靜心捻珠 ›",
             "theme": (135, 78, 36),     # 檀木棕
             "gold": (224, 178, 92),
@@ -70,10 +70,10 @@ def create_rich_menu():
         },
         {
             "col": 2, "row": 0,
-            "badge": "【 數位巡禮 】",
-            "title": "參拜腳印",
-            "subtitle": "四大名廟路線・感應打卡",
-            "cta": "巡禮地圖 ›",
+            "badge": "【 香路巡禮 】",
+            "title": "參拜足跡",
+            "subtitle": "精選全台香路・GPS導航",
+            "cta": "足跡地圖 ›",
             "theme": (38, 76, 96),      # 群青靛藍
             "gold": (212, 160, 74),
             "asset_icon": "腳印收集.png"
@@ -91,9 +91,9 @@ def create_rich_menu():
         },
         {
             "col": 1, "row": 1,
-            "badge": "【 數位執事 】",
-            "title": "智慧廟祝",
-            "subtitle": "生肖歲煞・白米收驚諮詢",
+            "badge": "【 信眾服務 】",
+            "title": "信眾中心",
+            "subtitle": "生肖歲煞・白米收驚祈福",
             "cta": "信眾中心 ›",
             "theme": (142, 28, 25),     # 宮廟絳紅
             "gold": (224, 178, 92),
@@ -102,13 +102,13 @@ def create_rich_menu():
         {
             "col": 2, "row": 1,
             "badge": "【 敬神儀軌 】",
-            "title": "參拜指南",
-            "subtitle": "持香順序・拜拜求神小撇步",
-            "cta": "儀軌解說 ›",
+            "title": "大殿首頁",
+            "subtitle": "宮廟首頁・持香禮佛儀軌",
+            "cta": "進入大殿 ›",
             "theme": (36, 78, 64),      # 翡翠碧青
             "gold": (212, 160, 74),
             "asset_icon": None,
-            "custom_icon": "incense"
+            "custom_icon": "temple"
         }
     ]
 
@@ -222,18 +222,22 @@ def create_rich_menu():
 
 def draw_custom_icon(draw, cx, cy, icon_type, theme, gold):
     if icon_type == "beads":
-        # 3D 佛珠串
-        r = 54
-        num_beads = 8
+        # 3D 檀木佛珠手串 (精緻原木光澤與穿繩流蘇)
+        r = 52
+        num_beads = 9
         for i in range(num_beads):
-            ang = i * (2 * math.pi / num_beads)
+            ang = i * (2 * math.pi / num_beads) - math.pi / 2
             bx = cx + r * math.cos(ang)
             by = cy + r * math.sin(ang)
-            br = 15 if i == 0 else 12
-            b_fill = gold if i == 0 else theme
-            draw.ellipse([bx - br, by - br, bx + br, by + br], fill=b_fill, outline=(36, 18, 10, 180), width=2)
-            draw.ellipse([bx - br//2, by - br//2, bx - br//4, by - br//4], fill=(255, 255, 255, 210))
-        draw.line([cx, cy + r + 12, cx, cy + r + 42], fill=(166, 40, 36), width=6)
+            br = 18 if i == 0 else 13
+            b_fill = (214, 155, 92) if i == 0 else (184, 113, 53)
+            b_edge = (78, 39, 10)
+            draw.ellipse([bx - br, by - br, bx + br, by + br], fill=b_fill, outline=b_edge, width=2)
+            # 珠體高光
+            draw.ellipse([bx - br//2, by - br//2, bx - br//4, by - br//4], fill=(255, 245, 230, 200))
+        # 佛頭結與流蘇
+        draw.line([cx, cy + r + 10, cx, cy + r + 42], fill=(166, 40, 36), width=7)
+        draw.ellipse([cx - 5, cy + r + 40, cx + 5, cy + r + 50], fill=(212, 160, 74))
 
     elif icon_type == "lamp":
         # 光明蓮花祈福燈
@@ -243,6 +247,23 @@ def draw_custom_icon(draw, cx, cy, icon_type, theme, gold):
         draw.ellipse([cx - 32, cy - 44, cx + 32, cy + 12], fill=(255, 245, 220, 230), outline=gold, width=3)
         draw.ellipse([cx - 13, cy - 28, cx + 13, cy - 2], fill=(235, 75, 45))
         draw.ellipse([cx - 7, cy - 24, cx + 7, cy - 6], fill=(255, 220, 80))
+
+    elif icon_type == "temple":
+        # 宮廟大殿飛簷殿堂造型
+        # 屋頂飛簷
+        draw.polygon([(cx, cy - 54), (cx - 62, cy - 22), (cx + 62, cy - 22)], fill=theme)
+        draw.line([cx - 68, cy - 20, cx, cy - 54], fill=gold, width=5)
+        draw.line([cx + 68, cy - 20, cx, cy - 54], fill=gold, width=5)
+        # 橫樑與斗栱
+        draw.rectangle([cx - 50, cy - 20, cx + 50, cy - 10], fill=gold)
+        # 殿堂立柱
+        draw.rectangle([cx - 42, cy - 10, cx - 30, cy + 44], fill=theme, outline=gold, width=2)
+        draw.rectangle([cx + 30, cy - 10, cx + 42, cy + 44], fill=theme, outline=gold, width=2)
+        # 正門拱券
+        draw.arc([cx - 22, cy - 4, cx + 22, cy + 40], 180, 0, fill=gold, width=3)
+        draw.rectangle([cx - 22, cy + 16, cx + 22, cy + 44], fill=(245, 235, 220))
+        # 殿基台階
+        draw.rectangle([cx - 58, cy + 44, cx + 58, cy + 54], fill=gold)
 
     elif icon_type == "incense":
         # 三足大鼎銅爐與清香

@@ -4506,12 +4506,32 @@
       initTipsTicker();
       initLbFooterTicker();
 
-      // 檢查網址是否有 ?page=divination 或 ?page=meditation
+      // 依據 URL 參數（?page=... 或 ?modal=...）自動導航至對應頁面或彈窗
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('page') === 'divination') {
+      const targetPage = urlParams.get('page');
+      const targetModal = urlParams.get('modal');
+
+      if (targetPage === 'divination' || targetPage === 'shake') {
         openDivinationFlow();
-      } else if (urlParams.get('page') === 'meditation') {
+      } else if (targetPage === 'meditation') {
         openMeditationPage();
+      } else if (targetPage === 'routes' || targetPage === 'footprints') {
+        openRouteListPage();
+      } else if (targetPage === 'routedetail') {
+        const routeId = urlParams.get('route') || 'wanchun';
+        openRouteDetailPage(routeId);
+      } else if (targetPage === 'lighting') {
+        openLightingPage();
+      } else if (targetPage === 'profile' || targetModal === 'profile') {
+        openLbModal('profileModal');
+      } else if (targetModal === 'zodiac') {
+        openLbModal('zodiacModal');
+      } else if (targetModal === 'shoujing') {
+        openLbModal('shoujingModal');
+      } else if (targetModal === 'sticker') {
+        openLbModal('stickerModal');
+      } else if (targetModal === 'charity') {
+        openLbModal('charityModal');
       }
     });
 

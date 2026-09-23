@@ -37,16 +37,16 @@ RICH_MENU_SCHEMA = {
     "name": "智慧宮廟六宮格文化圖文選單",
     "chatBarText": "🏮 點此開啟宮廟功能選單",
     "areas": [
-        # 1. 左上：線上靈籤 (LIFF 抽籤)
+        # 1. 左上：線上靈籤 (LIFF 搖筒抽籤與請示)
         {
             "bounds": {"x": 0, "y": 0, "width": 833, "height": 843},
             "action": {
                 "type": "uri",
                 "label": "線上靈籤",
-                "uri": "https://liff.line.me/2011668576-3Qay1nBv"
+                "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=divination"
             }
         },
-        # 2. 中上：正念冥想 (3D 捻珠)
+        # 2. 中上：正念冥想 (3D 立體念珠撥珠)
         {
             "bounds": {"x": 833, "y": 0, "width": 834, "height": 843},
             "action": {
@@ -55,16 +55,16 @@ RICH_MENU_SCHEMA = {
                 "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=meditation"
             }
         },
-        # 3. 右上：參拜腳印 (四大巡禮路線)
+        # 3. 右上：參拜足跡 (精選香路與 GPS 導航)
         {
             "bounds": {"x": 1667, "y": 0, "width": 833, "height": 843},
             "action": {
                 "type": "uri",
-                "label": "參拜腳印",
+                "label": "參拜足跡",
                 "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=routes"
             }
         },
-        # 4. 左下：祈安點燈 (點燈與公益)
+        # 4. 左下：祈安點燈 (線上光明燈與公益認捐)
         {
             "bounds": {"x": 0, "y": 843, "width": 833, "height": 843},
             "action": {
@@ -73,22 +73,22 @@ RICH_MENU_SCHEMA = {
                 "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=lighting"
             }
         },
-        # 5. 中下：智慧廟祝 (信眾中心 / 歲煞收驚)
+        # 5. 中下：信眾中心 (生肖歲煞排盤與白米收驚)
         {
             "bounds": {"x": 833, "y": 843, "width": 834, "height": 843},
             "action": {
-                "type": "message",
-                "label": "智慧廟祝",
-                "text": "智慧廟祝"
+                "type": "uri",
+                "label": "信眾中心",
+                "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=profile"
             }
         },
-        # 6. 右下：參拜指南 (持香儀軌與拜拜小撇步)
+        # 6. 右下：大殿首頁 (宮廟大殿首頁與敬神儀軌)
         {
             "bounds": {"x": 1667, "y": 843, "width": 833, "height": 843},
             "action": {
-                "type": "message",
-                "label": "參拜指南",
-                "text": "參拜指南"
+                "type": "uri",
+                "label": "大殿首頁",
+                "uri": "https://liff.line.me/2011668576-3Qay1nBv"
             }
         }
     ]
