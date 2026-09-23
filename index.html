@@ -1257,7 +1257,7 @@
       -webkit-backdrop-filter: blur(10px);
       border-top: 1px solid #ECE7E1;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       align-items: center;
       padding: 0 1% env(safe-area-inset-bottom, 0px);
       z-index: 100;
@@ -2286,26 +2286,6 @@
       </div>
     </section>
 
-    <!-- 2.5 正念冥想・金絲檀木佛珠靜心入口卡 -->
-    <div onclick="openMeditationPage()" style="margin: 0 5% 12px 5%; background: linear-gradient(135deg, #FFFDF9 0%, #FAF5EE 100%); border: 1.5px solid #E8D8C8; border-radius: 12px; padding: 11px 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; box-shadow: 0 2px 8px rgba(140, 91, 50, 0.06); transition: transform 0.15s;">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <div style="width:38px; height:38px; border-radius:50%; background:#FFF; border:1.5px solid #C68F42; display:flex; align-items:center; justify-content:center; color:#C68F42; box-shadow:0 0 12px rgba(198,143,66,0.3);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C68F42" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="7" stroke-dasharray="2 4" stroke-width="2.5"/>
-            <circle cx="12" cy="5" r="2.2" fill="#A62824" stroke="none"/>
-          </svg>
-        </div>
-        <div>
-          <div style="font-weight:bold; color:#231C18; font-size:0.9rem; display:flex; align-items:center; gap:6px;">
-            正念冥想・檀木佛珠
-            <span style="background:#A62824; color:#FFF; font-size:0.58rem; font-weight:800; padding:1px 5px; border-radius:8px;">定心</span>
-          </div>
-          <div style="font-size:0.71rem; color:#8C5B32;">金光呼吸引導・撥珠積福・安神定心</div>
-        </div>
-      </div>
-      <span style="color:#A62824; font-size:0.85rem; font-weight:bold;">入座 &gt;</span>
-    </div>
-
     <!-- 3.5 三百年巡禮實境尋寶・闖關挑戰卡 (Quest Card: LINE Touch 實境集章) -->
         <!-- ==============================================
          4.4 核心整合模組：周邊宮廟探索・即時參拜足跡
@@ -2403,7 +2383,7 @@
       </div>
     </div>
 
-    <!-- 7. 底部導航欄 (四大核心服務入口：替代舊 Dock，全功能一鍵直達) -->
+    <!-- 7. 底部導航欄 (五大核心服務入口：湄洲媽靈籤、祈安點燈、正念冥想、參拜腳印、信眾中心) -->
     <nav class="lb-bottom-dock">
       <!-- 導航 1：線上解籤（湄洲媽靈籤） - 抽籤竹筒 -->
       <button class="lb-dock-item" onclick="openDivinationFlow()">
@@ -2430,7 +2410,18 @@
         <span class="lb-dock-label">祈安點燈</span>
       </button>
 
-      <!-- 導航 3：參拜腳印（巡境足印與香路行腳） - 腳印收集 -->
+      <!-- 導航 3：正念冥想（金絲檀木念珠・撥珠積福） -->
+      <button class="lb-dock-item" onclick="openMeditationPage()">
+        <span class="lb-dock-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="7" stroke-dasharray="2 3.5" stroke-width="2.2"/>
+            <circle cx="12" cy="5" r="2.2" fill="#A62824" stroke="none"/>
+          </svg>
+        </span>
+        <span class="lb-dock-label">正念冥想</span>
+      </button>
+
+      <!-- 導航 4：參拜腳印（巡境足印與香路行腳） - 腳印收集 -->
       <button class="lb-dock-item" onclick="openRouteListPage()">
         <span class="lb-dock-icon">
           <img src="assets/icons/腳印收集.png" alt="參拜腳印" style="width: 22px; height: 22px; object-fit: contain;">
@@ -2438,7 +2429,7 @@
         <span class="lb-dock-label">參拜腳印</span>
       </button>
 
-      <!-- 導航 4：信眾中心 - 正襟危坐參拜信徒與香火袋 (點選進入可選擇 生肖歲煞 與 白米收驚) -->
+      <!-- 導航 5：信眾中心 - 正襟危坐參拜信徒與香火袋 (點選進入可選擇 生肖歲煞 與 白米收驚) -->
       <button class="lb-dock-item" onclick="openLbModal('profileModal')">
         <span class="lb-dock-icon">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
