@@ -7749,21 +7749,29 @@
         }
 
         if (isFriend === true) {
-          // 情境一：已是好友 -> 籤詩與 AI 解籤已自動送達，直接為信徒開啟 1 對 1 聊天室
+          // 情境一：已是好友 -> 籤詩與 AI 解籤已由後端自動送達聊天室，直接關閉網頁回到聊天室
           sendBtn.innerHTML = "<span>💬 籤詩已送達！正在開啟聊天室...</span>";
           setTimeout(() => {
-            window.location.href = "https://line.me/R/oaMessage/@326watsb/";
+            if (typeof liff !== 'undefined' && liff.isInClient()) {
+              liff.closeWindow();
+            } else {
+              window.location.href = "https://line.me/R/ti/p/@326watsb";
+            }
           }, 350);
         } else {
           // 情境二：尚未加好友 -> 引導加入好友；加好友瞬間 Webhook 透過 FollowEvent 自動補發靈籤與 AI 解籤！
           sendBtn.innerHTML = "<span>👉 請點選「加入好友」，將自動為您解籤...</span>";
           setTimeout(() => {
-            window.location.href = `https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`;
+            window.location.href = "https://line.me/R/ti/p/@326watsb";
           }, 450);
         }
       } catch (err) {
-        console.error("handleSendToLine 失敗，啟用終極保底:", err);
-        window.location.href = `https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`;
+        console.error("handleSendToLine 失敗，啟用保底返回聊天室:", err);
+        if (typeof liff !== 'undefined' && liff.isInClient()) {
+          liff.closeWindow();
+        } else {
+          window.location.href = "https://line.me/R/ti/p/@326watsb";
+        }
       }
     }
 
