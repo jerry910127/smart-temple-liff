@@ -2470,7 +2470,7 @@
       </button>
 
       <div class="med-3d-merit-badge" title="今日累積功德與財氣">
-        <span>📿 功德圓滿・財氣+</span><span id="meritCount">108</span>
+        <span>📿 今日功德+</span><span id="meritCount">0</span>
       </div>
     </header>
 
@@ -4849,7 +4849,7 @@
     // ==============================================
     // 正念冥想：3D 斜角立體圓弧念珠互動引擎 (3D Oblique Arc Mala Engine)
     // ==============================================
-    let malaMeritCount = 108;
+    let malaMeritCount = 0;
     let isMalaRolling = false;
     let malaSwipeStartY = 0;
     let malaSwipeStartX = 0;
@@ -4857,10 +4857,10 @@
     let malaListenersBound = false;
 
     const AUSPICIOUS_MERIT_TEXTS = [
-      '💰 Money +1',
+      '💰 財氣 +1',
       '✨ 功德圓滿',
       '🌿 財氣亨通',
-      '📿 釋迦護佑',
+      '📿 佛陀護佑',
       '🌸 業障消除',
       '☀️ 財源廣進',
       '🏮 貴人相助',
@@ -4869,17 +4869,33 @@
       '🌾 諸事遂意'
     ];
 
+    // 取得當日 YYYY-MM-DD 日期字串（用於每日功德自動歸零）
+    function getTodayDateString() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
     function initMeditationPage() {
-      // 讀取功德存檔
+      // 讀取當日功德存檔（跨日自動歸零）
+      const todayStr = getTodayDateString();
       try {
+        const savedDate = localStorage.getItem('smart_temple_merit_date');
         const savedMerit = localStorage.getItem('smart_temple_merit_count');
-        if (savedMerit !== null && !isNaN(parseInt(savedMerit, 10))) {
+
+        if (savedDate === todayStr && savedMerit !== null && !isNaN(parseInt(savedMerit, 10))) {
+          // 當日已累積之功德數
           malaMeritCount = parseInt(savedMerit, 10);
         } else {
-          malaMeritCount = 108;
+          // 新的一天 / 初次進入：每日自動歸零！
+          malaMeritCount = 0;
+          localStorage.setItem('smart_temple_merit_date', todayStr);
+          localStorage.setItem('smart_temple_merit_count', '0');
         }
       } catch (e) {
-        malaMeritCount = 108;
+        malaMeritCount = 0;
       }
       updateMeritDisplay();
       bindMalaGestureEvents();
@@ -5065,10 +5081,20 @@
       if (isMalaRolling) return;
       isMalaRolling = true;
 
-      // 1. 累加功德計數並存檔
+      // 1. 檢查是否跨日，並累加當日功德計數與存檔
+      const todayStr = getTodayDateString();
+      try {
+        const savedDate = localStorage.getItem('smart_temple_merit_date');
+        if (savedDate !== todayStr) {
+          malaMeritCount = 0;
+          localStorage.setItem('smart_temple_merit_date', todayStr);
+        }
+      } catch (e) {}
+
       malaMeritCount++;
       try {
-        localStorage.setItem('smart_temple_merit_count', malaMeritCount);
+        localStorage.setItem('smart_temple_merit_date', todayStr);
+        localStorage.setItem('smart_temple_merit_count', String(malaMeritCount));
       } catch (err) {}
       updateMeritDisplay();
 
