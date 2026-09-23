@@ -4734,7 +4734,7 @@
         const distBadge = firstCpDist < 0.1 ? "🟢 就在身邊" : `📍 距起點 ${firstCpDist < 1 ? Math.round(firstCpDist * 1000) + 'm' : firstCpDist.toFixed(1) + 'km'}`;
 
         heroContainer.innerHTML = `
-          <div class="route-hero-card" onclick="openRouteGoogleMaps('${heroRoute.id}')" style="cursor:pointer;">
+          <div class="route-hero-card" onclick="openRouteDetailPage('${heroRoute.id}')" style="cursor:pointer;">
             <span class="route-hero-badge">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:2px; display:inline-block;"><path d="M12 2C9 7 4 11 4 16A8 8 0 0 0 20 16C20 11 15 7 12 2Z"/></svg>${heroRoute.badge}・${distBadge}
             </span>
@@ -4744,8 +4744,8 @@
               <span style="font-size:0.75rem; color:#FFF; opacity:0.9; font-weight:bold;">
                 進度 ${completedCount}/${heroRoute.totalSteps} 站
               </span>
-              <button class="route-hero-more-btn" onclick="event.stopPropagation(); openRouteGoogleMaps('${heroRoute.id}');">
-                <span>Google 導航</span>
+              <button class="route-hero-more-btn" onclick="event.stopPropagation(); openRouteDetailPage('${heroRoute.id}');">
+                <span>出發參拜</span>
                 <span>&gt;</span>
               </button>
             </div>
@@ -4753,7 +4753,7 @@
         `;
       }
 
-      // 2. 渲染直列主題路線卡片清單 (點擊直達 Google Maps 導航)
+      // 2. 渲染直列主題路線卡片清單
       const listContainer = document.getElementById('routeCardsListContainer');
       if (listContainer) {
         listContainer.innerHTML = Object.values(ROUTES_DATA).map(route => {
@@ -4764,7 +4764,7 @@
           const distStr = distKm < 0.1 ? '🟢 身邊 50m 內' : (distKm < 1.0 ? `距 ${Math.round(distKm * 1000)}m` : `距 ${distKm.toFixed(1)}km`);
 
           return `
-            <div class="route-list-item-card" onclick="openRouteGoogleMaps('${route.id}')" style="cursor:pointer;">
+            <div class="route-list-item-card" onclick="openRouteDetailPage('${route.id}')" style="cursor:pointer;">
               <div class="route-card-left">
                 <div class="route-card-icon-box" style="background:${route.iconBg || '#FAF4EC'}; color:${route.iconColor || '#A62824'};">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -5188,36 +5188,6 @@
       const vRouteList = document.getElementById('pageRouteList');
       if (vRouteList) vRouteList.style.display = 'flex';
       window.scrollTo(0, 0);
-    }
-
-    // 直達 Google Maps 導航指定路線
-    function openRouteGoogleMaps(routeId) {
-      const userLat = userCurrentCoords ? userCurrentCoords.lat : 24.1432;
-      const userLng = userCurrentCoords ? userCurrentCoords.lng : 120.6806;
-      rebuildDynamicRoutes(userLat, userLng);
-
-      const route = ROUTES_DATA[routeId] || ROUTES_DATA['nearby_dynamic'] || Object.values(ROUTES_DATA)[0];
-      if (!route || !route.checkpoints || route.checkpoints.length === 0) {
-        window.open('https://www.google.com/maps/search/?api=1&query=宮廟', '_blank');
-        return;
-      }
-
-      // 取得起點與終點，開啟 Google Maps 路線導航
-      const firstCp = route.checkpoints[0];
-      const lastCp = route.checkpoints[route.checkpoints.length - 1];
-      
-      let navUrl = "";
-      if (route.checkpoints.length === 1) {
-        navUrl = `https://www.google.com/maps/dir/?api=1&destination=${firstCp.lat},${firstCp.lng}&travelmode=walking`;
-      } else {
-        const origin = userCurrentCoords ? `${userCurrentCoords.lat},${userCurrentCoords.lng}` : `${firstCp.lat},${firstCp.lng}`;
-        const destination = `${lastCp.lat},${lastCp.lng}`;
-        const waypoints = route.checkpoints.slice(0, -1).map(cp => `${cp.lat},${cp.lng}`).join('|');
-        const waypointsParam = waypoints ? `&waypoints=${encodeURIComponent(waypoints)}` : '';
-        navUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${waypointsParam}&travelmode=walking`;
-      }
-
-      window.open(navUrl, '_blank');
     }
 
     // 3. 打開頁面三：特定路線打卡與進度詳情 (Page 3)
