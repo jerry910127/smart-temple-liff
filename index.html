@@ -1769,9 +1769,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
+      padding: 8px 6px;
       border-bottom: 1px dashed #ECE7E1;
       gap: 8px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.15s ease;
+    }
+    .checkpoint-item:active {
+      background: rgba(198, 143, 66, 0.08);
     }
     .checkpoint-item:last-child {
       border-bottom: none;
@@ -5486,19 +5492,22 @@
           }
 
           return `
-            <div class="checkpoint-item" id="cpRow_${idx}">
+            <div class="checkpoint-item" id="cpRow_${idx}" onclick="openCheckpointGoogleMaps('${routeId}', ${idx})" title="點擊開啟 Google Maps 導航至此站點">
               <div class="checkpoint-left">
                 <div class="checkpoint-circle ${isDone ? 'completed' : ''}" id="cpCircle_${idx}">
                   ${isDone ? '✓' : cp.code}
                 </div>
                 <div style="flex:1; overflow:hidden;">
-                  <div class="checkpoint-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${cp.name}</div>
+                  <div class="checkpoint-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:4px;">
+                    <span>${cp.name}</span>
+                    <span style="font-size:0.65rem; color:#1890FF; font-weight:normal;">🧭 導航</span>
+                  </div>
                   <div class="checkpoint-dist" id="cpDist_${idx}">
                     📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : (canCheckin ? '・<span style="color:#06C755; font-weight:bold;">🟢 可打卡</span>' : '・待靠近')}
                   </div>
                 </div>
               </div>
-              <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="triggerManualBeacon(${idx})" style="${isDone ? 'background:#E8E3DD; color:#888;' : (canCheckin ? 'background:#06C755; color:#FFF; font-weight:bold;' : '')}">
+              <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="event.stopPropagation(); triggerManualBeacon(${idx})" style="${isDone ? 'background:#E8E3DD; color:#888;' : (canCheckin ? 'background:#06C755; color:#FFF; font-weight:bold;' : '')}">
                 ${isDone ? '已蓋印 ✓' : (canCheckin ? '🟢 立即打卡' : '📡 LINE Touch')}
               </button>
             </div>
@@ -5510,6 +5519,24 @@
       if (isGoogleMapsLoaded) {
         renderGoogleMap(routeId);
       }
+    }
+
+    // 點擊宮廟站點直達 Google Maps 導航
+    function openCheckpointGoogleMaps(routeId, checkpointIdx) {
+      const route = ROUTES_DATA[routeId] || ROUTES_DATA[activeRouteId];
+      if (!route || !route.checkpoints || !route.checkpoints[checkpointIdx]) return;
+      const cp = route.checkpoints[checkpointIdx];
+
+      // 1. 若內嵌 Google Maps 已載入，平移地圖並彈出站點 InfoWindow
+      if (gMapInstance && gMapMarkers && gMapMarkers[checkpointIdx]) {
+        gMapInstance.panTo({ lat: cp.lat, lng: cp.lng });
+        gMapInstance.setZoom(17);
+        google.maps.event.trigger(gMapMarkers[checkpointIdx], 'click');
+      }
+
+      // 2. 開啟 Google Maps 導航
+      const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${cp.lat},${cp.lng}&travelmode=walking`;
+      window.open(navUrl, '_blank');
     }
 
     // 手繪尋寶步道（維持向下相容）
