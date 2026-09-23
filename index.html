@@ -4869,29 +4869,41 @@
       '🌾 諸事遂意'
     ];
 
-    // 取得當日 YYYY-MM-DD 日期字串（用於每日功德自動歸零）
-    function getTodayDateString() {
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, '0');
-      const d = String(now.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
+    // 功德有效時限：1 小時（3,600,000 毫秒），一小時後自動歸零
+    const MERIT_EXPIRE_DURATION_MS = 60 * 60 * 1000;
+    let hourlyResetTimer = null;
+
+    function scheduleHourlyReset(delayMs) {
+      if (hourlyResetTimer) clearTimeout(hourlyResetTimer);
+      const safeDelay = Math.max(100, delayMs);
+      hourlyResetTimer = setTimeout(() => {
+        malaMeritCount = 0;
+        try {
+          localStorage.setItem('smart_temple_merit_count', '0');
+          localStorage.setItem('smart_temple_merit_timestamp', String(Date.now()));
+        } catch (e) {}
+        updateMeritDisplay();
+      }, safeDelay);
     }
 
     function initMeditationPage() {
-      // 讀取當日功德存檔（跨日自動歸零）
-      const todayStr = getTodayDateString();
+      // 讀取功德存檔（超過一小時自動歸零）
+      const now = Date.now();
       try {
-        const savedDate = localStorage.getItem('smart_temple_merit_date');
-        const savedMerit = localStorage.getItem('smart_temple_merit_count');
+        const savedTimeStr = localStorage.getItem('smart_temple_merit_timestamp');
+        const savedMeritStr = localStorage.getItem('smart_temple_merit_count');
+        const savedTime = savedTimeStr ? parseInt(savedTimeStr, 10) : 0;
+        const savedMerit = savedMeritStr ? parseInt(savedMeritStr, 10) : 0;
 
-        if (savedDate === todayStr && savedMerit !== null && !isNaN(parseInt(savedMerit, 10))) {
-          // 當日已累積之功德數
-          malaMeritCount = parseInt(savedMerit, 10);
+        if (savedTime && (now - savedTime < MERIT_EXPIRE_DURATION_MS) && !isNaN(savedMerit)) {
+          // 距離上次未滿一小時：載入累積數，並設定剩餘時間歸零計時器
+          malaMeritCount = savedMerit;
+          const remainingMs = MERIT_EXPIRE_DURATION_MS - (now - savedTime);
+          scheduleHourlyReset(remainingMs);
         } else {
-          // 新的一天 / 初次進入：每日自動歸零！
+          // 超過一小時 / 初次進入：自動歸零！
           malaMeritCount = 0;
-          localStorage.setItem('smart_temple_merit_date', todayStr);
+          localStorage.setItem('smart_temple_merit_timestamp', String(now));
           localStorage.setItem('smart_temple_merit_count', '0');
         }
       } catch (e) {
@@ -5081,22 +5093,24 @@
       if (isMalaRolling) return;
       isMalaRolling = true;
 
-      // 1. 檢查是否跨日，並累加當日功德計數與存檔
-      const todayStr = getTodayDateString();
+      // 1. 檢查是否已超過 1 小時，並更新時間戳與計數存檔
+      const now = Date.now();
       try {
-        const savedDate = localStorage.getItem('smart_temple_merit_date');
-        if (savedDate !== todayStr) {
+        const savedTimeStr = localStorage.getItem('smart_temple_merit_timestamp');
+        const savedTime = savedTimeStr ? parseInt(savedTimeStr, 10) : 0;
+        if (!savedTime || (now - savedTime >= MERIT_EXPIRE_DURATION_MS)) {
+          // 超過一小時重新歸零計數
           malaMeritCount = 0;
-          localStorage.setItem('smart_temple_merit_date', todayStr);
         }
       } catch (e) {}
 
       malaMeritCount++;
       try {
-        localStorage.setItem('smart_temple_merit_date', todayStr);
+        localStorage.setItem('smart_temple_merit_timestamp', String(now));
         localStorage.setItem('smart_temple_merit_count', String(malaMeritCount));
       } catch (err) {}
       updateMeritDisplay();
+      scheduleHourlyReset(MERIT_EXPIRE_DURATION_MS);
 
       // 2. 播放清脆沈穩老山檀木碰擊音 (Web Audio)
       playMalaBeadSound(false);
