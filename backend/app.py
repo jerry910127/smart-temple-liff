@@ -98,11 +98,11 @@ def call_nvidia_ai(user_message: str) -> str:
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
     max_tok = 700 if is_fortune else 450
 
-    # 候選可用模型清單 (優先 Llama 3.2 11B Multimodal)
+    # 候選可用模型清單 (優先極速精準之 ising-calibration-31b 與 Llama 3.2 11B)
     candidate_models = [
+        "nvidia/ising-calibration-1.5-31b",
         NVIDIA_MODEL,
-        "mistralai/mistral-nemotron",
-        "nvidia/ising-calibration-1.5-31b"
+        "mistralai/mistral-nemotron"
     ]
 
     for model_name in candidate_models:
@@ -113,9 +113,9 @@ def call_nvidia_ai(user_message: str) -> str:
                     {"role": "system", "content": TEMPLE_SERVICE_PROMPT},
                     {"role": "user", "content": user_message}
                 ],
-                temperature=0.5,
+                temperature=0.4,
                 max_tokens=max_tok,
-                timeout=16.0
+                timeout=8.0
             )
             msg = response.choices[0].message
             content = msg.content or getattr(msg, "reasoning_content", "")
