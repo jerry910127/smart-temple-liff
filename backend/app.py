@@ -27,7 +27,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="3.0.0")
+app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="3.2.0-knowledge-engine")
 
 app.add_middleware(
     CORSMiddleware,
@@ -662,7 +662,7 @@ def root():
         "vision_support": "multimodal-enabled",
         "desktop_push_support": "api-push-fortune-enabled",
         "logs_endpoint": "/logs",
-        "version": "3.0.0"
+        "version": "3.2.0-knowledge-engine"
     }
 
 
