@@ -1292,6 +1292,68 @@
       line-height: 1;
     }
 
+    /* 核心突出大圓形：實境解謎【開始遊戲】按鈕 (正中間大圓形) */
+    .lb-dock-hero-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-top: -24px;
+      z-index: 105;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lb-dock-hero-circle {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #B82C24 0%, #7D100E 100%);
+      box-shadow: 0 5px 16px rgba(166, 40, 36, 0.45), 0 0 0 3.5px #FFFFFF, 0 0 0 5px rgba(212, 160, 74, 0.55);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .lb-dock-hero-circle::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 50% 50% 0 0;
+      pointer-events: none;
+    }
+    .lb-dock-hero-btn:active .lb-dock-hero-circle {
+      transform: scale(0.92);
+      box-shadow: 0 2px 8px rgba(166, 40, 36, 0.6), 0 0 0 3px #FFFFFF;
+    }
+    .lb-dock-hero-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -1px;
+      margin-bottom: 2px;
+    }
+    .lb-dock-hero-text {
+      font-size: 0.66rem;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+      color: #FFFDF5;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+      line-height: 1.1;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+
     /* LINE Pay / LINE GO 風格通用彈窗 (Bottom Sheet / Center Modal) */
     .lb-modal-overlay {
       position: fixed;
@@ -2323,14 +2385,14 @@
           <!-- 預設由 JS renderNearbyTemples 動態注入 -->
         </div>
 
-        <!-- 獎勵進度與直達參拜腳印入口 -->
-        <div onclick="openRouteListPage()" style="display:flex; justify-content:space-between; align-items:center; background:#FFF; border:1px solid #E8D8C8; padding:7px 10px; border-radius:8px; font-size:0.74rem; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+        <!-- 獎勵進度與直達實境解謎入口 -->
+        <div onclick="openQuestGameFlow()" style="display:flex; justify-content:space-between; align-items:center; background:#FFF; border:1px solid #E8D8C8; padding:7px 10px; border-radius:8px; font-size:0.74rem; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
           <span style="color:#5C381E; display:flex; align-items:center; gap:4px;">
             <span style="font-size:0.85rem;">🎁</span>
-            <span><strong>集滿 3 處足跡：</strong>解鎖過爐平安米＋開基御守</span>
+            <span><strong>大墩密碼實境解謎：</strong>通關解鎖開運古印＋過爐御守</span>
           </span>
           <span style="color:#A62824; font-weight:bold; font-size:0.76rem; display:inline-flex; align-items:center; gap:2px;">
-            進入參拜腳印 ❯
+            開始遊戲 ❯
           </span>
         </div>
       </div>
@@ -2389,17 +2451,17 @@
       </div>
     </div>
 
-    <!-- 7. 底部導航欄 (五大核心服務入口：湄洲媽靈籤、祈安點燈、正念冥想、參拜腳印、信眾中心) -->
+    <!-- 7. 底部導航欄 (五大入口，正中間為大圓形「開始遊戲」實境解謎按鈕) -->
     <nav class="lb-bottom-dock">
-      <!-- 導航 1：線上解籤（湄洲媽靈籤） - 抽籤竹筒 -->
+      <!-- 導航 1：線上解籤（萬春靈籤） -->
       <button class="lb-dock-item" onclick="openDivinationFlow()">
         <span class="lb-dock-icon">
-          <img src="assets/icons/抽籤.png" alt="湄洲媽靈籤" style="width: 22px; height: 22px; object-fit: contain;">
+          <img src="assets/icons/抽籤.png" alt="萬春靈籤" style="width: 22px; height: 22px; object-fit: contain;">
         </span>
-        <span class="lb-dock-label">湄洲媽靈籤</span>
+        <span class="lb-dock-label">萬春靈籤</span>
       </button>
 
-      <!-- 導航 2：點燈專區（祈安點燈） - 殿前宮燈斗燈與元辰燭火 -->
+      <!-- 導航 2：點燈專區（祈安點燈） -->
       <button class="lb-dock-item" onclick="openLightingPage()">
         <span class="lb-dock-icon">
           <svg width="22" height="22" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -2416,7 +2478,20 @@
         <span class="lb-dock-label">祈安點燈</span>
       </button>
 
-      <!-- 導航 3：正念冥想（金絲檀木念珠・撥珠積福） -->
+      <!-- 導航 3 (正中間大圓形)：實境解謎【開始遊戲】 -->
+      <button class="lb-dock-hero-btn" onclick="openQuestGameFlow()" title="實境解謎・開始遊戲">
+        <div class="lb-dock-hero-circle">
+          <span class="lb-dock-hero-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFF7E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="rgba(255,247,230,0.3)"/>
+            </svg>
+          </span>
+          <span class="lb-dock-hero-text">開始遊戲</span>
+        </div>
+      </button>
+
+      <!-- 導航 4：正念冥想（金絲檀木念珠・撥珠積福） -->
       <button class="lb-dock-item" onclick="openMeditationPage()">
         <span class="lb-dock-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2425,14 +2500,6 @@
           </svg>
         </span>
         <span class="lb-dock-label">正念冥想</span>
-      </button>
-
-      <!-- 導航 4：參拜足跡（巡境足印與香路行腳） - 足跡收集 -->
-      <button class="lb-dock-item" onclick="openRouteListPage()">
-        <span class="lb-dock-icon">
-          <img src="assets/icons/腳印收集.png" alt="參拜足跡" style="width: 22px; height: 22px; object-fit: contain;">
-        </span>
-        <span class="lb-dock-label">參拜足跡</span>
       </button>
 
       <!-- 導航 5：信眾中心 - 正襟危坐參拜信徒與香火袋 (點選進入可選擇 生肖歲煞 與 白米收驚) -->
@@ -4236,19 +4303,114 @@
         <div style="background:#FAF5F0; border:1px solid #E8D8C8; border-radius:12px; padding:12px 14px; margin:10px 0; text-align:left; font-size:0.8rem;">
           <div style="display:flex; align-items:center; gap:6px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C68F42" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
-            <span><strong>我的開運券</strong>：全台通用手搖飲 15 元券 (代碼: TEMPLE88)</span>
+            <span id="profileQuestStatusText"><strong>實境解謎道具</strong>：萬春宮大墩密碼道具包（點擊下方「開始遊戲」）</span>
           </div>
           <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A62824" stroke-width="2"><line x1="8" y1="3" x2="8" y2="10"/><line x1="12" y1="2" x2="12" y2="10"/><line x1="16" y1="3" x2="16" y2="10"/><path d="M5 10 L19 10 L17 22 L7 22 Z"/></svg>
-            <span><strong>累計求籤次數</strong>：已獲賜神意靈籤 1 支</span>
+            <span><strong>累計求籤次數</strong>：已獲賜正身媽神意靈籤 1 支</span>
           </div>
           <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C5B32" stroke-width="2"><path d="M4 8 L20 8"/><path d="M2 11 L22 11"/><line x1="7" y1="8" x2="7" y2="22"/><line x1="17" y1="8" x2="17" y2="22"/></svg>
-            <span><strong>參拜足跡章</strong>：1 / 3 間</span>
+            <span><strong>大墩解謎古印</strong>：<span id="profileQuestStampCount">0</span> / 6 枚印記</span>
           </div>
         </div>
       </div>
       <button class="lb-primary-btn" onclick="closeLbModal('profileModal')">關閉</button>
+    </div>
+  </div>
+
+  <!-- 10. 實境解謎：開始遊戲專屬 Modal (Quest Game Modal) -->
+  <div class="lb-modal-overlay" id="questGameModal" onclick="closeQuestGameModal()">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:90vh; overflow-y:auto; border-radius:20px 20px 0 0; background:#FFFDF8;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title" style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.15rem;">🏮</span>
+          <span style="font-weight:bold; color:#A62824;">大墩密碼・實境解謎</span>
+        </div>
+        <button class="lb-sheet-close" onclick="closeQuestGameModal()">✕</button>
+      </div>
+
+      <div style="font-size:0.86rem; line-height:1.6; color:#444; padding-bottom:14px;">
+        <!-- 主題視覺卡片 -->
+        <div style="background:linear-gradient(135deg, #FAF4EB 0%, #F5E8D8 100%); border:1.5px solid #E8D5C1; border-radius:14px; padding:16px; margin-bottom:14px; box-shadow:0 3px 10px rgba(140,91,50,0.06); text-align:center;">
+          <div style="display:inline-flex; align-items:center; gap:6px; background:#A62824; color:#FFF; font-size:0.7rem; font-weight:bold; padding:3px 10px; border-radius:12px; margin-bottom:8px;">
+            <span>⭐ 台中萬春宮 官方文創實境遊戲</span>
+          </div>
+          <div style="font-family:'Noto Serif TC', serif; font-size:1.2rem; font-weight:bold; color:#2B1810; margin-bottom:6px;">
+            《大墩密碼：萬春三媽開基古印》
+          </div>
+          <div style="font-size:0.78rem; color:#7A6250; line-height:1.5; margin-bottom:10px;">
+            穿梭三百年開基名剎與舊城巷弄，破解道光石獅、成功路青草街與第二市場六角樓的古代密碼！
+          </div>
+          <div style="display:flex; justify-content:center; gap:8px; font-size:0.72rem; color:#8C5B32; font-weight:bold;">
+            <span style="background:rgba(255,255,255,0.7); padding:3px 8px; border-radius:6px; border:1px solid #E2D3C4;">⏳ 2~3 小時</span>
+            <span style="background:rgba(255,255,255,0.7); padding:3px 8px; border-radius:6px; border:1px solid #E2D3C4;">👥 1~4 人同樂</span>
+            <span style="background:rgba(255,255,255,0.7); padding:3px 8px; border-radius:6px; border:1px solid #E2D3C4;">📍 台中中區舊城</span>
+          </div>
+        </div>
+
+        <!-- 區塊一：已有實體道具包？輸入序號開局 -->
+        <div style="background:#FFF; border:1.5px solid #E8D8C8; border-radius:12px; padding:14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+          <div style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#2B1810; font-size:0.9rem; margin-bottom:6px;">
+            <span>🔑</span>
+            <span>輸入實體包序號・啟動遊戲</span>
+          </div>
+          <p style="font-size:0.76rem; color:#777; margin-bottom:10px;">
+            請刮開實體解謎包「遊戲啟動卡」之 8 碼序號即可解鎖全關卡：
+          </p>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="questSerialInput" placeholder="例：WANCHUN8" style="flex:1; padding:9px 12px; border:1.5px solid #D5C8BA; border-radius:8px; font-size:0.9rem; font-family:monospace; text-transform:uppercase; letter-spacing:1px; outline:none;" />
+            <button onclick="submitQuestSerial()" style="background:#A62824; color:#FFF; border:none; padding:0 18px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer; white-space:nowrap;">
+              驗證開局
+            </button>
+          </div>
+          <div id="questSerialMsg" style="font-size:0.72rem; color:#A62824; margin-top:6px; display:none;"></div>
+        </div>
+
+        <!-- 區塊二：尚未購包？免費試玩第一關 -->
+        <div style="background:#FFF; border:1.5px solid #E8D8C8; border-radius:12px; padding:14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#2B1810; font-size:0.9rem;">
+              <span>🎯</span>
+              <span>新手試玩體驗</span>
+            </div>
+            <span style="font-size:0.68rem; background:#EBF8F2; color:#1B8055; font-weight:bold; padding:2px 8px; border-radius:10px;">免序號試玩</span>
+          </div>
+          <p style="font-size:0.76rem; color:#777; margin-bottom:10px;">
+            尚未取得實體道具？可先免費體驗<strong>第一關【萬春宮牌樓・道光石獅】</strong>實境謎題：
+          </p>
+          <button class="lb-primary-btn" onclick="startQuestTrial()" style="background:#2A6041; display:flex; align-items:center; justify-content:center; gap:6px; font-size:0.85rem; padding:10px;">
+            <span>🧭</span>
+            <span>即刻開始試玩第一關（道光石獅）</span>
+          </button>
+        </div>
+
+        <!-- 區塊三：實體解謎包內容物與購買 -->
+        <div style="background:#FAF5EE; border:1.5px dashed #C68F42; border-radius:12px; padding:14px; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#8C5B32; font-size:0.9rem;">
+              <span>📦</span>
+              <span>萬春宮實體文創解謎盒</span>
+            </div>
+            <span style="font-size:0.85rem; color:#A62824; font-weight:bold;">NT$ 650 / 盒</span>
+          </div>
+          <ul style="font-size:0.75rem; color:#6E5745; margin:0 0 10px 16px; padding:0; line-height:1.7;">
+            <li>大墩古風手繪地圖摺頁手冊</li>
+            <li>透光八卦解謎片 ＆ 六角乾坤透明旋轉密碼盤</li>
+            <li>本草神木試紙 ＆ 萬春宮開運過爐香火符</li>
+            <li>LINE 官方 8 碼開局序號卡（全關卡啟動）</li>
+          </ul>
+          <div style="display:flex; gap:8px;">
+            <button onclick="alert('【線下購買】：歡迎親臨台中萬春宮服務台（台中市中區成功路212號）現場購買解謎盒！\n\n【線上訂購】：請於官方 LINE 聊天室輸入「我要購買解謎包」由老廟祝專人指引。');" style="flex:1; background:#8C5B32; color:#FFF; border:none; padding:9px; border-radius:8px; font-size:0.8rem; font-weight:bold; cursor:pointer;">
+              🛒 購買方式說明
+            </button>
+            <button onclick="closeQuestGameModal();" style="background:#ECE7E1; color:#555; border:none; padding:9px 16px; border-radius:8px; font-size:0.8rem; font-weight:bold; cursor:pointer;">
+              關閉
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -4517,6 +4679,8 @@
         openMeditationPage();
       } else if (targetPage === 'routes' || targetPage === 'footprints') {
         openRouteListPage();
+      } else if (targetPage === 'quest' || targetPage === 'game') {
+        openQuestGameFlow();
       } else if (targetPage === 'routedetail') {
         const routeId = urlParams.get('route') || 'wanchun';
         openRouteDetailPage(routeId);
@@ -4630,14 +4794,17 @@
     const BASE_THEMATIC_ROUTES = {
       wanchun: {
         id: "wanchun",
-        name: "開基名剎古蹟巡禮",
-        badge: "開基古剎",
+        name: "大墩密碼：萬春媽祖實境解謎",
+        badge: "實境解謎",
         iconColor: "#A62824",
         iconBg: "#FDF2F0",
         checkpoints: [
-          { id: "wc_1", code: "Ⓐ", name: "天后閣牌樓 (道光石獅)", lat: 24.1430, lng: 120.6804 },
-          { id: "wc_2", code: "Ⓑ", name: "聖母大殿 (光緒御匾)", lat: 24.1432, lng: 120.6806 },
-          { id: "wc_3", code: "Ⓒ", name: "天井廊樓 (咸豐古鐘・蒼龍壁畫)", lat: 24.1434, lng: 120.6808 }
+          { id: "wc_1", code: "①", name: "萬春山門牌樓 (道光青斗石獅)", lat: 24.1430, lng: 120.6804, desc: "八卦透光片天干地支解碼・探索守護大墩兩百載之石獅" },
+          { id: "wc_2", code: "②", name: "萬春聖母大殿 (光緒御匾・開基三媽)", lat: 24.1432, lng: 120.6806, desc: "仰望「海國端倪」御匾・請示開基正身三媽解鎖第 2 道古印" },
+          { id: "wc_3", code: "③", name: "成功路青草街 (阿慶伯/漢強百草茶)", lat: 24.1435, lng: 120.6801, desc: "本草聞香字謎・【美食休憩站】推薦自費品嚐青草茶消暑" },
+          { id: "wc_4", code: "④", name: "台中第二市場 (六角樓幾何密碼盤)", lat: 24.1425, lng: 120.6789, desc: "旋轉六角乾坤盤對齊通道・【美食中繼站】王記菜頭粿/爌肉飯" },
+          { id: "wc_5", code: "⑤", name: "繼光街徒步區 (香香雞發源地老街)", lat: 24.1398, lng: 120.6835, desc: "老街創始銘板時空字謎・【美食休憩站】品嚐創始老店炸香雞" },
+          { id: "wc_6", code: "⑥", name: "返回萬春宮正殿 (終極開印・過爐平安符)", lat: 24.1432, lng: 120.6806, desc: "輸入終極古印通關・香爐順時針繞三圈過爐加持平安符" }
         ]
       },
       oldtown: {
@@ -7674,6 +7841,70 @@
           document.getElementById('resetBtn').style.display = 'inline-flex';
         }
       }, 1750);
+    }
+
+    // ==============================================
+    // 萬春宮大墩實境解謎遊戲核心控制 (Quest Game Engine)
+    // ==============================================
+    function openQuestGameFlow() {
+      // 點擊底部導航「開始遊戲」按鈕
+      if (navigator.vibrate) {
+        try { navigator.vibrate(30); } catch (e) {}
+      }
+      const isQuestActive = localStorage.getItem('wanchun_quest_active') === 'true';
+      if (isQuestActive) {
+        // 已有啟用序號，直接直通解謎關卡頁面
+        openRouteDetailPage('wanchun');
+      } else {
+        // 開啟開局對話盒（可輸入序號、免費試玩或購買道具包）
+        openLbModal('questGameModal');
+      }
+    }
+
+    function closeQuestGameModal() {
+      closeLbModal('questGameModal');
+    }
+
+    function submitQuestSerial() {
+      const input = document.getElementById('questSerialInput');
+      const msg = document.getElementById('questSerialMsg');
+      const val = (input ? input.value : '').trim().toUpperCase();
+
+      if (!val) {
+        if (msg) {
+          msg.innerText = '⚠️ 請輸入實體道具包之 8 碼開局序號';
+          msg.style.display = 'block';
+        }
+        return;
+      }
+
+      // 支援預設體驗序號或任一 4 碼以上序號
+      if (val.length >= 4) {
+        localStorage.setItem('wanchun_quest_active', 'true');
+        localStorage.setItem('wanchun_quest_serial', val);
+        if (msg) {
+          msg.innerText = '✅ 序號驗證成功！大墩三媽開基印已全面解鎖，正在為您載入關卡...';
+          msg.style.color = '#1B8055';
+          msg.style.display = 'block';
+        }
+        setTimeout(() => {
+          closeQuestGameModal();
+          openRouteDetailPage('wanchun');
+        }, 600);
+      } else {
+        if (msg) {
+          msg.innerText = '⚠️ 序號格式有誤，請確認刮刮卡上之英文與數字代碼';
+          msg.style.color = '#A62824';
+          msg.style.display = 'block';
+        }
+      }
+    }
+
+    function startQuestTrial() {
+      // 免費試玩第一關模式
+      localStorage.setItem('wanchun_quest_trial', 'true');
+      closeQuestGameModal();
+      openRouteDetailPage('wanchun');
     }
 
     // 商圈奉茶折扣券控制（獨立商圈優惠，不在抽籤擲筊中彈出干擾）

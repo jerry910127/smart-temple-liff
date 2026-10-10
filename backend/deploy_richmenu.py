@@ -55,13 +55,13 @@ RICH_MENU_SCHEMA = {
                 "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=meditation"
             }
         },
-        # 3. 右上：參拜足跡 (精選香路與 GPS 導航)
+        # 3. 右上：實境解謎 (大墩密碼・開始遊戲)
         {
             "bounds": {"x": 1667, "y": 0, "width": 833, "height": 843},
             "action": {
                 "type": "uri",
-                "label": "參拜足跡",
-                "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=routes"
+                "label": "開始遊戲",
+                "uri": "https://liff.line.me/2011668576-3Qay1nBv?page=quest"
             }
         },
         # 4. 左下：祈安點燈 (線上光明燈與公益認捐)
