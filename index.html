@@ -3003,6 +3003,19 @@
       </div>
     </section>
 
+    <!-- 實境解謎啟動碼與開局說明提示條 -->
+    <section style="padding: 0 16px 6px;">
+      <div style="background:#FFFDF8; border:1px solid #E8D5C1; border-radius:10px; padding:7px 12px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+        <div style="font-size:0.74rem; color:#8C5B32; display:flex; align-items:center; gap:5px;">
+          <span>🔑</span>
+          <span id="questSerialStatusText"><strong>實境走讀模式：</strong>破關親領過爐香包</span>
+        </div>
+        <button onclick="openLbModal('questGameModal')" style="background:#A62824; color:#FFF; border:none; padding:4px 9px; border-radius:6px; font-size:0.68rem; font-weight:bold; cursor:pointer;">
+          啟動碼 / 說明
+        </button>
+      </div>
+    </section>
+
     <!-- 打卡站點清單與距離導引 (Checkpoints List: Y 24% ~ 50%) -->
     <section class="checkpoints-container" id="detailCheckpointsList">
       <!-- 動態注入站點 Ⓐ, Ⓑ, Ⓒ -->
@@ -5493,11 +5506,7 @@
       if (vRouteDetail) vRouteDetail.style.display = 'flex';
       window.scrollTo(0, 0);
       refreshGpsLocation();
-      setTimeout(() => {
-        if (isGoogleMapsLoaded) {
-          renderGoogleMap(activeRouteId);
-        }
-      }, 150);
+      ensureGoogleMapRendered(activeRouteId);
     }
 
     // 關閉 LIFF 返回 LINE 聊天室
@@ -5534,6 +5543,25 @@
     let gMapUserMarker = null;
     let isGoogleMapsLoaded = false;
     let currentTrackView = 'map'; // 'map' or 'svg'
+
+    // 智能確保 Google Maps 實體地圖確實渲染（非同步重試機制，徹底杜絕地圖消失或空白）
+    function ensureGoogleMapRendered(routeId, maxRetries = 25) {
+      if (typeof google !== 'undefined' && google.maps) {
+        isGoogleMapsLoaded = true;
+        renderGoogleMap(routeId);
+        setTimeout(() => {
+          if (gMapInstance) google.maps.event.trigger(gMapInstance, 'resize');
+        }, 150);
+        setTimeout(() => {
+          if (gMapInstance) google.maps.event.trigger(gMapInstance, 'resize');
+        }, 400);
+      } else if (maxRetries > 0) {
+        setTimeout(() => ensureGoogleMapRendered(routeId, maxRetries - 1), 150);
+      } else {
+        console.warn("⚠️ Google Maps 載入逾時，啟用備用實境地圖視圖");
+        renderInteractiveTempleFallback();
+      }
+    }
 
     // Google Maps API 初始化回調函數
     window.initGoogleMapsApi = function() {
@@ -5575,11 +5603,11 @@
       mapTrack.innerHTML = `
         <div style="position:relative; width:100%; height:100%; background:radial-gradient(circle at center, #F0FAF3 0%, #E6F8EE 100%); padding:10px; overflow-y:auto; box-sizing:border-box;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <div style="font-size:0.78rem; font-weight:bold; color:#0D5426;">🗺️ 開基名剎三百年巡禮香路軌跡</div>
+            <div style="font-size:0.78rem; font-weight:bold; color:#0D5426;">🗺️ 大墩密碼・萬春三媽實境解謎走讀地圖</div>
             <span style="font-size:0.65rem; background:#EBF8F2; color:#06C755; padding:1px 6px; border-radius:10px; border:1px solid #B7EB8F; font-weight:bold;">GPS 即時追蹤中</span>
           </div>
           <div style="background:rgba(255,255,255,0.85); border-radius:8px; padding:6px 10px; margin-bottom:8px; font-size:0.72rem; color:#666;">
-            📍 台中市中區成功路 212 號・靠近宮廟各站點即可透過 LINE Touch 自動打卡！
+            📍 台中市中區成功路 212 號・親臨萬春宮與舊城各站點即可解密並蓋印大墩古印！
           </div>
           ${checkpointsHtml}
         </div>
@@ -5619,8 +5647,14 @@
 
     // 渲染 Google Maps 地圖實體、標註站點與巡禮軌跡折線
     function renderGoogleMap(routeId) {
-      if (!isGoogleMapsLoaded || typeof google === 'undefined' || !google.maps) return;
-      const route = ROUTES_DATA[routeId];
+      if (typeof google === 'undefined' || !google.maps) {
+        if (typeof ensureGoogleMapRendered === 'function') {
+          ensureGoogleMapRendered(routeId, 15);
+        }
+        return;
+      }
+      isGoogleMapsLoaded = true;
+      const route = ROUTES_DATA[routeId] || ROUTES_DATA['wanchun'];
       if (!route) return;
 
       const mapContainer = document.getElementById('googleMapTrack');
@@ -5628,8 +5662,8 @@
 
       if (!gMapInstance) {
         gMapInstance = new google.maps.Map(mapContainer, {
-          zoom: 13,
-          center: { lat: 25.0594, lng: 121.5208 },
+          zoom: 15,
+          center: { lat: 24.1432, lng: 120.6806 }, // 台中萬春宮中心座標
           disableDefaultUI: true,
           zoomControl: true,
           mapTypeControl: false,
@@ -7909,18 +7943,11 @@
     // 萬春宮大墩實境解謎遊戲核心控制 (Quest Game Engine)
     // ==============================================
     function openQuestGameFlow() {
-      // 點擊底部導航「開始遊戲」按鈕
+      // 點擊底部導航「開始遊戲」按鈕：直接直通萬春宮實境解謎與實體 Google Maps 地圖！
       if (navigator.vibrate) {
         try { navigator.vibrate(30); } catch (e) {}
       }
-      const isQuestActive = localStorage.getItem('wanchun_quest_active') === 'true';
-      if (isQuestActive) {
-        // 已有啟用序號，直接直通解謎關卡頁面
-        openRouteDetailPage('wanchun');
-      } else {
-        // 開啟開局對話盒（可輸入序號、免費試玩或購買道具包）
-        openLbModal('questGameModal');
-      }
+      openRouteDetailPage('wanchun');
     }
 
     function closeQuestGameModal() {
@@ -8151,36 +8178,19 @@
       }
     }
 
-    // 動態載入 Google Maps API（安全獲取金鑰，避免代碼明文掃描）
-    async function loadGoogleMapsSdk() {
-      let apiKey = "";
-      try {
-        const resp = await fetch("https://smart-temple-liff.onrender.com/api/maps_key");
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.key) apiKey = data.key;
-        }
-      } catch (err) {
-        console.warn("後端金鑰讀取異常:", err);
-      }
-
-      // 備援金鑰（已限制僅供 jerry910127.github.io 網域調用）
-      if (!apiKey) {
-        apiKey = atob("QUl6YVN5QWVoMTlDdHNLTHR6Z2REZnFnZHV3aEMzT0JwR1NtNHlv");
-      }
-
-      if (apiKey) {
-        const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initGoogleMapsApi&loading=async`;
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-      }
-    }
-    loadGoogleMapsSdk();
-  
     // 初始化地理位置與周邊宮廟偵測
-    setTimeout(() => { updateGlobalFootprintCounts(); triggerGeoLocate(false); }, 150);
+    setTimeout(() => { 
+      updateGlobalFootprintCounts(); 
+      triggerGeoLocate(false); 
+      if (typeof google !== 'undefined' && google.maps) {
+        isGoogleMapsLoaded = true;
+      }
+    }, 150);
 </script>
+
+<!-- ==============================================
+     Google Maps JavaScript API (實境解謎專屬高解析走讀地圖)
+     ============================================== -->
+<script async defer id="google-maps-sdk" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeh19CtsKLtzgdDfqgduwhC3OBpGSm4yo&callback=initGoogleMapsApi&loading=async" onerror="if(typeof renderInteractiveTempleFallback==='function')renderInteractiveTempleFallback()"></script>
 </body>
 </html>
