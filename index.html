@@ -1831,18 +1831,24 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 6px;
-      border-bottom: 1px dashed #ECE7E1;
-      gap: 8px;
+      padding: 10px 10px;
+      margin-bottom: 8px;
+      background: #FFFFFF;
+      border: 1px solid #ECE7E1;
+      gap: 10px;
       cursor: pointer;
-      border-radius: 8px;
-      transition: background 0.15s ease;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(140, 91, 50, 0.03);
+      transition: all 0.2s ease;
     }
-    .checkpoint-item:active {
-      background: rgba(198, 143, 66, 0.08);
+    .checkpoint-item:hover, .checkpoint-item:active {
+      background: #FFFDF8;
+      border-color: #E6D2BF;
     }
-    .checkpoint-item:last-child {
-      border-bottom: none;
+    .checkpoint-item.active-target {
+      background: #FFFDF7;
+      border-color: #F0D5BE;
+      box-shadow: 0 2px 8px rgba(166, 40, 36, 0.08);
     }
     .checkpoint-left {
       display: flex;
@@ -1852,22 +1858,35 @@
       min-width: 0;
     }
     .checkpoint-circle {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: #F7F3EE;
       color: #8C827A;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       flex-shrink: 0;
+      border: 1.5px solid #E8D8C8;
+    }
+    .checkpoint-circle.active-target {
+      background: #FFF2F0;
+      color: #A62824;
+      border-color: #A62824;
+      box-shadow: 0 0 0 3px rgba(166, 40, 36, 0.15);
+      animation: pulseTargetCircle 2s infinite;
+    }
+    @keyframes pulseTargetCircle {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 3px rgba(166, 40, 36, 0.15); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 5px rgba(166, 40, 36, 0.25); }
     }
     .checkpoint-circle.completed {
       background: #A62824;
       color: #FFFFFF;
+      border-color: #A62824;
       box-shadow: 0 2px 8px rgba(166, 40, 36, 0.35);
     }
     .checkpoint-name {
@@ -1877,14 +1896,72 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cp-tag-pill {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #8C5B32;
+      background: #FAF5F0;
+      border: 1px solid #E8D8C8;
+      padding: 1px 6px;
+      border-radius: 8px;
+      flex-shrink: 0;
     }
     .checkpoint-dist {
-      font-size: 0.7rem;
+      font-size: 0.70rem;
       color: #8C827A;
-      margin-top: 1px;
+      margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    .checkpoint-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .cp-nav-btn {
+      background: #F4F8FA;
+      border: 1px solid #D1E4ED;
+      color: #1890FF;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 5px 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .cp-nav-btn:active {
+      transform: scale(0.94);
+      background: #E6F3F8;
+    }
+    .cp-solve-btn {
+      background: linear-gradient(135deg, #A62824 0%, #7A1916 100%);
+      border: none;
+      color: #FFFFFF;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(166, 40, 36, 0.25);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .cp-solve-btn:active {
+      transform: scale(0.94);
+    }
+    .cp-solve-btn.completed {
+      background: #FAF5EE;
+      border: 1px solid #E8D5C1;
+      color: #8C5B32;
+      box-shadow: none;
+      font-weight: 700;
     }
     .checkpoint-beacon-btn {
       background: #FAF5F0;
@@ -1909,27 +1986,47 @@
       cursor: default;
     }
 
-    /* 動態解謎地圖區 (Visual Track: Y 52% ~ 95%) */
+    /* 動態解謎地圖區 (Visual Track) */
     .visual-track-container {
-      padding: 12px 4% 16px 4%;
-      flex: 1 0 auto;
+      padding: 10px 4% 12px 4%;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: stretch;
       position: relative;
-      background: linear-gradient(180deg, #FAF7F2 0%, #F5EFE8 100%);
+      background: #FAF7F2;
+      border-bottom: 1px solid #ECE7E1;
+      flex-shrink: 0;
     }
     .track-map-wrapper {
       width: 100%;
-      height: 240px;
-      min-height: 200px;
-      border-radius: 14px;
+      height: 285px;
+      min-height: 240px;
+      border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(140, 91, 50, 0.08);
       position: relative;
-      border: 1px solid #E8D8C8;
+      border: 1.5px solid #E8D5C1;
       background: #EAE6DF;
+    }
+    .map-ctrl-btn {
+      background: #FFFFFF;
+      border: 1px solid #D5C8BA;
+      color: #5C381E;
+      font-size: 0.68rem;
+      font-weight: bold;
+      padding: 4px 9px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .map-ctrl-btn:active {
+      transform: scale(0.94);
+      background: #FAF5F0;
     }
     #googleMapTrack {
       width: 100%;
@@ -2990,39 +3087,38 @@
       </button>
     </header>
 
-    <!-- 個人收集進度指示 (Progress Header: Y 10% ~ 22%) -->
+    <!-- 個人收集進度指示 (Progress Header) -->
     <section class="detail-progress-panel">
       <div class="detail-progress-title">
-        目前已解鎖 <span class="detail-progress-highlight" id="detailCollectedCount">0</span> 關古印
+        大墩密碼：萬春三媽實境走讀
       </div>
-      <div class="detail-target-badge" id="detailTargetBadge">共 6 關</div>
-      <div style="font-size:0.75rem; color:#888; margin-top:2px;">
-        親臨萬春宮與大墩街現場，解謎破關蓋印數位文化章
+      <div style="display:flex; align-items:baseline; justify-content:center; gap:4px; margin:2px 0;">
+        <span style="font-size:0.85rem; color:#666;">已解鎖古印：</span>
+        <span class="detail-progress-highlight" id="detailCollectedCount">0</span>
+        <span style="font-size:0.9rem; font-weight:bold; color:#8C5B32;" id="detailTargetBadge">/ 6 關</span>
       </div>
-    </section>
+      
+      <!-- 雅緻金色進度條 (Progress Bar) -->
+      <div style="width:100%; max-width:320px; height:8px; background:#ECE7E1; border-radius:4px; overflow:hidden; margin:6px 0 8px 0;">
+        <div id="questProgressBar" style="width:0%; height:100%; background:linear-gradient(90deg, #C68F42 0%, #A62824 100%); transition:width 0.4s ease; border-radius:4px;"></div>
+      </div>
 
-    <!-- 實境解謎啟動碼與開局說明提示條 -->
-    <section style="padding: 0 16px 6px;">
-      <div style="background:#FFFDF8; border:1px solid #E8D5C1; border-radius:10px; padding:7px 12px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+      <!-- 實境解謎啟動碼與開局說明提示條 -->
+      <div style="background:#FFFDF8; border:1px solid #E8D5C1; border-radius:12px; padding:6px 12px; display:flex; justify-content:space-between; align-items:center; width:100%; max-width:340px; box-shadow:0 1px 4px rgba(140,91,50,0.04); margin-top:2px;">
         <div style="font-size:0.74rem; color:#8C5B32; display:flex; align-items:center; gap:5px;">
           <span>🔑</span>
           <span id="questSerialStatusText"><strong>實境走讀模式：</strong>破關親領過爐香包</span>
         </div>
         <button onclick="openLbModal('questGameModal')" style="background:#A62824; color:#FFF; border:none; padding:4px 9px; border-radius:6px; font-size:0.68rem; font-weight:bold; cursor:pointer;">
-          啟動碼 / 說明
+          啟動碼 / 規則
         </button>
       </div>
     </section>
 
-    <!-- 打卡站點清單與距離導引 (Checkpoints List: Y 24% ~ 50%) -->
-    <section class="checkpoints-container" id="detailCheckpointsList">
-      <!-- 動態注入站點 Ⓐ, Ⓑ, Ⓒ -->
-    </section>
-
-    <!-- 動態解謎地圖區 (Visual Track: Y 52% ~ 95%) -->
+    <!-- 動態解謎地圖區 (置頂核心，加大至 285px，附頂部微型操作) -->
     <section class="visual-track-container">
       <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <div style="font-size:0.75rem; font-weight:800; color:#8C5B32; display:flex; align-items:center; gap:4px;">
+        <div style="font-size:0.78rem; font-weight:800; color:#8C5B32; display:flex; align-items:center; gap:5px;">
           <span style="display:flex; align-items:center; gap:4px;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8C5B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="9"/>
@@ -3030,30 +3126,36 @@
             </svg>
             實境解謎地圖
           </span>
-          <span style="font-size:0.65rem; background:#EBF8F2; color:#06C755; padding:2px 6px; border-radius:10px; border:1px solid #B7EB8F; font-weight:bold;">LINE 解謎連線中</span>
+          <span style="font-size:0.65rem; background:#EBF8F2; color:#06C755; padding:2px 7px; border-radius:10px; border:1px solid #B7EB8F; font-weight:bold;">● GPS 即時連線</span>
+        </div>
+        
+        <!-- 地圖控制：定位與快速體驗 -->
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button class="map-ctrl-btn" onclick="refreshGpsLocation()" title="重新偵測我的 GPS 定位">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            定位
+          </button>
+          <button class="map-ctrl-btn" onclick="simulateNextBeacon()" title="快速體驗通關測試" style="background:#FFF9EE; border-color:#F2DAAB; color:#C68F42;">
+            🧪 體驗破關
+          </button>
         </div>
       </div>
 
-      <!-- Google 實體地圖容器 -->
+      <!-- Google 實體地圖容器 (285px) -->
       <div class="track-map-wrapper" id="googleMapWrapper">
         <div id="googleMapTrack"></div>
       </div>
+    </section>
 
-      <!-- 快速微型測試工具列 -->
-      <div style="margin-top:10px; width:100%; display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
-        <button class="checkpoint-beacon-btn" style="flex:1 1 180px; display:flex; align-items:center; justify-content:center; gap:5px; padding:6px 10px;" onclick="simulateNextBeacon()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M16 8a6 6 0 0 1 0 8m-8 0a6 6 0 0 1 0-8"/></svg>模擬實境解謎（解鎖下一關）
-        </button>
-        <button class="checkpoint-beacon-btn" style="background:#FFF; border-color:#DDD; color:#666; display:flex; align-items:center; justify-content:center; gap:4px; padding:6px 10px; flex:0 0 auto;" onclick="refreshGpsLocation()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>重新定位
-        </button>
-      </div>
+    <!-- 打卡站點清單與距離導引 (位於地圖下方，卡片式美觀排列) -->
+    <section class="checkpoints-container" id="detailCheckpointsList" style="padding: 12px 4% 16px 4%;">
+      <!-- 動態依關卡狀態渲染 -->
     </section>
 
     <!-- 底部常駐區 -->
     <div class="route-tips-footer">
-      <span class="route-tips-badge">解謎通關</span>
-      <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+      <span class="route-tips-badge">🎁 破關好禮</span>
+      <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.75rem;">
         完成 6 大實境謎題即可至服務台迎請【過爐加持刺繡香包】與吉祥物
       </span>
     </div>
@@ -4425,6 +4527,90 @@
             </button>
           </div>
         </div>
+  <!-- 10.2 實境解謎：關卡謎題與線索互動 Modal (Quest Puzzle Modal) -->
+  <div class="lb-modal-overlay" id="questPuzzleModal" onclick="closeQuestPuzzleModal()">
+    <div class="lb-sheet" onclick="event.stopPropagation()" style="max-height:92vh; overflow-y:auto; border-radius:20px 20px 0 0; background:#FFFDF8;">
+      <div class="lb-sheet-bar"></div>
+      <div class="lb-sheet-header">
+        <div class="lb-sheet-title" style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.15rem;">🏮</span>
+          <span id="puzzleModalStationTitle" style="font-weight:bold; color:#A62824;">第 1 關：萬春山門牌樓</span>
+        </div>
+        <button class="lb-sheet-close" onclick="closeQuestPuzzleModal()">✕</button>
+      </div>
+
+      <div style="font-size:0.86rem; line-height:1.6; color:#444; padding-bottom:16px;">
+        <!-- 關卡現場所在地卡片 -->
+        <div style="background:linear-gradient(135deg, #FAF4EB 0%, #F5E8D8 100%); border:1.5px solid #E8D5C1; border-radius:14px; padding:12px 14px; margin-bottom:12px; display:flex; align-items:flex-start; gap:10px;">
+          <div style="font-size:1.6rem; line-height:1;">📍</div>
+          <div style="flex:1;">
+            <div id="puzzleModalStationName" style="font-weight:bold; color:#2B1810; font-size:0.95rem; margin-bottom:2px;">萬春山門牌樓 (道光青斗石獅)</div>
+            <div id="puzzleModalLocationTip" style="font-size:0.76rem; color:#7A6250; line-height:1.4;">請親臨萬春宮成功路牌樓前，仰望左右兩側的清代青斗石獅與古楹聯。</div>
+          </div>
+        </div>
+
+        <!-- 謎題主要卡片 -->
+        <div style="background:#FFFFFF; border:1.5px solid #E8D8C8; border-radius:14px; padding:16px; margin-bottom:12px; box-shadow:0 2px 8px rgba(140,91,50,0.04); position:relative;">
+          <!-- 已通關蓋印 -->
+          <div id="puzzleSolvedStamp" style="display:none; position:absolute; right:15px; top:12px; transform:rotate(-15deg); border:2.5px solid #A62824; color:#A62824; font-weight:900; font-size:0.82rem; padding:4px 10px; border-radius:6px; background:rgba(253,242,240,0.92); z-index:5; box-shadow:0 2px 8px rgba(166,40,36,0.2);">
+            萬春神印・已破關 ✓
+          </div>
+
+          <div style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#8C5B32; font-size:0.88rem; margin-bottom:8px;">
+            <span style="font-size:1rem;">🎯</span>
+            <span>實境文化謎題</span>
+          </div>
+          <div id="puzzleQuestionText" style="font-size:0.92rem; font-weight:700; color:#231C18; line-height:1.6; margin-bottom:12px; font-family:'Noto Serif TC', serif;">
+            雙獅鎮守山門兩百載，青斗石雕見滄桑。公獅腳踏象徵圓滿吉祥的法寶，母獅慈愛撫弄幼獅。請問公獅腳下所踩踏之物為何？
+          </div>
+
+          <!-- 錦囊提示 (可摺疊展開) -->
+          <div style="background:#FFF9EE; border:1px dashed #C68F42; border-radius:10px; padding:10px 12px; margin-bottom:14px;">
+            <div onclick="togglePuzzleClue()" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+              <span style="font-size:0.78rem; font-weight:bold; color:#8C5B32; display:flex; align-items:center; gap:4px;">
+                <span>💡</span> 錦囊線索提示
+              </span>
+              <span id="puzzleClueToggleIcon" style="font-size:0.75rem; color:#C68F42;">▼ 點擊展開</span>
+            </div>
+            <div id="puzzleClueContent" style="display:none; font-size:0.76rem; color:#7A6250; margin-top:8px; line-height:1.5; border-top:1px dashed #E8D5C1; padding-top:6px;">
+              常見於傳統宮廟前祥瑞青石獸，象徵錦繡前程與圓滿如意的綵球（兩個字）。
+            </div>
+          </div>
+
+          <!-- 答題輸入區域 (未完成時顯示) -->
+          <div id="puzzleInputArea">
+            <div style="display:flex; gap:8px; margin-bottom:8px;">
+              <input type="text" id="puzzleAnswerInput" placeholder="請輸入謎題解答（例：繡球）" onkeydown="if(event.key==='Enter') submitPuzzleAnswer()" style="flex:1; padding:10px 12px; border:1.5px solid #D5C8BA; border-radius:8px; font-size:0.92rem; outline:none; background:#FFFDF8;" />
+              <button onclick="submitPuzzleAnswer()" style="background:#A62824; color:#FFF; border:none; padding:0 18px; border-radius:8px; font-weight:bold; font-size:0.88rem; cursor:pointer; white-space:nowrap; box-shadow:0 2px 6px rgba(166,40,36,0.25);">
+                驗證通關
+              </button>
+            </div>
+            <div id="puzzleErrorMsg" style="font-size:0.74rem; color:#A62824; margin-top:4px; display:none;"></div>
+            
+            <!-- 貼心輔助按鈕 (快速導航至此關或提示) -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+              <button id="puzzleNavBtn" onclick="openCurrentPuzzleGpsNav()" style="background:none; border:none; color:#1890FF; font-size:0.74rem; cursor:pointer; display:flex; align-items:center; gap:3px;">
+                🧭 開啟 Google Maps 現場導航 ›
+              </button>
+              <button onclick="quickDemoSolveCurrentPuzzle()" style="background:none; border:none; color:#8C827A; font-size:0.72rem; cursor:pointer; text-decoration:underline;">
+                現場觀察不易？直接通關
+              </button>
+            </div>
+          </div>
+
+          <!-- 通關故事與深入解說 (已完成時顯示) -->
+          <div id="puzzleStoryArea" style="display:none; background:#FAF5F0; border:1px solid #E8D8C8; border-radius:10px; padding:12px; margin-top:10px;">
+            <div style="font-size:0.78rem; font-weight:bold; color:#A62824; margin-bottom:4px; display:flex; align-items:center; gap:4px;">
+              <span>📜</span> 歷史文化典故
+            </div>
+            <div id="puzzleStoryText" style="font-size:0.8rem; color:#5C381E; line-height:1.6;">
+              此對道光青斗石獅已守護大墩兩百餘載...
+            </div>
+            <button onclick="closeQuestPuzzleModal()" style="width:100%; margin-top:10px; background:#8C5B32; color:#FFF; border:none; padding:8px; border-radius:8px; font-size:0.82rem; font-weight:bold; cursor:pointer;">
+              收起・前往下一站 ➔
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -5711,11 +5897,13 @@
             <div class="gmap-info-status">
               ${isDone ? '✅ 已解鎖謎題關卡' : '📍 距離約 ' + distStr + ' (待解密)'}
             </div>
-            <div class="gmap-info-actions">
-              <a href="${navUrl}" target="_blank" class="gmap-nav-btn">
-                🧭 Google 導航
+            <div class="gmap-info-actions" style="display:flex; gap:6px; margin-top:6px;">
+              <a href="${navUrl}" target="_blank" class="gmap-nav-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:3px;">
+                🧭 導航
               </a>
-              ${!isDone ? `<button class="gmap-nav-btn" style="background:#8C5B32;" onclick="triggerManualBeacon(${idx})">🏮 破關解密</button>` : ''}
+              <button class="gmap-nav-btn" style="background:#A62824; color:#FFF; border:none; cursor:pointer;" onclick="openQuestPuzzleModal(${idx})">
+                ${isDone ? '📜 重溫故事' : '🧩 進行解謎'}
+              </button>
             </div>
           </div>
         `;
@@ -5765,6 +5953,234 @@
       gMapInstance.fitBounds(bounds, { top: 35, right: 35, bottom: 35, left: 35 });
     }
 
+    // =======================================================
+    // 萬春宮實境解謎專屬文化謎題資料庫與互動控制器
+    // =======================================================
+    const WANCHUN_PUZZLES_DATA = [
+      {
+        id: "wc_1",
+        station: "第 1 關",
+        tag: "道光古蹟",
+        name: "萬春山門牌樓 (道光青斗石獅)",
+        locationTip: "請親臨萬春宮成功路山門牌樓前，仰望左右兩側的清道光青斗石獅與古楹聯。",
+        question: "雙獅鎮守山門兩百載，青斗石雕見滄桑。公獅腳踏象徵圓滿吉祥的法寶，母獅慈愛撫弄幼獅。請問公獅腳下所踩踏之物為何？",
+        clue: "常見於傳統宮廟前祥瑞青石獸，象徵錦繡前程與圓滿如意的綵球（兩個字）。",
+        answers: ["繡球", "彩球", "球", "石球"],
+        story: "解密成功！此對道光青斗石獅已守護大墩兩百餘載，雕工古樸渾厚，公獅踏繡球象徵圓滿富貴，母獅抱幼獅象徵世代綿延，是萬春宮鎮煞護境的珍貴古蹟至寶！"
+      },
+      {
+        id: "wc_2",
+        station: "第 2 關",
+        tag: "清代御匾",
+        name: "萬春聖母大殿 (光緒御匾・開基三媽)",
+        locationTip: "進入萬春宮正殿，抬頭仰望神龕上方清代皇帝親賜之金字御匾。",
+        question: "大殿正堂高懸光緒皇帝御賜金匾，前兩字指遼闊汪洋，後兩字喻慈悲祥雲，庇佑合境平安。此御匾四字為何？",
+        clue: "出自光緒帝御賜金匾『大〇慈〇』，形容媽祖慈恩如海上廣大祥雲。",
+        answers: ["大海慈雲", "海國端倪"],
+        story: "解密成功！清光緒年間台灣巡撫岑毓英奉旨抵台，祈請媽祖庇佑合境甘霖，光緒帝親賜「大海慈雲」御匾；神龕前更有乾隆嘉慶傳承古匾，見證三媽守護中台灣的崇高歷史定位！"
+      },
+      {
+        id: "wc_3",
+        station: "第 3 關",
+        tag: "舊城老街",
+        name: "成功路青草街 (阿慶伯/漢強百草茶)",
+        locationTip: "自萬春宮右側步入成功路90巷，撲鼻而來的是百年青草老街天然藥草香。",
+        question: "老街藥香飄百載，昔日信眾於萬春宮求得藥籤後，常至此街抓配青草煎湯。請問民間最常見、生津止渴又降火氣的代表性飲品為何？",
+        clue: "由多種天然草本慢火熬煮而成，夏日大墩舊城老店必喝的黑褐色甘涼茶飲（三個字）。",
+        answers: ["青草茶", "百草茶", "草茶"],
+        story: "解密成功！青草老街不僅是大墩舊城的味覺記憶，更連結了早年媽祖藥籤救拔黎民之慈悲心。喝一口溫潤青草茶，消暑定心、行腳更有力！"
+      },
+      {
+        id: "wc_4",
+        station: "第 4 關",
+        tag: "日治建築",
+        name: "台中第二市場 (六角樓幾何建築)",
+        locationTip: "漫步至三民路與台灣大道口之第二市場中央核心天井。",
+        question: "走入市場核心，仰望這座興建於日治大正時期的核心地標建築，其外觀結構幾何形狀具有幾個邊角？",
+        clue: "從上方俯瞰呈現向外放射之對稱多角形建築，稱為『〇角樓』（填寫中文或數字）。",
+        answers: ["六", "6", "六角", "六角樓"],
+        story: "解密成功！第二市場六角樓建於大正六年（1917），是大墩舊城常民生活之樞紐，更曾是 1917 台中七媽會盛大舉辦時的繁榮背景，幾何放射構造是全台稀有的日治建築瑰寶！"
+      },
+      {
+        id: "wc_5",
+        station: "第 5 關",
+        tag: "美食發源地",
+        name: "繼光街徒步區 (香香雞發源地老街銘板)",
+        locationTip: "走入台中早期最具盛名、舊稱『榮町』的繼光街商圈徒步區。",
+        question: "這條曾經被譽為『台中銀座』的繁華老街，在 1970 年代孕育了風靡海內外、以老街為名的經典台灣炸物美食品牌為何？",
+        clue: "以『繼光』為名，撲鼻胡椒香與金黃酥脆的炸雞老店（五個字或三個字皆可）。",
+        answers: ["繼光香香雞", "香香雞", "繼光香雞"],
+        story: "解密成功！繼光街承載百年商圈脈絡，1973年創始於萬春宮附近的「繼光香香雞」從街頭小攤邁向全球，展現大墩庶民飲食文化的旺盛生命力！"
+      },
+      {
+        id: "wc_6",
+        station: "第 6 關",
+        tag: "功德圓滿",
+        name: "返回萬春宮大殿 (功德圓滿・迎請香包過爐)",
+        locationTip: "恭喜您行腳圓滿回到萬春宮大殿！請向大殿服務台出示通關憑證領取紀念小物。",
+        question: "迎請開基媽祖加持刺繡香包後，應於聖母大殿天公爐或主爐前，依順時針方向繞行幾圈過火加持靈氣？",
+        clue: "道教傳統祈安儀軌中象徵天、地、人三合吉祥圓滿之吉數（一個數字）。",
+        answers: ["三", "3", "三圈", "3圈"],
+        story: "🎉 恭賀大圓滿！您已完成大墩密碼實境走讀所有關卡！至萬春宮服務台出示手機畫面即可迎請【開基媽祖正身過爐・刺繡開運香包／吉祥物】，順時針過爐三圈保平安！"
+      }
+    ];
+
+    let currentActivePuzzleIndex = 0;
+
+    function openQuestPuzzleModal(checkpointIdx) {
+      currentActivePuzzleIndex = checkpointIdx;
+      const route = ROUTES_DATA[activeRouteId] || ROUTES_DATA['wanchun'];
+      const cp = route && route.checkpoints ? route.checkpoints[checkpointIdx] : null;
+      const puzzle = (activeRouteId === 'wanchun' && WANCHUN_PUZZLES_DATA[checkpointIdx])
+        ? WANCHUN_PUZZLES_DATA[checkpointIdx]
+        : {
+            station: `第 ${checkpointIdx + 1} 關`,
+            tag: "文化站點",
+            name: cp ? cp.name : `站點 ${checkpointIdx + 1}`,
+            locationTip: `請步行抵達 ${cp ? cp.name : '此站點'} 現場並環顧四周。`,
+            question: `親臨現場，觀察並感受 ${cp ? cp.name : '此古蹟'} 的建築與歷史氛圍，請問您是否已抵達？（輸入「已抵達」即可通關）`,
+            clue: "直接輸入「已抵達」或「是」即可蓋章通關！",
+            answers: ["已抵達", "抵達", "是", "好", "ok", "yes"],
+            story: `🎉 已為您蓋印 ${cp ? cp.name : '此站點'} 文化古印！`
+          };
+
+      const isDone = cp ? (isCheckpointCompleted(cp.id) || cp.completed) : false;
+
+      // DOM Elements
+      const titleElem = document.getElementById('puzzleModalStationTitle');
+      const nameElem = document.getElementById('puzzleModalStationName');
+      const tipElem = document.getElementById('puzzleModalLocationTip');
+      const qElem = document.getElementById('puzzleQuestionText');
+      const clueElem = document.getElementById('puzzleClueContent');
+      const clueToggle = document.getElementById('puzzleClueToggleIcon');
+      const inputArea = document.getElementById('puzzleInputArea');
+      const storyArea = document.getElementById('puzzleStoryArea');
+      const stampElem = document.getElementById('puzzleSolvedStamp');
+      const errorMsg = document.getElementById('puzzleErrorMsg');
+      const answerInput = document.getElementById('puzzleAnswerInput');
+
+      if (titleElem) titleElem.innerText = `${puzzle.station}：${cp ? cp.name.split('(')[0].trim() : puzzle.name}`;
+      if (nameElem) nameElem.innerText = `${puzzle.name} [${puzzle.tag}]`;
+      if (tipElem) tipElem.innerText = puzzle.locationTip;
+      if (qElem) qElem.innerText = puzzle.question;
+      if (clueElem) {
+        clueElem.innerText = puzzle.clue;
+        clueElem.style.display = 'none';
+      }
+      if (clueToggle) clueToggle.innerText = '▼ 點擊展開';
+      if (errorMsg) errorMsg.style.display = 'none';
+      if (answerInput) {
+        answerInput.value = '';
+        answerInput.placeholder = `請輸入謎題解答（例：${puzzle.answers[0]}）`;
+      }
+
+      if (isDone) {
+        if (stampElem) stampElem.style.display = 'block';
+        if (inputArea) inputArea.style.display = 'none';
+        if (storyArea) {
+          storyArea.style.display = 'block';
+          const storyText = document.getElementById('puzzleStoryText');
+          if (storyText) storyText.innerText = puzzle.story;
+        }
+      } else {
+        if (stampElem) stampElem.style.display = 'none';
+        if (inputArea) inputArea.style.display = 'block';
+        if (storyArea) storyArea.style.display = 'none';
+      }
+
+      openLbModal('questPuzzleModal');
+    }
+
+    function closeQuestPuzzleModal() {
+      closeLbModal('questPuzzleModal');
+    }
+
+    function togglePuzzleClue() {
+      const clueElem = document.getElementById('puzzleClueContent');
+      const clueToggle = document.getElementById('puzzleClueToggleIcon');
+      if (clueElem) {
+        if (clueElem.style.display === 'none' || !clueElem.style.display) {
+          clueElem.style.display = 'block';
+          if (clueToggle) clueToggle.innerText = '▲ 點擊收起';
+        } else {
+          clueElem.style.display = 'none';
+          if (clueToggle) clueToggle.innerText = '▼ 點擊展開';
+        }
+      }
+    }
+
+    function submitPuzzleAnswer() {
+      const input = document.getElementById('puzzleAnswerInput');
+      const errorMsg = document.getElementById('puzzleErrorMsg');
+      const val = (input ? input.value : '').trim().toLowerCase().replace(/[\s\-_]/g, '');
+
+      if (!val) {
+        if (errorMsg) {
+          errorMsg.innerText = '⚠️ 請先輸入您的解謎答案喔！';
+          errorMsg.style.display = 'block';
+        }
+        return;
+      }
+
+      const puzzle = (activeRouteId === 'wanchun' && WANCHUN_PUZZLES_DATA[currentActivePuzzleIndex])
+        ? WANCHUN_PUZZLES_DATA[currentActivePuzzleIndex]
+        : null;
+
+      let isCorrect = false;
+      if (puzzle && puzzle.answers) {
+        isCorrect = puzzle.answers.some(ans => {
+          const cleanAns = ans.toLowerCase().replace(/[\s\-_]/g, '');
+          return val === cleanAns || val.includes(cleanAns) || cleanAns.includes(val);
+        });
+      } else {
+        isCorrect = true;
+      }
+
+      if (isCorrect) {
+        if (errorMsg) errorMsg.style.display = 'none';
+        // 觸發破關通關
+        triggerManualBeacon(currentActivePuzzleIndex);
+        
+        // 介面即時轉換為通關蓋章狀態
+        const stampElem = document.getElementById('puzzleSolvedStamp');
+        const inputArea = document.getElementById('puzzleInputArea');
+        const storyArea = document.getElementById('puzzleStoryArea');
+        if (stampElem) stampElem.style.display = 'block';
+        if (inputArea) inputArea.style.display = 'none';
+        if (storyArea) {
+          storyArea.style.display = 'block';
+          const storyText = document.getElementById('puzzleStoryText');
+          if (storyText) storyText.innerText = puzzle ? puzzle.story : '🎉 通關成功！';
+        }
+      } else {
+        if (errorMsg) {
+          errorMsg.innerText = '💡 答案似乎不太對喔！不妨再觀察一下現場或打開錦囊提示～';
+          errorMsg.style.display = 'block';
+        }
+      }
+    }
+
+    function quickDemoSolveCurrentPuzzle() {
+      triggerManualBeacon(currentActivePuzzleIndex);
+      const puzzle = (activeRouteId === 'wanchun' && WANCHUN_PUZZLES_DATA[currentActivePuzzleIndex])
+        ? WANCHUN_PUZZLES_DATA[currentActivePuzzleIndex]
+        : null;
+      const stampElem = document.getElementById('puzzleSolvedStamp');
+      const inputArea = document.getElementById('puzzleInputArea');
+      const storyArea = document.getElementById('puzzleStoryArea');
+      if (stampElem) stampElem.style.display = 'block';
+      if (inputArea) inputArea.style.display = 'none';
+      if (storyArea) {
+        storyArea.style.display = 'block';
+        const storyText = document.getElementById('puzzleStoryText');
+        if (storyText) storyText.innerText = puzzle ? puzzle.story : '🎉 通關成功！';
+      }
+    }
+
+    function openCurrentPuzzleGpsNav() {
+      openCheckpointGoogleMaps(activeRouteId, currentActivePuzzleIndex);
+    }
+
     // 渲染頁面三（打卡詳情）視圖
     function renderRouteDetailView(routeId) {
       const route = ROUTES_DATA[routeId];
@@ -5779,13 +6195,39 @@
       const countElem = document.getElementById('detailCollectedCount');
       if (countElem) countElem.innerText = completedCount;
       const badgeElem = document.getElementById('detailTargetBadge');
-      if (badgeElem) badgeElem.innerText = `共 ${route.totalSteps} 個`;
+      if (badgeElem) badgeElem.innerText = `/ ${route.totalSteps} 關`;
 
-      // 3. 打卡站點清單（動態依距離與打卡狀態渲染）
+      // 2.1 更新金色進度條 (Progress Bar)
+      const progressBar = document.getElementById('questProgressBar');
+      if (progressBar && route.totalSteps > 0) {
+        const pct = Math.min(100, Math.round((completedCount / route.totalSteps) * 100));
+        progressBar.style.width = `${pct}%`;
+      }
+
+      // 2.2 更新啟動碼狀態提示膠囊
+      const serialStatusText = document.getElementById('questSerialStatusText');
+      if (serialStatusText) {
+        const isSerialActive = localStorage.getItem('wanchun_quest_active') === 'true';
+        const serialCode = localStorage.getItem('wanchun_quest_serial') || 'OK';
+        if (isSerialActive) {
+          serialStatusText.innerHTML = `<strong>👑 正式走讀版：</strong>已啟動 (${serialCode})`;
+        } else {
+          serialStatusText.innerHTML = `<strong>實境走讀模式：</strong>破關親領過爐香包`;
+        }
+      }
+
+      // 3. 找出目前第一座尚未通關的關卡索引 (Next Active Target)
+      const nextActiveIdx = route.checkpoints.findIndex(c => !(isCheckpointCompleted(c.id) || c.completed));
+
+      // 4. 打卡站點清單（動態依距離與打卡狀態渲染，全新雙按鈕卡片設計）
       const listContainer = document.getElementById('detailCheckpointsList');
       if (listContainer) {
         listContainer.innerHTML = route.checkpoints.map((cp, idx) => {
           const isDone = isCheckpointCompleted(cp.id) || cp.completed;
+          const isTarget = (idx === nextActiveIdx);
+          const puzzle = (routeId === 'wanchun' && WANCHUN_PUZZLES_DATA[idx]) ? WANCHUN_PUZZLES_DATA[idx] : null;
+          const tagText = puzzle ? puzzle.tag : (cp.tag || "文化站點");
+
           let distStr = "";
           let canCheckin = false;
 
@@ -5803,30 +6245,35 @@
           }
 
           return `
-            <div class="checkpoint-item" id="cpRow_${idx}" onclick="openCheckpointGoogleMaps('${routeId}', ${idx})" title="點擊開啟 Google Maps 導航至此站點">
+            <div class="checkpoint-item ${isTarget ? 'active-target' : ''}" id="cpRow_${idx}" onclick="openQuestPuzzleModal(${idx})" title="點擊開啟本關實境謎題與線索">
               <div class="checkpoint-left">
-                <div class="checkpoint-circle ${isDone ? 'completed' : ''}" id="cpCircle_${idx}">
-                  ${isDone ? '✓' : cp.code}
+                <div class="checkpoint-circle ${isDone ? 'completed' : (isTarget ? 'active-target' : '')}" id="cpCircle_${idx}">
+                  ${isDone ? '✓' : (idx + 1)}
                 </div>
                 <div style="flex:1; overflow:hidden;">
-                  <div class="checkpoint-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:4px;">
-                    <span>${cp.name}</span>
-                    <span style="font-size:0.65rem; color:#1890FF; font-weight:normal;">🧭 導航</span>
+                  <div class="checkpoint-name">
+                    <span>${cp.name.split('(')[0].trim()}</span>
+                    <span class="cp-tag-pill">${tagText}</span>
                   </div>
                   <div class="checkpoint-dist" id="cpDist_${idx}">
-                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : (canCheckin ? '・<span style="color:#06C755; font-weight:bold;">🟢 可解謎</span>' : '・待靠近')}
+                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : (canCheckin ? '・<span style="color:#A62824; font-weight:bold;">🟢 現場就位</span>' : (isTarget ? '・<span style="color:#A62824; font-weight:bold;">進行中</span>' : '・待前往'))}
                   </div>
                 </div>
               </div>
-              <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="event.stopPropagation(); triggerManualBeacon(${idx})" style="${isDone ? 'background:#E8E3DD; color:#888;' : (canCheckin ? 'background:#06C755; color:#FFF; font-weight:bold;' : '')}">
-                ${isDone ? '已解鎖 ✓' : (canCheckin ? '🟢 立即破關' : '🏮 實境解謎')}
-              </button>
+              <div class="checkpoint-actions">
+                <button class="cp-nav-btn" onclick="event.stopPropagation(); openCheckpointGoogleMaps('${routeId}', ${idx})" title="開啟 Google Maps 步行導航至此站點">
+                  🧭 導航
+                </button>
+                <button class="cp-solve-btn ${isDone ? 'completed' : ''}" onclick="event.stopPropagation(); openQuestPuzzleModal(${idx})">
+                  ${isDone ? '已破關 ✓' : '🧩 進行解謎'}
+                </button>
+              </div>
             </div>
           `;
         }).join('');
       }
 
-      // 4. 更新 Google Maps 實體解謎地圖
+      // 5. 更新 Google Maps 實體解謎地圖
       if (isGoogleMapsLoaded) {
         renderGoogleMap(routeId);
       }
@@ -5881,9 +6328,15 @@
 
       if (activeRouteId === 'wanchun') {
         const wcCompleted = route.checkpoints.filter(c => isCheckpointCompleted(c.id)).length;
+        const puzzleModal = document.getElementById('questPuzzleModal');
+        const isModalOpen = puzzleModal && puzzleModal.classList.contains('active');
+
         if (wcCompleted >= route.totalSteps) {
-          openLbModal('questRedeemModal');
-        } else {
+          setTimeout(() => {
+            closeQuestPuzzleModal();
+            openLbModal('questRedeemModal');
+          }, isModalOpen ? 1600 : 300);
+        } else if (!isModalOpen) {
           alert(`🏮【大墩密碼・實境解謎】通關成功！\n已解鎖第 ${checkpointIdx + 1} 關【${cp.name}】！\n目前進度 ${wcCompleted}/${route.totalSteps} 關。\n走完全程 6 關即可至萬春宮服務台迎請【正身媽祖加持・刺繡開運香包／吉祥物】！`);
         }
         return;
@@ -5892,7 +6345,10 @@
       if (totalStamps >= 6) {
         alert(`🎉 恭賀大圓滿！\n您已成功解開 ${totalStamps} 道大墩實境謎題！\n正式解鎖【開基媽祖過爐加持刺繡香包／吉祥物】迎請資格！\n可至萬春宮服務處出示 LINE 畫面迎請過爐加持小物！`);
       } else {
-        alert(`🎉 現場解鎖成功！\n已為您蓋印【${cp.name}】實境解謎印記！\n目前累計解鎖 ${totalStamps}/6 關，繼續探索更多大墩古蹟！`);
+        const puzzleModal = document.getElementById('questPuzzleModal');
+        if (!puzzleModal || !puzzleModal.classList.contains('active')) {
+          alert(`🎉 現場解鎖成功！\n已為您蓋印【${cp.name}】實境解謎印記！\n目前累計解鎖 ${totalStamps}/6 關，繼續探索更多大墩古蹟！`);
+        }
       }
     }
 
