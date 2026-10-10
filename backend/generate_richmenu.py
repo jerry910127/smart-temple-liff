@@ -72,7 +72,7 @@ def create_rich_menu():
             "col": 2, "row": 0,
             "badge": "【 實境闖關 】",
             "title": "實境解謎",
-            "subtitle": "大墩密碼・文創實境遊戲",
+            "subtitle": "大墩走讀・破關迎香包",
             "cta": "開始遊戲 ›",
             "theme": (166, 40, 36),      # 朱砂赤金
             "gold": (224, 178, 92),
