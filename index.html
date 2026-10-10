@@ -1539,8 +1539,8 @@
     }
 
     /* =======================================================
-       頁面二：參拜足跡總覽列表頁 (Footprint Route List)
-       頁面三：路線進度與打卡詳情頁 (Footprint Route Detail)
+       頁面二：實境解謎總覽列表頁 (Quest Route List)
+       頁面三：路線進度與解密詳情頁 (Quest Route Detail)
        ======================================================= */
     .route-page-container {
       width: 100%;
@@ -1909,7 +1909,7 @@
       cursor: default;
     }
 
-    /* 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) */
+    /* 動態解謎地圖區 (Visual Track: Y 52% ~ 95%) */
     .visual-track-container {
       padding: 12px 4% 16px 4%;
       flex: 1 0 auto;
@@ -2356,7 +2356,7 @@
 
     <!-- 3.5 三百年巡禮實境尋寶・闖關挑戰卡 (Quest Card: LINE Touch 實境集章) -->
         <!-- ==============================================
-         4.4 核心整合模組：周邊宮廟探索・即時參拜足跡
+         4.4 核心整合模組：大墩行腳・實境解謎走讀
          ============================================== -->
     <section class="lb-nearby-section" style="padding: 0 5% 10px 5%;">
       <div style="background: linear-gradient(135deg, #FFFDF9 0%, #FAF4EC 100%); border: 1.5px solid #E8D5C1; border-radius: 14px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(140, 91, 50, 0.08);">
@@ -2371,7 +2371,7 @@
               </svg>
             </span>
             <div>
-              <strong style="font-size:0.92rem; color:#5C381E;">周邊宮廟探索・即時足跡</strong>
+              <strong style="font-size:0.92rem; color:#5C381E;">大墩行腳・實境解謎站點</strong>
               <div id="nearbyLocationStatus" style="font-size:0.68rem; color:#8C5B32; display:flex; align-items:center; gap:5px; margin-top:1px;">
                 <span>📍 定位偵測中...</span>
                 <button onclick="triggerGeoLocate(true)" style="background:none; border:none; color:#A62824; font-size:0.68rem; cursor:pointer; padding:0; text-decoration:underline; font-weight:bold;">🔄 重新整理</button>
@@ -2908,7 +2908,7 @@
   </div>
 
   <!-- ==============================================
-       頁面二：參拜足跡總覽列表頁 (Page 2: Route Index)
+       頁面二：實境解謎總覽列表頁 (Page 2: Quest Index)
        ============================================== -->
   <div class="route-page-container" id="pageRouteList" style="display:none;">
     <!-- 頂部導航列 (Header: Y 0% ~ 8%) -->
@@ -2920,8 +2920,8 @@
         </svg>
       </button>
 
-      <!-- 標題 (參拜足跡 置中) -->
-      <div class="route-nav-title">參拜足跡</div>
+      <!-- 標題 (實境解謎 置中) -->
+      <div class="route-nav-title">實境解謎走讀</div>
 
       <!-- 首頁鍵 (房子圖示) -->
       <button class="route-nav-btn" onclick="openHomePage()" title="回首頁">
@@ -2937,19 +2937,19 @@
       <!-- 動態載入核心推薦香路 -->
     </section>
 
-    <!-- 累積足跡成果提示條 -->
+    <!-- 累積解謎成果提示條 -->
     <section style="padding: 0 16px 8px;">
       <div style="background:#FFF; border:1px solid #E8D8C8; border-radius:10px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
         <div style="display:flex; align-items:center; gap:6px;">
-          <span style="font-size:1.1rem;">👣</span>
+          <span style="font-size:1.1rem;">🏮</span>
           <div>
             <div style="font-size:0.78rem; font-weight:bold; color:#5C381E;">
-              我的參拜進度：<span id="routeListTotalStampsText" style="color:#A62824;">已打卡 0 處</span>
+              大墩解謎進度：<span id="routeListTotalStampsText" style="color:#A62824;">已解鎖 0 關</span>
             </div>
-            <div style="font-size:0.65rem; color:#7A6F66;">隨身造訪身邊廟宇，每蓋印 1 處即永久記錄</div>
+            <div style="font-size:0.65rem; color:#7A6F66;">隨身造訪萬春宮與大墩舊城，每解鎖 1 關即永久記錄</div>
           </div>
         </div>
-        <button onclick="resetUserFootprintsPrompt()" style="background:none; border:1px solid #E5DDD3; color:#8C5B32; font-size:0.65rem; padding:3px 7px; border-radius:6px; cursor:pointer;" title="重置本機足跡記錄">重置足跡</button>
+        <button onclick="resetUserFootprintsPrompt()" style="background:none; border:1px solid #E5DDD3; color:#8C5B32; font-size:0.65rem; padding:3px 7px; border-radius:6px; cursor:pointer;" title="重置本機解謎記錄">重置進度</button>
       </div>
     </section>
 
@@ -2960,9 +2960,9 @@
 
     <!-- 底部常駐區 (Tips Bar: Y 85% ~ 93%) -->
     <div class="route-tips-footer" onclick="cycleLbTip()">
-      <span class="route-tips-badge">足跡 tips</span>
+      <span class="route-tips-badge">解謎 tips</span>
       <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="routeListTipText">
-        親臨合作廟宇 100 公尺範圍內，LINE Touch 感應將自動蓋印數位足跡
+        親臨萬春宮與大墩舊城現場，解鎖 6 大文化關卡迎請過爐香包
       </span>
     </div>
   </div>
@@ -2995,11 +2995,11 @@
     <!-- 個人收集進度指示 (Progress Header: Y 10% ~ 22%) -->
     <section class="detail-progress-panel">
       <div class="detail-progress-title">
-        目前已蒐集 <span class="detail-progress-highlight" id="detailCollectedCount">1</span> 個腳印
+        目前已解鎖 <span class="detail-progress-highlight" id="detailCollectedCount">0</span> 關古印
       </div>
-      <div class="detail-target-badge" id="detailTargetBadge">共 3 個</div>
+      <div class="detail-target-badge" id="detailTargetBadge">共 6 關</div>
       <div style="font-size:0.75rem; color:#888; margin-top:2px;">
-        靠近宮廟 50 公尺開啟藍牙與 LINE Touch 自動感應蓋章
+        親臨萬春宮與大墩街現場，解謎破關蓋印數位文化章
       </div>
     </section>
 
@@ -3008,7 +3008,7 @@
       <!-- 動態注入站點 Ⓐ, Ⓑ, Ⓒ -->
     </section>
 
-    <!-- 動態足跡地圖區 (Visual Track: Y 52% ~ 95%) -->
+    <!-- 動態解謎地圖區 (Visual Track: Y 52% ~ 95%) -->
     <section class="visual-track-container">
       <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <div style="font-size:0.75rem; font-weight:800; color:#8C5B32; display:flex; align-items:center; gap:4px;">
@@ -3017,9 +3017,9 @@
               <circle cx="12" cy="12" r="9"/>
               <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="rgba(198,143,66,0.25)" stroke="#A62824"/>
             </svg>
-            巡禮足跡地圖
+            實境解謎地圖
           </span>
-          <span style="font-size:0.65rem; background:#EBF8F2; color:#06C755; padding:2px 6px; border-radius:10px; border:1px solid #B7EB8F; font-weight:bold;">LINE Touch 連線中</span>
+          <span style="font-size:0.65rem; background:#EBF8F2; color:#06C755; padding:2px 6px; border-radius:10px; border:1px solid #B7EB8F; font-weight:bold;">LINE 解謎連線中</span>
         </div>
       </div>
 
@@ -3031,7 +3031,7 @@
       <!-- 快速微型測試工具列 -->
       <div style="margin-top:10px; width:100%; display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
         <button class="checkpoint-beacon-btn" style="flex:1 1 180px; display:flex; align-items:center; justify-content:center; gap:5px; padding:6px 10px;" onclick="simulateNextBeacon()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M16 8a6 6 0 0 1 0 8m-8 0a6 6 0 0 1 0-8"/></svg>模擬走入宮廟（LINE Touch 感應）
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M16 8a6 6 0 0 1 0 8m-8 0a6 6 0 0 1 0-8"/></svg>模擬實境解謎（解鎖下一關）
         </button>
         <button class="checkpoint-beacon-btn" style="background:#FFF; border-color:#DDD; color:#666; display:flex; align-items:center; justify-content:center; gap:4px; padding:6px 10px; flex:0 0 auto;" onclick="refreshGpsLocation()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>重新定位
@@ -3041,9 +3041,9 @@
 
     <!-- 底部常駐區 -->
     <div class="route-tips-footer">
-      <span class="route-tips-badge">打卡守則</span>
+      <span class="route-tips-badge">解謎通關</span>
       <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-        集滿 3 個數位足跡即可解鎖神明庇佑徽章與廟宇限定香火禮
+        完成 6 大實境謎題即可至服務台迎請【過爐加持刺繡香包】與吉祥物
       </span>
     </div>
   </div>
@@ -3148,8 +3148,8 @@
           秋季祈安禮斗法會開放線上填寫文疏，元辰光彩、平安順遂。
         </div>
         <div style="border-bottom:1px solid #EEE; padding:10px 0;">
-          <strong style="color:#1890FF;">【三百年香路 LINE Touch 感應】</strong><br>
-          至宮廟牌樓、聖母大殿或天井古鐘處，手機靠近感應即自動蓋印數位足跡章！
+          <strong style="color:#1890FF;">【大墩密碼・實境解謎走讀】</strong><br>
+          親臨萬春宮牌樓、御匾、青草街與第二市場，解鎖實境謎題即可迎請過爐加持香包！
         </div>
         <div style="padding:10px 0;">
           <strong style="color:#D48806;">【宮廟常設參拜指引與金流】</strong><br>
@@ -3375,7 +3375,7 @@
     </div>
   </div>
 
-  <!-- 6. 參拜足跡 Modal -->
+  <!-- 6. 實境解謎走讀 Modal -->
   <div class="lb-modal-overlay" id="footprintModal" onclick="closeLbModal('footprintModal')">
     <div class="lb-sheet" onclick="event.stopPropagation()">
       <div class="lb-sheet-bar"></div>
@@ -3387,35 +3387,35 @@
             <circle cx="12" cy="4.5" r="1.5" fill="#A62824"/>
             <circle cx="15" cy="6" r="1.5" fill="#A62824"/>
           </svg>
-          開基名剎古蹟巡禮足跡
+          大墩密碼・實境解謎走讀
         </div>
         <button class="lb-sheet-close" onclick="closeLbModal('footprintModal')">✕</button>
       </div>
       <div style="font-size:0.86rem; line-height:1.7; color:#444;">
-        <p>開基名剎三百年古蹟巡禮蓋章進度：</p>
+        <p>萬春宮大墩古蹟巡禮解謎進度：</p>
         <div style="background:#FAF5F0; border:1px solid #E8D8C8; padding:12px; border-radius:10px; margin:10px 0; display:flex; align-items:center; justify-content:space-around;">
           <div style="text-align:center;">
             <div style="width:36px; height:36px; border-radius:50%; background:#FDF2F0; border:1px solid #F3C5C2; display:flex; align-items:center; justify-content:center; margin:0 auto 4px auto; color:#A62824;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8 L20 8"/><path d="M2 11 L22 11"/><line x1="7" y1="8" x2="7" y2="22"/><line x1="17" y1="8" x2="17" y2="22"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
             </div>
-            <strong>天后閣牌樓</strong><br><span style="color:#A62824; font-size:0.72rem; font-weight:bold;">已蓋章完成</span>
+            <strong>天后閣牌樓</strong><br><span style="color:#A62824; font-size:0.72rem; font-weight:bold;">已解鎖第一關</span>
           </div>
           <div style="text-align:center;">
             <div style="width:36px; height:36px; border-radius:50%; background:#FFF; border:1px dashed #DDD; display:flex; align-items:center; justify-content:center; margin:0 auto 4px auto; color:#999;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17 L5 7 L12 11 L19 7 L21 17 Z"/><circle cx="12" cy="5" r="1.5"/><line x1="6" y1="20" x2="18" y2="20"/></svg>
             </div>
-            <strong>聖母大殿</strong><br><span style="color:#999; font-size:0.72rem;">尚未集章</span>
+            <strong>聖母大殿</strong><br><span style="color:#999; font-size:0.72rem;">待解密</span>
           </div>
           <div style="text-align:center;">
             <div style="width:36px; height:36px; border-radius:50%; background:#FFF; border:1px dashed #DDD; display:flex; align-items:center; justify-content:center; margin:0 auto 4px auto; color:#999;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 8 C8 4.5 9.8 3 12 3 C14.2 3 16 4.5 16 8 L18 16 L6 16 Z"/><path d="M5 16 L19 16 C19.5 16 20 16.5 19.8 17 L19 19 L5 19 L4.2 17 C4 16.5 4.5 16 5 16 Z"/><line x1="12" y1="19" x2="12" y2="21"/></svg>
             </div>
-            <strong>天井古鐘</strong><br><span style="color:#999; font-size:0.72rem;">尚未集章</span>
+            <strong>青草老街</strong><br><span style="color:#999; font-size:0.72rem;">待解密</span>
           </div>
         </div>
-        <p style="font-size:0.8rem; color:#777;">親臨宮廟現場靠近 LINE Touch 感應點，自動完成足跡蓋印！</p>
+        <p style="font-size:0.8rem; color:#777;">親臨萬春宮與大墩舊城現場，解鎖 6 大關卡實境謎題！</p>
       </div>
-      <button class="lb-primary-btn" onclick="closeLbModal('footprintModal'); openRouteListPage();">前往路線總覽</button>
+      <button class="lb-primary-btn" onclick="closeLbModal('footprintModal'); openRouteDetailPage('wanchun');">進入實境解謎走讀</button>
     </div>
   </div>
 
@@ -4674,7 +4674,7 @@
       "【參拜動線】遵循「左青龍進、右白虎出」，象徵入吉出凶、福澤迎祥。",
       "【神意確證】抽得靈籤後須連續擲出「三聖筊」，方能領受神意正籤。",
       "【祈福心態】一事一問最相應，求籤在於解心結，正向面對人生起伏。",
-      "【線下集章】抵達實體宮廟靠近 LINE Touch，自動為您蓋上「廟宇數位足跡」。"
+      "【實境解謎】親臨萬春宮與舊城現場，解鎖大墩文化謎題並迎請過爐香包。"
     ];
     let currentTipIndex = 0;
 
@@ -4781,7 +4781,7 @@
     // LINE Bye 頁面導航與三大核心頁面狀態切換 (SPA Router)
     // ==============================================
     // ==============================================
-    // 參拜足跡動態資料中心 (Dynamic Footprints & Routes Engine)
+    // 實境解謎動態資料中心 (Dynamic Quests & Routes Engine)
     // 絕不寫死：資料庫驅動 + 本地持久化 + GPS 動態組裝路線
     // ==============================================
 
@@ -4818,27 +4818,27 @@
 
     // 重置打卡進度（供信眾重新體驗或測試）
     function resetUserFootprintsPrompt() {
-      if (confirm("是否確定重置所有已打卡足跡？\n重置後可重新開始蒐集 3 座宮廟平安米解鎖進度。")) {
+      if (confirm("是否確定重置所有實境解謎進度？\n重置後可重新開始解鎖 6 關實境謎題。")) {
         localStorage.removeItem(FOOTPRINTS_STORAGE_KEY);
         updateGlobalFootprintCounts();
         renderRouteListPage();
         if (typeof renderRouteDetailView === 'function') {
           renderRouteDetailView(activeRouteId);
         }
-        alert("已重置參拜足跡！");
+        alert("已重置實境解謎進度！");
       }
     }
 
-    // 更新全站足跡累計徽章
+    // 更新全站解謎累計徽章
     function updateGlobalFootprintCounts() {
       const total = getUserFootprints().length;
       const badge = document.getElementById('nearbyStampBadge');
       if (badge) {
-        badge.innerText = `👣 參拜足跡 ${total}/3`;
+        badge.innerText = `🏮 實境解謎 ${total}/6`;
       }
       const totalText = document.getElementById('routeListTotalStampsText');
       if (totalText) {
-        totalText.innerText = `已打卡 ${total} 處 ${total >= 3 ? '🎉 (已獲過爐平安米兌換資格)' : `(尚差 ${Math.max(0, 3 - total)} 處)`}`;
+        totalText.innerText = `已解鎖 ${total} 關 ${total >= 6 ? '🎉 (已獲過爐加持香包與吉祥物迎請資格)' : `(尚差 ${Math.max(0, 6 - total)} 關)`}`;
       }
     }
 
@@ -4961,7 +4961,7 @@
       }
     }
 
-    // 動態渲染參拜足跡列表頁（pageRouteList，完全數據驅動，絕不寫死）
+    // 動態渲染實境解謎列表頁（pageRouteList，完全數據驅動，絕不寫死）
     function renderRouteListPage() {
       const userLat = userCurrentCoords ? userCurrentCoords.lat : 24.1432;
       const userLng = userCurrentCoords ? userCurrentCoords.lng : 120.6806;
@@ -4990,7 +4990,7 @@
                 進度 ${completedCount}/${heroRoute.totalSteps} 站
               </span>
               <button class="route-hero-more-btn" onclick="event.stopPropagation(); openRouteDetailPage('${heroRoute.id}');">
-                <span>出發參拜</span>
+                <span>出發解謎</span>
                 <span>&gt;</span>
               </button>
             </div>
@@ -5466,7 +5466,7 @@
       openHomePage();
     }
 
-    // 打開頁面二：參拜足跡總覽列表
+    // 打開頁面二：實境解謎總覽列表
     function openRouteListPage() {
       hideAllAppViews();
       renderRouteListPage();
@@ -5505,7 +5505,7 @@
       if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
         liff.closeWindow();
       } else {
-        alert("已結束足跡瀏覽，點擊確認返回首頁。");
+        alert("已結束解謎地圖瀏覽，點擊確認返回首頁。");
         openHomePage();
       }
     }
@@ -5526,7 +5526,7 @@
     }
 
     /* =======================================================
-       Google Maps JavaScript API 整合模組 (真實經緯度與足跡打卡)
+       Google Maps JavaScript API 整合模組 (真實經緯度與實境解謎走讀)
        ======================================================= */
     let gMapInstance = null;
     let gMapMarkers = [];
@@ -5589,7 +5589,7 @@
     // 廢除手繪尋寶步道，保留空函數以相容既有呼叫
     function switchTrackView(type) {}
 
-    // 產生客製化足跡 Marker SVG 圖標（已打卡為常亮宮廟硃砂紅腳印，未打卡為沉穩檜木棕腳印）
+    // 產生客製化解謎 Marker SVG 圖標（已解鎖為常亮硃砂紅，未解鎖為沉穩檜木棕）
     function getFootprintMarkerIcon(isDone, code) {
       const pinBg = isDone ? "#A62824" : "#8C5B32";
       const iconFill = isDone ? "#FFFFFF" : "#FAF5F0";
@@ -5677,13 +5677,13 @@
           <div class="gmap-infowindow">
             <div class="gmap-info-title">${cp.name}</div>
             <div class="gmap-info-status">
-              ${isDone ? '✅ 已解鎖蓋印足跡' : '📍 距離約 ' + distStr + ' (待感應)'}
+              ${isDone ? '✅ 已解鎖謎題關卡' : '📍 距離約 ' + distStr + ' (待解密)'}
             </div>
             <div class="gmap-info-actions">
               <a href="${navUrl}" target="_blank" class="gmap-nav-btn">
                 🧭 Google 導航
               </a>
-              ${!isDone ? `<button class="gmap-nav-btn" style="background:#8C5B32;" onclick="triggerManualBeacon(${idx})">📡 感應打卡</button>` : ''}
+              ${!isDone ? `<button class="gmap-nav-btn" style="background:#8C5B32;" onclick="triggerManualBeacon(${idx})">🏮 破關解密</button>` : ''}
             </div>
           </div>
         `;
@@ -5742,7 +5742,7 @@
       const titleElem = document.getElementById('detailRouteTitle');
       if (titleElem) titleElem.innerText = route.name;
 
-      // 2. 收集進度指示（完全依據本地持久化真實打卡足跡）
+      // 2. 收集進度指示（完全依據本地持久化真實解謎進度）
       const completedCount = route.checkpoints.filter(c => isCheckpointCompleted(c.id) || c.completed).length;
       const countElem = document.getElementById('detailCollectedCount');
       if (countElem) countElem.innerText = completedCount;
@@ -5782,19 +5782,19 @@
                     <span style="font-size:0.65rem; color:#1890FF; font-weight:normal;">🧭 導航</span>
                   </div>
                   <div class="checkpoint-dist" id="cpDist_${idx}">
-                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : (canCheckin ? '・<span style="color:#06C755; font-weight:bold;">🟢 可打卡</span>' : '・待靠近')}
+                    📍 距離 ${distStr} ${isDone ? '・<span style="color:#06C755; font-weight:bold;">已解鎖</span>' : (canCheckin ? '・<span style="color:#06C755; font-weight:bold;">🟢 可解謎</span>' : '・待靠近')}
                   </div>
                 </div>
               </div>
               <button class="checkpoint-beacon-btn ${isDone ? 'completed' : ''}" onclick="event.stopPropagation(); triggerManualBeacon(${idx})" style="${isDone ? 'background:#E8E3DD; color:#888;' : (canCheckin ? 'background:#06C755; color:#FFF; font-weight:bold;' : '')}">
-                ${isDone ? '已蓋印 ✓' : (canCheckin ? '🟢 立即打卡' : '📡 LINE Touch')}
+                ${isDone ? '已解鎖 ✓' : (canCheckin ? '🟢 立即破關' : '🏮 實境解謎')}
               </button>
             </div>
           `;
         }).join('');
       }
 
-      // 4. 更新 Google Maps 實體足跡地圖
+      // 4. 更新 Google Maps 實體解謎地圖
       if (isGoogleMapsLoaded) {
         renderGoogleMap(routeId);
       }
@@ -5828,11 +5828,11 @@
       if (!cp) return;
 
       if (isCheckpointCompleted(cp.id)) {
-        alert(`【${cp.name}】已完成數位足跡打卡蓋印！`);
+        alert(`【${cp.name}】已解鎖本關實境謎題！`);
         return;
       }
 
-      // 儲存至本地永久化足跡庫
+      // 儲存至本地永久化解謎庫
       saveUserFootprint(cp.id);
       cp.completed = true;
 
@@ -5852,15 +5852,15 @@
         if (wcCompleted >= route.totalSteps) {
           openLbModal('questRedeemModal');
         } else {
-          alert(`🏮【大墩密碼・實境走讀】打卡蓋印成功！\n已解鎖第 ${checkpointIdx + 1} 關【${cp.name}】！\n目前進度 ${wcCompleted}/${route.totalSteps} 關。\n走完全程 6 關即可至萬春宮服務台迎請【正身媽祖加持・刺繡開運香包／吉祥物】！`);
+          alert(`🏮【大墩密碼・實境解謎】通關成功！\n已解鎖第 ${checkpointIdx + 1} 關【${cp.name}】！\n目前進度 ${wcCompleted}/${route.totalSteps} 關。\n走完全程 6 關即可至萬春宮服務台迎請【正身媽祖加持・刺繡開運香包／吉祥物】！`);
         }
         return;
       }
 
-      if (totalStamps >= 3) {
-        alert(`🎉 恭賀大圓滿！\n您已成功累計 ${totalStamps} 處宮廟參拜足跡！\n正式解鎖【開基媽祖過爐加持平安米】領取資格與【神兵數位護身御守】！\n可至宮廟服務處出示 LINE 畫面領取加持平安米！`);
+      if (totalStamps >= 6) {
+        alert(`🎉 恭賀大圓滿！\n您已成功解開 ${totalStamps} 道大墩實境謎題！\n正式解鎖【開基媽祖過爐加持刺繡香包／吉祥物】迎請資格！\n可至萬春宮服務處出示 LINE 畫面迎請過爐加持小物！`);
       } else {
-        alert(`🎉 LINE Touch 感應成功！\n已為您蓋印【${cp.name}】參拜足跡章！\n目前累計打卡 ${totalStamps}/3 處，再造訪 ${3 - totalStamps} 處即可獲得過爐平安米！`);
+        alert(`🎉 現場解鎖成功！\n已為您蓋印【${cp.name}】實境解謎印記！\n目前累計解鎖 ${totalStamps}/6 關，繼續探索更多大墩古蹟！`);
       }
     }
 
@@ -6325,7 +6325,7 @@
           // 強制僅計算並渲染周邊最近廟宇（嚴格排他，絕不呈現遙遠外縣市廟宇）
           renderNearestTemplesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
 
-          // 同步更新參拜腳印頁面的所有站點即時距離與動態路線
+          // 同步更新實境解謎頁面的所有站點即時距離與動態路線
           rebuildDynamicRoutes(userCurrentCoords.lat, userCurrentCoords.lng);
           updateAllRouteDistancesFromCoords(userCurrentCoords.lat, userCurrentCoords.lng);
         },
@@ -6439,7 +6439,7 @@
       }
     }
 
-    // 同步更新參拜腳印頁面中所有香路站點的即時距離
+    // 同步更新實境解謎頁面中所有解密站點的即時距離
     function updateAllRouteDistancesFromCoords(lat, lng) {
       if (!lat || !lng) return;
       Object.keys(ROUTES_DATA).forEach(routeId => {
@@ -6472,14 +6472,14 @@
         });
       });
 
-      visitedStampsCount = Math.min(3, visitedStampsCount + 1);
+      visitedStampsCount = Math.min(6, visitedStampsCount + 1);
       const badge = document.getElementById('nearbyStampBadge');
-      if (badge) badge.innerText = `👣 參拜足跡 ${visitedStampsCount}/3`;
+      if (badge) badge.innerText = `🏮 實境解謎 ${visitedStampsCount}/6`;
 
-      if (visitedStampsCount >= 3) {
-        alert("🎉 恭喜達成三處宮廟參拜足跡！\n您已解鎖【開基媽祖過爐平安米】兌換憑證與【神兵數位護身御守】！\n可至宮廟服務處出示 LINE 畫面領取加持平安米！");
+      if (visitedStampsCount >= 6) {
+        alert("🎉 恭喜達成大墩實境解謎通關！\n您已解鎖【開基媽祖過爐刺繡香包／吉祥物】迎請憑證！\n可至萬春宮服務處出示 LINE 畫面迎請過爐加持小物！");
       } else {
-        alert(`✅ 參拜打卡成功！\n已記錄【${foundCp ? foundCp.name : '宮廟足跡'}】！\n目前累計 ${visitedStampsCount}/3 處，再造訪 ${3 - visitedStampsCount} 處即可獲得過爐平安米！`);
+        alert(`✅ 實境解鎖成功！\n已記錄【${foundCp ? foundCp.name : '大墩古印'}】！\n目前累計 ${visitedStampsCount}/6 關，繼續探索下一關！`);
       }
 
       if (typeof renderRouteDetailView === 'function') {
@@ -6566,7 +6566,7 @@
         title: "台中第二市場（六角樓）",
         body: `<p><strong>百年常民美食與日治市場地標</strong></p>
                <p style="margin:6px 0;"><strong>文化地標：</strong>建於1917年，六條放射狀街道中央聳立核心六角樓，見證台中大墩百年商業繁華。</p>
-               <p style="margin:6px 0;"><strong>香路合作：</strong>十方善信憑 LINE Bye 參拜足跡章，可於市場特約手搖飲與老店兌換「奉茶補償券」現折折扣。</p>
+               <p style="margin:6px 0;"><strong>實境尋寶：</strong>大墩實境走讀推薦中繼補給站，深入六角樓尋找歷史謎底，品嚐在地百年傳統美味。</p>
                <p style="margin:6px 0; color:#888;">📍 台中市中區三民路二段87號（步行距宮廟 350 公尺）</p>`,
         mapUrl: "https://maps.google.com/?q=台中第二市場"
       },
@@ -7094,7 +7094,7 @@
       "報姓名生辰，神明指點更靈",
       "龍門進、虎門出，納福避煞",
       "求籤一事一問，心誠三聖筊",
-      "靠近感應點，秒蓋參拜腳印",
+      "親臨古蹟現場，解鎖大墩實境謎題",
       "心誠則靈，靜心再擲解迷津",
       "求賜月老紅線，隨身早結緣"
     ];

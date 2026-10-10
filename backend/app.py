@@ -85,7 +85,7 @@ TEMPLE_SERVICE_PROMPT = """你是「靈籤入微 - 智慧宮廟線上服務處�
    - 📿【湄洲媽靈籤（六十甲子靈籤）】：誠心搖筒、三聖筊請示神意，並提供 AI 深度客觀解籤（ https://liff.line.me/2011668576-3Qay1nBv?page=divination ）。
    - 🏮【祈安點燈專區】：提供文昌光明燈、元辰斗燈、祈安燭火線上祈福與文教公益（ https://liff.line.me/2011668576-3Qay1nBv?page=lighting ）。
    - 🧘【正念冥想・檀木佛珠】：3D 立體斜角檀木佛珠，金光呼吸引導、捻珠積福、沉澱心靈（ https://liff.line.me/2011668576-3Qay1nBv?page=meditation ）。
-   - ⛩️【參拜足跡巡禮】：收錄開基名剎、身邊中小宮廟、舊城商圈走讀等實體 Touch 感應打卡收集數位香火袋（ https://liff.line.me/2011668576-3Qay1nBv?page=routes ）。
+   - 🏮【實境解謎走讀】：專為萬春宮（大墩街媽祖）設計之城市解謎遊戲，串聯山門御匾、青草街、第二市場與舊城美食，通關可迎請過爐加持香包與吉祥物紀念品（ https://liff.line.me/2011668576-3Qay1nBv?page=routes ）。
    - 🌾【信眾中心（白米收驚與生肖歲煞）】：安撫心神不寧、查詢流年太歲與歲煞制化指南（ https://liff.line.me/2011668576-3Qay1nBv?page=profile ）。
 
 【回覆規範】：
@@ -196,7 +196,7 @@ def identify_quick_intent(user_text: str) -> str:
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=lighting\n\n"
             "3. 🧘【正念冥想・檀木佛珠】：3D 金光呼吸定心捻珠、累積每日功德\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=meditation\n\n"
-            "4. ⛩️【參拜足跡巡禮】：開基名剎與舊城走讀，實體感應打卡收集香火袋\n"
+            "4. 🏮【實境解謎走讀】：萬春宮廟宇文化與舊城美食城市尋寶，破關迎請過爐香包\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=routes\n\n"
             "5. 🌾【信眾中心（收驚與歲煞）】：白米收驚安魂與生肖流年太歲制化指南\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=profile\n\n"
@@ -211,7 +211,7 @@ def identify_quick_intent(user_text: str) -> str:
             "1. 📿【湄洲媽靈籤】：六十甲子靈籤與 AI 深度解籤\n"
             "2. 🧘【正念冥想】：3D 斜角立體檀木捻珠與呼吸定心\n"
             "3. 🏮【祈安點燈】：文昌光明、元辰祈安與功德祿位\n"
-            "4. ⛩️【參拜足跡】：宮廟名剎行腳打卡與數位香火袋收集\n"
+            "4. 🏮【實境解謎走讀】：萬春宮×舊城大墩密碼城市解謎，破關迎請過爐加持香包\n"
             "5. 🌾【白米收驚與生肖歲煞】：安魂定神與流年太歲制化諮詢\n\n"
             "請問今日有什麼事項需要為您向神明指引或查詢嗎？"
         )
@@ -283,7 +283,7 @@ def get_casual_fallback(user_text: str) -> str:
             "📌【配祀神明】：觀音佛祖、註生娘娘、文昌帝君、福德正神、關聖帝君、千里眼將軍、順風耳將軍、虎爺將軍。\n\n"
             "🏛️【歷史由來】：創建於清康熙末年（1721年），為台中市區最古老的開基媽祖名剎。總兵藍廷珍恭迎湄洲媽祖渡海來台，於大墩街設廟，後定名「萬春宮」。\n\n"
             "✨【重要文物】：清代道光青斗石獅與光緒皇帝御賜「光被四表」古匾。\n\n"
-            "👉 歡迎點選下方選單「參拜足跡」展開巡禮，或至「湄洲媽靈籤」虔誠向神明請示！"
+            "👉 歡迎點選下方選單「開始遊戲」展開實境解謎，或至「湄洲媽靈籤」虔誠向神明請示！"
         )
     # 2. 參拜流程 / 順序 / 拜拜
     elif any(k in t for k in ["參拜", "拜拜", "流程", "順序", "儀軌", "怎麼拜", "如何拜", "持香", "天公爐", "進廟"]):
@@ -307,7 +307,7 @@ def get_casual_fallback(user_text: str) -> str:
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=lighting\n\n"
             "3. 🧘【正念冥想】：3D 檀木佛珠金光呼吸引導、定心積福\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=meditation\n\n"
-            "4. ⛩️【參拜足跡】：開基名剎與舊城走讀，實體感應打卡收集數位香火袋\n"
+            "4. 🏮【實境解謎走讀】：萬春宮實境城市尋寶，破關迎請過爐加持刺繡香包\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=routes\n\n"
             "5. 🌾【信眾中心】：白米收驚安魂與生肖流年太歲制化指南\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=profile\n\n"
@@ -518,7 +518,7 @@ def handle_follow_event(user_id: str):
                 "點擊下方圖文選單，隨時體驗：\n"
                 "1. 📿【線上靈籤】：誠心搖筒請示六十甲子靈籤與 AI 客觀解籤\n"
                 "2. 🧘【正念冥想】：3D 斜角立體捻珠與累積今日功德\n"
-                "3. ⛩️【參拜腳印】：四大名廟巡禮路線與實體感應打卡\n"
+                "3. 🏮【實境解謎】：萬春宮大墩尋寶路線與現場破關解密\n"
                 "4. 💡【祈安點燈】：文昌光明與元辰祈安文教公益\n"
                 "5. 📜【參拜指南】：隨時查詢進廟順序與持香撇步\n\n"
                 "願神明威靈護佑，祈願所求皆得圓滿、平安吉祥！"
@@ -648,11 +648,11 @@ async def api_touch_checkin(request: Request):
         with ApiClient(configuration) as api_client:
             messaging_api = MessagingApi(api_client)
             push_text = (
-                f"🎉【LINE Touch 實體感應打卡成功】\n\n"
-                f"恭賀信士親臨參拜【{temple_name}】！\n"
-                f"已為您成功蓋印第 {cp_index + 1} 枚數位足跡。\n"
+                f"🎉【大墩密碼・實境解謎通關成功】\n\n"
+                f"恭賀信士親臨解密【{temple_name}】！\n"
+                f"已為您成功解鎖第 {cp_index + 1} 道實境謎題古印。\n"
                 f"神尊威靈護佑，祈願所求皆遂、平安吉祥！\n\n"
-                f"👉 點此開啟參拜足跡進度地圖：\n"
+                f"👉 點此開啟實境解謎進度地圖：\n"
                 f"https://liff.line.me/2011668576-3Qay1nBv?route={route_id}"
             )
             try:
@@ -671,7 +671,7 @@ async def api_touch_checkin(request: Request):
         "route_id": route_id,
         "checkpoint_index": cp_index,
         "temple_name": temple_name,
-        "message": f"已成功記錄【{temple_name}】LINE Touch 足跡"
+        "message": f"已成功記錄【{temple_name}】實境解謎進度"
     }
 
 
