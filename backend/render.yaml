@@ -14,3 +14,13 @@ services:
         sync: false
       - key: NVIDIA_API_KEY
         sync: false
+      - key: NVIDIA_MODEL
+        sync: false
+      - key: LINE_LOGIN_CHANNEL_IDS
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://jerry910127.github.io
+      - key: ADMIN_LOG_TOKEN
+        generateValue: true
+      - key: QUEST_ACCESS_CODE_HASHES
+        sync: false

@@ -1,6 +1,9 @@
 # ⛩️ LINE Bye・智慧宮廟文化生活圈 (Smart Temple LIFF / MINI App)
 ## 系統全架構、環境參數、LLM 設定與開發延續手冊
 
+> [!WARNING]
+> 本文件是 2026-09-20 的歷史快照，內容停留在 v3.2.0，不代表目前部署規格。現行版本、API、安全設定與環境變數請以 `README.md`、`backend/.env.example` 及程式碼為準。
+
 > **本檔案用途**：收錄專案所有前端網址、LINE Developers 參數、後端 Render 服務端點、NVIDIA NIM LLM 模型設定、官方宮廟客觀客服 Prompt、心理學擲筊動態機率公式、UI 座標與歷史除錯紀錄。方便日後切換 LLM 或交接延續開發時，一鍵查閱即可無縫接軌。
 > **建立時間**：2026-09-20  
 > **系統版本**：v3.2.0 (LINE Bye Portal + 廟方智能客服客觀版)
