@@ -66,6 +66,9 @@ def log_event(msg: str):
 # 環境變數設定（請於 Render 後台或本地 .env 設定，嚴禁在公開代碼中硬編碼）
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "").strip()
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "").strip()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite").strip()
+GEMINI_FALLBACK_MODEL = os.getenv("GEMINI_FALLBACK_MODEL", "gemini-3.5-flash").strip()
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
 NVIDIA_MODEL = os.getenv("NVIDIA_MODEL", "meta/llama-3.2-11b-vision-instruct").strip()
 LINE_LOGIN_CHANNEL_IDS = [
@@ -91,12 +94,34 @@ RATE_LIMIT_BUCKETS = collections.defaultdict(collections.deque)
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(LINE_CHANNEL_SECRET)
 
+# AI 供應商：優先 Google Gemini（OpenAI 相容端點），NVIDIA NIM 作為備援。
+# 實測（2026-10-11）：gemini-3.5-flash-lite 約 2 秒、gemini-3.5-flash（關閉推理）約 2.5 秒，
+# NVIDIA Llama 3.2 11B 約 6 秒且偶有逾時。
+gemini_client = OpenAI(
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+    api_key=GEMINI_API_KEY,
+    max_retries=0,
+    timeout=10.0
+) if GEMINI_API_KEY else None
+
 nvidia_client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=NVIDIA_API_KEY,
     max_retries=1,
     timeout=25.0
-)
+) if NVIDIA_API_KEY else None
+
+
+def ai_candidates():
+    """依優先順序回傳 (供應商名稱, client, 模型, 額外參數)；未設定金鑰的供應商會被略過。"""
+    candidates = []
+    if gemini_client:
+        candidates.append(("Gemini", gemini_client, GEMINI_MODEL, {}))
+        candidates.append(("Gemini", gemini_client, GEMINI_FALLBACK_MODEL, {"extra_body": {"reasoning_effort": "none"}}))
+    if nvidia_client:
+        candidates.append(("NVIDIA", nvidia_client, NVIDIA_MODEL, {}))
+        candidates.append(("NVIDIA", nvidia_client, "nvidia/ising-calibration-1.5-31b", {}))
+    return candidates
 
 
 def enforce_rate_limit(key: str, limit: int, window_seconds: int = 60):
@@ -230,23 +255,23 @@ FORTUNE_REFLECTION_FALLBACK = (
 )
 
 
-def call_nvidia_ai(user_message: str) -> str:
-    """調用 NVIDIA NIM 模型，具備多模型層級降級防線與超時防護"""
+def format_fortune_reply(content: str) -> str:
+    """LINE 不支援 Markdown：移除粗體與標題符號、統一段落標題，並附上固定結語。"""
+    cleaned = re.sub(r"\*\*|__|^#+\s*", "", content.strip(), flags=re.M)
+    cleaned = re.sub(r"^\s*[\*\-]\s+", "・", cleaned, flags=re.M)
+    cleaned = re.sub(r"^【?(籤詩白話|可以這樣理解|問問自己)】?[：:]?\s*$", r"【\1】", cleaned, flags=re.M)
+    return cleaned.rstrip() + "\n\n" + FORTUNE_REFLECTION_CLOSING
+
+
+def call_ai(user_message: str) -> str:
+    """依序嘗試 Gemini 與 NVIDIA 模型，具備多模型降級防線與超時防護"""
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
-    max_tok = 700 if is_fortune else 450
+    max_tok = 900 if is_fortune else 600
     system_prompt = TEMPLE_SERVICE_PROMPT + ("\n\n" + FORTUNE_REFLECTION_PROMPT if is_fortune else "")
 
-    # 候選可用模型清單 (優先極速精準之 ising-calibration-31b 與 Llama 3.2 11B)
-    # 先用回應較快的 NVIDIA_MODEL（預設 Llama 3.2 11B，實測約 6 秒）；
-    # ising-calibration 實測常超過 8 秒，改為備援；mistral-nemotron 已於 2026 年停用（HTTP 410）。
-    candidate_models = [
-        NVIDIA_MODEL,
-        "nvidia/ising-calibration-1.5-31b",
-    ]
-
-    for model_name in candidate_models:
+    for provider, client, model_name, extra in ai_candidates():
         try:
-            response = nvidia_client.chat.completions.create(
+            response = client.chat.completions.create(
                 model=model_name,
                 messages=[
                     {"role": "system", "content": system_prompt},
@@ -254,20 +279,15 @@ def call_nvidia_ai(user_message: str) -> str:
                 ],
                 temperature=0.4,
                 max_tokens=max_tok,
-                timeout=8.0
+                timeout=8.0,
+                **extra
             )
             msg = response.choices[0].message
             content = msg.content or getattr(msg, "reasoning_content", "")
             if content and content.strip():
-                if is_fortune:
-                    # LINE 不支援 Markdown：移除粗體與標題符號，並附上固定結語
-                    cleaned = re.sub(r"\*\*|__|^#+\s*", "", content.strip(), flags=re.M)
-                    cleaned = re.sub(r"^\s*[\*\-]\s+", "・", cleaned, flags=re.M)
-                    cleaned = re.sub(r"^【?(籤詩白話|可以這樣理解|問問自己)】?[：:]?\s*$", r"【\1】", cleaned, flags=re.M)
-                    return cleaned.rstrip() + "\n\n" + FORTUNE_REFLECTION_CLOSING
-                return content.strip()
+                return format_fortune_reply(content) if is_fortune else content.strip()
         except Exception as e:
-            log_event(f"NVIDIA 模型 [{model_name}] 異常或超時 ({e})，嘗試切換下一模型")
+            log_event(f"{provider} 模型 [{model_name}] 異常或超時 ({e})，嘗試切換下一模型")
 
     if is_fortune:
         return FORTUNE_REFLECTION_FALLBACK
@@ -497,7 +517,7 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
             reply_content = quick_reply
         else:
             # 2. 特殊或自由問答，調用 NVIDIA AI 進行客觀深度解答
-            reply_content = call_nvidia_ai(user_text)
+            reply_content = call_ai(user_text)
 
         elapsed = time.time() - t_start
         log_event(f"回覆生成完成 (耗時 {elapsed:.2f}s): {reply_content[:25]}...")
@@ -529,38 +549,42 @@ def process_and_reply(user_text: str, reply_token: str, user_id: str):
                 log_event(f"push_message 亦失敗: {push_err}")
 
 
-def call_nvidia_vision(image_b64: str) -> str:
-    """調用 NVIDIA NIM 視覺模型辨識照片（智慧宮廟客服文化導覽與客觀解說）"""
-    timeout_sec = 16.0
-    try:
-        response = nvidia_client.chat.completions.create(
-            model=NVIDIA_MODEL,
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "你是智慧宮廟線上服務處的官方智能客服人員。信士傳送了一張照片（可能包含籤詩、神明聖像、平安符、香火袋或廟宇建築）。"
-                        "請以客觀、禮貌、專業且莊重的客服語氣，用繁體中文為信士說明照片中的宗教文物象徵意義、文化由來與正向安定的提醒，篇幅適中、條理清晰，結尾語意完整。"
-                    )
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "客服人員您好，這是我拍的照片，請協助解讀與說明："},
-                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
-                    ]
-                }
-            ],
-            temperature=0.7,
-            max_tokens=750,
-            timeout=timeout_sec
-        )
-        msg = response.choices[0].message
-        content = msg.content or getattr(msg, "reasoning_content", "")
-        if content and content.strip():
-            return content.strip()
-    except Exception as e:
-        log_event(f"視覺辨識略過或超時 ({e})")
+def call_vision(image_b64: str) -> str:
+    """依序以 Gemini、NVIDIA 視覺模型辨識照片（智慧宮廟客服文化導覽與客觀解說）"""
+    system_text = (
+        "你是智慧宮廟線上服務處的官方智能客服人員。信士傳送了一張照片（可能包含籤詩、神明聖像、平安符、香火袋或廟宇建築）。"
+        "請以客觀、禮貌、專業且莊重的客服語氣，用繁體中文為信士說明照片中的宗教文物象徵意義、文化由來與正向安定的提醒，"
+        "篇幅適中、條理清晰，使用純文字（不要用 ** 或 # 等符號），結尾語意完整。"
+        "\n\n若照片中是一支靈籤：第一行先抄錄籤號與詩句（例如「第五籤【戊辰】：⋯⋯」），"
+        "接著改依下列規則回覆，不要另外解說。\n" + FORTUNE_REFLECTION_PROMPT
+    )
+    for provider, client, model_name, extra in ai_candidates():
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {"role": "system", "content": system_text},
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": "客服人員您好，這是我拍的照片，請協助解讀與說明："},
+                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
+                        ]
+                    }
+                ],
+                temperature=0.7,
+                max_tokens=900,
+                timeout=16.0,
+                **extra
+            )
+            msg = response.choices[0].message
+            content = msg.content or getattr(msg, "reasoning_content", "")
+            if content and content.strip():
+                if "問問自己" in content:
+                    return format_fortune_reply(content)
+                return re.sub(r"\*\*|__|^#+\s*", "", content.strip(), flags=re.M)
+        except Exception as e:
+            log_event(f"{provider} 視覺模型 [{model_name}] 略過或超時 ({e})")
 
     return "信士您好，已收到您傳送的照片。若此為靈籤或平安符，神明庇佑心誠則靈；若需進一步問事或解籤，歡迎隨時於對話框留言，本處竭誠為您服務。"
 
@@ -585,7 +609,7 @@ def process_and_reply_image(message_id: str, reply_token: str, user_id: str):
         try:
             img_bytes = blob_api.get_message_content(message_id)
             img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-            reply_content = call_nvidia_vision(img_b64)
+            reply_content = call_vision(img_b64)
         except Exception as e:
             log_event(f"讀取照片失敗: {e}")
             reply_content = "哎呀照片讀取有點小問題，不過心誠則靈！有想問的事阿伯都在這裡陪你聊聊～"
@@ -687,7 +711,7 @@ def process_and_push_ai_interpretation(fortune_text: str, user_id: str):
     """為抽籤的信徒，非同步生成官方宮廟客觀解籤並推播至 LINE 聊天室"""
     time.sleep(1.2)  # 稍微錯開，讓籤詩先抵達聊天室
     log_event(f"正在為信徒 [{user_id}] 生成官方宮廟客觀解籤...")
-    reply_content = call_nvidia_ai(fortune_text)
+    reply_content = call_ai(fortune_text)
     with ApiClient(configuration) as api_client:
         messaging_api = MessagingApi(api_client)
         try:
@@ -766,7 +790,7 @@ async def api_interpret_fortune(request: Request):
     if quick:
         reply = quick
     else:
-        reply = call_nvidia_ai(text)
+        reply = call_ai(text)
     return {"status": "success", "reply": reply}
 
 
