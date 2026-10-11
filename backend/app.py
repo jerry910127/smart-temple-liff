@@ -5,8 +5,16 @@ import base64
 import random
 import traceback
 import collections
+import hashlib
+import hmac
+import json
+import re
+import urllib.error
+import urllib.parse
+import urllib.request
 from datetime import datetime
 from fastapi import FastAPI, Request, HTTPException, Header, BackgroundTasks
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from linebot.v3 import WebhookParser
@@ -27,14 +35,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version="3.2.0-knowledge-engine")
+APP_VERSION = "3.7.0"
+DEFAULT_ALLOWED_ORIGINS = "https://jerry910127.github.io"
+
+app = FastAPI(title="靈籤入微 - AI 智慧宮廟後端 Webhook", version=APP_VERSION)
+
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", DEFAULT_ALLOWED_ORIGINS).split(",")
+    if origin.strip()
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "X-Line-Signature", "X-Admin-Token"],
 )
 
 # 即時日誌快取（記錄最近 100 筆系統動作，方便診斷）
@@ -51,6 +68,25 @@ LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "").strip()
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "").strip()
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
 NVIDIA_MODEL = os.getenv("NVIDIA_MODEL", "meta/llama-3.2-11b-vision-instruct").strip()
+LINE_LOGIN_CHANNEL_IDS = [
+    value.strip()
+    for value in os.getenv(
+        "LINE_LOGIN_CHANNEL_IDS",
+        "2011668576,2011672732,2011672733,2011672734",
+    ).split(",")
+    if value.strip()
+]
+ADMIN_LOG_TOKEN = os.getenv("ADMIN_LOG_TOKEN", "").strip()
+QUEST_ACCESS_CODE_HASHES = {
+    value.strip().lower()
+    for value in os.getenv("QUEST_ACCESS_CODE_HASHES", "").split(",")
+    if value.strip()
+}
+
+MAX_FORTUNE_TEXT_LENGTH = 3000
+MAX_INTERPRET_TEXT_LENGTH = 2000
+LINE_USER_ID_RE = re.compile(r"^U[0-9a-f]{32}$", re.IGNORECASE)
+RATE_LIMIT_BUCKETS = collections.defaultdict(collections.deque)
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(LINE_CHANNEL_SECRET)
@@ -61,6 +97,64 @@ nvidia_client = OpenAI(
     max_retries=1,
     timeout=25.0
 )
+
+
+def enforce_rate_limit(key: str, limit: int, window_seconds: int = 60):
+    """Small in-memory guard for the free Render instance."""
+    now = time.time()
+    bucket = RATE_LIMIT_BUCKETS[key]
+    while bucket and now - bucket[0] >= window_seconds:
+        bucket.popleft()
+    if len(bucket) >= limit:
+        raise HTTPException(status_code=429, detail="Too many requests")
+    bucket.append(now)
+
+
+def require_text(value, field_name: str, max_length: int) -> str:
+    if not isinstance(value, str):
+        raise HTTPException(status_code=400, detail=f"Invalid {field_name}")
+    value = value.strip()
+    if not value:
+        raise HTTPException(status_code=400, detail=f"Missing {field_name}")
+    if len(value) > max_length:
+        raise HTTPException(status_code=413, detail=f"{field_name} is too long")
+    return value
+
+
+def verify_line_id_token(id_token: str) -> str:
+    """Verify a raw LIFF ID token with LINE and return its authoritative user ID."""
+    id_token = require_text(id_token, "id_token", 4096)
+    if not LINE_LOGIN_CHANNEL_IDS:
+        raise HTTPException(status_code=503, detail="LINE Login channel is not configured")
+
+    for channel_id in LINE_LOGIN_CHANNEL_IDS:
+        payload = urllib.parse.urlencode({
+            "id_token": id_token,
+            "client_id": channel_id,
+        }).encode("utf-8")
+        request = urllib.request.Request(
+            "https://api.line.me/oauth2/v2.1/verify",
+            data=payload,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=8) as response:
+                verified = json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as error:
+            if error.code == 400:
+                continue
+            log_event(f"LINE ID token verification failed with HTTP {error.code}")
+            raise HTTPException(status_code=502, detail="LINE verification unavailable")
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as error:
+            log_event(f"LINE ID token verification unavailable: {type(error).__name__}")
+            raise HTTPException(status_code=502, detail="LINE verification unavailable")
+
+        user_id = verified.get("sub", "")
+        if LINE_USER_ID_RE.fullmatch(user_id):
+            return user_id
+
+    raise HTTPException(status_code=401, detail="Invalid LINE ID token")
 
 # 智慧宮廟線上服務處 客服專員 System Prompt
 TEMPLE_SERVICE_PROMPT = """你是「靈籤入微 - 智慧宮廟線上服務處」的官方首席智能執事與文化導覽員。你具備深厚豐富的台灣宮廟文化、傳統禮俗、民間信仰、神明歷史與籤詩解析底蘊。
@@ -85,7 +179,7 @@ TEMPLE_SERVICE_PROMPT = """你是「靈籤入微 - 智慧宮廟線上服務處�
    - 📿【湄洲媽靈籤（六十甲子靈籤）】：誠心搖筒、三聖筊請示神意，並提供 AI 深度客觀解籤（ https://liff.line.me/2011668576-3Qay1nBv?page=divination ）。
    - 🏮【祈安點燈專區】：提供文昌光明燈、元辰斗燈、祈安燭火線上祈福與文教公益（ https://liff.line.me/2011668576-3Qay1nBv?page=lighting ）。
    - 🧘【正念冥想・檀木佛珠】：3D 立體斜角檀木佛珠，金光呼吸引導、捻珠積福、沉澱心靈（ https://liff.line.me/2011668576-3Qay1nBv?page=meditation ）。
-   - 🏮【實境解謎走讀】：專為萬春宮（大墩街媽祖）設計之城市解謎遊戲，串聯山門御匾、青草街、第二市場與舊城美食，通關可迎請過爐加持香包與吉祥物紀念品（ https://liff.line.me/2011668576-3Qay1nBv?page=routes ）。
+   - 🏮【藍興之謎・尋找遺失的寶物】：以純手機取代遊戲後易被丟棄的紙本題盒與一次性道具，串聯萬春宮、青草街、第二市場與舊城商圈；通關後可依當期活動規則迎請《藍興之謎》聯名限定金色平安符，將故事中的寶物化為可長期保存的祈安信物（ https://liff.line.me/2011668576-3Qay1nBv?page=routes ）。
    - 🌾【信眾中心（白米收驚與生肖歲煞）】：安撫心神不寧、查詢流年太歲與歲煞制化指南（ https://liff.line.me/2011668576-3Qay1nBv?page=profile ）。
 
 【回覆規範】：
@@ -131,18 +225,20 @@ def identify_quick_intent(user_text: str) -> str:
     """高頻專用意圖精準秒回引擎 (0.01 秒無延遲，不受第三方 AI 佇列或超時影響)"""
     t = user_text.strip().lower()
 
-    # 0. 萬春宮實境走讀解謎 / 大墩密碼 / 開始遊戲 / 啟動碼 / 香包 / 吉祥物 / 城市尋寶
-    if any(k in t for k in ["解謎", "實境", "開始遊戲", "大墩密碼", "啟動碼", "香包", "吉祥物", "實境遊戲", "尋寶", "城市尋寶", "購買解謎", "卡關", "提示"]):
+    # 0. 萬春宮實境走讀解謎 / 藍興之謎 / 開始遊戲 / 啟動碼 / 金色平安符 / 城市尋寶
+    if any(k in t for k in ["解謎", "實境", "開始遊戲", "藍興之謎", "大墩密碼", "啟動碼", "平安符", "金色平安符", "實境遊戲", "尋寶", "城市尋寶", "購買解謎", "卡關", "提示"]):
         return (
-            "🏮【台中萬春宮官方實境走讀・《大墩密碼：萬春三媽開基走讀》】：\n\n"
-            "📱【純手機數位啟動・零廢紙丟棄負擔】：\n"
-            "免買厚重紙本題本！由 LINE AI 老廟祝一步步引導，深入萬春宮建築瑰寶（道光石獅、光緒御匾）與舊城美食（第二市場、青草老街）。\n\n"
-            "🎁【破關迎請開運香包／吉祥物】：\n"
-            "您的付費緣金（NT$ 299）全數作為古蹟文教維護，走完 6 關後，手機自動生成結緣憑證，可至萬春宮服務台親領【正身媽祖刺繡開運香包／祈福吉祥物】並至大殿香爐過火三圈加持！\n\n"
+            "🏮【台中萬春宮文化尋寶・《藍興之謎：尋找遺失的寶物》】：\n\n"
+            "🔎【我們發現的問題】：\n"
+            "傳統解謎包的題本、紙盒與一次性道具，在遊戲結束後常被丟棄，文化體驗也容易隨之中斷。\n\n"
+            "📱【線上參拜 × 到訪尋寶】：\n"
+            "平時可先在線上認識參拜方式與地方故事；到訪萬春宮時，再由 LINE 智慧廟祝引導，探索道光石獅、光緒御匾、青草街、第二市場與舊城商圈。\n\n"
+            "🎁【尋回寶物・限定金色平安符】：\n"
+            "完成 6 關後，故事中的『遺失寶物』將化為《藍興之謎》聯名限定金色平安符。不同於一般紅色平安符，它是可長期保存的通關紀念與祈安信物；正式品項與兌換方式依當期活動公告。\n\n"
             "🛒【啟動方式】：\n"
             "1. 點擊下方選單正中間大圓形【開始遊戲】輸入 8 碼啟動碼（亦可免費試玩第 1 關道光石獅）！\n"
             "2. 服務台結緣卡：親臨萬春宮服務台取得啟動卡。\n\n"
-            "👉 點此立即開啟大墩實境走讀大廳：\n"
+            "👉 點此立即開啟《藍興之謎》尋寶大廳：\n"
             "https://liff.line.me/2011668576-3Qay1nBv?page=quest"
         )
 
@@ -157,7 +253,7 @@ def identify_quick_intent(user_text: str) -> str:
             "   - 老賴紅茶 / 鄒記阿嬤紅茶（古早味碎冰紅茶）\n"
             "3. 🍗【繼光街老街】（步行 4 分鐘）：繼光香香雞創始本舖、福州意麵。\n"
             "4. 🥮【自由路/中山路】（步行 5 分鐘）：洪瑞珍三明治本舖、全安堂太陽餅博物館。\n\n"
-            "💡【解謎小提醒】：上述美食皆為《大墩密碼》實境解謎路線上的重要探索點與自費休憩補給站，歡迎邊走讀邊品嚐！"
+            "💡【解謎小提醒】：上述美食皆為《藍興之謎》尋寶路線上的探索點與自費休憩補給站，歡迎邊走讀、邊認識台中，也為舊城商圈帶來更多停留！"
         )
 
     # 1. 台中萬春宮 / 藍興宮 / 供奉神明 / 歷史特色查詢
@@ -196,7 +292,7 @@ def identify_quick_intent(user_text: str) -> str:
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=lighting\n\n"
             "3. 🧘【正念冥想・檀木佛珠】：3D 金光呼吸定心捻珠、累積每日功德\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=meditation\n\n"
-            "4. 🏮【實境解謎走讀】：萬春宮廟宇文化與舊城美食城市尋寶，破關迎請過爐香包\n"
+            "4. 🏮【藍興之謎】：萬春宮、地方歷史與舊城商圈尋寶，通關可依活動規則迎請限定金色平安符\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=routes\n\n"
             "5. 🌾【信眾中心（收驚與歲煞）】：白米收驚安魂與生肖流年太歲制化指南\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=profile\n\n"
@@ -211,7 +307,7 @@ def identify_quick_intent(user_text: str) -> str:
             "1. 📿【湄洲媽靈籤】：六十甲子靈籤與 AI 深度解籤\n"
             "2. 🧘【正念冥想】：3D 斜角立體檀木捻珠與呼吸定心\n"
             "3. 🏮【祈安點燈】：文昌光明、元辰祈安與功德祿位\n"
-            "4. 🏮【實境解謎走讀】：萬春宮×舊城大墩密碼城市解謎，破關迎請過爐加持香包\n"
+            "4. 🏮【藍興之謎】：尋找遺失的寶物，走進萬春宮與舊城商圈，通關收藏限定金色平安符\n"
             "5. 🌾【白米收驚與生肖歲煞】：安魂定神與流年太歲制化諮詢\n\n"
             "請問今日有什麼事項需要為您向神明指引或查詢嗎？"
         )
@@ -307,7 +403,7 @@ def get_casual_fallback(user_text: str) -> str:
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=lighting\n\n"
             "3. 🧘【正念冥想】：3D 檀木佛珠金光呼吸引導、定心積福\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=meditation\n\n"
-            "4. 🏮【實境解謎走讀】：萬春宮實境城市尋寶，破關迎請過爐加持刺繡香包\n"
+            "4. 🏮【藍興之謎】：萬春宮實境城市尋寶，通關可依活動規則迎請聯名限定金色平安符\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=routes\n\n"
             "5. 🌾【信眾中心】：白米收驚安魂與生肖流年太歲制化指南\n"
             "   👉 https://liff.line.me/2011668576-3Qay1nBv?page=profile\n\n"
@@ -518,7 +614,7 @@ def handle_follow_event(user_id: str):
                 "點擊下方圖文選單，隨時體驗：\n"
                 "1. 📿【線上靈籤】：誠心搖筒請示六十甲子靈籤與 AI 客觀解籤\n"
                 "2. 🧘【正念冥想】：3D 斜角立體捻珠與累積今日功德\n"
-                "3. 🏮【實境解謎】：萬春宮大墩尋寶路線與現場破關解密\n"
+                "3. 🏮【藍興之謎】：尋找遺失的寶物，走讀萬春宮與台中舊城商圈\n"
                 "4. 💡【祈安點燈】：文昌光明與元辰祈安文教公益\n"
                 "5. 📜【參拜指南】：隨時查詢進廟順序與持香撇步\n\n"
                 "願神明威靈護佑，祈願所求皆得圓滿、平安吉祥！"
@@ -561,10 +657,9 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    user_id = data.get("user_id")
-    text = data.get("text")
-    if not user_id or not text:
-        raise HTTPException(status_code=400, detail="Missing user_id or text")
+    text = require_text(data.get("text"), "text", MAX_FORTUNE_TEXT_LENGTH)
+    user_id = await run_in_threadpool(verify_line_id_token, data.get("id_token"))
+    enforce_rate_limit(f"push:{user_id}", limit=4)
 
     log_event(f"收到抽籤回傳請求: 信徒 [{user_id}]")
     PENDING_FORTUNES[user_id] = {"text": text, "timestamp": time.time()}
@@ -607,8 +702,13 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
 @app.post("/api/interpret_fortune")
 async def api_interpret_fortune(request: Request):
     """直接在網頁畫面上進行官方宮廟即時客觀解籤（適用於不想跳轉 LINE 的電腦用戶）"""
-    data = await request.json()
-    text = data.get("text", "")
+    try:
+        data = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+    text = require_text(data.get("text"), "text", MAX_INTERPRET_TEXT_LENGTH)
+    client_host = request.client.host if request.client else "unknown"
+    enforce_rate_limit(f"interpret:{client_host}", limit=8)
     quick = identify_quick_intent(text)
     if quick:
         reply = quick
@@ -625,21 +725,33 @@ async def api_touch_checkin(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    user_id = data.get("user_id")
-    route_id = data.get("route_id", "wenchang")
+    user_id = await run_in_threadpool(verify_line_id_token, data.get("id_token"))
+    enforce_rate_limit(f"checkin:{user_id}", limit=12)
+    route_id = require_text(data.get("route_id", "wanchun"), "route_id", 40)
     try:
         cp_index = int(data.get("checkpoint_index", 0))
     except (ValueError, TypeError):
         cp_index = 0
 
-    TEMPLE_NAMES = {
-        "wenchang": ["台北文昌宮 (雙連)", "大龍峒保安宮文昌殿", "新莊文昌祠"],
-        "yuelao": ["台北霞海城隍廟", "艋舺龍山寺月老廳", "大稻埕慈聖宮"],
-        "mazu": ["北投關渡宮", "松山慈祐宮", "士林慈諴宮"],
-        "baishatun": ["白沙屯拱天宮", "通霄慈惠宮", "北港朝天宮"]
+    ROUTE_NAMES = {
+        "wanchun": [
+            "萬春山門牌樓（道光青斗石獅）",
+            "萬春聖母大殿（光緒御匾・開基三媽）",
+            "成功路青草街",
+            "台中第二市場（六角樓）",
+            "繼光街徒步區",
+            "萬春宮大殿（功德圓滿）",
+        ],
+        "oldtown": ["大墩福德祠", "第二市場六角樓", "中區輔天宮"],
+        "rainroute": ["開基天后古壇", "柳川水神福德祠", "綠川親水福德爺"],
+        "sevenmazu": ["天后聖母大殿", "台中火車站舊站", "彰化南瑤宮分靈站"],
     }
-    names = TEMPLE_NAMES.get(route_id, ["宮廟"])
-    temple_name = names[cp_index] if 0 <= cp_index < len(names) else names[0]
+    names = ROUTE_NAMES.get(route_id)
+    if not names:
+        raise HTTPException(status_code=400, detail="Unknown route_id")
+    if not 0 <= cp_index < len(names):
+        raise HTTPException(status_code=400, detail="Invalid checkpoint_index")
+    temple_name = names[cp_index]
 
     log_event(f"信徒 [{user_id}] 透過 LINE Touch 實體感應完成【{temple_name}】打卡！")
 
@@ -648,7 +760,7 @@ async def api_touch_checkin(request: Request):
         with ApiClient(configuration) as api_client:
             messaging_api = MessagingApi(api_client)
             push_text = (
-                f"🎉【大墩密碼・實境解謎通關成功】\n\n"
+                f"🎉【藍興之謎・尋寶關卡解鎖成功】\n\n"
                 f"恭賀信士親臨解密【{temple_name}】！\n"
                 f"已為您成功解鎖第 {cp_index + 1} 道實境謎題古印。\n"
                 f"神尊威靈護佑，祈願所求皆遂、平安吉祥！\n\n"
@@ -675,11 +787,23 @@ async def api_touch_checkin(request: Request):
     }
 
 
-@app.get("/api/maps_key")
-def get_maps_key():
-    """安全提供受網域限制之 Google Maps API Key"""
-    key = os.getenv("GOOGLE_MAPS_API_KEY", "AIzaSyAeh19CtsKLtzgdDfqgduwhC3OBpGSm4yo")
-    return {"status": "ok", "key": key}
+@app.post("/api/quest/activate")
+async def activate_quest(request: Request):
+    """Validate an activation code without exposing valid codes to the browser."""
+    try:
+        data = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+
+    client_host = request.client.host if request.client else "unknown"
+    enforce_rate_limit(f"quest-activate:{client_host}", limit=8, window_seconds=300)
+    code = require_text(data.get("code"), "code", 64).upper()
+    if not QUEST_ACCESS_CODE_HASHES:
+        raise HTTPException(status_code=503, detail="Quest activation is not configured")
+    digest = hashlib.sha256(code.encode("utf-8")).hexdigest()
+    if not any(hmac.compare_digest(digest, expected) for expected in QUEST_ACCESS_CODE_HASHES):
+        raise HTTPException(status_code=401, detail="Invalid activation code")
+    return {"status": "success", "activated": True}
 
 
 @app.get("/")
@@ -690,14 +814,18 @@ def root():
         "chat_style": "temple-customer-service-objective",
         "vision_support": "multimodal-enabled",
         "desktop_push_support": "api-push-fortune-enabled",
-        "logs_endpoint": "/logs",
-        "version": "3.2.0-knowledge-engine"
+        "version": APP_VERSION,
+        "authentication": "line-id-token"
     }
 
 
 @app.get("/logs")
-def view_logs():
+def view_logs(x_admin_token: str = Header(None)):
     """即時查看伺服器處理日誌，排查連線狀況"""
+    if not ADMIN_LOG_TOKEN:
+        raise HTTPException(status_code=404, detail="Not found")
+    if not x_admin_token or not hmac.compare_digest(x_admin_token, ADMIN_LOG_TOKEN):
+        raise HTTPException(status_code=401, detail="Unauthorized")
     return {
         "total_logs": len(SERVER_LOGS),
         "logs": list(SERVER_LOGS)
