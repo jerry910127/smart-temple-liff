@@ -6878,15 +6878,18 @@
 
     // 發送打卡資料至後端 API (/api/touch_checkin)
     async function sendTouchCheckinToBackend(routeId, checkpointIdx) {
+      // 相容新舊後端：新版只採信驗證後的 id_token；舊版（v3.0.0）讀取 user_id。
       const idToken = getLineIdToken();
-      if (!idToken) return;
+      const userId = window.currentLineUserId || null;
+      if (!idToken && !userId) return;
 
       try {
         const response = await fetch(`${BACKEND_API_BASE}/api/touch_checkin`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            id_token: idToken,
+            ...(idToken ? { id_token: idToken } : {}),
+            user_id: userId,
             route_id: routeId,
             checkpoint_index: checkpointIdx
           })
@@ -9229,15 +9232,16 @@
         // 向後端發送籤詩暫存與單次推播請求 (4 秒逾時保護)
         if (userId) {
           try {
+            // 相容新舊後端：新版只採信驗證後的 id_token；舊版（v3.0.0）讀取 user_id。
             const idToken = getLineIdToken();
-            if (!idToken) throw new Error("LINE ID token unavailable");
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 4000);
             const resp = await fetch(`${BACKEND_API_BASE}/api/push_fortune`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                id_token: idToken,
+                ...(idToken ? { id_token: idToken } : {}),
+                user_id: userId,
                 text: msgText
               }),
               signal: controller.signal
