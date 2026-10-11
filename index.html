@@ -2914,7 +2914,7 @@
         </div>
         <p style="font-size:0.78rem; color:#666; line-height:1.5; margin:0 0 10px;">扶助清寒家庭勤學學子，頒發助學獎勵金與贈閱文教書籍，陪伴莘莘學子安心求學成才。</p>
         <div style="display:flex; gap:8px;">
-          <button onclick="prompt('【學子獎助學金】發心助學認捐：\n請輸入認捐金額（例：500 或 1000）：', '500'); alert('感謝善信發心！文教助學功德無量，宮廟執事將寄發數位徵信感謝狀！');" style="flex:1; background:#0D5426; color:#FFF; border:none; padding:7px 0; border-radius:6px; font-size:0.78rem; font-weight:bold; cursor:pointer;">發心助學認捐</button>
+          <button onclick="demoPaymentNotice('學子獎助學金認捐')" style="flex:1; background:#0D5426; color:#FFF; border:none; padding:7px 0; border-radius:6px; font-size:0.78rem; font-weight:bold; cursor:pointer;">發心助學認捐</button>
           <button onclick="alert('【學子獎助學金申辦須知】\n凡設籍之清寒學子，憑各級學校前一學期成績單與清寒證明，可於每年春、秋二季向本宮管委會秘書處申請！');" style="background:#FAF5F0; color:#8C5B32; border:1px solid #E8D8C8; padding:7px 12px; border-radius:6px; font-size:0.78rem; cursor:pointer;">申請資格須知</button>
         </div>
       </div>
@@ -2928,7 +2928,7 @@
         </div>
         <p style="font-size:0.78rem; color:#666; line-height:1.5; margin:0 0 10px;">及時慰問援助突遭逢重大意外、失怙傷病或急迫家庭經濟變故之弱勢信眾，協助度過燃眉之急。</p>
         <div style="display:flex; gap:8px;">
-          <button onclick="prompt('【急難救助金】慈悲專款認捐：\n請輸入認捐金額（例：600 或 1200）：', '600'); alert('感謝善信慈悲！急難救助專款專用，神明鑒照，福蔭子孫！');" style="flex:1; background:#A62824; color:#FFF; border:none; padding:7px 0; border-radius:6px; font-size:0.78rem; font-weight:bold; cursor:pointer;">發心急難捐助</button>
+          <button onclick="demoPaymentNotice('急難救助金認捐')" style="flex:1; background:#A62824; color:#FFF; border:none; padding:7px 0; border-radius:6px; font-size:0.78rem; font-weight:bold; cursor:pointer;">發心急難捐助</button>
           <button onclick="alert('【急難救助洽詢】\n如有突發醫療或家庭急變需救助者，可請地方里長通報，或撥打宮廟慈善專線由志工社工專人探訪關懷！');" style="background:#FAF5F0; color:#8C5B32; border:1px solid #E8D8C8; padding:7px 12px; border-radius:6px; font-size:0.78rem; cursor:pointer;">救助洽詢方式</button>
         </div>
       </div>
@@ -2942,7 +2942,7 @@
         </div>
         <p style="font-size:0.78rem; color:#666; line-height:1.5; margin:0 0 10px;">聯合中西醫護志工深入醫療資源不足之偏鄉村落，舉辦免費義診健檢、致贈長輩常備健康物資與營養補品。</p>
         <div style="display:flex; gap:8px;">
-          <button onclick="prompt('【偏鄉文教義診】愛心支持認捐：\n請輸入支持金額或物資認贈：', '600'); alert('感謝善信慈悲！已登記偏鄉巡迴義診護持基金，下季巡迴將代表善信送暖！');" style="flex:1; background:#8C5B32; color:#FFF; border:none; padding:7px 0; border-radius:6px; font-size:0.78rem; font-weight:bold; cursor:pointer;">支持義診物資</button>
+          <button onclick="demoPaymentNotice('偏鄉文教義診護持')" style="flex:1; background:#8C5B32; color:#FFF; border:none; padding:7px 0; border-radius:6px; font-size:0.78rem; font-weight:bold; cursor:pointer;">支持義診物資</button>
           <button onclick="alert('【偏鄉義診排程】\n偏鄉巡迴義診車隊定期於每季末啟程前往山區聚落，歡迎醫護專才加入志工服務隊！');" style="background:#FAF5F0; color:#8C5B32; border:1px solid #E8D8C8; padding:7px 12px; border-radius:6px; font-size:0.78rem; cursor:pointer;">志工招募與排程</button>
         </div>
       </div>
@@ -3253,10 +3253,6 @@
       </div>
       <div style="font-size:0.86rem; line-height:1.7; color:#444;">
         <div style="border-bottom:1px solid #EEE; padding:10px 0;">
-          <strong style="color:#FF5A1F;">【中區舊城老店奉茶】</strong><br>
-          擲筊未賜杯觸發心理學奉茶補償！第二市場特約店家滿百折 15 元或 85 折優惠！
-        </div>
-        <div style="border-bottom:1px solid #EEE; padding:10px 0;">
           <strong style="color:#06C755;">【甲辰年祈安禮斗大法會】</strong><br>
           秋季祈安禮斗法會開放線上填寫文疏，元辰光彩、平安順遂。
         </div>
@@ -3265,10 +3261,9 @@
           親臨萬春宮牌樓、御匾、青草街與第二市場，解鎖實境謎題即可迎請過爐加持香包！
         </div>
         <div style="padding:10px 0;">
-          <strong style="color:#D48806;">【宮廟常設參拜指引與金流】</strong><br>
-          • 廟址：台中市中區成功路212號（每日 06:00~21:00 開放）<br>
-          • 銀行帳號：聯邦銀行民權分行 062-10010-7299（宮廟文教專戶 常立文）<br>
-          • 服務電話：(04) 2224-5964・支援 LINE Pay / 街口臨櫃奉納
+          <strong style="color:#D48806;">【宮廟參拜資訊】</strong><br>
+          • 廟址：台中市中區成功路212號<br>
+          • 開放時間、服務電話與捐獻方式，請以廟方官方公告為準。本 App 為提案原型，不代收任何款項。
         </div>
       </div>
       <button class="lb-primary-btn" onclick="closeLbModal('bellModal')">關閉通知</button>
@@ -3297,10 +3292,6 @@
         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #ECE7E1;">
           <span>解籤角色風格</span>
           <strong style="color:#8C5B32;">宮廟資深廟祝（溫暖慈悲）</strong>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #ECE7E1;">
-          <span>線上對帳末五碼申報</span>
-          <button style="background:#A62824; color:#FFF; border:none; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer;" onclick="prompt('請輸入您的銀行匯款帳號末五碼與奉納項目：', '12345 光明燈'); alert('✅ 已向宮廟執事提交對帳登記！');">快速登記</button>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
           <span>LINE MINI App 版本</span>
@@ -3417,7 +3408,7 @@
         </div>
 
         <button class="lb-primary-btn" style="background:#A62824;" onclick="submitLightingOrder()">
-          LINE Pay 奉納登記・點亮元辰燈
+          示範：登記文疏・點亮元辰燈（未串接金流）
         </button>
       </div>
 
@@ -3476,7 +3467,7 @@
             </button>
             <button class="lb-primary-btn" style="flex:1; background:linear-gradient(135deg, #722ED1 0%, #B37FEB 100%); display:flex; align-items:center; justify-content:center; gap:5px;" onclick="buyGlazeOil()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFE58F"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              升級七寶琉璃油 ($30)
+              升級七寶琉璃油（示範）
             </button>
           </div>
           <button class="lb-primary-btn" style="background:#444; padding:8px 0; font-size:0.8rem; display:flex; align-items:center; justify-content:center; gap:4px;" onclick="switchLightingTab('register')">
@@ -3614,11 +3605,11 @@
         </div>
 
         <div style="background:#FFFDF9; border:1px dashed #C68F42; padding:10px; border-radius:8px; font-size:0.78rem; color:#8C5B32; margin-bottom:12px;">
-          ✨ <strong>透明徵信承諾：</strong>贊普完成後，系統將自動於 LINE 官方帳號發送<strong>「開基三媽功德收據」</strong>與社福團體受贈證明。
+          ℹ️ <strong>示範流程：</strong>尚未串接 LINE Pay 與徵信系統，不會實際付款、代收款項或寄發收據。
         </div>
 
         <button class="lb-primary-btn" style="background:#A62824;" onclick="submitCharityDonation()">
-          LINE Pay 愛心認捐・祈安植福
+          示範：愛心認捐流程（未串接金流）
         </button>
       </div>
     </div>
@@ -3984,7 +3975,7 @@
           <span style="color:#A83800; font-size:0.78rem;">★ 凡登記即獲大甲媽過爐平安香火袋宅配送達</span>
         </div>
       </div>
-      <button class="lb-primary-btn" onclick="alert('感謝信士支持！已為您記錄贊助意願，將由廟方執事專人聯繫。'); closeLbModal('adModal');">
+      <button class="lb-primary-btn" onclick="demoPaymentNotice('宮廟慶典贊助'); closeLbModal('adModal');">
         誠心參與祈福贊助
       </button>
     </div>
@@ -4071,9 +4062,6 @@
           </div>
 
           <div style="display:flex; gap:10px;">
-            <button class="lb-primary-btn" style="flex:1; background:#A62824;" onclick="openCouponModal(); closeLbModal('shoujingModal');">
-              領取奉茶優惠溫潤定神
-            </button>
             <button class="lb-primary-btn" style="flex:1; background:#5C381E;" onclick="resetShoujingView()">
               為親友再收一次
             </button>
@@ -4663,31 +4651,6 @@
     </div>
   </div>
 
-  <!-- 10. 商圈奉茶優惠券 Modal (獨立商圈券，首頁點擊開啟) -->
-  <div class="lb-modal-overlay" id="couponModal" onclick="closeCouponModal()">
-    <div class="lb-sheet" onclick="event.stopPropagation()">
-      <div class="lb-sheet-bar"></div>
-      <div class="lb-sheet-header">
-        <div class="lb-sheet-title" style="display:flex; align-items:center; gap:6px;">
-          <span>🍵</span> 商圈奉茶・現折優惠券
-        </div>
-        <button class="lb-sheet-close" onclick="closeCouponModal()">✕</button>
-      </div>
-      <div style="font-size:0.86rem; line-height:1.7; color:#444; text-align:center; padding:8px 0;">
-        <p style="color:#666; font-size:0.82rem; margin-bottom:12px;">結帳時出示專屬優惠代碼，享全台合作手搖飲、咖啡門市現折：</p>
-        <div style="background:#FAF5F0; border:1.5px dashed #C68F42; border-radius:12px; padding:16px; margin-bottom:14px;">
-          <div style="font-size:0.75rem; color:#8C5B32; font-weight:bold; margin-bottom:4px;">全台合作手搖飲 / 咖啡通用</div>
-          <div style="font-size:1.3rem; font-weight:bold; color:#A62824; margin-bottom:10px;">🥤 現折 15 元／85 折</div>
-          <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
-            <span id="couponCodeText" style="font-family:monospace; font-size:1.1rem; font-weight:bold; color:#1C1614; background:#FFF; border:1px solid #DDD; padding:6px 14px; border-radius:6px; letter-spacing:2px;">TEMPLE88</span>
-            <button onclick="copyCouponCode()" style="background:#A62824; color:#FFF; border:none; padding:7px 14px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">複製代碼</button>
-          </div>
-        </div>
-        <button class="lb-primary-btn" style="background:#8C5B32;" onclick="closeCouponModal()">關閉</button>
-      </div>
-    </div>
-  </div>
-
   <!-- ==============================================
        求籤與擲筊核心舞台 (預設隱藏，點擊「線上解籤」進入)
        ============================================== -->
@@ -4892,25 +4855,9 @@
     let isTossing = false;
     let audioContext = null;
 
-    // 心理學動態保底機率與行為增強狀態
-    let failureStreak = 0;
-    let pityShengBonus = 0;
-    let couponOffered = false;
-
-    // 動態機率運算（平滑運算，在背後自然調節，神不知鬼不覺，絕不對外顯示任何勝率或%數）
-    function getDynamicRates() {
-      const dynamicSheng = Math.min(70, 50 + (failureStreak * 4));
-      const remaining = 100 - dynamicSheng;
-      return {
-        sheng: dynamicSheng,
-        xiao: remaining / 2,
-        yin: remaining / 2
-      };
-    }
-
-    function updatePityIndicator() {
-      // 純淨神聖儀軌：完全不對外顯示任何勝率或機率%數，一切自然運轉（神不知鬼不覺）
-    }
+    // 固定且公開的擲筊機率：兩片筊杯各自正反獨立，一正一反（聖杯）為 50%，
+    // 兩正（笑杯）與兩反（陰杯）各 25%。不因先前結果調整，僅供文化互動體驗。
+    const TOSS_RATES = Object.freeze({ sheng: 50, xiao: 25, yin: 25 });
 
     window.addEventListener('DOMContentLoaded', () => {
       initLiffApp();
@@ -7286,7 +7233,7 @@
       document.getElementById('roomLightDays').innerText = virtualRoomState.days;
       document.getElementById('roomMeritCount').innerText = virtualRoomState.merit;
 
-      alert(`🎉 感謝信士誠心！已透過 LINE Pay 成功奉納 ${currentSelectedLight.title}（新台幣 $${currentSelectedLight.price} 元）！\n\n文疏已存檔備呈宮廟大殿，現已為您在殿前點亮【專屬虛擬元辰燈】！`);
+      alert(`【示範流程】已為「${name}」顯示虛擬元辰燈畫面（${currentSelectedLight.title}）。\n\n本 App 為提案原型，尚未串接 LINE Pay，未實際付款，文疏也不會送至宮廟。`);
       switchLightingTab('room');
     }
 
@@ -7344,7 +7291,7 @@
         }, 400);
       }
 
-      alert('✨ 感謝信士發心！已透過 LINE Pay 成功奉納 $30 元升級【七寶琉璃金油】！\n\n功德值爆發 +50，元辰燈光芒升級為尊榮七彩琉璃光，連續添油進度直接滿額解鎖！');
+      alert('【示範流程】已顯示七寶琉璃燈的升級效果。\n\n尚未串接 LINE Pay，未實際付款。');
     }
 
     // ==============================================
@@ -7526,7 +7473,7 @@
       const orgText = org ? org.options[org.selectedIndex].text : '弱勢機構';
 
       playCypressWoodSound();
-      alert(`🌾 感謝信士【${donor}】慈悲認捐！\n\n已透過 LINE Pay 奉納：${itemText}\n轉贈指派：${orgText}\n\n宮廟執事將於秋祭清醮法會圓滿後，由開基三媽加持並將物資轉贈，並於 LINE 官方帳號發送數位感謝狀與物資徵信證明！`);
+      demoPaymentNotice(`愛心認捐（${itemText} → ${orgText}）`);
       closeLbModal('charityModal');
     }
 
@@ -8260,9 +8207,9 @@
       document.getElementById('tossBtnLabel').innerText = consecutiveSheng === 0 ? '擲　　筊' : '誠 心 再 擲';
     }
 
-    // 機率運算（採用心理學動態補償與近失效應 Near-Miss Effect）
+    // 依固定機率決定擲筊結果
     function evaluateTossOutcome() {
-      const rates = getDynamicRates();
+      const rates = TOSS_RATES;
       const roll = Math.random() * 100;
 
       if (roll < rates.xiao) {
@@ -8363,11 +8310,6 @@
           updateShengProgress();
 
           if (consecutiveSheng >= TARGET_SHENG_COUNT) {
-            // 三聖杯達成！重置失敗累積與加成
-            failureStreak = 0;
-            pityShengBonus = 0;
-            updatePityIndicator();
-
             tossBtn.style.display = 'none';
             document.getElementById('resetBtn').style.display = 'none';
             document.getElementById('viewPoemBtn').style.display = 'inline-flex';
@@ -8378,13 +8320,10 @@
             document.getElementById('resetBtn').style.display = 'none';
           }
         } else {
-          // 未獲聖杯：累加失敗次數，背景平滑微調（神不知鬼不覺，無任何彈窗干擾）
-          failureStreak++;
+          // 未獲聖杯：連續聖杯歸零，重新擲筊
           consecutiveSheng = 0;
           updateShengProgress();
-          updatePityIndicator();
 
-          // 保持純淨神聖儀軌，消除任何浮誇或商業券提示
           tossBtn.style.display = 'inline-flex';
           tossBtn.disabled = false;
           document.getElementById('tossBtnLabel').innerText = '誠 心 再 擲';
@@ -8450,21 +8389,9 @@
       openRouteDetailPage('wanchun');
     }
 
-    // 商圈奉茶折扣券控制（獨立商圈優惠，不在抽籤擲筊中彈出干擾）
-    function openCouponModal() {
-      openLbModal('couponModal');
-    }
-
-    function closeCouponModal() {
-      closeLbModal('couponModal');
-    }
-
-    function copyCouponCode() {
-      const code = 'TEMPLE88';
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(code).catch(() => {});
-      }
-      alert(`🎉 奉茶折扣代碼【${code}】已成功複製到剪貼簿！\n至全台合作手搖茶飲或門市結帳出示即享折抵！`);
+    // 所有付款、認捐與贊助入口共用：原型尚未串接金流，明確告知未實際付款。
+    function demoPaymentNotice(item) {
+      alert(`【示範流程】${item}\n\n本 App 為提案原型，尚未串接 LINE Pay，未實際付款，也不會代收任何款項。`);
     }
 
     // 重置回到第一幕搖籤
