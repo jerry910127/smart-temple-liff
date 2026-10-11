@@ -9193,7 +9193,7 @@
     // 回傳至 LINE 聊天室進行 AI 解籤（保證單次發送 + 已加好友直接關閉回到聊天室）
     async function handleSendToLine() {
       const sendBtn = document.getElementById('sendToLineBtn');
-      const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請老廟祝／AI大師為我深入剖析指點迷津！`;
+      const msgText = `【靈籤入微・AI福運宮】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請陪我想想，這支籤對我的處境有什麼提醒。`;
 
       // 若剛剛已經送出過，直接關閉或返回聊天室，絕不重複發送
       if (hasSentCurrentFortune) {

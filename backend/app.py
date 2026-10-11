@@ -186,17 +186,62 @@ TEMPLE_SERVICE_PROMPT = """你是「靈籤入微 - 智慧宮廟線上服務處�
 - 稱呼用戶為「信士」或「您」。
 - 回覆結構條理分明（可用項目清單）、重點突出、語意完整，結尾劃上適當標點符號。"""
 
+# 解籤專用：引導信眾自己領會，而非替神明下結論
+FORTUNE_REFLECTION_PROMPT = """【本次任務：引導式解籤】
+信士傳來的是一支靈籤。請不要替信士或神明下結論，而是陪信士自己想清楚。籤詩的領會在信士自己。
+只寫以下三段，總長不超過 280 字，使用純文字（不要用 ** 或 # 等符號），一律稱「您」，不用「我們」。
+請完全照抄這個格式與標題：
+
+【籤詩白話】
+（兩句話說明籤詩字面意思與意象；籤上原有的吉凶標示可照錄，但不要延伸成預言）
+
+【可以這樣理解】
+・若您⋯⋯，這支籤可以看成⋯⋯的提醒。
+・若您⋯⋯，這支籤可以看成⋯⋯的提醒。
+・若您⋯⋯，這支籤可以看成⋯⋯的提醒。
+
+【問問自己】
+1. （具體的反思問題）
+2. （具體的反思問題）
+3. （具體的反思問題）
+
+禁止事項：
+- 不預言結果，不使用「必定」「一定」「保證」「即將」「一切都會」「將會成功」等斷語。
+- 不恐嚇、不製造焦慮（例如「不化解會有災」）。
+- 不推銷點燈、祭解、收驚或任何付費服務。
+- 不以神明口吻發言，不說「神明要您⋯⋯」，改用「這支籤提醒⋯⋯」。
+- 不要寫結語或叮嚀，系統會自動附上。"""
+
+# 解籤固定結語：由程式附加，不交給模型生成
+FORTUNE_REFLECTION_CLOSING = (
+    "【溫馨叮嚀】籤詩是指引，不是定論，最後的領會在您自己。"
+    "重大事項可親至宮廟向神明稟明，或請教醫療、法律、財務等專業人士。"
+)
+
+# AI 服務異常時的解籤保底：仍以引導反思的方式回覆
+FORTUNE_REFLECTION_FALLBACK = (
+    "信士您好，籤詩已收到。這支籤的意思，最終由您自己領會，本處陪您一起想想：\n\n"
+    "【問問自己】\n"
+    "1. 您求問的這件事，現在最讓您掛心的是什麼？\n"
+    "2. 籤詩裡哪一句最觸動您？它讓您想到生活中的哪個處境？\n"
+    "3. 這件事中，哪些是您現在就能掌握、能先做的一小步？\n\n"
+    "【溫馨叮嚀】籤詩是指引，不是定論。重大事項可親至宮廟向神明稟明，"
+    "或請教醫療、法律、財務等專業人士。祝您心安順遂。"
+)
+
 
 def call_nvidia_ai(user_message: str) -> str:
     """調用 NVIDIA NIM 模型，具備多模型層級降級防線與超時防護"""
     is_fortune = any(k in user_message for k in ["靈籤", "籤詩", "第", "首", "聖筊"])
     max_tok = 700 if is_fortune else 450
+    system_prompt = TEMPLE_SERVICE_PROMPT + ("\n\n" + FORTUNE_REFLECTION_PROMPT if is_fortune else "")
 
     # 候選可用模型清單 (優先極速精準之 ising-calibration-31b 與 Llama 3.2 11B)
+    # 先用回應較快的 NVIDIA_MODEL（預設 Llama 3.2 11B，實測約 6 秒）；
+    # ising-calibration 實測常超過 8 秒，改為備援；mistral-nemotron 已於 2026 年停用（HTTP 410）。
     candidate_models = [
-        "nvidia/ising-calibration-1.5-31b",
         NVIDIA_MODEL,
-        "mistralai/mistral-nemotron"
+        "nvidia/ising-calibration-1.5-31b",
     ]
 
     for model_name in candidate_models:
@@ -204,7 +249,7 @@ def call_nvidia_ai(user_message: str) -> str:
             response = nvidia_client.chat.completions.create(
                 model=model_name,
                 messages=[
-                    {"role": "system", "content": TEMPLE_SERVICE_PROMPT},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_message}
                 ],
                 temperature=0.4,
@@ -214,10 +259,18 @@ def call_nvidia_ai(user_message: str) -> str:
             msg = response.choices[0].message
             content = msg.content or getattr(msg, "reasoning_content", "")
             if content and content.strip():
+                if is_fortune:
+                    # LINE 不支援 Markdown：移除粗體與標題符號，並附上固定結語
+                    cleaned = re.sub(r"\*\*|__|^#+\s*", "", content.strip(), flags=re.M)
+                    cleaned = re.sub(r"^\s*[\*\-]\s+", "・", cleaned, flags=re.M)
+                    cleaned = re.sub(r"^【?(籤詩白話|可以這樣理解|問問自己)】?[：:]?\s*$", r"【\1】", cleaned, flags=re.M)
+                    return cleaned.rstrip() + "\n\n" + FORTUNE_REFLECTION_CLOSING
                 return content.strip()
         except Exception as e:
             log_event(f"NVIDIA 模型 [{model_name}] 異常或超時 ({e})，嘗試切換下一模型")
 
+    if is_fortune:
+        return FORTUNE_REFLECTION_FALLBACK
     return get_casual_fallback(user_message)
 
 
