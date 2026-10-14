@@ -62,7 +62,7 @@ assert.equal(run("canAccessQuestCheckpoint(0, 'other')"),true);
 let rendered = run('renderMysteryCheckpoints()');
 assert.ok(rendered.includes('LOCATION_0'));
 for (let i=1;i<6;i++) assert.ok(!rendered.includes(`LOCATION_${i}`));
-assert.ok(!/金色平安符|金紋/.test(rendered));
+assert.ok(!/聖筊擺飾|金色平安符|金紋/.test(rendered));
 run('renderInteractiveTempleFallback()');
 assert.ok(node('googleMapTrack').innerHTML.includes('LOCATION_0'));
 assert.ok(!node('googleMapTrack').innerHTML.includes('LOCATION_1'));

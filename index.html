@@ -5024,7 +5024,7 @@
     </div>
   </div>
 
-  <!-- 10.5 實境解謎：功德圓滿・限定金色平安符資格 Modal (Quest Redeem Modal) -->
+  <!-- 10.5 實境解謎：功德圓滿・通關限定版聖筊擺飾資格 Modal (Quest Redeem Modal) -->
   <div class="lb-modal-overlay" id="questRedeemModal" onclick="closeLbModal('questRedeemModal')">
     <div class="lb-sheet quest-puzzle-sheet" onclick="event.stopPropagation()" style="max-height:90vh; overflow-y:auto; border-radius:20px 20px 0 0;">
       <div class="lb-sheet-bar"></div>
@@ -5039,11 +5039,11 @@
       <div style="font-size:0.86rem; line-height:1.6; color:#444; padding-bottom:14px; text-align:center;">
         <!-- 金印認證卡片 -->
         <div style="background:radial-gradient(circle at 50% 28%,rgba(231,195,106,.22),transparent 34%),rgba(255,255,255,.05); border:1.5px solid rgba(227,188,98,.55); border-radius:18px; padding:20px 16px; margin-bottom:14px; box-shadow:0 14px 30px rgba(0,0,0,.24);">
-          <svg class="quest-final-talisman" viewBox="0 0 140 184" aria-label="完成的藍興之謎金色平安符">
-            <circle cx="70" cy="18" r="11" fill="none" stroke="#E7C36A" stroke-width="5"/><path d="M43 28h54l13 21v104l-40 22-40-22V49z" fill="#6F201E" stroke="#E7C36A" stroke-width="4"/>
-            <path d="M39 51h62M39 145h62" stroke="#E7C36A" stroke-width="2" opacity=".7"/><circle cx="70" cy="98" r="35" fill="none" stroke="#E7C36A" stroke-width="2" opacity=".62"/>
-            <path d="M70 66v64M51 76l38 44M89 76l-38 44M48 94h44M54 110h32M58 83h24" fill="none" stroke="#F5D987" stroke-width="5" stroke-linecap="round"/>
-            <text x="70" y="105" text-anchor="middle" fill="#FFF0A8" font-size="22" font-family="serif" font-weight="bold">安</text>
+          <svg class="quest-final-talisman" viewBox="0 0 140 184" aria-label="完成的藍興之謎通關限定版聖筊擺飾">
+            <path d="M64 36A56 56 0 0 0 64 148C52 118 52 68 64 36z" fill="#E8622A" stroke="#E7C36A" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M74 36A56 56 0 0 1 74 148C62 118 62 68 74 36z" fill="#E8622A" stroke="#E7C36A" stroke-width="3" stroke-linejoin="round"/>
+            <rect x="22" y="140" width="96" height="14" rx="3" fill="#F7F1E6" stroke="#E7C36A" stroke-width="2"/>
+            <rect x="12" y="154" width="116" height="14" rx="3" fill="#F7F1E6" stroke="#E7C36A" stroke-width="2"/>
           </svg>
           <div style="font-family:'Noto Serif TC', serif; font-size:1.3rem; font-weight:bold; color:#F5D987; margin-bottom:4px;">
             【六道金紋・全數歸位】
@@ -5061,10 +5061,10 @@
             </div>
           </div>
           <div style="font-size:0.75rem; color:#5C381E; line-height:1.6; text-align:left; background:rgba(255,255,255,0.7); padding:10px 12px; border-radius:8px;">
-            <strong>🙏 終章神聖儀軌三步驟：</strong><br>
+            <strong>🎁 終章領取三步驟：</strong><br>
             1. 前往萬春宮服務台出示本畫面。<br>
-            2. 由服務台依當期活動規則確認限定金色平安符資格。<br>
-            3. 依廟方指引持平安符過爐，將尋回的寶物化為可長久保存的祈安信物。
+            2. 由服務台依當期活動規則確認通關限定版聖筊擺飾資格。<br>
+            3. 把尋回的寶物帶回家；底座內建 NFC，手機靠近即可再次開啟 LINEBYE。
           </div>
         </div>
 
@@ -5441,7 +5441,7 @@
           { id: "wc_3", code: "③", name: "成功路青草街 (阿慶伯/漢強百草茶)", lat: 24.1435, lng: 120.6801, desc: "聞百草香與青草老街文化・【美食休憩站】推薦自費品嚐青草茶消暑" },
           { id: "wc_4", code: "④", name: "台中第二市場 (六角樓幾何建築)", lat: 24.1425, lng: 120.6789, desc: "探索大正時期六角樓構造・【美食中繼站】王記菜頭粿/爌肉飯" },
           { id: "wc_5", code: "⑤", name: "繼光街徒步區 (香香雞發源地老街銘板)", lat: 24.1398, lng: 120.6835, desc: "走讀大墩老街發展史・【美食休憩站】品嚐創始老店炸香雞" },
-          { id: "wc_6", code: "⑥", name: "返回萬春宮大殿 (尋回寶物・祈安圓滿)", lat: 24.1432, lng: 120.6806, desc: "完成尋寶後由服務台依活動規則核驗【《藍興之謎》限定金色平安符】資格" }
+          { id: "wc_6", code: "⑥", name: "返回萬春宮大殿 (尋回寶物・祈安圓滿)", lat: 24.1432, lng: 120.6806, desc: "完成尋寶後由服務台依活動規則核驗【《藍興之謎》通關限定版聖筊擺飾】資格" }
         ]
       },
       oldtown: {
@@ -6854,7 +6854,7 @@
       }
 
       if (totalStamps >= 6) {
-        alert(`🎉 恭賀尋寶圓滿！\n您已成功解開 ${totalStamps} 道《藍興之謎》實境謎題！\n已取得【聯名限定金色平安符】活動核驗資格；請至萬春宮服務處出示 LINE 畫面，正式品項與兌換方式依當期公告。`);
+        alert(`🎉 恭賀尋寶圓滿！\n您已成功解開 ${totalStamps} 道《藍興之謎》實境謎題！\n已取得【通關限定版聖筊擺飾】活動核驗資格；請至萬春宮服務處出示 LINE 畫面，正式品項與兌換方式依當期公告。`);
       } else {
         const puzzleModal = document.getElementById('questPuzzleModal');
         if (!puzzleModal || !puzzleModal.classList.contains('active')) {
@@ -7484,7 +7484,7 @@
       if (badge) badge.innerText = `🏮 實境解謎 ${visitedStampsCount}/6`;
 
       if (visitedStampsCount >= 6) {
-        alert("🎉 恭喜完成《藍興之謎》！\n您已取得【聯名限定金色平安符】活動核驗資格。\n請至萬春宮服務處出示 LINE 畫面；正式品項與兌換方式依當期公告。");
+        alert("🎉 恭喜完成《藍興之謎》！\n您已取得【通關限定版聖筊擺飾】活動核驗資格。\n請至萬春宮服務處出示 LINE 畫面；正式品項與兌換方式依當期公告。");
       } else {
         alert(`✅ 實境解鎖成功！\n已記錄【${foundCp ? foundCp.name : '大墩古印'}】！\n目前累計 ${visitedStampsCount}/6 關，繼續探索下一關！`);
       }
