@@ -27,6 +27,8 @@ from linebot.v3.messaging import (
     ReplyMessageRequest,
     PushMessageRequest,
     TextMessage,
+    FlexMessage,
+    FlexContainer,
     ShowLoadingAnimationRequest
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent, ImageMessageContent, FollowEvent
@@ -649,8 +651,153 @@ PENDING_FORTUNES = {}
 LAST_PUSHED_FORTUNES = {}
 
 
+def build_sticker_welcome_flex():
+    """建立信徒加入好友時自動跳出的【開基媽祖・開運祈福貼圖】全套 16 款 Flex Message 卡片"""
+    flex_data = {
+        "type": "bubble",
+        "size": "giga",
+        "header": {
+            "type": "box",
+            "layout": "vertical",
+            "backgroundColor": "#A62824",
+            "paddingAll": "16px",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": "✨ 開基媽祖・開運祈福貼圖",
+                    "weight": "bold",
+                    "color": "#FFFFFF",
+                    "size": "md"
+                },
+                {
+                    "type": "text",
+                    "text": "全套 16 款大字版・神明庇佑",
+                    "color": "#FFD9A0",
+                    "size": "xs",
+                    "margin": "xs"
+                }
+            ]
+        },
+        "hero": {
+            "type": "image",
+            "url": "https://raw.githubusercontent.com/jerry910127/smart-temple-liff/main/assets/promo_wanchun_banner.png",
+            "size": "full",
+            "aspectRatio": "16:9",
+            "aspectMode": "cover",
+            "action": {
+                "type": "uri",
+                "uri": "https://liff.line.me/2011668576-3Qay1nBv?modal=sticker"
+            }
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "md",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": "#FDF2F0",
+                    "borderColor": "#F3C5C2",
+                    "borderWidth": "1.5px",
+                    "cornerRadius": "12px",
+                    "paddingAll": "12px",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "🎉 加入官方 LINE 帳號限定！",
+                            "weight": "bold",
+                            "color": "#A62824",
+                            "size": "sm"
+                        },
+                        {
+                            "type": "text",
+                            "text": "立即可在聊天室免費領取並永久收藏全套 16 款大字版開運貼圖！",
+                            "color": "#666666",
+                            "size": "xs",
+                            "wrap": True,
+                            "margin": "xs"
+                        }
+                    ]
+                },
+                {
+                    "type": "text",
+                    "text": "👀 貼圖全覽（16 款神明庇佑日常實用語錄）：",
+                    "weight": "bold",
+                    "color": "#8C5B32",
+                    "size": "xs"
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "xs",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "🌟 穩啦・水逆退散・發大財・莫慌",
+                            "color": "#444444",
+                            "size": "xs"
+                        },
+                        {
+                            "type": "text",
+                            "text": "☀️ 早安・晚安・收到・謝謝・拜託",
+                            "color": "#444444",
+                            "size": "xs"
+                        },
+                        {
+                            "type": "text",
+                            "text": "💪 辛苦了・加油・笑死・真的假的・太讚了・吃飽沒・哭哭",
+                            "color": "#444444",
+                            "size": "xs"
+                        }
+                    ]
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#A62824",
+                    "action": {
+                        "type": "uri",
+                        "label": "📲 一鍵免費領取貼圖包 (開啟全覽)",
+                        "uri": "https://liff.line.me/2011668576-3Qay1nBv?modal=sticker"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "secondary",
+                    "action": {
+                        "type": "uri",
+                        "label": "🎬 觀看萬春宮文化走讀 (IG Reel)",
+                        "uri": "https://www.instagram.com/reel/Deb5hBnvNRCM5gEgWA9-sVSKBBANtydeykXFKk0/?exln=dDNyNjB1bHE4ODVq"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "link",
+                    "action": {
+                        "type": "uri",
+                        "label": "⛩️ 探索智慧宮廟・大殿首頁",
+                        "uri": "https://liff.line.me/2011668576-3Qay1nBv"
+                    }
+                }
+            ]
+        }
+    }
+    return FlexMessage(
+        alt_text="✨ 歡迎加入萬春宮！恭喜獲得【全套16款開基媽祖開運貼圖】免費領取",
+        contents=FlexContainer.from_dict(flex_data)
+    )
+
+
 def handle_follow_event(user_id: str):
-    """信徒加入好友時的專屬迎賓與抽籤補推流程"""
+    """信徒加入好友時的專屬迎賓、開運貼圖贈送與抽籤補推流程"""
     log_event(f"信徒 [{user_id}] 成功加入【智慧宮廟】為好友！")
 
     with ApiClient(configuration) as api_client:
@@ -668,7 +815,7 @@ def handle_follow_event(user_id: str):
 
             welcome_text = (
                 "🎉 感謝信士加入【智慧宮廟】！\n\n"
-                "已自動為您送達剛剛在線上求籤專區所獲賜的神明靈籤："
+                "已自動為您送達剛剛在線上求籤專區所獲賜的神明靈籤，同時奉上開基媽祖開運貼圖禮："
             )
             try:
                 messaging_api.push_message(
@@ -676,35 +823,28 @@ def handle_follow_event(user_id: str):
                         to=user_id,
                         messages=[
                             TextMessage(text=welcome_text),
-                            TextMessage(text=fortune_text)
+                            TextMessage(text=fortune_text),
+                            build_sticker_welcome_flex()
                         ]
                     )
                 )
-                log_event(f"已成功於加好友瞬間補推靈籤給信徒 [{user_id}]！")
+                log_event(f"已成功於加好友瞬間補推靈籤與貼圖禮給信徒 [{user_id}]！")
                 LAST_PUSHED_FORTUNES[user_id] = {"text": fortune_text, "timestamp": time.time()}
                 process_and_push_ai_interpretation(fortune_text, user_id)
             except Exception as e:
                 log_event(f"加好友補推靈籤失敗: {e}")
         else:
-            welcome_msg = (
-                "🏮 信士吉祥！歡迎光臨「靈籤入微 - 智慧宮廟文化生活圈」官方服務處。\n\n"
-                "點擊下方圖文選單，隨時體驗：\n"
-                "1. 📿【線上靈籤】：誠心搖筒請示六十甲子靈籤與 AI 客觀解籤\n"
-                "2. 🧘【正念冥想】：3D 斜角立體捻珠與累積今日功德\n"
-                "3. 🏮【藍興之謎】：尋找遺失的寶物，走讀萬春宮與台中舊城商圈\n"
-                "4. 💡【祈安點燈】：文昌光明與元辰祈安文教公益\n"
-                "5. 📜【參拜指南】：隨時查詢進廟順序與持香撇步\n\n"
-                "願神明威靈護佑，祈願所求皆得圓滿、平安吉祥！"
-            )
             try:
+                sticker_flex = build_sticker_welcome_flex()
                 messaging_api.push_message(
                     PushMessageRequest(
                         to=user_id,
-                        messages=[TextMessage(text=welcome_msg)]
+                        messages=[sticker_flex]
                     )
                 )
+                log_event(f"已成功於加好友瞬間推送開運貼圖迎賓禮給信徒 [{user_id}]！")
             except Exception as e:
-                log_event(f"推送迎賓詞失敗: {e}")
+                log_event(f"推送開運貼圖迎賓詞失敗: {e}")
 
 
 def process_and_push_ai_interpretation(fortune_text: str, user_id: str):
