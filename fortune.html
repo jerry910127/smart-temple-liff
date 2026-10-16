@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>出外轉運靈籤 - 湄洲開基媽祖</title>
+  <!-- LINE LIFF SDK -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <!-- Google Fonts: 典雅明體與黑體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --temple-red: #A62824;          /* 核心宮廟朱紅 / 硃砂紅 */
+      --temple-red-dark: #7A1916;     /* 深緋紅 / 沉穩檀紅 */
+      --temple-red-light: #FDF2F0;    /* 朱紅淡雅透光底色 */
+      --temple-red-border: #F3C5C2;   /* 朱紅細邊框 */
+      
+      --earth-wood: #8C5B32;          /* 沉穩檜木棕 / 大地深棕 */
+      --earth-wood-dark: #5C381E;     /* 深楠木黑棕 */
+      --earth-wood-light: #FAF5F0;    /* 溫潤木質透光淺色 */
+      --earth-wood-border: #E8D8C8;   /* 檜木淺邊框 */
+      
+      --temple-gold: #C68F42;         /* 殿堂泥金 / 典雅金棕 */
+      --temple-gold-light: #FFF9EE;   /* 泥金明亮背景 */
+      --temple-gold-border: #F2DAAB;  /* 泥金邊框 */
+      
+      --bg-light-washi: #FAF7F2;      /* 溫潤宣紙象牙白 */
+      --washi-card: #FFFFFF;          /* 卡片純淨白底 */
+      --washi-border: #EADBCE;        /* 雅緻宣紙邊框色 */
+      
+      --bg-dark: #1f1d1b;
+      --bg-card: #282522;
+      --hinoki-wood: #c89666;
+      --hinoki-dark: #8c5b32;
+      --deep-ochre: #8b3a2b;
+      --deep-ochre-dark: #662217;
+      --muted-gold: #c9a45c;
+      --warm-gray: #423d39;
+      --text-main: #231C18;
+      --text-muted: #7A6F66;
+      --text-light: #f5f2eb;
+      --text-dim: #A89E94;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Noto Sans TC', -apple-system, sans-serif;
+      background: radial-gradient(circle at 50% 30%, #2c2825 0%, #1a1817 100%);
+      color: #231C18;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* 和風禪意背景紋理 */
+    .zen-app-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 30%, #2c2825 0%, #1a1817 100%);
+      opacity: 1;
+      display: block;
+    }
+
+    /* 頂部神社注連繩 / 暖簾裝飾線條 */
+    .shrine-top-curtain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #8b3a2b 0%, #c9a45c 50%, #8b3a2b 100%);
+      z-index: 30;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    /* 頂部神社匾額與使用者迎接 */
+    .shrine-brand-bar {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 92%;
+      max-width: 340px;
+    }
+
+    .shrine-plaque {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(38, 34, 32, 0.9);
+      border: 1px solid var(--muted-gold);
+      padding: 5px 16px;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+    }
+
+    .shrine-plaque h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--muted-gold);
+      letter-spacing: 3px;
+    }
+
+    .shrine-user-greeting {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* 頂部返回 LINE 導航按鈕 */
+    .zen-nav-back {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 35;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(38, 34, 32, 0.92);
+      border: 1px solid var(--muted-gold);
+      color: #ffd875;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 16px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .zen-nav-back:active {
+      transform: scale(0.95);
+      background: rgba(55, 48, 44, 0.95);
+    }
+
+    /* === 場景共用 === */
+    .shrine-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 95px 16px 18px;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .shrine-scene.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    /* === 第一階段：誠心搖籤 === */
+    .zen-circle-aura {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      border: 1px dashed rgba(201, 164, 92, 0.22);
+      pointer-events: none;
+      animation: zen_spin 60s linear infinite;
+    }
+
+    @keyframes zen_spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* 檜木籤筒與籤枝 60FPS 物理展示舞台 */
+    .cylinder-stage {
+      position: relative;
+      width: 100%;
+      height: 375px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .cylinder-stage:active {
+      cursor: grabbing;
+    }
+    #cylinderCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+    }
+    .cylinder-progress-wrap {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 9px;
+      background: rgba(35, 20, 16, 0.85);
+      border: 1px solid rgba(226, 180, 106, 0.5);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .cylinder-progress-wrap.active {
+      opacity: 1;
+    }
+    .cylinder-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #A62824 0%, #E2B46A 100%);
+      border-radius: 4px;
+      transition: width 0.05s linear;
+      box-shadow: 0 0 10px rgba(226, 180, 106, 0.8);
+    }
+    .cylinder-sound-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(38, 34, 32, 0.88);
+      border: 1px solid rgba(201, 164, 92, 0.4);
+      color: #E2B46A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 35;
+      font-size: 15px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .cylinder-sound-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* 禪意祈願說明卡 */
+    .washi-guide-card {
+      background: rgba(38, 34, 32, 0.85);
+      border: 1px solid rgba(201, 164, 92, 0.3);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-dim);
+      text-align: center;
+      max-width: 310px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+
+    .washi-guide-card strong {
+      color: var(--muted-gold);
+      font-weight: 500;
+    }
+
+    /* 聖杯進度指示面板 */
+    .poe-status-panel {
+      background: rgba(38, 34, 32, 0.9);
+      border: 1px solid rgba(201, 164, 92, 0.35);
+      border-radius: 6px;
+      padding: 8px 16px;
+      text-align: center;
+      width: 90%;
+      max-width: 310px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      flex-shrink: 0;
+    }
+
+    .lot-indicator-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.96rem;
+      color: var(--muted-gold);
+      margin-bottom: 3px;
+      letter-spacing: 1px;
+    }
+
+    /* 三聖杯圓形指示燈 */
+    .sheng-dot-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 4px 0 2px;
+    }
+
+    .sheng-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid var(--muted-gold);
+      background: transparent;
+      transition: all 0.4s ease;
+    }
+
+    .sheng-dot.achieved {
+      background: #c9a45c;
+      box-shadow: 0 0 10px rgba(201, 164, 92, 0.8);
+      border-color: #ffd875;
+      transform: scale(1.15);
+    }
+
+    .sheng-dot-tip {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+    }
+
+    /* 極窄螢幕 / 矮手機高度自適應彈性調整 */
+    @media (max-height: 680px) {
+      .shrine-scene {
+        padding: 85px 12px 14px;
+      }
+      .toss-stage {
+        height: 220px !important;
+      }
+      .cylinder-stage {
+        height: 300px !important;
+      }
+      .toss-result-view {
+        max-width: 270px !important;
+        padding: 10px 12px 10px !important;
+      }
+      .toss-result-view img {
+        max-width: 110px !important;
+      }
+      .zen-btn {
+        padding: 9px 16px !important;
+        font-size: 0.92rem !important;
+      }
+    }
+
+    /* 筊杯投擲舞台 (彈性自適應高度) */
+    .toss-stage {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      height: 260px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 左右硃砂紅筊杯 */
+    .poe-item {
+      position: absolute;
+      top: 50%;
+      width: 82px;
+      height: 138px;
+      transition: opacity 0.3s ease;
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,0.55));
+    }
+
+    .poe-left {
+      left: 36%;
+      transform: translate(-50%, -50%) rotate(-55deg);
+      animation: poe_idle_hover 1.4s ease-in-out infinite alternate;
+    }
+
+    .poe-right {
+      left: 64%;
+      transform: translate(-50%, -50%) rotate(125deg);
+      animation: poe_idle_hover 1.4s ease-in-out infinite alternate -0.7s;
+    }
+
+    @keyframes poe_idle_hover {
+      from { top: 48%; }
+      to { top: 52%; }
+    }
+
+    /* ====================================================
+       拋物線拋擲動畫
+       ==================================================== */
+    .poe-left.launch-flat {
+      animation: toss_left_to_flat 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes toss_left_to_flat {
+      0% { top: 50%; left: 36%; transform: translate(-50%, -50%) rotate(-55deg); }
+      22% { top: 60%; left: 36%; transform: translate(-50%, -50%) rotate(-55deg); }
+      50% { top: -45%; left: 45%; transform: translate(-50%, -50%) rotate(-360deg) scale(1.15); }
+      100% { top: 52%; left: 34%; transform: translate(-50%, -50%) rotate(-720deg) scale(1); }
+    }
+
+    .poe-left.launch-convex {
+      animation: toss_left_to_convex 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes toss_left_to_convex {
+      0% { top: 50%; left: 36%; transform: translate(-50%, -50%) rotate(-55deg); }
+      22% { top: 60%; left: 36%; transform: translate(-50%, -50%) rotate(-55deg); }
+      50% { top: -45%; left: 45%; transform: translate(-50%, -50%) rotate(-360deg) scale(1.15); }
+      100% { top: 52%; left: 34%; transform: translate(-50%, -50%) rotate(-720deg) scale(1); }
+    }
+
+    .poe-right.launch-flat {
+      animation: toss_right_to_flat 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes toss_right_to_flat {
+      0% { top: 50%; left: 64%; transform: translate(-50%, -50%) rotate(125deg); }
+      22% { top: 60%; left: 64%; transform: translate(-50%, -50%) rotate(125deg); }
+      50% { top: -45%; left: 55%; transform: translate(-50%, -50%) rotate(420deg) scale(1.15); }
+      100% { top: 52%; left: 66%; transform: translate(-50%, -50%) rotate(840deg) scale(1); }
+    }
+
+    .poe-right.launch-convex {
+      animation: toss_right_to_convex 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+    @keyframes toss_right_to_convex {
+      0% { top: 50%; left: 64%; transform: translate(-50%, -50%) rotate(125deg); }
+      22% { top: 60%; left: 64%; transform: translate(-50%, -50%) rotate(125deg); }
+      50% { top: -45%; left: 55%; transform: translate(-50%, -50%) rotate(360deg) scale(1.15); }
+      100% { top: 52%; left: 65%; transform: translate(-50%, -50%) rotate(720deg) scale(1); }
+    }
+
+    /* 拋擲結果神意通知框 */
+    .toss-result-view {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.85);
+      width: 90%;
+      max-width: 290px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      z-index: 25;
+      background: rgba(28, 22, 20, 0.96);
+      border: 1.5px solid #C68F42;
+      border-radius: 14px;
+      padding: 12px 14px 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 18px rgba(198, 143, 66, 0.3);
+      box-sizing: border-box;
+    }
+
+    .toss-result-view.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+
+    .toss-result-header {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.76rem;
+      letter-spacing: 2px;
+      color: #C68F42;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .toss-result-view img {
+      max-width: 128px;
+      height: auto;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+      margin: 2px auto;
+      display: block;
+    }
+
+    .result-badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.98rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    .badge-sheng {
+      background: rgba(166, 40, 36, 0.25);
+      color: #f7a072;
+      border: 1px solid #A62824;
+      box-shadow: 0 0 14px rgba(166, 40, 36, 0.4);
+    }
+
+    /* === 按鈕風格 === */
+    .zen-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 11px 20px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.98rem;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      color: #fff;
+      background: var(--deep-ochre);
+      border: 1px solid var(--muted-gold);
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .zen-btn:active {
+      transform: scale(0.98);
+      background: var(--deep-ochre-dark);
+    }
+
+    .zen-btn:disabled {
+      background: #3e3a37 !important;
+      border-color: #5a544f !important;
+      color: #8a837c !important;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .zen-btn-secondary {
+      background: transparent;
+      border-color: rgba(201, 164, 92, 0.5);
+      color: var(--text-dim);
+      box-shadow: none;
+      margin-top: 8px;
+    }
+
+    .controls-wrapper {
+      width: 90%;
+      max-width: 310px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    /* === 籤枝抽出彈窗 (過渡到擲筊) === */
+    .zen-modal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: 88%;
+      max-width: 310px;
+      max-height: 82vh;
+      overflow-y: auto;
+      background: rgba(35, 31, 29, 0.97);
+      border: 1px solid var(--muted-gold);
+      border-radius: 6px;
+      padding: 22px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 40;
+      backdrop-filter: blur(10px);
+    }
+
+    .zen-modal.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .zen-modal-tag {
+      font-size: 0.74rem;
+      color: var(--muted-gold);
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .zen-modal-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.25rem;
+      color: #ffd875;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .zen-modal-body {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    /* === 日式御神籤 (和紙風格詩籤詳情) === */
+    .omikuji-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(18, 16, 15, 0.92);
+      z-index: 50;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+    }
+
+    .omikuji-overlay.visible {
+      display: flex;
+    }
+
+    .omikuji-sheet {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      background: var(--bg-light-washi);
+      color: var(--text-main);
+      border: 1px solid var(--washi-border);
+      border-radius: 3px;
+      padding: 26px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      text-align: center;
+    }
+
+    /* 日式御神籤傳統邊框 */
+    .omikuji-inner-border {
+      border: 1.5px solid #8b3a2b;
+      padding: 16px 14px;
+      position: relative;
+    }
+
+    .omikuji-header {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem;
+      color: #8b3a2b;
+      letter-spacing: 3px;
+      margin-bottom: 4px;
+    }
+
+    .omikuji-lot-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #2b2623;
+      margin-bottom: 8px;
+    }
+
+    .omikuji-rank-seal {
+      display: inline-block;
+      border: 1.5px solid #8b3a2b;
+      color: #8b3a2b;
+      padding: 2px 10px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      border-radius: 2px;
+      margin-bottom: 14px;
+    }
+
+    .omikuji-poem-lines {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: #1a1614;
+      font-weight: 600;
+      letter-spacing: 3px;
+      border-top: 1px solid rgba(139, 58, 43, 0.25);
+      border-bottom: 1px solid rgba(139, 58, 43, 0.25);
+      padding: 14px 0;
+      margin: 10px 0;
+    }
+
+    .omikuji-explanation {
+      font-size: 0.84rem;
+      line-height: 1.6;
+      color: #574e47;
+      margin: 12px 0 18px;
+      text-align: justify;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==============================================
+       出外轉運靈籤專屬核心舞台
+       ============================================== -->
+  <div class="zen-app-container" id="zenApp">
+
+    <!-- 頂部返回 LINE 按鈕 -->
+    <button class="zen-nav-back" onclick="handleNavBack()">
+      <span>‹ 返回 LINE</span>
+    </button>
+
+    <!-- 神社注連飾邊 -->
+    <div class="shrine-top-curtain"></div>
+
+    <!-- 頂部神社標題匾額 -->
+    <div class="shrine-brand-bar">
+      <div class="shrine-plaque">
+        <span style="color:#c9a45c; font-size:0.9rem;">⛩️</span>
+        <h1>開基媽祖・出外轉運神籤</h1>
+      </div>
+      <div class="shrine-user-greeting" id="userGreeting">信士 請靜心向開基媽祖祈願...</div>
+    </div>
+
+    <!-- ==============================================
+         第一幕：靜心祈願・搖動籤筒
+         ============================================== -->
+    <div class="shrine-scene active" id="sceneShake">
+      <div class="zen-circle-aura"></div>
+
+      <!-- 禪意導引文字卡 -->
+      <div class="washi-guide-card">
+        <strong>【出外轉運祈請儀軌】</strong><br>
+        靜心凝神，向開基湄洲三媽默稟姓名、所求轉運意念。<br>
+        誠心搖動靈籤筒，連續擲得<strong>三個聖杯</strong>即獲賜神明正籤。
+      </div>
+
+      <!-- 音效開關按鈕 -->
+      <button class="cylinder-sound-btn" id="btnCylinderSound" onclick="toggleCylinderSound()" title="音效切換">🔊</button>
+
+      <!-- 檜木籤筒與籤枝 60FPS 物理舞台 -->
+      <div class="cylinder-stage" id="stageContainer">
+        <canvas id="cylinderCanvas"></canvas>
+        <div class="cylinder-progress-wrap" id="pbarWrap">
+          <div class="cylinder-progress-fill" id="pbarFill"></div>
+        </div>
+      </div>
+
+      <!-- 底部操作列 -->
+      <div class="controls-wrapper">
+        <button class="zen-btn" id="shakeBtn" onclick="handleStartShake()">
+          <span>誠 心 搖 籤</span>
+        </button>
+        <div class="zen-shake-hint" style="font-size:0.75rem; color:#b5987c; margin-top:8px; letter-spacing:1px; text-align:center;">
+          點擊「誠心搖籤」或直接在籤筒上左右滑動搖晃
+        </div>
+      </div>
+
+      <!-- 抽籤完成確認彈窗 -->
+      <div class="zen-modal" id="spearReadyModal">
+        <div class="zen-modal-tag">靈 籤 入 微</div>
+        <div class="zen-modal-title" id="readyLotName">第一籤【甲子】</div>
+        <div class="zen-modal-body">
+          已為信士請出出外轉運籤枝。<br>
+          按傳統儀軌，請移步案前擲筊請示，<br>
+          <strong style="color:#c9a45c;">連續獲得 3 個聖杯</strong>即可恭領籤詩。
+        </div>
+        <button class="zen-btn" onclick="enterTossScene()">
+          <span>前 往 擲 筊 請 示</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         第二幕：傳統硃砂紅筊・請示神意 (100% 聖杯)
+         ============================================== -->
+    <div class="shrine-scene" id="sceneToss">
+      <!-- 聖杯進度指示面板 -->
+      <div class="poe-status-panel">
+        <div class="lot-indicator-title" id="tossTargetLot">請示【第一籤 甲子】</div>
+        <div class="sheng-dot-container">
+          <div class="sheng-dot" id="dot1"></div>
+          <div class="sheng-dot" id="dot2"></div>
+          <div class="sheng-dot" id="dot3"></div>
+        </div>
+        <div class="sheng-dot-tip" id="shengTipText">尚需連續擲出 3 個聖杯</div>
+      </div>
+
+      <!-- 筊杯拋擲舞台 -->
+      <div class="toss-stage">
+        <!-- 左筊 (凸/正面・朱紅色) -->
+        <img class="poe-item poe-left" id="poeLeft" src="assets/zen/cypress_convex.svg?v=v3" alt="左筊" />
+        <!-- 右筊 (平/陰面・咖啡色) -->
+        <img class="poe-item poe-right" id="poeRight" src="assets/zen/cypress_flat.svg?v=v3" alt="右筊" />
+
+        <!-- 落地神意通知展示框 -->
+        <div class="toss-result-view" id="resultView">
+          <div class="toss-result-header">✦ 神 意 昭 示 ✦</div>
+          <img id="resultImage" src="assets/zen/cypress_sheng.svg?v=v3" alt="擲筊結果" />
+          <br>
+          <span class="result-badge badge-sheng" id="resultBadge">【聖杯】神明首肯</span>
+          <div id="resultTip" style="font-size:0.75rem; color:#D5C5B5; margin-top:8px; line-height:1.4;">一陽一陰・神明應允・轉運吉祥圓滿</div>
+        </div>
+      </div>
+
+      <!-- 底部擲筊控制項 -->
+      <div class="controls-wrapper">
+        <button class="zen-btn" id="tossBtn" onclick="handleTossPoe()">
+          <span id="tossBtnLabel">擲　　筊</span>
+        </button>
+
+        <button class="zen-btn zen-btn-secondary" id="resetBtn" style="display:none;" onclick="handleResetToShake()">
+          <span>放回籤枝，重新求籤</span>
+        </button>
+
+        <button class="zen-btn" id="viewPoemBtn" style="display:none;" onclick="handleOpenOmikuji()">
+          <span>恭 領 籤 詩 解 惑</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         御神籤詩展卷 Modal (和紙風日式籤詩)
+         ============================================== -->
+    <div class="omikuji-overlay" id="omikujiOverlay">
+      <div class="omikuji-sheet">
+        <div class="omikuji-inner-border">
+          <div class="omikuji-header">出 外 轉 運 ｜ 靈 籤 賜 福</div>
+          <h2 class="omikuji-lot-title" id="omikujiTitle">第一籤【甲子】</h2>
+          <div class="omikuji-rank-seal" id="omikujiRank">上上大吉</div>
+          
+          <div class="omikuji-poem-lines" id="omikujiPoem">
+            春風拂面步芳庭<br>
+            雲散天開日月明<br>
+            出門信步迎祥氣<br>
+            萬里前程自亨通
+          </div>
+
+          <div class="omikuji-explanation" id="omikujiDesc">
+            【解曰】動則吉星相照，行則百慮皆消。久坐室內思緒易滯，不妨步出戶外，迎春風、沐暖陽。腳步邁開之時，天地清氣灌注，身心暢達，好運與貴人自然隨行而至。
+          </div>
+
+          <button class="zen-btn" id="sendToLineBtn" style="margin-bottom:10px;" onclick="handleSendToLine()">
+            <span>💬 回傳 LINE 聊天室（AI即時解籤）</span>
+          </button>
+          <button class="zen-btn zen-btn-secondary" onclick="handleResetToShake()">
+            <span>誠心致謝，再求一籤</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // LINE MINI App / LIFF ID 多階段配置
+    const MINI_APP_IDS = {
+      dev: "2011672732-8VId10cb",       // Developing（開發中階段）
+      review: "2011672733-59eN6KAB",    // Review（審核中階段）
+      published: "2011672734-RX4TBGQf", // Published（正式發布階段）
+      legacy: "2011668576-3Qay1nBv"     // 舊版 LINE Login LIFF
+    };
+
+    function resolveCurrentLiffId() {
+      const search = window.location.search || '';
+      const href = window.location.href || '';
+      const urlParams = new URLSearchParams(search);
+      if (urlParams.get('liffId')) return urlParams.get('liffId');
+      if (href.includes('2011672734-RX4TBGQf')) return MINI_APP_IDS.published;
+      if (href.includes('2011672733-59eN6KAB')) return MINI_APP_IDS.review;
+      if (href.includes('2011672732-8VId10cb')) return MINI_APP_IDS.dev;
+      return MINI_APP_IDS.legacy;
+    }
+
+    const MY_LIFF_ID = resolveCurrentLiffId();
+    const BACKEND_API_BASE = "https://smart-temple-liff.onrender.com";
+
+    function getLineIdToken() {
+      if (typeof liff === 'undefined' || !liff.isLoggedIn || !liff.isLoggedIn()) return null;
+      return liff.getIDToken ? liff.getIDToken() : null;
+    }
+
+    // 「出去走走轉轉運」專屬靈籤詩庫（對應 7 款正統檜木竹籤刻印）
+    const LOTS_DATABASE = [
+      {
+        id: 1,
+        name: "第一籤【甲子】",
+        rank: "上上大吉",
+        poem: "春風拂面步芳庭，\n雲散天開日月明。\n出門信步迎祥氣，\n萬里前程自亨通。",
+        desc: "【解曰】動則吉星相照，行則百慮皆消。久坐室內思緒易滯，不妨步出戶外，迎春風、沐暖陽。腳步邁開之時，天地清氣灌注，身心暢達，好運與貴人自然隨行而至。"
+      },
+      {
+        id: 2,
+        name: "第二籤【乙丑】",
+        rank: "上吉",
+        poem: "綠野徐行換精神，\n青山流水別有春。\n轉向新程逢好景，\n前途處處遇貴人。",
+        desc: "【解曰】轉換境地，撥雲見日。近來若覺心煩氣悶或謀事難展，出門走走正是轉運良方。沿著綠意水畔漫步，換口清爽元氣，轉移視角便能豁然開朗，機緣立現。"
+      },
+      {
+        id: 3,
+        name: "第三籤【丙寅】",
+        rank: "大吉",
+        poem: "登高望遠眼界寬，\n萬里江山任盤桓。\n步出重圍迎爽籟，\n清風朗月照平安。",
+        desc: "【解曰】心胸開闊，運勢大展。走出屋宇、登高極目遠眺，繁雜鎖事自化清風。跨出門外即是跨越瓶頸，換個地方走動走動，晦氣退散，前程光明朗朗。"
+      },
+      {
+        id: 4,
+        name: "第四籤【丁卯】",
+        rank: "上上",
+        poem: "綠蔭林道步從容，\n古巷晨鐘韻正濃。\n信步探幽添喜氣，\n祥光瑞彩滿堂紅。",
+        desc: "【解曰】放緩腳步，福緣自來。到老街、林道、廟宇或是未曾探訪的小巷信步遊走，讓身心沈靜下來。在悠然自得中調和磁場氣運，出行大吉，所求順遂。"
+      },
+      {
+        id: 5,
+        name: "第五籤【戊辰】",
+        rank: "中吉",
+        poem: "推門迎向朗朗天，\n換步移星氣運連。\n莫守幽居愁往事，\n踏青得福喜相延。",
+        desc: "【解曰】動身轉運，否極泰來。留在原地枯坐只會增添煩思，踏出門檻便是轉機起點。到郊外公園踏踏青、踩踩泥土，吸納地氣，氣運流轉，好彩頭自然相隨。"
+      },
+      {
+        id: 6,
+        name: "第六籤【己巳】",
+        rank: "上吉",
+        poem: "沿溪徐步意悠長，\n水碧波澄映日光。\n踏破沉鬱生慧思，\n柳暗花明好風光。",
+        desc: "【解曰】身心活絡，靈感激發。漫步水岸或臨風徐行，聽鳥語水聲，整頓思緒。走走動動能讓鬱氣宣洩，生出全新智慧，工作與生活難題隨即迎刃而解。"
+      },
+      {
+        id: 7,
+        name: "第七籤【庚午】",
+        rank: "上上大吉",
+        poem: "足踏祥雲步步通，\n出行有吉遇和風。\n放開懷抱巡千里，\n錦繡風華在目中。",
+        desc: "【解曰】萬事如意，出行極旺。出外有神明護佑，所經之地皆得福澤。放寬懷抱多出門與世界相逢，走得越遠、看得越廣，福氣越厚，滿載吉祥喜樂而歸。"
+      }
+    ];
+
+    let currentLot = null;
+    let consecutiveSheng = 0;
+    const TARGET_SHENG_COUNT = 3;
+    let isTossing = false;
+    let audioContext = null;
+    let userFriendshipStatus = null;
+    let hasSentCurrentFortune = false;
+
+    // 100% 聖杯保證：每次擲筊皆為一陽一陰（聖杯）
+    function evaluateTossOutcome() {
+      return {
+        type: 'sheng',
+        leftForm: 'convex',
+        rightForm: 'flat',
+        title: '【聖杯】神明首肯！',
+        badgeClass: 'badge-sheng',
+        imageSrc: 'assets/zen/cypress_sheng.svg?v=v3'
+      };
+    }
+
+    // 返回 LINE 或關閉視窗
+    function handleNavBack() {
+      if (typeof liff !== 'undefined' && liff.isInClient()) {
+        liff.closeWindow();
+      } else {
+        window.location.href = "https://line.me/R/ti/p/@326watsb";
+      }
+    }
+
+    // 1. 初始化 LIFF SDK
+    async function initLiffApp() {
+      try {
+        await liff.init({ liffId: MY_LIFF_ID });
+        if (liff.isLoggedIn()) {
+          const profile = await liff.getProfile();
+          window.currentLineUserId = profile.userId;
+          document.getElementById('userGreeting').innerText = `信士 ${profile.displayName}，請靜心祈願`;
+        } else {
+          document.getElementById('userGreeting').innerText = "信士 請靜心向開基媽祖祈願";
+        }
+      } catch (err) {
+        console.warn("LIFF 連線提示:", err);
+        document.getElementById('userGreeting').innerText = "出外轉運靈籤 ｜ 湄洲開基媽祖";
+      }
+    }
+
+    // 2. 沈穩檜木撞擊音效 (Web Audio API)
+    function playCypressWoodSound() {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+
+        const now = audioContext.currentTime;
+        [0, 0.07].forEach((delay, index) => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(index === 0 ? 360 : 420, now + delay);
+          osc.frequency.exponentialRampToValueAtTime(120, now + delay + 0.11);
+
+          gain.gain.setValueAtTime(0.65, now + delay);
+          gain.gain.exponentialRampToValueAtTime(0.005, now + delay + 0.11);
+
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+
+          osc.start(now + delay);
+          osc.stop(now + delay + 0.12);
+        });
+      } catch (e) {
+        console.warn("音效合成略過:", e);
+      }
+    }
+
+    /* 60FPS 擬真物理籤筒與竹籤撞擊聲學引擎 */
+    class FortuneSoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playBambooClack(intensity = 0.5) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const baseFreq = 650 + Math.random() * 550;
+
+        const bufferSize = Math.floor(this.ctx.sampleRate * 0.04);
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.2));
+        }
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = noiseBuffer;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(baseFreq, now);
+        filter.Q.setValueAtTime(4.0, now);
+
+        const gain = this.ctx.createGain();
+        const peakGain = Math.min(0.35, 0.08 + intensity * 0.25);
+        gain.gain.setValueAtTime(peakGain, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        noise.start(now);
+      }
+      playChime() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.12, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 1.2);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 1.25);
+        });
+      }
+    }
+
+    const cylinderSound = new FortuneSoundEngine();
+
+    function toggleCylinderSound() {
+      cylinderSound.enabled = !cylinderSound.enabled;
+      const btn = document.getElementById('btnCylinderSound');
+      if (btn) btn.textContent = cylinderSound.enabled ? "🔊" : "🔇";
+      if (cylinderSound.enabled) cylinderSound.init();
+    }
+
+    // 籤筒與竹籤圖片資源
+    const cylImgBody = new Image();
+    cylImgBody.src = "assets/fortune_cylinder/cylinder_body.png";
+    const cylImgBack = new Image();
+    cylImgBack.src = "assets/fortune_cylinder/cylinder_back.png";
+
+    const cylStickImages = [];
+    for (let i = 1; i <= 7; i++) {
+      const img = new Image();
+      img.src = `assets/fortune_cylinder/sticks/stick_${i}.png`;
+      cylStickImages.push(img);
+    }
+    const cylStickBlank = new Image();
+    cylStickBlank.src = "assets/fortune_cylinder/sticks/stick_blank.png";
+
+    // 籤筒剛體物理狀態
+    const cylinderObj = {
+      x: 0,
+      y: 0,
+      baseX: 0,
+      baseY: 0,
+      vx: 0,
+      vy: 0,
+      angle: 0,
+      vAngle: 0
+    };
+
+    const TOTAL_CYLINDER_STICKS = 24;
+    const cylinderSticks = [];
+    let cylinderCanvas = null;
+    let cylinderCtx = null;
+    let cylViewW = 0, cylViewH = 0, cylScale = 0.45;
+    let cylinderAnimActive = false;
+    let cylLastTime = 0;
+
+    let cylIsDragging = false;
+    let cylDragStartX = 0, cylDragPrevX = 0, cylLastDragTime = 0;
+    let cylShakeProgress = 0;
+    const CYL_SHAKE_GOAL = 100;
+    let cylChosenStick = null;
+    let cylinderGameState = "IDLE"; // "IDLE", "SHAKING", "EMERGING", "REVEALED"
+    let cylButtonShakeTimer = null;
+
+    function initCylinderSticks() {
+      cylinderSticks.length = 0;
+      const rimWidth = 260;
+      for (let i = 0; i < TOTAL_CYLINDER_STICKS; i++) {
+        const spreadRatio = (i / (TOTAL_CYLINDER_STICKS - 1)) * 2 - 1;
+        const xOffset = spreadRatio * (rimWidth * 0.42);
+        const restingY = -180 + Math.sin(i * 1.7) * 28 + (Math.random() - 0.5) * 15;
+        const restingAngle = spreadRatio * 0.16 + (Math.random() - 0.5) * 0.08;
+
+        const lotIdx = i % LOTS_DATABASE.length;
+        cylinderSticks.push({
+          id: i,
+          lot: LOTS_DATABASE[lotIdx],
+          img: cylStickImages[lotIdx] || cylStickBlank,
+          x: xOffset,
+          y: restingY,
+          baseX: xOffset,
+          baseY: restingY,
+          vx: 0,
+          vy: 0,
+          angle: restingAngle,
+          baseAngle: restingAngle,
+          vAngle: 0,
+          height: 440,
+          width: 38,
+          isChosen: false,
+          elevation: 0,
+          emergeProgress: 0
+        });
+      }
+    }
+
+    function resizeCylinderCanvas() {
+      const container = document.getElementById("stageContainer");
+      if (!container || !cylinderCanvas) return;
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      cylViewW = rect.width;
+      cylViewH = rect.height;
+
+      cylinderCanvas.width = cylViewW * dpr;
+      cylinderCanvas.height = cylViewH * dpr;
+      cylinderCanvas.style.width = `${cylViewW}px`;
+      cylinderCanvas.style.height = `${cylViewH}px`;
+
+      cylinderCtx.setTransform(1, 0, 0, 1, 0, 0);
+      cylinderCtx.scale(dpr, dpr);
+
+      cylinderObj.baseX = cylViewW / 2;
+      cylinderObj.baseY = cylViewH * 0.60;
+      cylinderObj.x = cylinderObj.baseX;
+      cylinderObj.y = cylinderObj.baseY;
+
+      cylScale = Math.min(cylViewW / 760, cylViewH / 650) * 0.85;
+      if (cylScale < 0.35) cylScale = 0.35;
+      if (cylScale > 0.52) cylScale = 0.52;
+    }
+
+    function initFortuneCylinder() {
+      if (!cylinderCanvas) {
+        cylinderCanvas = document.getElementById("cylinderCanvas");
+        if (!cylinderCanvas) return;
+        cylinderCtx = cylinderCanvas.getContext("2d");
+        setupCylinderPointerEvents();
+        window.addEventListener("resize", resizeCylinderCanvas);
+      }
+      resizeCylinderCanvas();
+      if (cylinderSticks.length === 0) {
+        initCylinderSticks();
+      }
+      if (!cylinderAnimActive) {
+        cylinderAnimActive = true;
+        cylLastTime = performance.now();
+        requestAnimationFrame(cylinderLoop);
+      }
+    }
+
+    function setupCylinderPointerEvents() {
+      const el = cylinderCanvas;
+      if (!el) return;
+
+      function onPointerStart(e) {
+        if (cylinderGameState === "EMERGING" || cylinderGameState === "REVEALED") return;
+        cylIsDragging = true;
+        cylinderGameState = "SHAKING";
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        cylDragStartX = clientX;
+        cylDragPrevX = clientX;
+        cylLastDragTime = performance.now();
+        cylinderSound.init();
+
+        const pbarWrap = document.getElementById("pbarWrap");
+        if (pbarWrap) pbarWrap.classList.add("active");
+      }
+
+      function onPointerMove(e) {
+        if (!cylIsDragging) return;
+        const currentX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        const now = performance.now();
+        const dt = Math.max(1, now - cylLastDragTime);
+        const dx = currentX - cylDragPrevX;
+        cylDragPrevX = currentX;
+        cylLastDragTime = now;
+
+        const speed = Math.abs(dx) / dt;
+        if (speed > 0.15) {
+          cylinderSound.playBambooClack(Math.min(1.0, speed * 0.7));
+          addCylinderShakeEnergy(speed * 4.5);
+        }
+
+        cylinderObj.vx += dx * 0.4;
+        cylinderObj.vAngle += (dx * 0.0015);
+
+        if (cylShakeProgress >= CYL_SHAKE_GOAL) {
+          cylIsDragging = false;
+          launchFortuneEmergence();
+        }
+      }
+
+      function onPointerEnd() {
+        cylIsDragging = false;
+        if (cylinderGameState === "SHAKING" && cylShakeProgress < CYL_SHAKE_GOAL) {
+          cylinderGameState = "IDLE";
+        }
+      }
+
+      el.addEventListener("mousedown", onPointerStart);
+      window.addEventListener("mousemove", onPointerMove);
+      window.addEventListener("mouseup", onPointerEnd);
+
+      el.addEventListener("touchstart", onPointerStart, { passive: true });
+      window.addEventListener("touchmove", onPointerMove, { passive: true });
+      window.addEventListener("touchend", onPointerEnd, { passive: true });
+    }
+
+    function addCylinderShakeEnergy(amount) {
+      if (cylinderGameState === "EMERGING" || cylinderGameState === "REVEALED") return;
+      cylShakeProgress = Math.min(CYL_SHAKE_GOAL, cylShakeProgress + amount);
+      const pbarFill = document.getElementById("pbarFill");
+      if (pbarFill) {
+        pbarFill.style.width = `${(cylShakeProgress / CYL_SHAKE_GOAL) * 100}%`;
+      }
+
+      cylinderSticks.forEach(st => {
+        st.vy -= Math.random() * amount * 1.5;
+        st.vAngle += (Math.random() - 0.5) * 0.03 * amount;
+      });
+
+      if (navigator.vibrate && amount > 2.0) {
+        try { navigator.vibrate(12); } catch (e) {}
+      }
+    }
+
+    function triggerAutoShake() {
+      if (cylinderGameState === "EMERGING" || cylinderGameState === "REVEALED") return;
+      cylinderSound.init();
+      cylinderGameState = "SHAKING";
+
+      const pbarWrap = document.getElementById("pbarWrap");
+      if (pbarWrap) pbarWrap.classList.add("active");
+
+      let elapsed = 0;
+      let cylShakePhase = 0;
+      if (cylButtonShakeTimer) clearInterval(cylButtonShakeTimer);
+
+      cylButtonShakeTimer = setInterval(() => {
+        elapsed += 40;
+        cylShakePhase += 0.45;
+        cylinderSound.playBambooClack(0.55 + Math.random() * 0.35);
+
+        const swirlX = Math.sin(cylShakePhase) * 10;
+        const swirlY = -Math.abs(Math.cos(cylShakePhase)) * 26 + 8;
+        const subtleAngle = Math.sin(cylShakePhase) * 0.024;
+
+        cylinderObj.vx += swirlX * 0.38;
+        cylinderObj.vy += swirlY * 0.52;
+        cylinderObj.vAngle += (subtleAngle - cylinderObj.angle) * 0.22;
+
+        addCylinderShakeEnergy(4.2);
+
+        if (cylShakeProgress >= CYL_SHAKE_GOAL || cylinderGameState === "EMERGING") {
+          clearInterval(cylButtonShakeTimer);
+          cylButtonShakeTimer = null;
+          launchFortuneEmergence();
+        }
+      }, 40);
+    }
+
+    function launchFortuneEmergence() {
+      cylinderGameState = "EMERGING";
+      const pbarWrap = document.getElementById("pbarWrap");
+      if (pbarWrap) pbarWrap.classList.remove("active");
+
+      // 隨機抽選一支「出外轉運」靈籤
+      const targetIdx = Math.floor(Math.random() * LOTS_DATABASE.length);
+      cylChosenStick = cylinderSticks.find(s => s.lot.id === LOTS_DATABASE[targetIdx].id) || cylinderSticks[0];
+      cylChosenStick.isChosen = true;
+      currentLot = cylChosenStick.lot;
+
+      cylinderSound.playChime();
+    }
+
+    function updateCylinderPhysics(dt) {
+      cylinderObj.baseX = cylViewW / 2;
+      cylinderObj.baseY = cylViewH * 0.60;
+
+      const kSpringX = 0.14;
+      const kDampX = 0.80;
+      const kSpringY = 0.16;
+      const kDampY = 0.78;
+      const kRotSpring = 0.22;
+      const kRotDamp = 0.76;
+
+      const fx = (cylinderObj.baseX - cylinderObj.x) * kSpringX;
+      cylinderObj.vx = (cylinderObj.vx + fx) * kDampX;
+      cylinderObj.x += cylinderObj.vx;
+
+      const fy = (cylinderObj.baseY - cylinderObj.y) * kSpringY;
+      cylinderObj.vy = (cylinderObj.vy + fy) * kDampY;
+      cylinderObj.y += cylinderObj.vy;
+
+      const fAngle = (0 - cylinderObj.angle) * kRotSpring;
+      cylinderObj.vAngle = (cylinderObj.vAngle + fAngle) * kRotDamp;
+      cylinderObj.angle += cylinderObj.vAngle;
+
+      const stickSpring = 0.22;
+      const stickDamp = 0.75;
+      const stickRotSpring = 0.18;
+      const stickRotDamp = 0.72;
+
+      for (let i = 0; i < cylinderSticks.length; i++) {
+        const s = cylinderSticks[i];
+
+        if (s.isChosen) {
+          s.emergeProgress = Math.min(1.0, s.emergeProgress + dt * 0.65);
+          s.y -= dt * 260;
+          s.angle += (0 - s.angle) * 0.1;
+
+          if (s.emergeProgress >= 1.0 && cylinderGameState === "EMERGING") {
+            cylinderGameState = "REVEALED";
+            document.getElementById('readyLotName').innerText = currentLot.name;
+            document.getElementById('spearReadyModal').classList.add('visible');
+          }
+          continue;
+        }
+
+        const distY = s.baseY - s.y;
+        const fyStick = distY * stickSpring;
+        s.vy = (s.vy + fyStick) * stickDamp;
+        s.y += s.vy;
+
+        const distAngle = s.baseAngle - s.angle;
+        const fRot = distAngle * stickRotSpring;
+        s.vAngle = (s.vAngle + fRot) * stickRotDamp;
+        s.angle += s.vAngle;
+
+        if (i > 0) {
+          const prev = cylinderSticks[i - 1];
+          const minAngleDiff = 0.04;
+          if (s.angle - prev.angle < minAngleDiff) {
+            const push = (minAngleDiff - (s.angle - prev.angle)) * 0.5;
+            s.angle += push;
+            prev.angle -= push;
+          }
+        }
+      }
+    }
+
+    function renderCylinder() {
+      if (!cylinderCtx || cylViewW === 0) return;
+      cylinderCtx.clearRect(0, 0, cylViewW, cylViewH);
+
+      cylinderCtx.save();
+      cylinderCtx.translate(cylinderObj.x, cylinderObj.y);
+      cylinderCtx.scale(cylScale, cylScale);
+      cylinderCtx.rotate(cylinderObj.angle);
+
+      const cx = -512;
+      const cy = -512;
+
+      // 1. 籤筒後緣高清檜木內筒
+      if (cylImgBack.complete) {
+        cylinderCtx.drawImage(cylImgBack, cx, cy, 1024, 1024);
+      }
+
+      // 2. 籤筒內深邃陰影
+      cylinderCtx.fillStyle = "rgba(18, 10, 5, 0.6)";
+      cylinderCtx.beginPath();
+      cylinderCtx.ellipse(0, -180, 150, 48, 0, 0, Math.PI * 2);
+      cylinderCtx.fill();
+
+      // 3. 24 根檜木竹籤繪製
+      for (let i = 0; i < cylinderSticks.length; i++) {
+        const s = cylinderSticks[i];
+        cylinderCtx.save();
+        cylinderCtx.translate(s.x, s.y);
+        cylinderCtx.rotate(s.angle);
+
+        cylinderCtx.shadowColor = "rgba(0, 0, 0, 0.4)";
+        cylinderCtx.shadowBlur = 6;
+        cylinderCtx.shadowOffsetY = 4;
+
+        const img = s.img.complete ? s.img : cylStickBlank;
+        if (img.complete) {
+          cylinderCtx.drawImage(img, -s.width / 2, 0, s.width, s.height);
+        }
+
+        cylinderCtx.fillStyle = "rgba(10, 5, 2, 0.4)";
+        cylinderCtx.fillRect(-s.width / 2, 220, s.width, s.height - 220);
+        cylinderCtx.restore();
+      }
+
+      // 4. 籤筒前緣高清檜木主體
+      if (cylImgBody.complete) {
+        cylinderCtx.drawImage(cylImgBody, cx, cy, 1024, 1024);
+      }
+
+      cylinderCtx.restore();
+    }
+
+    function cylinderLoop(time) {
+      if (!cylinderAnimActive) return;
+      if (!cylLastTime) cylLastTime = time;
+      const dt = Math.min(0.05, (time - cylLastTime) / 1000);
+      cylLastTime = time;
+
+      updateCylinderPhysics(dt);
+      renderCylinder();
+
+      requestAnimationFrame(cylinderLoop);
+    }
+
+    function resetCylinderDraw() {
+      cylShakeProgress = 0;
+      const pbarFill = document.getElementById("pbarFill");
+      const pbarWrap = document.getElementById("pbarWrap");
+      if (pbarFill) pbarFill.style.width = "0%";
+      if (pbarWrap) pbarWrap.classList.remove("active");
+      cylinderGameState = "IDLE";
+      if (cylChosenStick) cylChosenStick.isChosen = false;
+      cylChosenStick = null;
+      initCylinderSticks();
+      const shakeBtn = document.getElementById('shakeBtn');
+      if (shakeBtn) shakeBtn.disabled = false;
+    }
+
+    function handleStartShake() {
+      if (cylinderGameState !== "IDLE" && cylinderGameState !== "SHAKING") return;
+      triggerAutoShake();
+    }
+
+    function enterTossScene() {
+      document.getElementById('spearReadyModal').classList.remove('visible');
+      document.getElementById('sceneShake').classList.remove('active');
+      document.getElementById('sceneToss').classList.add('active');
+
+      consecutiveSheng = 0;
+      updateShengProgress();
+      restorePoeToRest();
+    }
+
+    function updateShengProgress() {
+      document.getElementById('tossTargetLot').innerText = `請示【${currentLot ? currentLot.name : '轉運靈籤'}】`;
+      for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById(`dot${i}`);
+        if (i <= consecutiveSheng) {
+          dot.classList.add('achieved');
+        } else {
+          dot.classList.remove('achieved');
+        }
+      }
+
+      const tip = document.getElementById('shengTipText');
+      if (consecutiveSheng === 0) {
+        tip.innerText = "須連續擲得 3 個聖杯方為神意明確";
+      } else if (consecutiveSheng === 1) {
+        tip.innerText = "已獲 1 聖杯，請誠心再擲一次";
+      } else if (consecutiveSheng === 2) {
+        tip.innerText = "已獲 2 聖杯！尚需最後一次聖杯確認";
+      } else {
+        tip.innerText = "🎉 連續三聖杯達成！神意明確賜籤";
+      }
+    }
+
+    // 預載筊杯材質
+    ['assets/zen/cypress_convex.svg?v=v3', 'assets/zen/cypress_flat.svg?v=v3', 'assets/zen/cypress_sheng.svg?v=v3', 'assets/zen/cypress_xiao.svg?v=v3', 'assets/zen/cypress_yin.svg?v=v3'].forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
+    function restorePoeToRest() {
+      const left = document.getElementById('poeLeft');
+      const right = document.getElementById('poeRight');
+      const resultView = document.getElementById('resultView');
+
+      resultView.classList.remove('active');
+      left.className = 'poe-item poe-left';
+      right.className = 'poe-item poe-right';
+      left.src = 'assets/zen/cypress_convex.svg?v=v3';
+      right.src = 'assets/zen/cypress_flat.svg?v=v3';
+      left.style.opacity = '1';
+      right.style.opacity = '1';
+
+      document.getElementById('tossBtn').disabled = false;
+      document.getElementById('tossBtnLabel').innerText = consecutiveSheng === 0 ? '擲　　筊' : '誠 心 再 擲';
+    }
+
+    // 核心擲杯邏輯 (100% 必聖杯)
+    function handleTossPoe() {
+      if (isTossing) return;
+      isTossing = true;
+
+      const tossBtn = document.getElementById('tossBtn');
+      const left = document.getElementById('poeLeft');
+      const right = document.getElementById('poeRight');
+      const resultView = document.getElementById('resultView');
+
+      tossBtn.disabled = true;
+      document.getElementById('resetBtn').style.display = 'none';
+      resultView.classList.remove('active');
+      left.style.opacity = '1';
+      right.style.opacity = '1';
+
+      const outcome = evaluateTossOutcome();
+
+      // 重置並賦予拋物線動畫
+      left.className = 'poe-item poe-left';
+      right.className = 'poe-item poe-right';
+      void left.offsetWidth;
+
+      left.classList.add(outcome.leftForm === 'convex' ? 'launch-convex' : 'launch-flat');
+      right.classList.add(outcome.rightForm === 'convex' ? 'launch-convex' : 'launch-flat');
+
+      // 550ms 在空中最高處翻轉時更新材質為聖杯形態 (左凸右平)
+      setTimeout(() => {
+        left.src = outcome.leftForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=v3' : 'assets/zen/cypress_flat.svg?v=v3';
+        right.src = outcome.rightForm === 'convex' ? 'assets/zen/cypress_convex.svg?v=v3' : 'assets/zen/cypress_flat.svg?v=v3';
+      }, 550);
+
+      // 1.55 秒著地瞬間播放紅木撞擊聲
+      setTimeout(() => {
+        playCypressWoodSound();
+      }, 1550);
+
+      // 1750ms 動畫結束判定
+      setTimeout(() => {
+        isTossing = false;
+
+        left.style.opacity = '0';
+        right.style.opacity = '0';
+
+        const resultImg = document.getElementById('resultImage');
+        const badge = document.getElementById('resultBadge');
+        const tip = document.getElementById('resultTip');
+        resultImg.src = outcome.imageSrc;
+        badge.innerText = outcome.title;
+        badge.className = `result-badge ${outcome.badgeClass}`;
+        if (tip) {
+          tip.innerText = '一陽一陰・神明應允・轉運吉祥圓滿';
+        }
+        resultView.classList.add('active');
+
+        // 100% 獲得聖杯
+        consecutiveSheng++;
+        updateShengProgress();
+
+        if (consecutiveSheng >= TARGET_SHENG_COUNT) {
+          tossBtn.style.display = 'none';
+          document.getElementById('resetBtn').style.display = 'none';
+          document.getElementById('viewPoemBtn').style.display = 'inline-flex';
+        } else {
+          tossBtn.style.display = 'inline-flex';
+          tossBtn.disabled = false;
+          document.getElementById('tossBtnLabel').innerText = '誠 心 再 擲';
+          document.getElementById('resetBtn').style.display = 'none';
+        }
+      }, 1750);
+    }
+
+    // 重置回到第一幕搖籤
+    function handleResetToShake() {
+      consecutiveSheng = 0;
+      hasSentCurrentFortune = false;
+      document.getElementById('sceneToss').classList.remove('active');
+      document.getElementById('omikujiOverlay').classList.remove('visible');
+      document.getElementById('sceneShake').classList.add('active');
+
+      resetCylinderDraw();
+      initFortuneCylinder();
+      document.getElementById('spearReadyModal').classList.remove('visible');
+
+      document.getElementById('tossBtn').style.display = 'inline-flex';
+      document.getElementById('resetBtn').style.display = 'none';
+      document.getElementById('viewPoemBtn').style.display = 'none';
+      restorePoeToRest();
+    }
+
+    // 開啟和風籤詩卡片
+    async function handleOpenOmikuji() {
+      document.getElementById('omikujiTitle').innerText = currentLot.name;
+      document.getElementById('omikujiRank').innerText = currentLot.rank;
+      document.getElementById('omikujiPoem').innerHTML = currentLot.poem.replace(/\n/g, '<br>');
+      document.getElementById('omikujiDesc').innerText = currentLot.desc;
+      document.getElementById('omikujiOverlay').classList.add('visible');
+
+      checkFriendshipForOmikuji();
+    }
+
+    async function checkFriendshipForOmikuji() {
+      const sendBtn = document.getElementById('sendToLineBtn');
+      if (!sendBtn) return;
+
+      if (hasSentCurrentFortune) {
+        sendBtn.innerHTML = "<span>💬 打開 LINE 聊天室查看解籤</span>";
+        return;
+      }
+
+      sendBtn.innerHTML = "<span>💬 送回 LINE 聊天室（AI即時解籤）</span>";
+
+      try {
+        if (typeof liff !== 'undefined' && liff.isLoggedIn()) {
+          if (!window.currentLineUserId) {
+            const profile = await liff.getProfile().catch(() => null);
+            if (profile) window.currentLineUserId = profile.userId;
+          }
+
+          if (liff.getFriendship) {
+            const friendship = await liff.getFriendship().catch(() => ({ friendFlag: false }));
+            userFriendshipStatus = !!(friendship && friendship.friendFlag);
+          }
+        }
+
+        if (userFriendshipStatus === true) {
+          sendBtn.innerHTML = "<span>💬 送回 LINE 聊天室（AI即時解籤）</span>";
+        } else if (userFriendshipStatus === false) {
+          sendBtn.innerHTML = "<span>➕ 加入好友並領取 AI 解籤</span>";
+        }
+      } catch (err) {
+        console.warn("checkFriendshipForOmikuji 異常:", err);
+      }
+    }
+
+    // 回傳至 LINE 聊天室進行 AI 解籤
+    async function handleSendToLine() {
+      const sendBtn = document.getElementById('sendToLineBtn');
+      const msgText = `【出外轉運・靈籤賜福】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請陪我想想，這支籤對我的處境有什麼提醒。`;
+
+      if (hasSentCurrentFortune) {
+        sendBtn.innerHTML = "<span>💬 正在為您打開聊天室...</span>";
+        setTimeout(() => {
+          if (typeof liff !== 'undefined' && liff.isInClient()) {
+            liff.closeWindow();
+          } else {
+            window.location.href = "https://line.me/R/ti/p/@326watsb";
+          }
+        }, 200);
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = "<span>⏳ 正在連線智慧宮廟服務處...</span>";
+
+      try {
+        let userId = window.currentLineUserId || null;
+        let isFriend = userFriendshipStatus;
+
+        if (typeof liff !== 'undefined' && liff.isLoggedIn()) {
+          if (!userId) {
+            const profile = await liff.getProfile().catch(() => null);
+            if (profile) {
+              userId = profile.userId;
+              window.currentLineUserId = userId;
+            }
+          }
+          if (isFriend === null && liff.getFriendship) {
+            const friendship = await liff.getFriendship().catch(() => ({ friendFlag: false }));
+            isFriend = !!(friendship && friendship.friendFlag);
+          }
+        }
+
+        // 向後端發送籤詩推播與 AI 解籤請求
+        if (userId) {
+          try {
+            const idToken = getLineIdToken();
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
+            const resp = await fetch(`${BACKEND_API_BASE}/api/push_fortune`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ...(idToken ? { id_token: idToken } : {}),
+                user_id: userId,
+                text: msgText
+              }),
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (resp.ok) {
+              const resData = await resp.json();
+              if (resData.delivered) isFriend = true;
+              hasSentCurrentFortune = true;
+            }
+          } catch (e) {
+            console.warn("後端推播逾時或異常:", e);
+          }
+        }
+
+        // 額外保底：在 LIFF 聊天室視窗內嘗試 sendMessages
+        if (typeof liff !== 'undefined' && liff.isInClient() && liff.sendMessages) {
+          try {
+            if (!hasSentCurrentFortune) {
+              await liff.sendMessages([{ type: 'text', text: msgText }]);
+              hasSentCurrentFortune = true;
+            }
+          } catch (e) {
+            console.warn("liff.sendMessages 略過:", e);
+          }
+        }
+
+        if (isFriend === true || hasSentCurrentFortune) {
+          sendBtn.innerHTML = "<span>💬 籤詩已送達！正在開啟聊天室...</span>";
+          setTimeout(() => {
+            if (typeof liff !== 'undefined' && liff.isInClient()) {
+              liff.closeWindow();
+            } else {
+              window.location.href = "https://line.me/R/ti/p/@326watsb";
+            }
+          }, 350);
+        } else {
+          hasSentCurrentFortune = true;
+          sendBtn.innerHTML = "<span>👉 請點選「加入好友」，將自動為您解籤...</span>";
+          setTimeout(() => {
+            window.location.href = "https://line.me/R/ti/p/@326watsb";
+          }, 450);
+        }
+      } catch (err) {
+        console.error("handleSendToLine 失敗，啟用保底返回聊天室:", err);
+        if (typeof liff !== 'undefined' && liff.isInClient()) {
+          liff.closeWindow();
+        } else {
+          window.location.href = "https://line.me/R/ti/p/@326watsb";
+        }
+      } finally {
+        setTimeout(() => {
+          sendBtn.disabled = false;
+        }, 1500);
+      }
+    }
+
+    // 啟動頁面
+    window.addEventListener('DOMContentLoaded', () => {
+      initLiffApp();
+      setTimeout(initFortuneCylinder, 80);
+    });
+  </script>
+</body>
+</html>

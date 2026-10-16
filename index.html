@@ -5326,7 +5326,10 @@
       const targetPage = urlParams.get('page');
       const targetModal = urlParams.get('modal');
 
-      if (targetPage === 'divination' || targetPage === 'shake') {
+      if (targetPage === 'walk' || targetPage === 'walk_fortune' || targetPage === 'fortune') {
+        window.location.replace('fortune.html' + window.location.search);
+        return;
+      } else if (targetPage === 'divination' || targetPage === 'shake') {
         openDivinationFlow();
       } else if (targetPage === 'meditation') {
         openMeditationPage();
