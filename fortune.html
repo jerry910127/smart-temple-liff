@@ -1137,6 +1137,7 @@
 
     let cylIsDragging = false;
     let cylDragStartX = 0, cylDragPrevX = 0, cylLastDragTime = 0;
+    let cylDragStartY = 0, cylDragPrevY = 0;
     let cylShakeProgress = 0;
     const CYL_SHAKE_GOAL = 100;
     let cylChosenStick = null;
@@ -1147,7 +1148,7 @@
       cylinderSticks.length = 0;
       const rimWidth = 260;
       for (let i = 0; i < TOTAL_CYLINDER_STICKS; i++) {
-        const spreadRatio = (i / (TOTAL_CYLINDER_STICKS - 1)) * 2 - 1;
+        const spreadRatio = (i / (TOTAL_CYLINDER_STICKS - 1)) * 2 - 1; // -1 to 1
         const xOffset = spreadRatio * (rimWidth * 0.42);
         const restingY = -180 + Math.sin(i * 1.7) * 28 + (Math.random() - 0.5) * 15;
         const restingAngle = spreadRatio * 0.16 + (Math.random() - 0.5) * 0.08;
@@ -1184,23 +1185,20 @@
       const dpr = window.devicePixelRatio || 1;
       cylViewW = rect.width;
       cylViewH = rect.height;
-
       cylinderCanvas.width = cylViewW * dpr;
       cylinderCanvas.height = cylViewH * dpr;
-      cylinderCanvas.style.width = `${cylViewW}px`;
-      cylinderCanvas.style.height = `${cylViewH}px`;
+      cylinderCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      cylinderCtx.setTransform(1, 0, 0, 1, 0, 0);
-      cylinderCtx.scale(dpr, dpr);
+      cylScale = Math.min(cylViewH / 940, cylViewW / 620);
+      if (cylScale > 0.65) cylScale = 0.65;
+      if (cylScale < 0.34) cylScale = 0.34;
 
       cylinderObj.baseX = cylViewW / 2;
       cylinderObj.baseY = cylViewH * 0.60;
-      cylinderObj.x = cylinderObj.baseX;
-      cylinderObj.y = cylinderObj.baseY;
-
-      cylScale = Math.min(cylViewW / 760, cylViewH / 650) * 0.85;
-      if (cylScale < 0.35) cylScale = 0.35;
-      if (cylScale > 0.52) cylScale = 0.52;
+      if (cylinderObj.x === 0 && cylinderObj.y === 0) {
+        cylinderObj.x = cylinderObj.baseX;
+        cylinderObj.y = cylinderObj.baseY;
+      }
     }
 
     function initFortuneCylinder() {
@@ -1222,20 +1220,27 @@
       }
     }
 
+    function pauseFortuneCylinder() {
+      cylinderAnimActive = false;
+      if (cylButtonShakeTimer) {
+        clearInterval(cylButtonShakeTimer);
+        cylButtonShakeTimer = null;
+      }
+    }
+
     function setupCylinderPointerEvents() {
-      const el = cylinderCanvas;
-      if (!el) return;
+      const stage = document.getElementById("stageContainer");
+      if (!stage) return;
 
-      function onPointerStart(e) {
-        if (cylinderGameState === "EMERGING" || cylinderGameState === "REVEALED") return;
-        cylIsDragging = true;
-        cylinderGameState = "SHAKING";
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
-        cylDragStartX = clientX;
-        cylDragPrevX = clientX;
-        cylLastDragTime = performance.now();
+      function onPointerDown(e) {
+        if (cylinderGameState !== "IDLE" && cylinderGameState !== "SHAKING") return;
         cylinderSound.init();
-
+        cylIsDragging = true;
+        cylDragStartX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        cylDragStartY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+        cylDragPrevX = cylDragStartX;
+        cylDragPrevY = cylDragStartY;
+        cylLastDragTime = performance.now();
         const pbarWrap = document.getElementById("pbarWrap");
         if (pbarWrap) pbarWrap.classList.add("active");
       }
@@ -1243,20 +1248,24 @@
       function onPointerMove(e) {
         if (!cylIsDragging) return;
         const currentX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        const currentY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
         const now = performance.now();
         const dt = Math.max(1, now - cylLastDragTime);
         const dx = currentX - cylDragPrevX;
+        const dy = currentY - cylDragPrevY;
         cylDragPrevX = currentX;
+        cylDragPrevY = currentY;
         cylLastDragTime = now;
 
-        const speed = Math.abs(dx) / dt;
-        if (speed > 0.15) {
+        const speed = Math.sqrt(dx * dx + dy * dy) / dt;
+        if (speed > 0.08) {
           cylinderSound.playBambooClack(Math.min(1.0, speed * 0.7));
-          addCylinderShakeEnergy(speed * 4.5);
+          addCylinderShakeEnergy(speed * 3.8);
         }
 
-        cylinderObj.vx += dx * 0.4;
-        cylinderObj.vAngle += (dx * 0.0015);
+        cylinderObj.vx += dx * 0.35;
+        cylinderObj.vy += dy * 0.45;
+        cylinderObj.vAngle += (dx * 0.0008);
 
         if (cylShakeProgress >= CYL_SHAKE_GOAL) {
           cylIsDragging = false;
@@ -1264,20 +1273,17 @@
         }
       }
 
-      function onPointerEnd() {
+      function onPointerUp() {
         cylIsDragging = false;
-        if (cylinderGameState === "SHAKING" && cylShakeProgress < CYL_SHAKE_GOAL) {
-          cylinderGameState = "IDLE";
-        }
       }
 
-      el.addEventListener("mousedown", onPointerStart);
+      stage.addEventListener("mousedown", onPointerDown);
       window.addEventListener("mousemove", onPointerMove);
-      window.addEventListener("mouseup", onPointerEnd);
+      window.addEventListener("mouseup", onPointerUp);
 
-      el.addEventListener("touchstart", onPointerStart, { passive: true });
+      stage.addEventListener("touchstart", onPointerDown, { passive: true });
       window.addEventListener("touchmove", onPointerMove, { passive: true });
-      window.addEventListener("touchend", onPointerEnd, { passive: true });
+      window.addEventListener("touchend", onPointerUp, { passive: true });
     }
 
     function addCylinderShakeEnergy(amount) {
@@ -1328,7 +1334,6 @@
         if (cylShakeProgress >= CYL_SHAKE_GOAL || cylinderGameState === "EMERGING") {
           clearInterval(cylButtonShakeTimer);
           cylButtonShakeTimer = null;
-          launchFortuneEmergence();
         }
       }, 40);
     }
@@ -1338,7 +1343,6 @@
       const pbarWrap = document.getElementById("pbarWrap");
       if (pbarWrap) pbarWrap.classList.remove("active");
 
-      // 隨機抽選一支「出外轉運」靈籤
       const targetIdx = Math.floor(Math.random() * LOTS_DATABASE.length);
       cylChosenStick = cylinderSticks.find(s => s.lot.id === LOTS_DATABASE[targetIdx].id) || cylinderSticks[0];
       cylChosenStick.isChosen = true;
@@ -1369,17 +1373,26 @@
       const fAngle = (0 - cylinderObj.angle) * kRotSpring;
       cylinderObj.vAngle = (cylinderObj.vAngle + fAngle) * kRotDamp;
       cylinderObj.angle += cylinderObj.vAngle;
+      cylinderObj.angle = Math.max(-0.05, Math.min(0.05, cylinderObj.angle));
 
-      const stickSpring = 0.22;
-      const stickDamp = 0.75;
-      const stickRotSpring = 0.18;
-      const stickRotDamp = 0.72;
+      if (!cylIsDragging && cylinderGameState === "IDLE" && cylShakeProgress > 0) {
+        cylShakeProgress = Math.max(0, cylShakeProgress - dt * 15);
+        const pbarFill = document.getElementById("pbarFill");
+        const pbarWrap = document.getElementById("pbarWrap");
+        if (pbarFill) pbarFill.style.width = `${(cylShakeProgress / CYL_SHAKE_GOAL) * 100}%`;
+        if (cylShakeProgress === 0 && pbarWrap) pbarWrap.classList.remove("active");
+      }
+
+      const stickSpring = 0.15;
+      const stickDamping = 0.80;
+      const angleSpring = 0.16;
+      const angleDamping = 0.84;
 
       for (let i = 0; i < cylinderSticks.length; i++) {
         const s = cylinderSticks[i];
 
-        if (s.isChosen) {
-          s.emergeProgress = Math.min(1.0, s.emergeProgress + dt * 0.65);
+        if (s.isChosen && cylinderGameState === "EMERGING") {
+          s.emergeProgress += dt * 0.85;
           s.y -= dt * 260;
           s.angle += (0 - s.angle) * 0.1;
 
@@ -1393,19 +1406,27 @@
 
         const distY = s.baseY - s.y;
         const fyStick = distY * stickSpring;
-        s.vy = (s.vy + fyStick) * stickDamp;
+        s.vy = (s.vy + fyStick - cylinderObj.vy * 0.42) * stickDamping;
         s.y += s.vy;
 
-        const distAngle = s.baseAngle - s.angle;
-        const fRot = distAngle * stickRotSpring;
-        s.vAngle = (s.vAngle + fRot) * stickRotDamp;
+        const fAng = (s.baseAngle - s.angle) * angleSpring;
+        s.vAngle = (s.vAngle + fAng - cylinderObj.vAngle * 0.3) * angleDamping;
         s.angle += s.vAngle;
+
+        const maxAngle = 0.16;
+        if (s.angle > maxAngle) {
+          s.angle = maxAngle;
+          s.vAngle = -s.vAngle * 0.4;
+        } else if (s.angle < -maxAngle) {
+          s.angle = -maxAngle;
+          s.vAngle = -s.vAngle * 0.4;
+        }
 
         if (i > 0) {
           const prev = cylinderSticks[i - 1];
-          const minAngleDiff = 0.04;
-          if (s.angle - prev.angle < minAngleDiff) {
-            const push = (minAngleDiff - (s.angle - prev.angle)) * 0.5;
+          const diffAng = s.angle - prev.angle;
+          if (Math.abs(diffAng) < 0.02) {
+            const push = (0.02 - Math.abs(diffAng)) * 0.5;
             s.angle += push;
             prev.angle -= push;
           }
@@ -1425,31 +1446,38 @@
       const cx = -512;
       const cy = -512;
 
-      // 1. 籤筒後緣高清檜木內筒
-      if (cylImgBack.complete) {
+      // 1. 動態案桌暗影
+      cylinderCtx.save();
+      cylinderCtx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      cylinderCtx.beginPath();
+      const shadowShiftX = cylinderObj.angle * 80;
+      cylinderCtx.ellipse(cx + 502 + shadowShiftX, cy + 960, 200, 32, 0, 0, Math.PI * 2);
+      cylinderCtx.fill();
+      cylinderCtx.restore();
+
+      // 2. 籤筒後緣（內部凹槽腔體）
+      if (cylImgBack.complete && cylImgBack.naturalWidth > 0) {
         cylinderCtx.drawImage(cylImgBack, cx, cy, 1024, 1024);
       }
 
-      // 2. 籤筒內深邃陰影
-      cylinderCtx.fillStyle = "rgba(18, 10, 5, 0.6)";
-      cylinderCtx.beginPath();
-      cylinderCtx.ellipse(0, -180, 150, 48, 0, 0, Math.PI * 2);
-      cylinderCtx.fill();
-
-      // 3. 24 根檜木竹籤繪製
+      // 3. 24 根竹籤層（在後筒與前筒之間動態撞擊）
       for (let i = 0; i < cylinderSticks.length; i++) {
         const s = cylinderSticks[i];
+        if (s.isChosen && cylinderGameState === "REVEALED") continue;
+
         cylinderCtx.save();
-        cylinderCtx.translate(s.x, s.y);
+        cylinderCtx.translate(cx + 502 + s.x, cy + 248 + s.y);
         cylinderCtx.rotate(s.angle);
 
-        cylinderCtx.shadowColor = "rgba(0, 0, 0, 0.4)";
-        cylinderCtx.shadowBlur = 6;
-        cylinderCtx.shadowOffsetY = 4;
-
-        const img = s.img.complete ? s.img : cylStickBlank;
-        if (img.complete) {
+        const img = (s.img && s.img.complete && s.img.naturalWidth > 0) ? s.img : (cylStickBlank && cylStickBlank.complete && cylStickBlank.naturalWidth > 0 ? cylStickBlank : null);
+        if (img) {
           cylinderCtx.drawImage(img, -s.width / 2, 0, s.width, s.height);
+        } else {
+          // 精緻木質竹籤備援繪製，保證絕不破圖
+          cylinderCtx.fillStyle = "#c89666";
+          cylinderCtx.fillRect(-s.width / 2, 0, s.width, s.height);
+          cylinderCtx.fillStyle = "#8c5b32";
+          cylinderCtx.fillRect(-s.width / 2 + 2, 0, 4, s.height);
         }
 
         cylinderCtx.fillStyle = "rgba(10, 5, 2, 0.4)";
@@ -1458,18 +1486,36 @@
       }
 
       // 4. 籤筒前緣高清檜木主體
-      if (cylImgBody.complete) {
+      if (cylImgBody.complete && cylImgBody.naturalWidth > 0) {
         cylinderCtx.drawImage(cylImgBody, cx, cy, 1024, 1024);
+      }
+
+      // 5. 獲選升騰的籤枝（金色神光，前置於籤筒之上）
+      if (cylChosenStick && (cylinderGameState === "EMERGING" || cylinderGameState === "REVEALED")) {
+        cylinderCtx.save();
+        cylinderCtx.translate(cx + 502 + cylChosenStick.x, cy + 248 + cylChosenStick.y);
+        cylinderCtx.rotate(cylChosenStick.angle);
+
+        cylinderCtx.shadowColor = "rgba(255, 215, 110, 0.95)";
+        cylinderCtx.shadowBlur = 35;
+
+        const img = (cylChosenStick.img && cylChosenStick.img.complete && cylChosenStick.img.naturalWidth > 0) ? cylChosenStick.img : (cylStickBlank && cylStickBlank.complete && cylStickBlank.naturalWidth > 0 ? cylStickBlank : null);
+        if (img) {
+          cylinderCtx.drawImage(img, -cylChosenStick.width / 2, 0, cylChosenStick.width, cylChosenStick.height);
+        } else {
+          cylinderCtx.fillStyle = "#ffd875";
+          cylinderCtx.fillRect(-cylChosenStick.width / 2, 0, cylChosenStick.width, cylChosenStick.height);
+        }
+        cylinderCtx.restore();
       }
 
       cylinderCtx.restore();
     }
 
-    function cylinderLoop(time) {
+    function cylinderLoop(now) {
       if (!cylinderAnimActive) return;
-      if (!cylLastTime) cylLastTime = time;
-      const dt = Math.min(0.05, (time - cylLastTime) / 1000);
-      cylLastTime = time;
+      const dt = Math.min(0.05, (now - cylLastTime) / 1000.0);
+      cylLastTime = now;
 
       updateCylinderPhysics(dt);
       renderCylinder();
@@ -1501,6 +1547,7 @@
       document.getElementById('sceneShake').classList.remove('active');
       document.getElementById('sceneToss').classList.add('active');
 
+      pauseFortuneCylinder();
       consecutiveSheng = 0;
       updateShengProgress();
       restorePoeToRest();
