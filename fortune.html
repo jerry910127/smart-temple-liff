@@ -702,8 +702,71 @@
       font-size: 0.84rem;
       line-height: 1.6;
       color: #574e47;
-      margin: 12px 0 18px;
+      margin: 12px 0 14px;
       text-align: justify;
+    }
+
+    /* 御神籤即時 AI 解籤展示區 */
+    .omikuji-ai-box {
+      margin: 10px 0 16px;
+      padding: 12px 14px;
+      background: rgba(166, 40, 36, 0.04);
+      border: 1px dashed rgba(139, 58, 43, 0.35);
+      border-radius: 4px;
+      text-align: left;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: #3e322d;
+    }
+
+    .omikuji-ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 700;
+      color: #8b3a2b;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+    }
+
+    .omikuji-ai-content {
+      white-space: pre-line;
+      color: #433932;
+      font-size: 0.82rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .omikuji-ai-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    .omikuji-ai-content::-webkit-scrollbar-thumb {
+      background: rgba(139, 58, 43, 0.3);
+      border-radius: 2px;
+    }
+
+    .omikuji-ai-loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #7a6e65;
+      font-style: italic;
+      padding: 4px 0;
+    }
+
+    .omikuji-ai-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(139, 58, 43, 0.2);
+      border-top-color: #8b3a2b;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -849,8 +912,21 @@
             【解曰】動則吉星相照，行則百慮皆消。久坐室內思緒易滯，不妨步出戶外，迎春風、沐暖陽。腳步邁開之時，天地清氣灌注，身心暢達，好運與貴人自然隨行而至。
           </div>
 
+          <!-- 即時客觀 AI 智慧解籤區 -->
+          <div class="omikuji-ai-box" id="omikujiAiBox">
+            <div class="omikuji-ai-badge">
+              <span>✨ 開基媽祖・智慧深度解籤</span>
+            </div>
+            <div class="omikuji-ai-content" id="omikujiAiContent">
+              <div class="omikuji-ai-loading">
+                <span class="omikuji-ai-spinner"></span>
+                <span>正在為您敬祈神明降示解籤意旨...</span>
+              </div>
+            </div>
+          </div>
+
           <button class="zen-btn" id="sendToLineBtn" style="margin-bottom:10px;" onclick="handleSendToLine()">
-            <span>💬 回傳 LINE 聊天室（AI即時解籤）</span>
+            <span>💬 回傳 LINE 聊天室（開啟對話）</span>
           </button>
           <button class="zen-btn zen-btn-secondary" onclick="handleResetToShake()">
             <span>誠心致謝，再求一籤</span>
@@ -1697,7 +1773,42 @@
       document.getElementById('omikujiDesc').innerText = currentLot.desc;
       document.getElementById('omikujiOverlay').classList.add('visible');
 
+      // 畫面同步請求 AI 智慧深度解籤
+      loadInPageAiInterpretation(currentLot);
+
       checkFriendshipForOmikuji();
+    }
+
+    let currentAiRequestId = 0;
+    async function loadInPageAiInterpretation(lot) {
+      const box = document.getElementById('omikujiAiContent');
+      if (!box) return;
+      box.innerHTML = `
+        <div class="omikuji-ai-loading">
+          <span class="omikuji-ai-spinner"></span>
+          <span>正在為您敬祈開基媽祖降示智慧解讀...</span>
+        </div>`;
+
+      const reqId = ++currentAiRequestId;
+      const promptText = `【出外轉運靈籤】\n${lot.name} ${lot.rank}\n\n詩曰：\n${lot.poem}\n\n${lot.desc}`;
+
+      try {
+        const resp = await fetch(`${BACKEND_API_BASE}/api/interpret_fortune`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: promptText })
+        });
+        if (!resp.ok) throw new Error("Network response not ok");
+        const data = await resp.json();
+        if (reqId === currentAiRequestId && data.status === "success" && data.reply) {
+          box.innerText = data.reply;
+        }
+      } catch (err) {
+        console.warn("即時 AI 解籤載入失敗:", err);
+        if (reqId === currentAiRequestId) {
+          box.innerHTML = `<span style="color:#8a4030;">✨ 點擊下方「回傳 LINE 聊天室」，神明將於 LINE 聊天室直接為您客觀解籤！</span>`;
+        }
+      }
     }
 
     async function checkFriendshipForOmikuji() {
@@ -1709,10 +1820,10 @@
         return;
       }
 
-      sendBtn.innerHTML = "<span>💬 送回 LINE 聊天室（AI即時解籤）</span>";
+      sendBtn.innerHTML = "<span>💬 回傳 LINE 聊天室（開啟對話）</span>";
 
       try {
-        if (typeof liff !== 'undefined' && liff.isLoggedIn()) {
+        if (typeof liff !== 'undefined' && liff.isLoggedIn && liff.isLoggedIn()) {
           if (!window.currentLineUserId) {
             const profile = await liff.getProfile().catch(() => null);
             if (profile) window.currentLineUserId = profile.userId;
@@ -1723,12 +1834,6 @@
             userFriendshipStatus = !!(friendship && friendship.friendFlag);
           }
         }
-
-        if (userFriendshipStatus === true) {
-          sendBtn.innerHTML = "<span>💬 送回 LINE 聊天室（AI即時解籤）</span>";
-        } else if (userFriendshipStatus === false) {
-          sendBtn.innerHTML = "<span>➕ 加入好友並領取 AI 解籤</span>";
-        }
       } catch (err) {
         console.warn("checkFriendshipForOmikuji 異常:", err);
       }
@@ -1738,27 +1843,42 @@
     async function handleSendToLine() {
       const sendBtn = document.getElementById('sendToLineBtn');
       const msgText = `【出外轉運・靈籤賜福】\n信士祈請三次聖杯確認，獲賜神意靈籤：\n${currentLot.name}【${currentLot.rank}】\n\n詩曰：\n「${currentLot.poem}」\n\n${currentLot.desc}\n\n請陪我想想，這支籤對我的處境有什麼提醒。`;
+      const oaMessageUrl = `https://line.me/R/oaMessage/@326watsb/?${encodeURIComponent(msgText)}`;
 
       if (hasSentCurrentFortune) {
         sendBtn.innerHTML = "<span>💬 正在為您打開聊天室...</span>";
         setTimeout(() => {
-          if (typeof liff !== 'undefined' && liff.isInClient()) {
+          if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
             liff.closeWindow();
           } else {
-            window.location.href = "https://line.me/R/ti/p/@326watsb";
+            window.location.href = oaMessageUrl;
           }
         }, 200);
         return;
       }
 
       sendBtn.disabled = true;
-      sendBtn.innerHTML = "<span>⏳ 正在連線智慧宮廟服務處...</span>";
+      sendBtn.innerHTML = "<span>⏳ 正在為您傳送至 LINE 聊天室...</span>";
 
       try {
-        let userId = window.currentLineUserId || null;
-        let isFriend = userFriendshipStatus;
+        // 第一順位：在 LINE App 內 (LIFF in-client)，直接發送訊息至目前聊天室（零延遲，免費免推播額度）
+        if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient() && liff.sendMessages) {
+          try {
+            await liff.sendMessages([{ type: 'text', text: msgText }]);
+            hasSentCurrentFortune = true;
+            sendBtn.innerHTML = "<span>💬 籤詩已送達！正在開啟聊天室...</span>";
+            setTimeout(() => {
+              liff.closeWindow();
+            }, 300);
+            return;
+          } catch (e) {
+            console.warn("liff.sendMessages 失敗，改用後端推播或 deep link:", e);
+          }
+        }
 
-        if (typeof liff !== 'undefined' && liff.isLoggedIn()) {
+        // 第二順位：後端驗證推播 (當具備 LINE 登入資訊或 userId 時)
+        let userId = window.currentLineUserId || null;
+        if (typeof liff !== 'undefined' && liff.isLoggedIn && liff.isLoggedIn()) {
           if (!userId) {
             const profile = await liff.getProfile().catch(() => null);
             if (profile) {
@@ -1766,13 +1886,9 @@
               window.currentLineUserId = userId;
             }
           }
-          if (isFriend === null && liff.getFriendship) {
-            const friendship = await liff.getFriendship().catch(() => ({ friendFlag: false }));
-            isFriend = !!(friendship && friendship.friendFlag);
-          }
         }
 
-        // 向後端發送籤詩推播與 AI 解籤請求
+        let pushSuccess = false;
         if (userId) {
           try {
             const idToken = getLineIdToken();
@@ -1791,52 +1907,42 @@
             clearTimeout(timeoutId);
             if (resp.ok) {
               const resData = await resp.json();
-              if (resData.delivered) isFriend = true;
-              hasSentCurrentFortune = true;
+              if (resData.delivered) {
+                pushSuccess = true;
+                hasSentCurrentFortune = true;
+              }
             }
           } catch (e) {
             console.warn("後端推播逾時或異常:", e);
           }
         }
 
-        // 額外保底：在 LIFF 聊天室視窗內嘗試 sendMessages
-        if (typeof liff !== 'undefined' && liff.isInClient() && liff.sendMessages) {
-          try {
-            if (!hasSentCurrentFortune) {
-              await liff.sendMessages([{ type: 'text', text: msgText }]);
-              hasSentCurrentFortune = true;
-            }
-          } catch (e) {
-            console.warn("liff.sendMessages 略過:", e);
-          }
-        }
-
-        if (isFriend === true || hasSentCurrentFortune) {
+        if (pushSuccess) {
           sendBtn.innerHTML = "<span>💬 籤詩已送達！正在開啟聊天室...</span>";
           setTimeout(() => {
-            if (typeof liff !== 'undefined' && liff.isInClient()) {
+            if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
               liff.closeWindow();
             } else {
               window.location.href = "https://line.me/R/ti/p/@326watsb";
             }
           }, 350);
-        } else {
-          hasSentCurrentFortune = true;
-          sendBtn.innerHTML = "<span>👉 請點選「加入好友」，將自動為您解籤...</span>";
-          setTimeout(() => {
-            window.location.href = "https://line.me/R/ti/p/@326watsb";
-          }, 450);
+          return;
         }
+
+        // 第三順位（萬能保底）：外部瀏覽器 / 未登入 / 未授權時，使用 LINE 官方 Deep Link 自動開啟聊天室並預填/送出籤詩！
+        sendBtn.innerHTML = "<span>💬 正為您開啟 LINE 聊天室送出...</span>";
+        hasSentCurrentFortune = true;
+        setTimeout(() => {
+          window.location.href = oaMessageUrl;
+        }, 300);
+
       } catch (err) {
-        console.error("handleSendToLine 失敗，啟用保底返回聊天室:", err);
-        if (typeof liff !== 'undefined' && liff.isInClient()) {
-          liff.closeWindow();
-        } else {
-          window.location.href = "https://line.me/R/ti/p/@326watsb";
-        }
+        console.error("handleSendToLine 失敗，保底跳轉 LINE:", err);
+        hasSentCurrentFortune = true;
+        window.location.href = oaMessageUrl;
       } finally {
         setTimeout(() => {
-          sendBtn.disabled = false;
+          if (sendBtn) sendBtn.disabled = false;
         }, 1500);
       }
     }

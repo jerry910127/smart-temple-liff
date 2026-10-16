@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>靈籤入微 - LINE 智慧宮廟文化生活圈</title>
+  <script>
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('page');
+        if (p === 'walk' || p === 'fortune' || p === 'walk_fortune') {
+          window.location.replace('fortune.html' + window.location.search);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <!-- LINE LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <!-- Google Fonts: 典雅明體與黑體 -->

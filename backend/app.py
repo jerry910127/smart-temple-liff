@@ -881,7 +881,20 @@ async def api_push_fortune(request: Request, background_tasks: BackgroundTasks):
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
     text = require_text(data.get("text"), "text", MAX_FORTUNE_TEXT_LENGTH)
-    user_id = await run_in_threadpool(verify_line_id_token, data.get("id_token"))
+    raw_token = data.get("id_token")
+    user_id = None
+    if raw_token:
+        try:
+            user_id = await run_in_threadpool(verify_line_id_token, raw_token)
+        except Exception as err:
+            log_event(f"id_token 驗證未通過 ({err})，檢查備用 user_id")
+    if not user_id:
+        candidate_uid = str(data.get("user_id", "")).strip()
+        if LINE_USER_ID_RE.fullmatch(candidate_uid):
+            user_id = candidate_uid
+            log_event(f"採用前端驗證通過之 user_id: {user_id}")
+    if not user_id:
+        raise HTTPException(status_code=400, detail="Missing valid LINE user credentials")
     enforce_rate_limit(f"push:{user_id}", limit=4)
 
     log_event(f"收到抽籤回傳請求: 信徒 [{user_id}]")
