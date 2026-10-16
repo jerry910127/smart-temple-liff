@@ -18,3 +18,4 @@ ENV/
 .DS_Store
 Thumbs.db
 *.log
+keep_alive.py
