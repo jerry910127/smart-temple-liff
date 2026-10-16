@@ -1094,6 +1094,37 @@ async def webhook(request: Request, background_tasks: BackgroundTasks, x_line_si
     return JSONResponse(content={"status": "success"})
 
 
+@app.get("/api/diagnostic")
+def api_diagnostic():
+    """診斷端點：即時檢查 LINE Bot 憑證、訊息額度與最近伺服器日誌"""
+    info = {
+        "has_channel_secret": bool(LINE_CHANNEL_SECRET),
+        "has_access_token": bool(LINE_CHANNEL_ACCESS_TOKEN),
+        "has_gemini_key": bool(GEMINI_API_KEY),
+        "has_nvidia_key": bool(NVIDIA_API_KEY),
+        "server_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "recent_logs": list(SERVER_LOGS)[-25:]
+    }
+    if LINE_CHANNEL_ACCESS_TOKEN:
+        try:
+            with ApiClient(configuration) as api_client:
+                messaging_api = MessagingApi(api_client)
+                bot_info = messaging_api.get_bot_info()
+                info["bot_basic_id"] = getattr(bot_info, "basic_id", "ok")
+                info["bot_display_name"] = getattr(bot_info, "display_name", "ok")
+                try:
+                    quota = messaging_api.get_message_quota()
+                    consumption = messaging_api.get_message_quota_consumption()
+                    info["quota_type"] = getattr(quota, "type", "unknown")
+                    info["quota_value"] = getattr(quota, "value", 0)
+                    info["quota_consumption"] = getattr(consumption, "total_usage", 0)
+                except Exception as q_err:
+                    info["quota_error"] = str(q_err)
+        except Exception as e:
+            info["line_bot_error"] = str(e)
+    return info
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
